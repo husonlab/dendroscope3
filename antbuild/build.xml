@@ -1,0 +1,96 @@
+<!-- builds Dendroscope -->
+
+<project name="project" default="jar" basedir=".">
+
+    <!-- edit the following lines to your needs -->
+    <property name="project_name" value="Dendroscope"/>
+    <property name="jlodaSrcDir" value="../../jloda/src"/>
+    <property name="dendroscopeSrcDir" value="../src"/>
+    <property name="srcDir" value="src"/>
+    <property name="classDir" value="classes"/>
+    <property name="jar" value="${project_name}.jar"/>
+    <property name="mainclass" value="dendroscope.main.Dendroscope"/>
+
+    <!-- class path -->
+
+    <path id="build.classpath">
+        <fileset dir="../../jloda/jars/batik-1.8" includes="*.jar"/>
+        <pathelement path="../../jloda/jars/junit.jar"/>
+
+        <fileset dir="../../dendroscope/jars"  includes="*.jar"/>
+    </path>
+
+    <!-- init -->
+    <target name="init">
+        <mkdir dir="${srcDir}"/>
+        <mkdir dir="${classDir}"/>
+        <mkdir dir="${classDir}/resources"/>
+    </target>
+
+    <!-- copy resources -->
+    <target name="copy_resources" depends="init">
+        <copy todir="${classDir}/resources">
+            <fileset dir="../resources" excludes="CVS files/** files/**"/>
+        </copy>
+    </target>
+
+    <!-- copy sources -->
+    <target name="copy_sources" depends="copy_resources">
+        <copy todir="${srcDir}">
+            <fileset dir="${jlodaSrcDir}" excludes=".svn/**"/>
+            <fileset dir="${dendroscopeSrcDir}" excludes=".svn/**"/>
+        </copy>
+    </target>
+
+    <!-- compile  Dendroscope -->
+    <target name="compile" depends="copy_sources">
+	    <javac includeantruntime="false"
+		    srcdir="${srcDir}"
+               compiler="javac1.7"
+               destdir="${classDir}"
+               debug="off"
+               classpathref="build.classpath"
+               source="1.7"
+               target="1.7"
+                />
+    </target>
+
+    <!-- create .jar -->
+    <target name="jar" depends="compile">
+        <jar jarfile="${jar}"
+             basedir="${classDir}"
+             includes="gnu/** jloda/** dendroscope/** resources/**">
+        </jar>
+    </target>
+
+
+    <!-- run project -->
+    <target name="run" depends="jar">
+        <java classname="${mainclass}" fork="true"
+		classpathref="build.classpath">
+            <classpath>
+                <pathelement location="${jar}"/>
+            </classpath>
+            <arg value="-d"/>
+            <arg value="-g"/>
+            <jvmarg value="-Dapple.laf.useScreenMenuBar=true"/>
+            <jvmarg value="-server"/>
+            <jvmarg value="-Xmx500M"/>
+            <jvmarg value="-Duser.language=en"/>
+            <jvmarg value="-Duser.region=US"/>
+        </java>
+    </target>
+
+    <!-- removes all that has been built -->
+    <target name="clean">
+        <delete dir="${classDir}" includeEmptyDirs="true"/>
+        <delete dir="src" includeEmptyDirs="true"/>
+        <delete file="Dendroscope_shrinklog.xml"/>
+        <delete file="Dendroscope_renamelog.xml"/>
+        <delete file="Dendroscope.jar"/>
+        <delete file="Dendroscope_raw.jar"/>
+
+    </target>
+</project>
+
+        <!-- end file build.xml -->

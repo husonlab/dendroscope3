@@ -1,0 +1,7 @@
+Dendroscope
+
+Use of Dendroscope is free-to-use software, but not open source. This program probably contains many bugs, both apparent and less apparent ones. We recommend that you cross validate all results obtained with this software using other programs. Use at your own risk!
+
+If you publish results obtained using this software, then we request that you pelease cite the following paper:
+
+Daniel Huson and Celine Scornavacca, Dendroscope 3: An interactive tool for rooted phylogenetic trees and networks, Systematic Biology, 2012.

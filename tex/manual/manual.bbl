@@ -1,0 +1,140 @@
+\begin{thebibliography}{10}
+
+\bibitem{Albrecht2012}
+B.~Albrecht, C.~Scornavacca, A.~Cenci, and D.~H. Huson.
+\newblock Fast computation of minimum hybridization networks.
+\newblock {\em Bioinformatics}, 28(2):191--197, 2012.
+
+\bibitem{CardonaTreeChildNetworks2008}
+G.~Cardona, F.~Rossell\'{o}, and G.~Valiente.
+\newblock Comparison of tree-child phylogenetic networks.
+\newblock {\em IEEE/ACM Transactions on Computational Biology and
+  Bioinformatics}, 6:552--569, 2007.
+
+\bibitem{CLRV2009d}
+Gabriel Cardona, Merc\'e Llabr\'es, Francesc Rossell\'o, and Gabriel Valiente.
+\newblock On {Nakhleh's} metric for reduced phylogenetic networks.
+\newblock {\em IEEE/ACM Transactions on Computational Biology and
+  Bioinformatics}, 6(4):629--638, 2009.
+
+\bibitem{Cardona2008}
+Gabriel Cardona, Francesc Rossell\'o, and Gabriel Valiente.
+\newblock Extended {Newick}: It is time for a standard representation of
+  phylogenetic networks.
+\newblock {\em BMC Bioinformatics}, 9:532, 2008.
+
+\bibitem{Doyon10}
+J.P. Doyon, C.~Scornavacca, K.~Yu. Gorbunov, G.J. Sz\"oll\H{o}si, V.~Ranwez,
+  and V.~Berry.
+\newblock An efficient algorithm for gene/species trees parsimonious
+  reconciliation with losses, duplications and transfers.
+\newblock In {\em Research in Computational Molecular Biology: Proceedings of
+  the 14th International Conference on Research in Computational Molecular
+  Biology (RECOMB)}, volume 6398 of {\em LNCS}, pages 93--108. Springer, 2010.
+
+\bibitem{gpwg2001}
+Grass Phylogeny~Working Group.
+\newblock Phylogeny and subfamilial classification of the grasses
+  (\mbox{P}oaceae).
+\newblock {\em Annals of the Missouri Botanical Garden}, 88(3):373--457, 2001.
+
+\bibitem{HOLM2007}
+Katharina~T Huber, Bengt Oxelman, Martin Lott, and Vincent Moulton.
+\newblock Reconstructing the evolutionary history of polyploids from
+  multilabeled trees.
+\newblock {\em Molecular Biology and Evolution}, 23(9):1784--1791, 2006.
+
+\bibitem{HusonBryant2006}
+D.~H. Huson and D.~Bryant.
+\newblock Application of phylogenetic networks in evolutionary studies.
+\newblock {\em Molecular Biology and Evolution}, 23:254--267, 2006.
+
+\bibitem{ClusterNetworks2008}
+D.~H. Huson and R.~Rupp.
+\newblock Summarizing multiple gene trees using cluster networks.
+\newblock In K.~Crandall and J.~Lagergren, editors, {\em Algorithms in
+  Bioinformatics, WABI 2008}, volume 5251, pages 296--305. Springer
+  Berlin/Heidelberg, 2008.
+
+\bibitem{GalledNetworks2009}
+D~H. Huson, R.~Rupp, V~Berry, P.~Gambette, and C.~Paul.
+\newblock Computing galled networks from real data.
+\newblock {\em Bioinformatics}, 25(12), 2009.
+
+\bibitem{PhylogeneticNetworks2010}
+D.~H. Huson, R.~Rupp, and C.~Scornavacca.
+\newblock {\em Phylogenetic Networks}.
+\newblock Cambridge University Press, 2010.
+
+\bibitem{SplitsTree98}
+Daniel~H. Huson.
+\newblock {SplitsTree}: analyzing and visualizing evolutionary data.
+\newblock {\em Bioinformatics}, 14(10):68--73, 1998.
+
+\bibitem{Huson2009}
+Daniel~H. Huson.
+\newblock Drawing rooted phylogenetic networks.
+\newblock {\em IEEE/ACM Transactions on Computational Biology and
+  Bioinformatics}, 6(1):103--109, 2009.
+
+\bibitem{zclosure}
+D.H. Huson, T.~Dezulian, T.~Kloepper, and M.~A. Steel.
+\newblock Phylogenetic super-networks from partial trees.
+\newblock {\em IEEE/ACM Transactions in Computational Biology and
+  Bioinformatics}, 1(4):151--158, 2004.
+
+\bibitem{HusonLinz2012}
+D.H. Huson and S.~Linz.
+\newblock Computing minimum hybridization networks from real phylogenetic
+  trees, 2012.
+\newblock Under review.
+
+\bibitem{MNWRTPST2004}
+Bernard M.~E. Moret, Luay Nakhleh, Tandy Warnow, C.~Randal Linder, Anna Tholse,
+  Anneke Padolina, Jerry Sun, and Ruth Timme.
+\newblock Phylogenetic networks: Modeling, reconstructibility, and accuracy.
+\newblock {\em IEEE/ACM Transactions on Computational Biology and
+  Bioinformatics}, 1(1):13--23, 2004.
+
+\bibitem{Nakhleh2009}
+Luay Nakhleh.
+\newblock A metric on the space of reduced phylogenetic networks.
+\newblock {\em IEEE/ACM Transactions on Computational Biology and
+  Bioinformatics}, 99(RapidPosts), 2009.
+
+\bibitem{Schmidt2003}
+H.A Schmidt.
+\newblock {\em Phylogenetic trees from large datasets}.
+\newblock PhD thesis, Heinrich-Heine-Universitat, Dusseldorf, 2003.
+
+\bibitem{Tanglegrams}
+C.~Scornavacca, F.~Zickmann, and D.H. Huson.
+\newblock Tanglegrams for rooted phylogenetic trees and networks.
+\newblock {\em Bioinformatics}, 27(13):i248--i256, 2011.
+
+\bibitem{Primodial2013}
+M.A. Steel, S.~Linz, D.H. Huson, and M.J. Sanderson.
+\newblock Identifying a species tree subject to random lateral gene transfer.
+\newblock {\em Journal of Theoretical Biology}, 322:81--93, 2013.
+
+\bibitem{VanIersel2009}
+Leo {van Iersel} and Steven Kelk.
+\newblock Constructing the simplest possible phylogenetic network from
+  triplets.
+\newblock {\em Algorithmica}, 2009.
+\newblock DOI 10.1007/s00453-009-9333-0.
+
+\bibitem{LevelKClusters2010}
+Leo van Iersel, Steven Kelk, Regula Rupp, and Daniel~H. Huson.
+\newblock Phylogenetic networks do not need to be complex: using fewer
+  reticulations to represent conflicting clusters.
+\newblock {\em Bioinformatics}, 26(12):i124--i131, June 2010.
+
+\bibitem{whiddenWABI}
+Chris Whidden and Norbert Zeh.
+\newblock A unifying view on approximation and fpt of agreement forests.
+\newblock In Steven Salzberg and Tandy Warnow, editors, {\em Algorithms in
+  Bioinformatics}, volume 5724 of {\em Lecture Notes in Computer Science},
+  pages 390--402. Springer Berlin / Heidelberg, 2009.
+
+\end{thebibliography}

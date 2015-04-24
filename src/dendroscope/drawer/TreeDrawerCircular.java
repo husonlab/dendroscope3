@@ -1,0 +1,258 @@
+/**
+ * Copyright 2015, Daniel Huson
+ *
+ *(Some files contain contributions from other authors, who are then mentioned separately)
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/
+
+package dendroscope.drawer;
+
+import dendroscope.window.TreeViewer;
+import jloda.graph.Edge;
+import jloda.graph.Node;
+import jloda.graph.NodeIntegerArray;
+import jloda.graphview.EdgeView;
+import jloda.graphview.GraphView;
+import jloda.graphview.NodeView;
+import jloda.phylo.PhyloTree;
+import jloda.phylo.PhyloTreeUtils;
+import jloda.util.Geometry;
+
+import java.awt.*;
+import java.awt.geom.Point2D;
+import java.util.Iterator;
+import java.util.LinkedList;
+
+/**
+ * draws a tree using circle arc edges
+ * Daniel Huson, 1.2007
+ */
+public class TreeDrawerCircular extends TreeDrawerRadial implements IOptimizedGraphDrawer {
+    final static public String DESCRIPTION = "Draw (rooted) tree using circle segments";
+
+    /**
+     * constructor
+     *
+     * @param viewer
+     * @param tree
+     */
+    public TreeDrawerCircular(TreeViewer viewer, PhyloTree tree) {
+        super(viewer, tree);
+        setupGraphView(viewer);
+        setAuxilaryParameter(5); // percent offset in phylogram view of network
+    }
+
+    /**
+     * setd up the graphview
+     *
+     * @param graphView
+     */
+    public void setupGraphView(GraphView graphView) {
+        graphView.setAllowInternalEdgePoints(false);
+        graphView.setMaintainEdgeLengths(false);
+        graphView.setAllowMoveNodes(false);
+        graphView.setAllowMoveInternalEdgePoints(false);
+        graphView.setKeepAspectRatio(true);
+        graphView.setAllowRotationArbitraryAngle(true);
+        trans.getMagnifier().setInRectilinearMode(false);
+    }
+
+    /**
+     * compute an embedding of the graph
+     *
+     * @param toScale if true, build to-scale embedding
+     * @return true, if embedding was computed
+     */
+    public boolean computeEmbedding(boolean toScale) {
+        this.toScale = toScale;
+        if (tree.getNumberOfNodes() == 0)
+            return true;
+        viewer.removeAllInternalPoints();
+        viewer.removeAllLocations();
+        nodesWithMovedLabels.clear();
+        edgesWithMovedLabels.clear();
+        edgesWithMovedInternalPoints.clear();
+
+        Node root = tree.getRoot();
+        if (root == null) {
+            tree.setRoot(tree.getFirstNode());
+            root = tree.getRoot();
+        }
+
+        // assign angles to all edges
+        computeAngles(root);
+
+        // compute coordinates
+        viewer.setLocation(root, new Point(0, 0));
+        if (toScale) {
+            setCoordinatesPhylogram(root);
+            addInternalPoints();
+        } else {
+            NodeIntegerArray levels = computeLevels(1);
+            int maxLevel = levels.getValue(tree.getRoot());
+            computeCoordinatesCladogramRec(tree.getRoot(), levels, maxLevel);
+            addInternalPoints();
+        }
+
+        // setup optimization datastructures:
+        recomputeOptimization(null);
+        return true;
+    }
+
+    /**
+     * assign equal angle coordinates
+     *
+     * @param root
+     */
+    protected void setCoordinatesPhylogram(Node root) {
+        boolean optionUseWeights = true;
+
+        Point2D rootPt = viewer.getLocation(root);
+
+        int percentOffset = getAuxilaryParameter();
+
+        double smallDistance = 5.0 / 100.0;
+        if (optionUseWeights) {
+            double largestDistance = getLongestEdgeLength();
+            smallDistance = (percentOffset / 100.0) * largestDistance;
+        }
+
+        // assign coordinates:
+        java.util.List<Node> queue = new LinkedList<>();
+        queue.add(root);
+
+        while (queue.size() > 0) // breath-first assignment
+        {
+            Node w = queue.remove(0); // pop
+
+            boolean ok = true;
+            if (w.getInDegree() == 1) // has regular in edge
+            {
+                Edge e = w.getFirstInEdge();
+                Node v = e.getSource();
+                Point2D vPt = viewer.getLocation(v);
+
+                if (vPt == null) // can't process yet
+                {
+                    ok = false;
+                } else {
+                    double weight = (optionUseWeights ? tree.getWeight(e) : 1);
+                    double dist = rootPt.distance(vPt) + weight;
+                    Point2D wPt = Geometry.translateByAngle(rootPt, node2AngleOfInEdge.getValue(w), dist);
+                    viewer.setLocation(w, wPt);
+                }
+            } else if (w.getInDegree() > 1) // all in edges are 'blue' edges
+            {
+                double maxDistance = 0;
+                for (Iterator it = w.getInEdges(); ok && it.hasNext(); ) {
+                    Node v = ((Edge) it.next()).getSource();
+                    Point2D vPt = viewer.getLocation(v);
+                    if (vPt == null) {
+                        ok = false;
+                    } else {
+                        maxDistance = Math.max(maxDistance, rootPt.distance(vPt));
+                    }
+                }
+                if (ok) {
+                    double angle = w.getOutDegree() > 0 ? node2AngleOfInEdge.getValue(w.getFirstOutEdge().getTarget()) : 0;
+                    Point2D wPt = Geometry.translateByAngle(rootPt, angle, maxDistance + smallDistance);
+                    wPt = Geometry.translateByAngle(wPt, angle, smallDistance);
+                    viewer.setLocation(w, wPt);
+                }
+            }
+
+            if (ok)  // add childern to end of queue:
+            {
+                for (Iterator it = w.getOutEdges(); it.hasNext(); ) {
+                    queue.add(((Edge) it.next()).getTarget());
+                }
+            } else  // process this node again later
+                queue.add(w);
+        }
+    }
+
+    /**
+     * recursively compute node coordinates from edge angles:
+     *
+     * @param v Node
+     */
+    private void computeCoordinatesCladogramRec(Node v, NodeIntegerArray levels, int maxLevel) {
+        for (Node w : getLSAChildren(v)) {
+            computeCoordinatesCladogramRec(w, levels, maxLevel);
+
+            int level = maxLevel - levels.getValue(w);
+            Point2D apt = new Point2D.Double(level, 0);
+            viewer.setLocation(w, Geometry.rotate(apt, node2AngleOfInEdge.getValue(w)));
+        }
+    }
+
+    /**
+     * set the default label positions for nodes and edges
+     *
+     * @param resetAll if true, reset positions for user-placed labels, too
+     */
+    public void resetLabelPositions(boolean resetAll) {
+        nodesWithMovedLabels.clear();
+        edgesWithMovedLabels.clear();
+        if (tree.getRoot() != null)
+            resetLabelPositionsRec(tree.getRoot(), null, resetAll);
+    }
+
+    /**
+     * recursively do the work
+     *
+     * @param v
+     * @param e
+     * @param resetAll
+     */
+    private void resetLabelPositionsRec(Node v, Edge e, boolean resetAll) {
+        if (e != null) {
+            EdgeView ev = viewer.getEV(e);
+            if (resetAll || ev.getLabelLayout() != EdgeView.USER) {
+                ev.setLabelAngle(0);
+                ev.setLabelLayout(EdgeView.CENTRAL);
+            }
+        }
+
+        boolean isLeaf = true;
+        for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
+            if (PhyloTreeUtils.okToDescendDownThisEdge(tree, f, v)) {
+                isLeaf = false;
+                resetLabelPositionsRec(f.getOpposite(v), f, resetAll);
+            }
+        }
+        NodeView nv = viewer.getNV(v);
+
+        if (resetAll || nv.getLabelLayout() != NodeView.USER) {
+            if (isLeaf) {
+                Point2D location = nv.getLocation();
+                Point2D refPoint = new Point2D.Double(0, 0);
+                float angle = (float) (Geometry.computeAngle(Geometry.diff(location, refPoint)) + trans.getAngle());
+                if (radialLabels) {
+                    nv.setLabelAngle(angle);
+                    nv.setLabelLayout(NodeView.RADIAL);
+                    int d = Math.max(nv.getHeight(), nv.getWidth()) / 2 + 3;
+                    nv.setLabelOffset(Geometry.rotate(new Point(d, 0), nv.getLabelAngle()));
+                } else {
+                    nv.setLabelLayoutFromAngle(angle);
+                    nv.setLabelAngle(0);
+                }
+            } else {
+                nv.setLabelAngle(0);
+                nv.setLabelOffset(new Point(0, 0));
+                nv.setLabelLayout(NodeView.CENTRAL);
+            }
+        }
+    }
+}

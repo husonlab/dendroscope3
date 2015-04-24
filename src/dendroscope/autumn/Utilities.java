@@ -1,0 +1,109 @@
+/**
+ * Copyright 2015, Daniel Huson
+ *
+ *(Some files contain contributions from other authors, who are then mentioned separately)
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/
+
+package dendroscope.autumn;
+
+import dendroscope.algorithms.utils.HasseDiagram;
+import dendroscope.consensus.Cluster;
+import dendroscope.consensus.Taxa;
+import jloda.graph.Edge;
+import jloda.graph.Node;
+import jloda.phylo.PhyloTree;
+import jloda.util.CanceledException;
+import jloda.util.ProgressListener;
+
+import java.io.IOException;
+import java.util.BitSet;
+import java.util.HashSet;
+import java.util.Set;
+
+/**
+ * utilities
+ * Daniel Huson, 7.2011
+ */
+public class Utilities {
+
+    /**
+     * get the number of reticulations in a cluster network
+     *
+     * @param tree1
+     * @param tree2
+     * @param progressListner
+     * @return number of reticulate nodes
+     * @throws CanceledException
+     */
+    public static int getNumberOfReticulationsInClusterNetwork(PhyloTree tree1, PhyloTree tree2, ProgressListener progressListner) throws CanceledException, IOException {
+
+        Taxa allTaxa = new Taxa();
+        dendroscope.consensus.Utilities.extractTaxa(1, tree1, allTaxa);
+        dendroscope.consensus.Utilities.extractTaxa(2, tree2, allTaxa);
+
+        Set<Cluster> clusters = extractClusters(allTaxa, tree1, tree2);
+        PhyloTree hasseDiagram = HasseDiagram.constructHasse(clusters.toArray(new Cluster[clusters.size()]));
+
+        int count = 0;
+        for (Node v = hasseDiagram.getFirstNode(); v != null; v = v.getNext()) {
+            if (v.getInDegree() > 1)
+                count++;
+        }
+        return count;
+    }
+
+    /**
+     * extract the set of clusters from the two given trees
+     *
+     * @param allTaxa
+     * @param tree1
+     * @return set of clusters, each cluster a BitSet
+     */
+    static public Set<Cluster> extractClusters(Taxa allTaxa, PhyloTree tree1, PhyloTree tree2) {
+        Set<Cluster> result = new HashSet<Cluster>();
+
+        BitSet taxa = extractClustersRec(tree1, tree1.getRoot(), allTaxa, result);
+        taxa.or(extractClustersRec(tree2, tree2.getRoot(), allTaxa, result));
+        assert (taxa.cardinality() == allTaxa.size());
+
+        return result;
+    }
+
+    /**
+     * recursively find all clusters in a tree
+     *
+     * @param tree
+     * @param v
+     * @param taxa
+     * @param clusters
+     * @return all taxa on or below v
+     */
+    private static Cluster extractClustersRec(PhyloTree tree, Node v, Taxa taxa, Set<Cluster> clusters) {
+        Cluster clusterV = new Cluster();
+        String label = tree.getLabel(v);
+        if (label != null && label.length() > 0 && taxa.indexOf(label) != -1)
+            clusterV.set(taxa.indexOf(label));
+
+        for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
+            Node w = e.getTarget();
+            Cluster clusterW = extractClustersRec(tree, w, taxa, clusters);
+            assert (clusterW.cardinality() > 0);
+            clusters.add(new Cluster(clusterW, tree.getWeight(e), tree.getConfidence(e), 0));
+            clusters.add(clusterW);
+            clusterV.or(clusterW);
+        }
+        return clusterV;
+    }
+}

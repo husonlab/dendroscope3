@@ -1,0 +1,568 @@
+/**
+ * Copyright 2015, Daniel Huson
+ *
+ *(Some files contain contributions from other authors, who are then mentioned separately)
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/
+
+package dendroscope.util;
+
+import jloda.graph.*;
+import jloda.phylo.PhyloGraphView;
+import jloda.phylo.PhyloTree;
+import jloda.util.Basic;
+import jloda.util.NotOwnerException;
+
+import java.util.*;
+
+/**
+ * phylo tree utilities
+ * Daniel Huson, Celine Scornavacca 2.2008
+ */
+
+
+//todo: can we delete extractInducedSubtree? Is it the same as extractInducedSubnetwork???
+
+public class PhyloTreeUtils {
+    /**
+     * extract the subtree induced by a selection of nodes.
+     *
+     * @return induced subtree   or null, if not possible
+     */
+    public static PhyloTree extractInducedSubtree(PhyloTree tree, NodeSet selected, NodeSet collapsed,
+                                                  boolean reduce) {
+        if (selected.size() == 0)
+            return tree;
+        NodeIntegerArray node2NumberInducedChildren = new NodeIntegerArray(tree);
+        findInducedSubnetworkRec(tree.getRoot(), node2NumberInducedChildren, new NodeSet(tree), collapsed, selected);
+        Node subtreeRoot = null;
+        if (reduce)
+            subtreeRoot = findSubtreeNetworkRec(tree, tree.getRoot(), node2NumberInducedChildren, selected);
+        if (subtreeRoot == null || subtreeRoot.getOutDegree() == 0 || (collapsed != null && collapsed.contains(subtreeRoot)))
+            subtreeRoot = tree.getRoot();
+        PhyloTree newTree = new PhyloTree();
+        newTree.setRoot(newTree.newNode());
+        newTree.setLabel(newTree.getRoot(), tree.getLabel(subtreeRoot));
+        createInducedSubnetworkRec(subtreeRoot, newTree.getRoot(), tree, new NodeSet(tree), newTree,
+                new NodeArray(tree), node2NumberInducedChildren);
+        if (reduce) {
+            java.util.List divertices = new LinkedList();
+            for (Node v = newTree.getFirstNode(); v != null; v = v.getNext()) {
+                if (v.getInDegree() == 1 && v.getOutDegree() == 1)
+                    divertices.add(v);
+            }
+            for (Iterator it = divertices.iterator(); it.hasNext(); ) {
+                Node v = (Node) it.next();
+                newTree.delDivertex(v);
+            }
+        }
+        for (Edge e = newTree.getFirstEdge(); e != null; e = e.getNext()) {
+
+            if (e.getTarget().getInDegree() > 1)
+                newTree.getSpecialEdges().add(e);
+        }
+        return newTree;
+    }
+
+    /**
+     * extract the subnetwork induced by a selection of nodes.
+     *
+     * @return induced subnetwork   or null, if not possible
+     */
+    public static PhyloTree extractInducedSubnetwork(PhyloTree network, NodeSet selected, NodeSet collapsed,
+                                                     boolean reduce) {
+        if (selected.size() == 0)
+            return network;
+
+        NodeIntegerArray node2NumberInducedChildren = new NodeIntegerArray(network);
+        findInducedSubnetworkRec(network.getRoot(), node2NumberInducedChildren, new NodeSet(network), collapsed, selected);
+
+        Node subtreeRoot = null;
+        if (network.getSpecialEdges().size() == 0) { //tree
+            subtreeRoot = findSubtreeNetworkRec(network, network.getRoot(), node2NumberInducedChildren, selected);
+        } else {
+            LCA_LSACalculation LSA = new LCA_LSACalculation(network, true);
+            subtreeRoot = LSA.getLca(selected, true);
+        }
+
+        if (subtreeRoot == null || subtreeRoot.getOutDegree() == 0 || (collapsed != null && collapsed.contains(subtreeRoot)))
+            subtreeRoot = network.getRoot();
+        PhyloTree newTree = new PhyloTree();
+        newTree.setRoot(newTree.newNode());
+        newTree.setLabel(newTree.getRoot(), network.getLabel(subtreeRoot));
+        createInducedSubnetworkRec(subtreeRoot, newTree.getRoot(), network, new NodeSet(network), newTree,
+                new NodeArray(network), node2NumberInducedChildren);
+        if (reduce) {
+            java.util.List divertices = new LinkedList();
+            for (Node v = newTree.getFirstNode(); v != null; v = v.getNext()) {
+                if (v.getInDegree() == 1 && v.getOutDegree() == 1)
+                    divertices.add(v);
+            }
+            for (Iterator it = divertices.iterator(); it.hasNext(); ) {
+                Node v = (Node) it.next();
+                newTree.delDivertex(v);
+            }
+        }
+        for (Edge e = newTree.getFirstEdge(); e != null; e = e.getNext()) {
+
+            if (e.getTarget().getInDegree() > 1)
+                newTree.getSpecialEdges().add(e);
+        }
+        return newTree;
+
+    }
+
+    /**
+     * extract the subnetwork induced by a selection of nodes.
+     *
+     * @return induced subnetwork   or null, if not possible
+     */
+    public static PhyloTree extractLSAInducedSubNetwork(PhyloTree network, NodeSet selected, NodeSet collapsed,
+                                                        boolean reduce) {
+
+        //System.err.println("size sel" + selected.size());
+
+        if (selected.size() == 0)
+            return network;
+
+
+        NodeIntegerArray node2NumberInducedChildren = new NodeIntegerArray(network);
+        findInducedSubnetworkRec(network.getRoot(), node2NumberInducedChildren, new NodeSet(network), collapsed, selected);
+
+        Node subtreeRoot = null;
+        if (network.getSpecialEdges().size() == 0) { //tree
+            subtreeRoot = findSubtreeNetworkRec(network, network.getRoot(), node2NumberInducedChildren, selected);
+        } else {
+            LCA_LSACalculation LSA = new LCA_LSACalculation(network, true);
+            subtreeRoot = LSA.getLca(selected, true);
+
+        }
+
+        if (subtreeRoot == null || subtreeRoot.getOutDegree() == 0 || (collapsed != null && collapsed.contains(subtreeRoot)))
+            subtreeRoot = network.getRoot();
+
+
+        PhyloTree newTree = getSubnetwork(network, subtreeRoot);
+
+        return newTree;
+
+    }
+
+    /**
+     * extract the subnetwork induced by a selection of nodes.
+     *
+     * @return induced subnetwork   or null, if not possible
+     */
+    public static PhyloTree extractSubNetwork(PhyloTree network, NodeSet selected, NodeSet collapsed,
+                                              boolean reduce) {
+        if (selected.size() == 0)
+            return network;
+
+
+        PhyloTree newTree = getSubnetwork(network, selected.getFirstElement());
+
+        return newTree;
+
+    }
+
+
+    /**
+     * selects the subnetwork rooted at the LSA of the given selection of nodes
+     *
+     * @param viewer
+     * @param network
+     * @param selected
+     */
+    public static Node selectLSAInducedSubNetwork(PhyloGraphView viewer, PhyloTree network, NodeSet selected, NodeSet collapsed) {
+
+        NodeIntegerArray node2NumberInducedChildren = new NodeIntegerArray(network);
+
+        Node subtreeRoot = null;
+        if (network.getSpecialEdges().size() == 0) { //tree
+            findInducedSubnetworkRec(network.getRoot(), node2NumberInducedChildren, new NodeSet(network), collapsed, selected);
+            subtreeRoot = findSubtreeNetworkRec(network, network.getRoot(), node2NumberInducedChildren, selected);
+        } else {
+            LCA_LSACalculation LSA = new LCA_LSACalculation(network, true);
+            subtreeRoot = LSA.getLca(selected, true);
+
+        }
+
+        if (subtreeRoot == null || subtreeRoot.getOutDegree() == 0 || (collapsed != null && collapsed.contains(subtreeRoot)))
+            subtreeRoot = network.getRoot();
+
+        return subtreeRoot;
+
+    }
+
+    /**
+     * selects the subnetwork induced by the given selection of nodes
+     *
+     * @param viewer
+     * @param network
+     * @param selected
+     */
+    public static void selectInducedSubNetwork(PhyloGraphView viewer, PhyloTree network, NodeSet selected, NodeSet collapsed) {
+
+
+        NodeIntegerArray node2NumberInducedChildren = new NodeIntegerArray(network);
+        findInducedSubnetworkRec(network.getRoot(), node2NumberInducedChildren, new NodeSet(network), collapsed, selected);
+
+        Node subtreeRoot;
+        if (network.getSpecialEdges().size() == 0) { //tree
+            subtreeRoot = findSubtreeNetworkRec(network, network.getRoot(), node2NumberInducedChildren, selected);
+        } else {
+            LCA_LSACalculation LSA = new LCA_LSACalculation(network, true);
+            subtreeRoot = LSA.getLca(selected, true);
+        }
+
+        if (subtreeRoot == null || subtreeRoot.getOutDegree() == 0 || (collapsed != null && collapsed.contains(subtreeRoot)))
+            subtreeRoot = network.getRoot();
+
+        selectInducedSubnetworkRec(viewer, subtreeRoot, network, new NodeSet(network), node2NumberInducedChildren);
+        viewer.setSelected(subtreeRoot, true);
+
+
+    }
+
+
+    /**
+     * find the subnetwork induced by a set of selected nodes
+     *
+     * @param v
+     * @param node2NumberInducedChildren
+     */
+    private static void findInducedSubnetworkRec(Node v, NodeIntegerArray node2NumberInducedChildren, NodeSet visited,
+                                                 NodeSet collapsed, NodeSet selected) {
+        int count = 0;
+        if (collapsed == null || !collapsed.contains(v)) {
+            for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
+                Node w = f.getTarget();
+                if (!visited.contains(w)) {
+                    visited.add(w);
+                    findInducedSubnetworkRec(w, node2NumberInducedChildren, visited, collapsed, selected);
+                }
+                if (node2NumberInducedChildren.getValue(w) != 0)
+                    count++;
+            }
+        }
+        if (count != 0)
+            node2NumberInducedChildren.set(v, count);
+        else if (selected.contains(v))
+            node2NumberInducedChildren.set(v, -1); // is selected
+    }
+
+    /**
+     * find root of induced subtree. this is first node that has two or more induced children
+     *
+     * @param v
+     * @param node2NumberInducedChildren
+     * @return root
+     */
+    private static Node findSubtreeNetworkRec(PhyloTree tree, Node v, NodeIntegerArray node2NumberInducedChildren, NodeSet selected) {
+        if (node2NumberInducedChildren.getValue(v) > 1 || selected.contains(v))
+            return v;
+        for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
+            if (jloda.phylo.PhyloTreeUtils.okToDescendDownThisEdge(tree, f, v)) {
+                Node w = f.getTarget();
+                if (node2NumberInducedChildren.getValue(w) != 0) {
+                    Node u = findSubtreeNetworkRec(tree, w, node2NumberInducedChildren, selected);
+                    if (u != null)
+                        return u;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * select the induced subtree
+     *
+     * @param v
+     * @param tree
+     */
+    private static void selectInducedSubnetworkRec(PhyloGraphView viewer, Node v, PhyloTree tree, NodeSet visited, NodeIntegerArray node2NumberInducedChildren) {
+
+        for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
+            Node w = f.getTarget();
+
+            if (node2NumberInducedChildren.getValue(w) != 0) {
+
+                viewer.setSelected(w, true);
+                viewer.setSelected(f, true);
+                if (!visited.contains(w)) {
+                    visited.add(w);
+                    selectInducedSubnetworkRec(viewer, w, tree, visited, node2NumberInducedChildren);
+                }
+            }
+        }
+    }
+
+
+    /**
+     * create the induced subtree
+     *
+     * @param v
+     * @param newV
+     * @param tree
+     * @param newTree
+     * @param old2new
+     */
+    private static void createInducedSubnetworkRec(Node v, Node newV, PhyloTree tree, NodeSet visited, PhyloTree newTree, NodeArray old2new,
+                                                   NodeIntegerArray node2NumberInducedChildren) {
+        for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
+            Node w = f.getTarget();
+
+            if (node2NumberInducedChildren.getValue(w) != 0) {
+                Node newW;
+                if (old2new.get(w) != null)
+                    newW = (Node) old2new.get(w);
+                else {
+                    newW = newTree.newNode();
+                    old2new.set(w, newW);
+                }
+
+                if (tree.getLabel(w) != null && tree.getLabel(w).length() > 0)
+                    newTree.setLabel(newW, tree.getLabel(w));
+                Edge newF = newTree.newEdge(newV, newW);
+                if (tree.getLabel(f) != null && tree.getLabel(f).length() > 0)
+                    newTree.setLabel(newF, tree.getLabel(f));
+                newTree.setWeight(newF, tree.getWeight(f));
+                if (!visited.contains(w)) {
+                    visited.add(w);
+                    createInducedSubnetworkRec(w, newW, tree, visited, newTree, old2new, node2NumberInducedChildren);
+                }
+            }
+        }
+    }
+
+
+    /**
+     * calculates the subnetwork T(v).
+     */
+
+    public static PhyloTree getSubnetwork(PhyloTree srcTree, Node v) {
+        PhyloTree newTree = new PhyloTree();
+        Node newNode = newTree.newNode();
+        newTree.setRoot(newNode);
+        List<Node> visited = new LinkedList<Node>();
+        List<Node> visitedNew = new LinkedList<Node>();
+        getSubnetworkRec(srcTree, newTree, v, newNode, visited, visitedNew);
+        return newTree;
+    }
+
+    /**
+     * recursively does the work
+     *
+     * @param oldTree
+     * @param newTree
+     * @param vOld
+     * @param vNew
+     */
+    private static void getSubnetworkRec(PhyloTree oldTree, PhyloTree newTree, Node vOld, Node vNew, List<Node> visited, List<Node> visitedNew) {
+        newTree.setLabel(vNew, oldTree.getLabel(vOld));
+        newTree.setInfo(vNew, oldTree.getInfo(vOld));
+        for (Edge eOld = vOld.getFirstOutEdge(); eOld != null; eOld = vOld.getNextOutEdge(eOld)) {
+            Node wOld = eOld.getTarget();
+            Node wNew = null;
+            boolean isVisited = false;
+
+            if (oldTree.isSpecial(eOld)) {
+                isVisited = visited.contains(wOld);
+                if (isVisited) {
+                    for (Iterator<Node> it = visitedNew.iterator(); it.hasNext(); ) {
+                        Node temp = it.next();
+                        if (newTree.getInfo(temp).equals(wOld.getId()))
+                            wNew = temp;
+                    }
+                } else {
+                    wNew = newTree.newNode();
+                    visited.add(wOld);
+                    if (oldTree.getInfo(wOld) == null) {
+                        newTree.setInfo(wNew, wOld.getId());
+                        oldTree.setInfo(wOld, wOld.getId());
+                    } else {
+                        newTree.setInfo(wNew, oldTree.getInfo(wOld));
+                    }
+                    visitedNew.add(wNew);
+                }
+
+            } else {
+                wNew = newTree.newNode();
+            }
+
+
+            Edge eNew = newTree.newEdge(vNew, wNew);
+            if (oldTree.isSpecial(eOld)) {
+                newTree.setSpecial(eNew, true);
+                newTree.setWeight(eNew, 0);
+            }
+
+            newTree.setLabel(eNew, oldTree.getLabel(eOld));
+            newTree.setInfo(eNew, oldTree.getInfo(eOld));
+
+            if (!isVisited)
+                getSubnetworkRec(oldTree, newTree, wOld, wNew, visited, visitedNew);
+        }
+    }
+
+    /**
+     * collects all clusters contained in the tree.
+     */
+    public static Set<Set<String>> collectAllHardwiredClusters(PhyloTree tree) {
+        Set<Set<String>> clusters = new HashSet<Set<String>>();
+        collectAllHardwiredClustersRec(tree, tree.getRoot(), clusters);
+        return clusters;
+    }
+
+    public static Set<String> collectAllHardwiredClustersRec(PhyloTree tree, Node v, Set<Set<String>> clusters) {
+        //reached a leave
+        if (v.getOutDegree() == 0) {
+            Set<String> set = new HashSet<String>();
+            set.add(tree.getLabel(v));
+            clusters.add(set);
+            return set;
+        }
+        //recursion
+        else {
+            TreeSet<String> set = new TreeSet<String>();
+            for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
+                Node w = f.getTarget();
+                set.addAll(collectAllHardwiredClustersRec(tree, w, clusters));
+            }
+            clusters.add(set);
+            return set;
+        }
+    }
+
+
+    /**
+     * compute the number of nodes present in the shortest path for each pair of leaves, considering the graph undirected
+     *
+     * @param graph
+     * @return dist of shortest paths for each pairs of leaves
+     */
+    public static void computeNumberNodesInTheShortestPath(final PhyloTree graph, Map<String, Integer> taxon2ID, double[][] distMatrix) {
+        try {
+
+
+            NodeSet leaves = graph.computeSetOfLeaves();
+            NodeSet allNodes = graph.getNodes();
+            int[][] distMatrixTemp = new int[allNodes.size()][allNodes.size()];   // temp matrix
+
+            NodeIntegerArray idTemp = new NodeIntegerArray(graph);   //temp id used to fill distMatrixTemp
+            int nN = 0;
+
+
+            for (Node tempNode : allNodes) {
+                idTemp.set(tempNode, nN);     //set temp id
+                nN++;
+
+            }
+
+
+            /* Find the shortest path between source and and all other nodes of the DiRECTED PN.
+            The values are saved in distMatrixTemp, dist is used to order the priorityQueue.
+            */
+
+            for (Node source : allNodes) {
+                int idS = idTemp.getValue(source);
+                //System.out.println("idS" + idS);
+
+                //NodeArray predecessor = new NodeArray(graph);
+                NodeIntegerArray dist = new NodeIntegerArray(graph);
+
+                for (Node v = graph.getFirstNode(); v != null; v = graph.getNextNode(v)) {
+                    dist.set(v, 10000);
+                    int idV = idTemp.getValue(v);
+                    distMatrixTemp[idS][idV] = 10000;
+                    //predecessor.set(v, null);
+                }
+                dist.set(source, 0);
+                distMatrixTemp[idS][idS] = 0;
+
+                SortedSet<Node> priorityQueue = Dijkstra.newFullQueue(graph, dist);
+
+
+                while (priorityQueue.isEmpty() == false) {
+                    int size = priorityQueue.size();
+                    Node u = priorityQueue.first();
+
+                    priorityQueue.remove(u);
+
+                    if (priorityQueue.size() != size - 1)
+                        throw new RuntimeException("remove u=" + u + " failed: size=" + size);
+
+
+                    int idU = idTemp.getValue(u);
+                    Iterator out = graph.getOutEdges(u);
+                    while (out.hasNext()) {
+                        Edge e = (Edge) out.next();
+                        Node v = graph.getOpposite(u, e);
+                        int idV = idTemp.getValue(v);
+                        if (distMatrixTemp[idS][idV] > distMatrixTemp[idS][idU] + 1) {
+                            //System.out.println("enter");
+                            // priorty of v changes, so must re-and to queue:
+                            priorityQueue.remove(v);
+                            distMatrixTemp[idS][idV] = distMatrixTemp[idS][idU] + 1;
+                            dist.set(v, distMatrixTemp[idS][idU] + 1);
+                            priorityQueue.add(v);
+                            //predecessor.set(v, u);
+                        }
+                    }
+                }
+
+
+            }
+
+
+            /* Find the shortest path between each pair of leaves (l1,l2) as the shortest
+            dist(l1,intNode)+ dist(l2,intNode), where intNode is an internal node.
+            The values are saved in distMatrix.
+            */
+
+            for (Iterator l = leaves.iterator(); l.hasNext(); ) {
+                Node source = (Node) l.next();
+                int idS = idTemp.getValue(source);
+                int labelS = taxon2ID.get(graph.getLabel(source)); // Franzi uses values from 1 to n, me from 0 to n-1
+                leaves.remove(source);
+                for (Iterator l2 = leaves.iterator(); l2.hasNext(); ) {
+
+                    Node target = (Node) l2.next();
+                    int idT = idTemp.getValue(target);
+                    int labelT = taxon2ID.get(graph.getLabel(target)); // Same as above
+
+                    //System.out.println("labelS " + labelS+ " labelT " + labelT);
+
+                    int min = 1000000;
+                    for (Iterator i = allNodes.iterator(); i.hasNext(); ) {
+                        Node node = (Node) i.next();
+                        int nodeID = idTemp.getValue(node);
+                        if (distMatrixTemp[nodeID][idS] + distMatrixTemp[nodeID][idT] < min)
+                            min = distMatrixTemp[nodeID][idS] + distMatrixTemp[nodeID][idT];
+                    }
+
+                    distMatrix[labelS][labelT] += min;   //update distMatrix
+                    distMatrix[labelT][labelS] += min;
+                }
+            }
+
+
+        } catch (NotOwnerException ex) {
+            Basic.caught(ex);
+
+        }
+    }
+
+}
+

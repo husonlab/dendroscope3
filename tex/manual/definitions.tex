@@ -1,0 +1,181 @@
+% Show optional stuff:
+\newcommand{\optional}[1]{{#1}}
+% Hide optional stuff:
+\renewcommand{\optional}[1]{}
+
+% link stuff using hyperlinks:
+\newcommand{\link}[2]{\hyperlink{#2}{#1}}
+
+% a todo command:
+\newcommand{\todo}[1]{
+\optional{\marginpar{\raggedright \tiny \textbf{todo:} {#1}}}}
+
+% use \mylabel instead of \label to see labels in print out
+\newcommand{\mylabel}[1]{
+\optional{\marginpar{\raggedright\tiny{#1}}}
+\label{#1}
+\hypertarget{#1}{}
+}
+
+% use \target instead of \hypertarget to see targets in print out
+\newcommand{\target}[2]{
+\hypertarget{#2}{#1}
+\optional{\marginpar{\raggedright\tiny{#2}}}
+}
+
+% use \mysection instead of \section to produce labels and hyperlink targets
+\newcommand{\mysection}[1]{\section{#1}\mylabel{sec:#1}}
+
+% use \mysubsection instead of \section to produce labels and hyperlink targets
+\newcommand{\mysubsection}[1]{\subsection{#1}\mylabel{subsec:#1}}
+
+\newcommand{\menu}[1]{
+\link{{\tt #1}}{menu:#1}}
+
+\newcommand{\pmenu}[1]{
+\target{{\tt #1}}{menu:#1}
+\index{#1}}
+
+\newcommand{\windowmenu}[2]{
+\link{{\tt $#2}}{windowmenu:#1-#2}\index{#2}\index{#2}}
+
+\newcommand{\pwindowmenu}[2]
+{\target{{\tt#2}}{windowmenu:#1-#2}
+\index{#2}\index{#2}}
+
+\newcommand{\submenu}[1]{
+\link{{\tt #1}}{submenu:#1}}
+
+\newcommand{\psubmenu}[1]{
+\target{{\tt #1}}{submenu:#1}
+\index{#1}}
+
+\newcommand{\menuitem}[2]{
+\link{{\tt #1$\to$#2}}{menuitem:#1-#2}
+\index{#1$\to$#2}\index{#2}}
+
+\newcommand{\pmenuitem}[2]{
+\target{{\tt #1$\to$#2}}{menuitem:#1-#2}
+\index{#1$\to$#2}\index{#2}}
+
+\newcommand{\menuitemh}[3]{
+\link{{\tt #1$\to$#2$\to$#3}}{menuitem:#1-#2-#3}\index{#1$\to$#2$\to$#3}\index{#3}}
+
+\newcommand{\pmenuitemh}[3]
+{\target{{\tt#1$\to$#2$\to$#3}}{menuitem:#1-#2-#3}
+\index{#1$\to$#2$\to$#3}\index{#3}}
+
+\newcommand{\windowmenuitem}[3]{
+\link{{\tt #2$\to$#3}}{windowmenuitem:#1-#2-#3}\index{#2$\to$#3}\index{#3}}
+
+\newcommand{\pwindowmenuitem}[3]
+{\target{{\tt#2$\to$#3}}{windowmenuitem:#1-#2-#3}
+\index{#2$\to$#3}\index{#3}}
+
+\newcommand{\ppopupmenu}[1]{
+\target{{\tt #1}}{popupmenu:#1}
+\index{#1}}
+
+\newcommand{\popupmenu}[1]{
+\link{{\tt #1}}{popupmenu:#1}
+\index{#1}}
+
+\newcommand{\ppopupmenuitem}[2]{
+\target{{\tt #2}}{popupmenuitem:#1-#2}
+\index{#1$\to$#2}\index{#2}}
+
+\newcommand{\popupmenuitem}[2]{
+\link{{\tt #2}}{popupmenuitem:#1-#2}
+\index{#1$\to$#2}\index{#2}}
+
+\newcommand{\block}[1]{
+\link{{\tt #1}}{block:#1}}
+
+\newcommand{\pblock}[1]{
+\target{{\tt #1}}{block:#1}
+\index{#1}}
+
+\newcommand{\button}[1]{
+\link{{\tt #1}}{button:#1}}
+
+\newcommand{\pbutton}[1]{
+\target{{\tt #1}}{button:#1}
+\index{#1}}
+
+\newcommand{\method}[1]{
+\link{{\tt #1}}{method:#1}}
+
+\newcommand{\pmethod}[1]{
+\target{{\tt #1}}{method:#1}
+\index{#1}}
+
+\newcommand{\window}[1]{
+\link{{\tt #1}}{window:#1}}
+
+\newcommand{\pwindow}[1]{
+\target{{\tt #1}}{window:#1}
+\index{#1}}
+
+\newcommand{\tab}[2]{
+\link{{\tt #1:#2}}{tab:#1-#2}}
+
+\newcommand{\ptab}[2]{
+\target{{\tt #1:#2}}{tab:#1-#2}
+\index{#1:#2}}
+
+\newcommand{\tabtab}[3]{
+\link{{\tt #1:#2:#3}}{tabtab:#1-#2-#3}}
+
+\newcommand{\ptabtab}[3]{
+\target{{\tt #1:#2:#3}}{tabtab:#1-#2-#3}
+\index{#1:#2:#3}}
+
+\newcommand{\concept}[1]{
+\link{{#1}}{concept:#1}}
+
+\newcommand{\pconcept}[1]{
+\target{{\em #1}}{concept:#1}
+\index{#1}}
+
+%%% The following commands are to help make hyperlinks:
+
+% use this to emphasize a word and to put it into the index:
+\newcommand{\iem}[1]{{\em #1}\index{#1}}
+\newcommand{\irm}[1]{{#1}\index{#1}}
+\newcommand{\itt}[1]{{\tt #1}\index{#1}}
+\newcommand{\ibf}[1]{{\bf #1}\index{#1}}
+\newcommand{\iit}[1]{{\it #1}\index{#1}}
+\newcommand{\isc}[1]{{\sc #1}\index{#1}}
+
+% use this to emphasize a word and to put it into the index and link it
+% to it's primary occurrence:
+\newcommand{\ieml}[1]{\link{{\em #1}}{#1}\index{#1}}
+\newcommand{\irml}[1]{\link{#1}{#1}\index{#1}}
+\newcommand{\ittl}[1]{\link{{\tt #1}}{#1}\index{#1}}
+\newcommand{\iitl}[1]{\link{{\it #1}}{#1}\index{#1}}
+\newcommand{\iscl}[1]{\link{{\sc #1}}{#1}\index{#1}}
+\newcommand{\il}[1]{\link{#1}{#1}\index{#1}}
+
+% use this to emphasize the primary occurrence of
+% word and to put it into the index, also make this occurrence of the word
+% a hyperlink target:
+\newcommand{\pem}[1]{{\em \hypertarget{#1}{#1}}\index{#1}
+\optional{{\marginpar{\raggedright\tiny{#1}}}}}
+
+
+% use this to ignore stuff:
+
+\newcommand{\ignore}[1]{}
+% some definitions:
+
+\def\kb{{\rm kb }}
+\def\bp{{\rm bp }}
+\def\Gb{{\rm Gb }}
+\def\Mb{{\rm Mb }}
+
+\def\this{.}
+
+% Headings
+%\pagestyle{myheadings}
+%\markboth{}{$ $Date: 2007-01-19 16:30:55 $ $\hfil User Manual \Megan v4b25} 
+
