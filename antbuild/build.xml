@@ -15,9 +15,7 @@
 
     <path id="build.classpath">
         <fileset dir="../../jloda/jars/batik-1.8" includes="*.jar"/>
-        <pathelement path="../../jloda/jars/junit.jar"/>
-
-        <fileset dir="../../dendroscope/jars"  includes="*.jar"/>
+        <fileset dir="../jars" includes="*.jar"/>
     </path>
 
     <!-- init -->
