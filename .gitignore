@@ -23,5 +23,5 @@ hs_err_pid*
 *.toc
 
 # antbuild:
-antbuild
+antbuild/
 !antbuild/build.xml

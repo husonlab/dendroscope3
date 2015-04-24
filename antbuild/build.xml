@@ -82,12 +82,8 @@
     <!-- removes all that has been built -->
     <target name="clean">
         <delete dir="${classDir}" includeEmptyDirs="true"/>
-        <delete dir="src" includeEmptyDirs="true"/>
-        <delete file="Dendroscope_shrinklog.xml"/>
-        <delete file="Dendroscope_renamelog.xml"/>
-        <delete file="Dendroscope.jar"/>
-        <delete file="Dendroscope_raw.jar"/>
-
+        <delete dir="${srcDir}" includeEmptyDirs="true"/>
+        <delete file="${jar}"/>
     </target>
 </project>
 
