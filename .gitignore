@@ -23,5 +23,8 @@ hs_err_pid*
 *.toc
 
 # antbuild:
-antbuild/
-!antbuild/build.xml
+antbuild/*.jar
+antbuild/*rename*
+antbuild/*shrink*
+antbuild/src/
+antbuild/classes/
