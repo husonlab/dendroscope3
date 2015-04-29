@@ -43,14 +43,15 @@
     <!-- compile  Dendroscope -->
     <target name="compile" depends="copy_sources">
 	    <javac includeantruntime="false"
-		    srcdir="${srcDir}"
+	    srcdir="${srcDir}"
                compiler="javac1.7"
                destdir="${classDir}"
                debug="off"
-               classpathref="build.classpath"
                source="1.7"
-               target="1.7"
-                />
+	       target="1.7"
+	       classpathref="build.classpath">
+	       <compilerarg value="-XDignore.symbol.file=true"/> 
+        </javac>
     </target>
 
     <!-- create .jar -->
