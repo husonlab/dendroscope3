@@ -58,7 +58,7 @@
     <target name="jar" depends="compile">
         <jar jarfile="${jar}"
              basedir="${classDir}"
-             includes="gnu/** jloda/** dendroscope/** resources/**">
+             includes="jloda/** dendroscope/** resources/**">
         </jar>
     </target>
 

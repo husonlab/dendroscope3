@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<install4j version="6.0.1" transformSequenceNumber="5">
-  <directoryPresets config="../jars/LICENSE-commons-collections-3.2.1.txt" />
-  <application name="Dendroscope" distributionSourceDir="" applicationId="3637-0812-9190-9529" mediaDir="../../../builds" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" commonExternalFiles="false" createMd5Sums="true" shrinkRuntime="true" shortName="Dendroscope" publisher="Center for Bioinformatics Tübingen" publisherWeb="www.zbit.informatik.uni-tuebingen.de" version="3.0" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" macVolumeId="f94969a45be0d53a" javaMinVersion="1.5" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
+<install4j version="6.0.3" transformSequenceNumber="5">
+  <directoryPresets config="../../jloda/jars/Jama-NOTICE.txt" />
+  <application name="Dendroscope" distributionSourceDir="" applicationId="3637-0812-9190-9529" mediaDir="../../../builds" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" commonExternalFiles="false" createMd5Sums="true" shrinkRuntime="true" shortName="Dendroscope" publisher="Center for Bioinformatics Tübingen" publisherWeb="www.zbit.informatik.uni-tuebingen.de" version="3.0" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" macVolumeId="f94969a45be0d53a" javaMinVersion="1.7" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="false" languageSelectionInPrincipalLanguage="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages />
@@ -26,17 +26,18 @@
     <entries>
       <fileEntry mountPoint="1691242181" file="../examples/trees.new" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="true" overrideOverwriteMode="true" overrideUninstallMode="true" />
       <fileEntry mountPoint="1691242181" file="../examples/23sA.tre" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="true" overrideOverwriteMode="true" overrideUninstallMode="true" />
-      <fileEntry mountPoint="1691242151" file="../jars/BrowserLauncher2-10rc4.jar" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="true" overrideOverwriteMode="true" overrideUninstallMode="true" />
-      <fileEntry mountPoint="1691242151" file="../jars/MRJAdapter.jar" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="true" overrideOverwriteMode="true" overrideUninstallMode="true" />
-      <fileEntry mountPoint="1691242151" file="../../jloda/jars/batik-all-1.6.jar" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="true" overrideOverwriteMode="true" overrideUninstallMode="true" />
-      <fileEntry mountPoint="1691242151" file="../../jloda/jars/batik.LICENSE.txt" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="true" overrideOverwriteMode="true" overrideUninstallMode="true" />
-      <fileEntry mountPoint="1691242151" file="../../jloda/jars/batik.NOTICE.txt" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="true" overrideOverwriteMode="true" overrideUninstallMode="true" />
-      <fileEntry mountPoint="1691242151" file="../../jloda/jars/Jama-1.0.2.jar" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="true" overrideOverwriteMode="true" overrideUninstallMode="true" />
       <fileEntry mountPoint="1691242151" file="../jars/nexml.jar" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" />
-      <fileEntry mountPoint="1691242151" file="../../jloda/jars/gnujpdf-license.txt" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" />
       <fileEntry mountPoint="1691242151" file="../antbuild/Dendroscope.jar" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="true" overrideOverwriteMode="true" overrideUninstallMode="true" />
       <fileEntry mountPoint="1691242151" file="../jars/commons-collections-3.2.1.jar" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" />
       <fileEntry mountPoint="1691242151" file="../jars/LICENSE-commons-collections-3.2.1.txt" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" />
+      <dirEntry mountPoint="1691242151" file="../../jloda/jars/batik-1.8" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="subdir" subDirectory="batik-1.8" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
+      <fileEntry mountPoint="1691242151" file="../../jloda/jars/gnujpdf-src.jar" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" />
+      <fileEntry mountPoint="1691242151" file="../../jloda/jars/gnujpdf.jar" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" />
+      <fileEntry mountPoint="1691242151" file="../../jloda/jars/gnujpdf-license.txt" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" />
+      <fileEntry mountPoint="1691242151" file="../../jloda/jars/Jama-1.0.3.jar" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" />
+      <fileEntry mountPoint="1691242151" file="../../jloda/jars/Jama-NOTICE.txt" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" />
       <fileEntry mountPoint="1691242160" file="./License.txt" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="true" overrideOverwriteMode="true" overrideUninstallMode="true" />
       <fileEntry mountPoint="1691242160" file="../tex/manual/manual.pdf" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="true" overrideOverwriteMode="true" overrideUninstallMode="true" />
     </entries>
@@ -81,6 +82,7 @@
         <classPath>
           <scanDirectory location="jars" failOnError="false" />
           <directory location="class" failOnError="false" />
+          <scanDirectory location="jars/batik-1.8" failOnError="false" />
         </classPath>
         <nativeLibraryDirectories />
       </java>
@@ -1240,7 +1242,9 @@ wizardContext.setCancelButtonVisible(false);</preActivation>
     </applications>
   </installerGui>
   <mediaSets>
-    <windows name="Windows" id="1280490036" customizedId="" mediaFileName="" installDir="Dendroscope" overridePrincipalLanguage="true" jreBitType="32" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="" manualJREEntry="false" bundleType="1" jreURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" customInstallBaseDir="" contentFilesType="1" downloadURL="" verifyIntegrity="true">
+    <windows name="Windows" id="1280490036" customizedId="" mediaFileName="" installDir="Dendroscope" overridePrincipalLanguage="true" jreBitType="32" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" downloadURL="" includeAllDownloadableComponents="false" includedJRE="windows-x86-1.8.0_40" manualJREEntry="false" bundleType="1" jreURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" customInstallBaseDir="" contentFilesType="1" verifyIntegrity="true">
+      <excludedComponents />
+      <includedDownloadableComponents />
       <excludedLaunchers />
       <excludedBeans />
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
@@ -1250,10 +1254,10 @@ wizardContext.setCancelButtonVisible(false);</preActivation>
         <commentFiles />
         <customAttributes />
       </autoUpdate>
-      <excludedComponents />
-      <includedDownloadableComponents />
     </windows>
-    <unixInstaller name="Unix Installer" id="1691242146" customizedId="" mediaFileName="" installDir="dendroscope" overridePrincipalLanguage="true" jreBitType="all" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="" manualJREEntry="false" bundleType="1" jreURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" customInstallBaseDir="" contentFilesType="1" downloadURL="">
+    <unixInstaller name="Unix Installer" id="1691242146" customizedId="" mediaFileName="" installDir="dendroscope" overridePrincipalLanguage="true" jreBitType="all" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" downloadURL="" includeAllDownloadableComponents="false" includedJRE="" manualJREEntry="false" bundleType="1" jreURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" customInstallBaseDir="" contentFilesType="1">
+      <excludedComponents />
+      <includedDownloadableComponents />
       <excludedLaunchers />
       <excludedBeans />
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
@@ -1263,13 +1267,13 @@ wizardContext.setCancelButtonVisible(false);</preActivation>
         <commentFiles />
         <customAttributes />
       </autoUpdate>
-      <excludedComponents />
-      <includedDownloadableComponents />
       <installerScript mode="1" file="">
         <content />
       </installerScript>
     </unixInstaller>
-    <macosFolder name="Mac OS X Folder" id="1691242149" customizedId="" mediaFileName="" installDir="Dendroscope" overridePrincipalLanguage="true" jreBitType="all" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="" manualJREEntry="false" bundleType="1" jreURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" appleJre="true" requiredVmIdPrefix="" customInstallBaseDir="" contentFilesType="1" downloadURL="" installerName="${i18n:InstallerName(${compiler:sys.fullName})}" volumeName="${compiler:sys.shortName}" compressDmg="false" signLaunchers="false">
+    <macosFolder name="Mac OS X Folder" id="1691242149" customizedId="" mediaFileName="" installDir="Dendroscope" overridePrincipalLanguage="true" jreBitType="all" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" downloadURL="" includeAllDownloadableComponents="false" includedJRE="macosx-amd64-1.8.0_40" manualJREEntry="false" bundleType="1" jreURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" appleJre="false" requiredVmIdPrefix="" customInstallBaseDir="" contentFilesType="1" installerName="${i18n:InstallerName(${compiler:sys.fullName})}" volumeName="${compiler:sys.shortName}" compressDmg="false" signLaunchers="false">
+      <excludedComponents />
+      <includedDownloadableComponents />
       <excludedLaunchers />
       <excludedBeans />
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
@@ -1279,11 +1283,11 @@ wizardContext.setCancelButtonVisible(false);</preActivation>
         <commentFiles />
         <customAttributes />
       </autoUpdate>
-      <excludedComponents />
-      <includedDownloadableComponents />
       <topLevelFiles />
     </macosFolder>
-    <windows name="Windows64bit" id="1691242421" customizedId="" mediaFileName="" installDir="Dendroscope" overridePrincipalLanguage="true" jreBitType="64" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="" manualJREEntry="false" bundleType="1" jreURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" customInstallBaseDir="" contentFilesType="1" downloadURL="" verifyIntegrity="true">
+    <windows name="Windows64bit" id="1691242421" customizedId="" mediaFileName="" installDir="Dendroscope" overridePrincipalLanguage="true" jreBitType="64" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" downloadURL="" includeAllDownloadableComponents="false" includedJRE="windows-amd64-1.8.0_40" manualJREEntry="false" bundleType="1" jreURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" customInstallBaseDir="" contentFilesType="1" verifyIntegrity="true">
+      <excludedComponents />
+      <includedDownloadableComponents />
       <excludedLaunchers />
       <excludedBeans />
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
@@ -1293,8 +1297,6 @@ wizardContext.setCancelButtonVisible(false);</preActivation>
         <commentFiles />
         <customAttributes />
       </autoUpdate>
-      <excludedComponents />
-      <includedDownloadableComponents />
     </windows>
   </mediaSets>
   <buildIds buildAll="false">
