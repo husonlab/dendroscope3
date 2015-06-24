@@ -535,4 +535,14 @@ public class Director implements IDirectableViewer, IDirector {
     public boolean isLocked() {
         return locked;
     }
+
+    /**
+     * get the name of the class
+     *
+     * @return class name
+     */
+    @Override
+    public String getClassName() {
+        return "Director";
+    }
 }
