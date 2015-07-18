@@ -104,7 +104,7 @@ public class Dendroscope {
         final boolean showVersion = options.getOption("-V", "version", "Show version string", false);
         final boolean silentMode = options.getOption("-S", "silentMode", "Silent mode", false);
         Basic.setDebugMode(options.getOption("-d", "debug", "Debug mode", false));
-        final boolean showSplash = !options.getOption("+s", "hideSplash", "Hide startup splash screen", true) && ProgramProperties.isUseGUI();
+        final boolean showSplash = (!options.getOption("+s", "hideSplash", "Hide startup splash screen", false)) && ProgramProperties.isUseGUI();
         options.done();
 
         if (silentMode) {

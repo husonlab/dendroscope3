@@ -15,6 +15,7 @@
 
     <path id="build.classpath">
         <fileset dir="../../jloda/jars/batik-1.8" includes="*.jar"/>
+        <fileset dir="../../jloda/jars" includes="*.jar"/>
         <fileset dir="../jars" includes="*.jar"/>
     </path>
 
@@ -71,7 +72,6 @@
                 <pathelement location="${jar}"/>
             </classpath>
             <arg value="-d"/>
-            <arg value="-g"/>
             <jvmarg value="-Dapple.laf.useScreenMenuBar=true"/>
             <jvmarg value="-server"/>
             <jvmarg value="-Xmx500M"/>
