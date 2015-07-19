@@ -106,7 +106,7 @@ public class ComputeHybridizationNetworksCommand extends CommandBaseMultiViewer 
     }
 
     public String getDescription() {
-        return "Compute minimum hybridization networks for two multifurcating trees with overlapping taxon sets (Huson, in preparation)";
+        return "Compute minimum hybridization networks for two multifurcating trees with overlapping taxon sets (Huson and Linz, submitted)";
     }
 
     public ImageIcon getIcon() {

@@ -71,7 +71,7 @@ public class ComputeHybridNumberCommand extends CommandBaseMultiViewer implement
     }
 
     public String getDescription() {
-        return "Compute hybrid number for two multifurcating trees on overlapping taxon sets (Autumn algorithm, Huson, in preparation)";
+        return "Compute hybrid number for two multifurcating trees on overlapping taxon sets (Autumn algorithm, Huson and Linz, submitted)";
     }
 
     public ImageIcon getIcon() {
