@@ -19,12 +19,10 @@
 */
 package dendroscope.commands;
 
-import dendroscope.main.Dendroscope;
 import dendroscope.window.MultiViewer;
 import dendroscope.window.TreeViewer;
 import jloda.export.TransferableGraphic;
 import jloda.gui.commands.ICommand;
-import jloda.util.Alert;
 import jloda.util.ResourceManager;
 import jloda.util.parse.NexusStreamParser;
 
@@ -84,11 +82,6 @@ public class CopyImageCommand extends CommandBaseMultiViewer implements ICommand
     @Override
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase(getSyntax());
-
-        if (!Dendroscope.getApplication().go(null, false, false)) {
-            new Alert(getViewer().getFrame(), "Unavailable: please register program to unlock");
-            return;
-        }
 
         if (multiViewer.getTreeGrid().getNumberSelectedOrAllViewers() == 1) {
             TreeViewer treeViewer = multiViewer.getTreeGrid().getSelectedOrAllIterator().next();

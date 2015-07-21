@@ -25,16 +25,12 @@ import dendroscope.window.MultiViewer;
 import jloda.gui.About;
 import jloda.gui.director.ProjectManager;
 import jloda.phylo.PhyloTree;
-import jloda.util.Alert;
 import jloda.util.ArgsOptions;
 import jloda.util.Basic;
 import jloda.util.ProgramProperties;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.io.*;
-import java.util.StringTokenizer;
 
 /**
  * Dendroscope main program
@@ -115,8 +111,6 @@ public class Dendroscope {
             System.err.println(ProgramProperties.getProgramVersion());
 
         DendroscopeProperties.initializeProperties(propertiesFile);
-        DendroscopeProperties.initializeToolBar();
-        DendroscopeProperties.initializeMenu();
 
         if (ProgramProperties.isUseGUI())  // run in GUI mode
         {
@@ -128,7 +122,6 @@ public class Dendroscope {
                     try {
                         Director dir = Director.newProject(1, 1);
                         MultiViewer multiViewer = (MultiViewer) dir.getViewerByClass(MultiViewer.class);
-                        go(multiViewer.getFrame(), true, false);
 
                         if (showMessageWindow)
                             multiViewer.getCommandManager().execute("show messageWindow;");
@@ -144,11 +137,6 @@ public class Dendroscope {
             });
         } else // non-gui mode
         {
-            if (!go(null, false, false)) {
-                System.err.println("No license - please obtain license to use");
-                System.exit(0);
-            }
-
             final Document doc = new Document();
             final Director dir = new Director(doc);
             dir.setID(ProjectManager.getNextID());
@@ -230,192 +218,4 @@ public class Dendroscope {
     static public Dendroscope getApplication() {
         return application;
     }
-
-    // EVERYTHING BELOW HERE IS REGISTRATION CODE
-    // at startup: ask=true show=false
-    // in action: ask=true show=true
-    // to check status: ask=false show=false
-
-    /**
-     * check for go
-     *
-     * @param parent
-     * @param ask
-     * @param show
-     */
-    public boolean go(JFrame parent, boolean ask, boolean show) {
-        final String programName = "Dendroscope";
-        final String url = "www.Dendroscope.org";
-
-        boolean ok = false;
-        try {
-            String s = jloda.util.ProgramProperties.get("User", "");
-            StringTokenizer tok = new StringTokenizer(s, ";");
-            String n = tok.nextToken();
-            String a = tok.nextToken();
-            String e = tok.nextToken();
-            String k = tok.nextToken();
-
-            long sum = 10000000;
-            for (int i = 0; i < programName.length(); i++)
-                sum += (7 + i) * programName.charAt(i);
-            for (int i = 0; i < n.length(); i++)
-                sum += (70 + i) * n.charAt(i);
-            for (int i = 0; i < a.length(); i++)
-                sum += (70 + i) * a.charAt(i);
-            for (int i = 0; i < e.length(); i++)
-                sum += (700 + i) * e.charAt(i);
-            if (k.equals(Long.toString(sum)) == false)
-                throw new Exception();
-            ok = true;
-            if (!ask && !show)
-                return true;
-        } catch (Exception ex) {
-            if (ask == false && !show)
-                return false;
-        }
-        if (ask && !ok) {
-            final JTextField name;
-            final JTextField address;
-            final JTextField email;
-            final JTextField key;
-
-            // registration dialog
-            final JDialog frame = new JDialog(parent);
-            frame.setModal(true);
-            frame.setTitle("Registration for " + programName);
-
-            if (parent != null) {
-                frame.setLocationRelativeTo(parent);
-
-            }
-
-            frame.setSize(350, 300);
-            Basic.centerDialogOnScreen(frame);
-            frame.getContentPane().setLayout(new BorderLayout());
-            JPanel main = new JPanel();
-            main.setLayout(new BoxLayout(main, BoxLayout.Y_AXIS));
-            main.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
-
-
-            frame.getContentPane().add(main, BorderLayout.CENTER);
-
-            JPanel panel = new JPanel();
-            panel.setBorder(BorderFactory.createEtchedBorder());
-            GridLayout grid = new GridLayout();
-            grid.setRows(4);
-            grid.setColumns(1);
-            panel.setLayout(grid);
-            panel.add(new JLabel("Please register your copy of the program."));
-            panel.add(new JLabel("A key is freely available from:"));
-            panel.add(new JLabel(url));
-            panel.add(new JLabel(" "));
-            main.add(panel);
-
-            JPanel middle = new JPanel();
-            middle.setBorder(BorderFactory.createEtchedBorder());
-            grid = new GridLayout();
-            grid.setColumns(2);
-            grid.setRows(5);
-            middle.setLayout(grid);
-            middle.add(new JLabel("Name:"));
-            name = new JTextField();
-            name.setPreferredSize(new Dimension(150, 20));
-            middle.add(name);
-
-            middle.add(new JLabel("Institute:"));
-            address = new JTextField();
-            middle.add(address);
-
-            middle.add(new JLabel("Email:"));
-            email = new JTextField();
-            middle.add(email);
-
-
-            middle.add(new JLabel(" "));
-            middle.add(new JLabel(" "));
-
-            middle.add(new JLabel("Key:"));
-            key = new JTextField();
-            middle.add(key);
-
-            main.add(middle);
-
-
-            JPanel buttons = new JPanel();
-            buttons.setLayout(new BoxLayout(buttons, BoxLayout.X_AXIS));
-            JButton button = new JButton("Later");
-            button.addActionListener(new AbstractAction() {
-                public void actionPerformed(ActionEvent actionEvent) {
-                    frame.setVisible(false);
-                    frame.dispose();
-                }
-            });
-            buttons.add(button);
-            button = new JButton("Register now");
-            button.addActionListener(new AbstractAction() {
-                public void actionPerformed(ActionEvent actionEvent) {
-                    try {
-                        if (key.getText().trim().length() == 0)
-                            throw new Exception("No key supplied");
-                        else if (name.getText().trim().length() == 0)
-                            throw new Exception("No name supplied");
-                        else if (address.getText().trim().length() == 0)
-                            throw new Exception("No address supplied");
-                        else if (email.getText().trim().length() == 0)
-                            throw new Exception("No email supplied");
-
-                        String n = name.getText().trim();
-                        String a = address.getText().trim();
-                        String e = email.getText().trim();
-                        String k = key.getText().trim();
-
-                        long sum = 10000000;
-                        for (int i = 0; i < programName.length(); i++)
-                            sum += (7 + i) * programName.charAt(i);
-                        for (int i = 0; i < n.length(); i++)
-                            sum += (70 + i) * n.charAt(i);
-                        for (int i = 0; i < a.length(); i++)
-                            sum += (70 + i) * a.charAt(i);
-                        for (int i = 0; i < e.length(); i++)
-                            sum += (700 + i) * e.charAt(i);
-                        if (k.equals(Long.toString(sum)) == false)
-                            throw new Exception("Key doesn't match name, institute and email");
-                        jloda.util.ProgramProperties.put("User",
-                                name.getText() + ";" + address.getText().trim() + ";" + email.getText().trim() + ";" + key.getText().trim() + ";");
-                        frame.setVisible(false);
-                        frame.dispose();
-                    } catch (Exception ex) {
-                        new Alert(frame, "Registration failed: " + ex.getMessage() + "."
-                                + "\nPlease obtain a key from\nwww.Dendroscope.org\nto unlock all features.");
-                    }
-
-                }
-            });
-            buttons.add(button);
-
-            JPanel bottom = new JPanel();
-            bottom.setBorder(BorderFactory.createEtchedBorder());
-            bottom.setLayout(new BorderLayout());
-            bottom.add(buttons, BorderLayout.EAST);
-            main.add(bottom);
-            frame.getContentPane().validate();
-
-            frame.setVisible(true);
-        } else if (show && ok) {
-            try {
-                String s = jloda.util.ProgramProperties.get("User", "");
-                StringTokenizer tok = new StringTokenizer(s, ";");
-                String n = tok.nextToken();
-                String a = tok.nextToken();
-                String e = tok.nextToken();
-                tok.nextToken();
-                new Alert(parent, "Registered to:\n"
-                        + n + "\n" + a + "\n" + e + "\n");
-            } catch (Exception ex) {
-            }
-        }
-        return ok;
-    }
-
 }

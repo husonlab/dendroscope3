@@ -22,10 +22,8 @@ package dendroscope.commands;
 import dendroscope.io.IOFormat;
 import dendroscope.io.IOManager;
 import dendroscope.io.nexml.Nexml;
-import dendroscope.main.Dendroscope;
 import jloda.gui.ChooseFileDialog;
 import jloda.gui.commands.ICommand;
-import jloda.util.Alert;
 import jloda.util.Basic;
 import jloda.util.ProgramProperties;
 import jloda.util.ResourceManager;
@@ -94,11 +92,6 @@ public class ExportCommand extends CommandBaseMultiViewer implements ICommand {
      * @param event
      */
     public void actionPerformed(ActionEvent event) {
-        if (!Dendroscope.getApplication().go(null, false, false)) {
-            new Alert(getViewer().getFrame(), "Unavailable: please register program to unlock");
-            return;
-        }
-
         String lastSaveFormat = ProgramProperties.get(ProgramProperties.SAVEFORMAT, Nexml.NAME);
 
         String format = (String) JOptionPane.showInputDialog(getViewer().getFrame(), "Output format:", "Choose output format",

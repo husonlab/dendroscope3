@@ -84,7 +84,7 @@ public class GUIConfiguration {
                 "Set Scale...;|;Use Magnifier;Magnify All Mode;|;Show Node Labels;Show Edge Labels;|;Label Edges By Weights;|;" +
                 "Sparse Labels;Radial Labels;|;Reposition Labels;");
 
-        menuConfig.defineMenu("Window", "About...;How to Cite...;Website...;|;Register...;|;Set Window Size...;|;" +
+        menuConfig.defineMenu("Window", "About...;How to Cite...;Website...;|;Set Window Size...;|;" +
                 "Command-line Syntax;Command Input...;|;Message Window...;");
         return menuConfig;
     }

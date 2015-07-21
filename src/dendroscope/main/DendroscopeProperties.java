@@ -93,38 +93,6 @@ public class DendroscopeProperties {
             ProgramProperties.setProgramTitle(ProgramProperties.getProgramName());
     }
 
-    protected static void initializeToolBar() {
-        ProgramProperties.put(ProgramProperties.TOOLBARITEMS, "Open...;Save;Print...;Export Image...;|;Format...;|;Expand Vertical;Contract Vertical;"
-                + "Expand Horizontal;Contract Horizontal;|;Rotate Left;Rotate Right;|;Zoom To Fit;Fully Contract;Fully Expand;|;Toggle Magnifier;|;" +
-                "Rectangular Phylogram;Rectangular Cladogram;Slanted Cladogram;Circular Phylogram;Circular Cladogram;Inner Circular Cladogram;Radial Phylogram;Radial Cladogram;|;Find/Replace...;" +
-                "|;Ladderize Left;Ladderize Right;Ladderize Random;|;Reroot;Swap Subtree;");
-    }
-
-    /**
-     * setup the initial menu
-     */
-    protected static void initializeMenu() {
-        ProgramProperties.put("MenuBar.main", "File;Edit;Select;Options;Tree;View;Window;");
-        ProgramProperties.put("Menu.File", "File;New...;" + (ALLOW_MULTIVIEWER ? "New MultiViewer...;" : "") + "|;Open...;@OpenRecent;|;Save;Save As...;Export...;|;Duplicate...;|;Export Image...;Print...;|;Close;Quit;");
-        ProgramProperties.put("Menu.OpenRecent", "Recent Files;");
-        ProgramProperties.put("Menu.Edit", "Edit;Copy;Paste;|;Find/Replace...;Find Again;|;Reroot;Swap Subtrees;Rotate Subtrees;Reorder Subtrees...;" + (ALLOW_TANGLEGRAM ? "@ChangeLeafOrder;" : "") + "|;Delete Taxa;|;Unlock Edge Lengths;|;Format...;");
-        ProgramProperties.put("Menu.ChangeLeafOrder", "Change Leaf Order;Best for current tree...;Circular Order from Combined Trees...;Set Order...;");
-        ProgramProperties.put("Menu.Select", "Select;Select All;Select Nodes;Select Edges;|;From Previous Window;|;Deselect All;Deselect Nodes;Deselect Edges;|;" +
-                "Select Labeled Nodes;Select Leaves;Select Subtree;Select Induced Tree;Select Induced Network;Select Spanned Edges;|;Select Root;Select Non-Terminal;" + (ALLOW_CONSENSUS ? "Select Special;" : "") + "|;Invert Selection;|;Scroll To Selection;|;List Selected Taxa;");
-        ProgramProperties.put("Menu.Options", "Options;" +
-                "Collapse;Uncollapse;Uncollapse Subtree;|;Collapse Complement;Collapse At Level...;|;" +
-                "Extract Subtree...;" + (ALLOW_IMAGES ? "|;Load Taxon Images...;Set Image Size...;@ImagePosition;" : "")
-                + (ALLOW_CONSENSUS ? "|;Strict Consensus...;Loose Consensus...;Majority Consensus...;LSA Consensus...;Network Consensus...;" : "")
-                + "|;Network for Multi-Labeled Tree...;");
-        ProgramProperties.put("Menu.ImagePosition", "Image Position;North;South;East;West;Radial;");
-        ProgramProperties.put("Menu.Tree", "Tree;Draw Rectangular Phylogram;Draw Rectangular Cladogram;|;Draw Slanted Cladogram;|;" +
-                "Draw Circular Phylogram;Draw Circular Cladogram;Draw Inner Circular Cladogram;|;Draw Radial Phylogram;Draw Radial Cladogram;|;" +
-                "Previous Tree;Next Tree;|;" +
-                "Ladderize Left;Ladderize Right;Ladderize Random;");
-        ProgramProperties.put("Menu.View", "View;Zoom To Fit;Fully Contract;Fully Expand;|;Use Magnifier;Magnify All Mode;|;Show Node Labels;Hide Node Labels;|;Show Edge Weights;Show Edge Labels;Hide Edge Labels;|;Sparse Labels;Radial Labels;|;Reposition Labels;");
-        ProgramProperties.put("Menu.Window", "Window;About...;How to Cite...;Website...;|;Register...;|;Set Window Size...;|;Command-line Syntax;Execute Command...;Add Tree or Network...;|;Message Window...;");
-    }
-
     /**
      * add a file to the recent files list
      *
@@ -206,11 +174,7 @@ public class DendroscopeProperties {
      * @return version
      */
     public static String getVersion() {
-        if (Dendroscope.getApplication() == null || Dendroscope.getApplication().go(null, false, false))
             return Version.SHORT_DESCRIPTION;
-        else {
-            return Version.SHORT_DESCRIPTION + " - unregistered copy";
-        }
     }
 
 }

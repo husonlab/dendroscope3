@@ -20,13 +20,11 @@
 package dendroscope.commands;
 
 import dendroscope.core.Document;
-import dendroscope.main.Dendroscope;
 import dendroscope.window.MultiViewer;
 import dendroscope.window.TreeViewer;
 import jloda.export.*;
 import jloda.gui.commands.CommandBase;
 import jloda.gui.commands.ICommand;
-import jloda.util.Alert;
 import jloda.util.Basic;
 import jloda.util.ResourceManager;
 import jloda.util.parse.NexusStreamParser;
@@ -153,13 +151,9 @@ public class ExportImageCommand extends CommandBase implements ICommand {
      * @param ev
      */
     public void actionPerformed(ActionEvent ev) {
-        MultiViewer viewer = (MultiViewer) getViewer();
-        Document doc = viewer.getDir().getDocument();
+        final MultiViewer viewer = (MultiViewer) getViewer();
+        final Document doc = viewer.getDir().getDocument();
 
-        if (!Dendroscope.getApplication().go(null, false, false)) {
-            new Alert(viewer.getFrame(), "Unavailable: please register program to unlock");
-            return;
-        }
         // setup a good default name: the file name plus .eps:
         String fileName = "Untitled";
         if (doc.getFile() != null)
