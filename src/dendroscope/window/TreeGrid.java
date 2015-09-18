@@ -586,7 +586,8 @@ public class TreeGrid extends JPanel {
             } else {
                 if (treeViewer.getGraph().getNumberOfNodes() > 0) {
                     selectedViewers.add(treeViewer);
-                    treeViewer.setCanvasColor(new Color(255, 220, 230)); // pink
+                    //treeViewer.setCanvasColor(new Color(255, 220, 230)); // pink
+                    treeViewer.setCanvasColor(new Color(230, 255, 230)); // light yellow
                 }
             }
             treeViewer.repaint();

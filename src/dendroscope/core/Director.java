@@ -545,4 +545,13 @@ public class Director implements IDirectableViewer, IDirector {
     public String getClassName() {
         return "Director";
     }
+
+    @Override
+    public boolean isInternalDocument() {
+        return false;
+    }
+
+    @Override
+    public void setInternalDocument(boolean invisible) {
+    }
 }

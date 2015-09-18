@@ -36,7 +36,7 @@ public class GUIConfiguration {
      */
     public static MenuConfiguration getMenuConfiguration() {
         MenuConfiguration menuConfig = new MenuConfiguration();
-        menuConfig.defineMenuBar("File;Edit;Select;Options;Algorithms;Layout;View;Window;");
+        menuConfig.defineMenuBar("File;Edit;Select;Options;Algorithms;Layout;View;Window;Help;");
 
         menuConfig.defineMenu("File", "New...;Open...;@Open Recent;|;Add From File...;Enter Trees or Networks...;|;Save;Save As...;" +
                 "Export...;|;Export Image...;|;Page Setup...;Print...;|;Close;|;Quit;");
@@ -84,8 +84,10 @@ public class GUIConfiguration {
                 "Set Scale...;|;Use Magnifier;Magnify All Mode;|;Show Node Labels;Show Edge Labels;|;Label Edges By Weights;|;" +
                 "Sparse Labels;Radial Labels;|;Reposition Labels;");
 
-        menuConfig.defineMenu("Window", "About...;How to Cite...;Website...;|;Set Window Size...;|;" +
-                "Command-line Syntax;Command Input...;|;Message Window...;");
+        menuConfig.defineMenu("Window", "Set Window Size...;|;Command-line Syntax;Command Input...;|;Message Window...;");
+
+        menuConfig.defineMenu("Help", "About...;How to Cite...;|;Website...;Reference Manual...;|;Check For Updates...;");
+
         return menuConfig;
     }
 
