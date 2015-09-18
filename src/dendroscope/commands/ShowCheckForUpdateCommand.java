@@ -124,7 +124,7 @@ public class ShowCheckForUpdateCommand extends CommandBase implements ICommand {
 
         // This will return immediately if you call it from the EDT,
 // otherwise it will block until the installer application exits
-        ApplicationLauncher.launchApplicationInProcess("1691242142", null, new ApplicationLauncher.Callback() {
+        ApplicationLauncher.launchApplicationInProcess("1691242312", null, new ApplicationLauncher.Callback() {
             public void exited(int exitValue) {
                 //TODO add your code here (not invoked on event dispatch thread)
             }
