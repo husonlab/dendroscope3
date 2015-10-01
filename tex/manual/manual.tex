@@ -126,7 +126,7 @@ coloring or resizing edges, nodes and labels.
 \item Rooted phylogenetic networks can be entered and visualized using the \concept{Extended Newick} format \cite{Cardona2008}.
 \item 
 The program permits the computation of consensus trees  from a set of input trees.
-\item The program also permits  the computation of rooted phylogenetic networks (among others cluster networks \cite{ClusterNetworks2008}, {galled networks} \cite{GalledNetworks2009}, {minimum networks} \cite{LevelKClusters2010} and hybridization networks  \cite{Albrecht2012,HusonLinz2012}) from a set of input trees.
+\item The program also permits  the computation of rooted phylogenetic networks (among others cluster networks \cite{ClusterNetworks2008}, {galled networks} \cite{GalledNetworks2009}, {minimum networks} \cite{LevelKClusters2010} and hybridization networks  \cite{Albrecht2012,HusonLinz2015}) from a set of input trees.
 \item It provides several tree manipulating functions like 
 rerooting, subtree rotating, tree flipping and formatting features like renaming,
 coloring or resizing edges, nodes and labels. 
@@ -381,11 +381,11 @@ then constructs the corresponding network for that label \cite{HOLM2007}.
 The \pconcept{level-k-based} method extracts all clusters and then seeks to compute a level-$k$ network
 of minimum level $k$ for the clusters.
 \item The \pmenuitem{Algorithms}{Hybridization Network} item computes all minimum {hybridization networks} for two rooted
-phylogenetic trees, not necessarily binary, on overlapping taxon sets using the Autumn algorithm \cite{HusonLinz2012}.
+phylogenetic trees, not necessarily binary, on overlapping taxon sets using the Autumn algorithm \cite{HusonLinz2015}.
 \item The \pmenuitem{Algorithms}{Hybridization Network (Binary Trees)} item computes all minimum {hybridization networks} for two bifurcating trees on the same taxon set  \cite{Albrecht2012}.
 \item The \pmenuitem{Algorithms}{Reroot By Hybridization Number} item determines a rooting that minimizes the
 hybridization number, given two rooted
-phylogenetic trees, not necessarily binary, on overlapping taxon sets, using the Autumn algorithm \cite{HusonLinz2012}.
+phylogenetic trees, not necessarily binary, on overlapping taxon sets, using the Autumn algorithm \cite{HusonLinz2015}.
 \\item The \pmenuitemh{Algorithms}{Tanglegram} item is used to compute a \pconcept{tanglegram} for two trees or networks using a NeighborNet-based heuristic \cite{Tanglegrams}.
 \end{itemize}
 
@@ -396,7 +396,7 @@ the Z-closure method to merge partial data \cite{zclosure}.%\marginpar{\cs{?}} %
 {\small
 The advanced algorithms submenu contains the following items:
 \begin{itemize}
-\item the \pmenuitem{Advanced Algorithms}{Hybridization Number} item is used to compute the {hybridization number} for two rooted trees using the Autumn algorithm \cite{HusonLinz2012}. Trees need not be binary and need not have identical taxon
+\item the \pmenuitem{Advanced Algorithms}{Hybridization Number} item is used to compute the {hybridization number} for two rooted trees using the Autumn algorithm \cite{HusonLinz2015}. Trees need not be binary and need not have identical taxon
 sets.
 \item the \pmenuitem{Advanced Algorithms}{Hybridization Number (Binary Trees)} item is used to compute the {hybridization number} for two selected rooted binary trees on the same taxon set \cite{Albrecht2012}.
 \item the \pmenuitem{Advanced Algorithms}{rSPR Distance (Binary Trees)} item  is used to compute the {rSPR distance} for two selected rooted binary trees on the same taxon set \cite{whiddenWABI}.

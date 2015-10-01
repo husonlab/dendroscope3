@@ -111,7 +111,7 @@ public class RerootByHybridNumberCommand extends CommandBaseMultiViewer implemen
     }
 
     public String getDescription() {
-        return "Reroot two trees so as to minimize their hybridization number (tree multifurcating, on overlapping taxon sets) (Autumn algorithm, Huson and Linz, submitted)";
+        return "Reroot two trees so as to minimize their hybridization number (tree multifurcating, on overlapping taxon sets) (Autumn algorithm, Huson and Linz, 2015)";
     }
 
     public ImageIcon getIcon() {
