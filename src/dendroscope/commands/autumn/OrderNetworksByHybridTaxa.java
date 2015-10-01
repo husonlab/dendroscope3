@@ -53,15 +53,15 @@ public class OrderNetworksByHybridTaxa extends CommandBase implements ICommand {
      */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
-        np.matchIgnoreCase("order_networks");
+        np.matchIgnoreCase("orderNetworks");
         boolean order = true;
         if (np.peekMatchIgnoreCase("mode")) {
             np.matchIgnoreCase("mode=");
             order = (np.getWordMatchesIgnoringCase("order filter").equalsIgnoreCase("order"));
         }
         Set<String> noHybrid = new HashSet<>();
-        if (np.peekMatchIgnoreCase("no_hybrid")) {
-            np.matchIgnoreCase("no_hybrid=");
+        if (np.peekMatchIgnoreCase("noHybrid")) {
+            np.matchIgnoreCase("noHybrid=");
             while (true) {
                 noHybrid.add(np.getWordRespectCase());
                 if (!np.peekMatchIgnoreCase(","))
@@ -71,8 +71,8 @@ public class OrderNetworksByHybridTaxa extends CommandBase implements ICommand {
             }
         }
         Set<String> noRecentHybrid = new HashSet<>();
-        if (np.peekMatchIgnoreCase("no_recent_hybrid")) {
-            np.matchIgnoreCase("no_recent_hybrid=");
+        if (np.peekMatchIgnoreCase("noRecentHybrid")) {
+            np.matchIgnoreCase("noRecentHybrid=");
             while (true) {
                 noRecentHybrid.add(np.getWordRespectCase());
                 if (!np.peekMatchIgnoreCase(","))
@@ -94,8 +94,8 @@ public class OrderNetworksByHybridTaxa extends CommandBase implements ICommand {
             }
         }
         Set<String> recentHybrid = new HashSet<>();
-        if (np.peekMatchIgnoreCase("recent_hybrid")) {
-            np.matchIgnoreCase("recent_hybrid=");
+        if (np.peekMatchIgnoreCase("recentHybrid")) {
+            np.matchIgnoreCase("recentHybrid=");
             while (true) {
                 recentHybrid.add(np.getWordRespectCase());
                 if (!np.peekMatchIgnoreCase(","))
@@ -261,7 +261,7 @@ public class OrderNetworksByHybridTaxa extends CommandBase implements ICommand {
      */
     @Override
     public String getSyntax() {
-        return "order_networks [mode=<order|filter>] [no_hybrid=<name,...>] [no_recent_hybrid=<name,...>] [hybrid=<name,...>] [recent_hybrid=<name,...>]";
+        return "orderNetworks [mode=<order|filter>] [noHybrid=<name,...>] [noRecent_hybrid=<name,...>] [hybrid=<name,...>] [recentHybrid=<name,...>]";
     }
 
     /**
