@@ -31,6 +31,7 @@ import jloda.graphview.NodeActionAdapter;
 import jloda.graphview.PanelActionListener;
 import jloda.gui.GraphViewPopupListener;
 import jloda.gui.commands.CommandManager;
+import jloda.gui.director.IDirector;
 import jloda.phylo.PhyloTree;
 import jloda.util.Basic;
 import jloda.util.ProgramProperties;
@@ -217,17 +218,17 @@ public class TreeGrid extends JPanel {
                                 }
                                 if (changed) {
                                     treeViewer.repaint();
-                                    multiViewer.updateView("enablestate");
+                                    multiViewer.updateView(IDirector.ENABLE_STATE);
                                 }
                             } else {
-                                if (!mouseEvent.isShiftDown())
-                                    selectAllPanels(false);
-                                setSelected(treeViewer, !isSelected(treeViewer));
-                                multiViewer.updateView("enablestate");
+                                if (!isSelected(treeViewer))
+                                    setSelected(treeViewer, true);
+                                multiViewer.updateView(IDirector.ENABLE_STATE);
                             }
                         } else if (mouseEvent.getClickCount() == 2) {
-                            setSelected(treeViewer, !isSelected(treeViewer));
-                            multiViewer.updateView("enablestate");
+                            if (mouseEvent.isShiftDown())
+                                setSelected(treeViewer, !isSelected(treeViewer));
+                            multiViewer.updateView(IDirector.ENABLE_STATE);
                         }
                     }
                 });
@@ -258,7 +259,7 @@ public class TreeGrid extends JPanel {
                                 }
                                 inSelectNodes = false;
                             }
-                            multiViewer.updateView("enablestate");
+                            multiViewer.updateView(IDirector.ENABLE_STATE);
                         }
                         // reportSelected();
                     }
@@ -285,7 +286,7 @@ public class TreeGrid extends JPanel {
                                 }
                                 inSelectNodes = false;
                             }
-                            multiViewer.updateView("enablestate");
+                            multiViewer.updateView(IDirector.ENABLE_STATE);
                         }
                         // reportSelected();
                     }
@@ -339,11 +340,11 @@ public class TreeGrid extends JPanel {
                         }
                         if (!multiViewer.isLocked()) {
                         }
-                        multiViewer.updateView("enablestate");
+                        multiViewer.updateView(IDirector.ENABLE_STATE);
                     }
 
                     public void doDeselect(EdgeSet edges) {
-                        multiViewer.updateView("enablestate");
+                        multiViewer.updateView(IDirector.ENABLE_STATE);
                     }
 
                     public void doClick(EdgeSet edges, int clicks) {
@@ -442,46 +443,48 @@ public class TreeGrid extends JPanel {
 
         treeViewer2TreeId.clear();
 
-        Iterator<TreeViewer> it = getIterator();
-        for (int i = 0; i < doc.getNumberOfTrees(); i++) {
-            if (which == null || which.get(i)) {
-                if (it.hasNext()) {
-                    TreeViewer treeViewer = it.next();
-                    treeViewer.setCanvasColor(Color.WHITE);
-                    treeViewer.setName(doc.getName(i));
-                    treeViewer.getPhyloTree().clear();
-                    treeViewer.setHasCoordinates(false);
-                    currentTrees.set(i);
-                    doc.setCurrent(i);
-                    treeViewer2TreeId.put(treeViewer, i);
+        if (doc != null) {
+            Iterator<TreeViewer> it = getIterator();
+            for (int i = 0; i < doc.getNumberOfTrees(); i++) {
+                if (which == null || which.get(i)) {
+                    if (it.hasNext()) {
+                        TreeViewer treeViewer = it.next();
+                        treeViewer.setCanvasColor(Color.WHITE);
+                        treeViewer.setName(doc.getName(i));
+                        treeViewer.getPhyloTree().clear();
+                        treeViewer.setHasCoordinates(false);
+                        currentTrees.set(i);
+                        doc.setCurrent(i);
+                        treeViewer2TreeId.put(treeViewer, i);
 
-                    if (doc.getTree(i) != null) {
-                        try {
-                            LayoutOptimizerManager.apply(multiViewer.getEmbedderName(), doc.getTree(i));
-                        } catch (Exception e) {
-                            Basic.caught(e);
+                        if (doc.getTree(i) != null) {
+                            try {
+                                LayoutOptimizerManager.apply(multiViewer.getEmbedderName(), doc.getTree(i));
+                            } catch (Exception e) {
+                                Basic.caught(e);
+                            }
+                            doc.getTree(i).syncData2Viewer(doc, treeViewer);
                         }
-                        doc.getTree(i).syncData2Viewer(doc, treeViewer);
+                        if (isShowBorders() && treeViewer.getWidth() >= 300 && treeViewer.getHeight() >= 200)
+                            treeViewer.getScrollPane().setBorder(BorderFactory.createTitledBorder(treeViewer.getName() + (treeViewer.isDirty() ? "*" : "")));
+                        else
+                            treeViewer.getScrollPane().setBorder(BorderFactory.createEmptyBorder());
+                        treeViewer.getScrollPane().revalidate();
                     }
-                    if (isShowBorders() && treeViewer.getWidth() >= 300 && treeViewer.getHeight() >= 200)
-                        treeViewer.getScrollPane().setBorder(BorderFactory.createTitledBorder(treeViewer.getName() + (treeViewer.isDirty() ? "*" : "")));
-                    else
-                        treeViewer.getScrollPane().setBorder(BorderFactory.createEmptyBorder());
-                    treeViewer.getScrollPane().revalidate();
                 }
             }
-        }
-        while (it.hasNext()) {
-            TreeViewer treeViewer = it.next();
-            treeViewer.setCanvasColor(Color.WHITE);
-            treeViewer.getGraph().deleteAllNodes();
-            treeViewer.getPhyloTree().setRoot((Node) null);
-            treeViewer.setFoundNode(null);
-            treeViewer.getScrollPane().setBorder(BorderFactory.createEmptyBorder());
-            treeViewer.getScrollPane().revalidate();
-        }
+            while (it.hasNext()) {
+                TreeViewer treeViewer = it.next();
+                treeViewer.setCanvasColor(Color.WHITE);
+                treeViewer.getGraph().deleteAllNodes();
+                treeViewer.getPhyloTree().setRoot((Node) null);
+                treeViewer.setFoundNode(null);
+                treeViewer.getScrollPane().setBorder(BorderFactory.createEmptyBorder());
+                treeViewer.getScrollPane().revalidate();
+            }
 
-        doc.getConnectors().syncDocumentToCurrentViewers(this);
+            doc.getConnectors().syncDocumentToCurrentViewers(this);
+        }
         //repaint();
     }
 

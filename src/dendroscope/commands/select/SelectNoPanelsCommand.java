@@ -19,16 +19,21 @@
 */
 package dendroscope.commands.select;
 
+import jloda.gui.commands.CommandBase;
+import jloda.gui.commands.ICommand;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 
 /**
  * select no panels
  * Daniel Huson, 5.2010
  */
-public class SelectNoPanelsCommand extends SelectPanelsCommand {
+public class SelectNoPanelsCommand extends CommandBase implements ICommand {
     /**
      * get the name to be used as a menu label
      *
@@ -56,7 +61,7 @@ public class SelectNoPanelsCommand extends SelectPanelsCommand {
      */
 
     public ImageIcon getIcon() {
-        return super.getIcon();
+        return null;
     }
 
     /**
@@ -66,7 +71,8 @@ public class SelectNoPanelsCommand extends SelectPanelsCommand {
      */
 
     public KeyStroke getAcceleratorKey() {
-        return super.getAcceleratorKey();
+        return KeyStroke.getKeyStroke(KeyEvent.VK_U, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK);
+
     }
 
     /**
@@ -77,7 +83,6 @@ public class SelectNoPanelsCommand extends SelectPanelsCommand {
      */
 
     public void apply(NexusStreamParser np) throws Exception {
-        super.apply(np);
     }
 
     /**
@@ -98,5 +103,25 @@ public class SelectNoPanelsCommand extends SelectPanelsCommand {
 
     public String getSyntax() {
         return null;
+    }
+
+    /**
+     * is this a critical command that can only be executed when no other command is running?
+     *
+     * @return true, if critical
+     */
+    @Override
+    public boolean isCritical() {
+        return true;
+    }
+
+    /**
+     * is the command currently applicable? Used to set enable state of command
+     *
+     * @return true, if command can be applied
+     */
+    @Override
+    public boolean isApplicable() {
+        return true;
     }
 }

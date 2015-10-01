@@ -19,16 +19,20 @@
 */
 package dendroscope.commands.select;
 
+import jloda.gui.commands.CommandBase;
+import jloda.gui.commands.ICommand;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 
 /**
  * select all panels
  * Daniel Huson, 5.2010
  */
-public class SelectAllPanelsCommand extends SelectPanelsCommand {
+public class SelectAllPanelsCommand extends CommandBase implements ICommand {
     /**
      * get the name to be used as a menu label
      *
@@ -56,7 +60,7 @@ public class SelectAllPanelsCommand extends SelectPanelsCommand {
      */
 
     public ImageIcon getIcon() {
-        return super.getIcon();
+        return null;
     }
 
     /**
@@ -64,9 +68,8 @@ public class SelectAllPanelsCommand extends SelectPanelsCommand {
      *
      * @return accelerator key
      */
-
     public KeyStroke getAcceleratorKey() {
-        return super.getAcceleratorKey();
+        return KeyStroke.getKeyStroke(KeyEvent.VK_U, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
     }
 
     /**
@@ -77,7 +80,6 @@ public class SelectAllPanelsCommand extends SelectPanelsCommand {
      */
 
     public void apply(NexusStreamParser np) throws Exception {
-        super.apply(np);
     }
 
     /**
@@ -107,7 +109,7 @@ public class SelectAllPanelsCommand extends SelectPanelsCommand {
      */
 
     public boolean isCritical() {
-        return super.isCritical();
+        return true;
     }
 
     /**
@@ -117,7 +119,7 @@ public class SelectAllPanelsCommand extends SelectPanelsCommand {
      */
 
     public boolean isApplicable() {
-        return super.isApplicable();
+        return true;
     }
 
     /**

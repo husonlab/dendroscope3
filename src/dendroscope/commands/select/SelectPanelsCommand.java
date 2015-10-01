@@ -66,6 +66,7 @@ public class SelectPanelsCommand extends CommandBaseMultiViewer implements IComm
      */
     public KeyStroke getAcceleratorKey() {
         return null;
+
     }
 
     /**
