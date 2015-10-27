@@ -43,7 +43,7 @@ public class GUIConfiguration {
         menuConfig.defineMenu("Open Recent", ";");
 
         menuConfig.defineMenu("Edit", "Copy;Copy Image;Paste;|;Find...;Find Again;Replace...;|;Reroot;Midpoint Root;|;Swap Subtrees;Rotate Subtrees;Reorder Subtrees...;"
-                + "|;Delete Taxa;Contract Edges;|;Unlock Edge Lengths;|;Format...;");
+                + "|;Delete Taxa;Contract Edges;Contract Low Support Edges;|;Unlock Edge Lengths;|;Format...;");
 
         menuConfig.defineMenu("Select", "@Advanced Selection;|;All Panels;No Panels;Invert Panels;|;Select All;Select Nodes;Select Edges;|;Select Short Edges...;Select Long Edges...;|;" +
                 "From Previous Window;|;Deselect All;Deselect Nodes;Deselect Edges;|;" +
