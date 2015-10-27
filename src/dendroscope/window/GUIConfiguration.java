@@ -62,13 +62,13 @@ public class GUIConfiguration {
 
         menuConfig.defineMenu("Algorithms", "@Advanced Algorithms;@Multi-Labeled Tree To Network;|;Strict Consensus...;Loose Consensus...;" +
                         "Majority Consensus...;|;LSA Consensus...;Primordial Consensus...;|;Cluster Network Consensus...;Level-k Network Consensus...;"
-                        + "Galled Network Consensus...;|;Hybridization Networks...;Hybridization Networks (Binary Trees)...;Reroot by Hybridization Number...;|;"
+                        + "Galled Network Consensus...;|;Hybridization Networks...;Hybridization Networks (Binary Trees)...;Hybridization Networks (Hybroscale)...;Reroot by Hybridization Number...;Reroot by Hybridization Number (Hybroscale)...;|;"
                         + "Tanglegram...;"
                         + (ProgramProperties.get("enable_experimental", false) ? "|;Merge Isomorphic Induced...;|;" +
                         "Refine...;Subtree Reduction...;Cluster Reduction...;|;Test for Duplicates;" : "")
         );
 
-        menuConfig.defineMenu("Advanced Algorithms", "Hybridization Number...;Hybridization Number (Binary Trees)...;rSPR Distance (Binary Trees)...;|;DTL Reconciliation...;"
+        menuConfig.defineMenu("Advanced Algorithms", "Hybridization Number...;Hybridization Number (Binary Trees)...;Hybridization Number (Hybroscale)...;rSPR Distance (Binary Trees)...;|;DTL Reconciliation...;"
                 + "|;Hardwired Cluster Distance...;Softwired Cluster Distance...;Displayed Trees Distance...;Tripartition Distance...;Nested Labels Distance...;Path Multiplicity Distance...;"
                 + "|;Distance To Root...;|;Topological Constraints...;Network Properties...;|;Simplistic...;");
 
