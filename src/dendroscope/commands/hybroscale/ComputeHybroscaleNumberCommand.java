@@ -23,10 +23,12 @@ import dendroscope.hybroscale.controller.HybroscaleController;
 import dendroscope.hybroscale.model.HybridManager.Computation;
 import dendroscope.window.TreeViewer;
 import jloda.phylo.PhyloTree;
+import jloda.phylo.PhyloTreeUtils;
 import jloda.util.Alert;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;
+
 import java.awt.event.ActionEvent;
 import java.util.Iterator;
 import java.util.Vector;
@@ -58,12 +60,10 @@ public class ComputeHybroscaleNumberCommand extends ComputeHybroscaleCommand {
 		while (it0.hasNext()) {
 			TreeViewer tV = it0.next();
 			PhyloTree t = tV.getPhyloTree();
-            /** todo: method not found
              if (!PhyloTreeUtils.areSingleLabeledTrees(t)) {
 				new Alert(getViewer().getFrame(), "The selected tree '" + t.getName() + "' is NOT single-labeled!");
 				return;
 			} else
-             */
             selectedTrees.add(t);
 		}
 
