@@ -23,30 +23,25 @@ import dendroscope.commands.CommandBaseMultiViewer;
 import dendroscope.core.Director;
 import dendroscope.core.Document;
 import dendroscope.core.TreeData;
-import dendroscope.hybroscale.controller.HybroscaleController;
-import dendroscope.hybroscale.model.HybridManager.Computation;
 import dendroscope.hybroscale.rerooting.RerootByHNumber;
 import dendroscope.hybroscale.rerooting.RerootingView;
 import dendroscope.hybroscale.util.graph.MyPhyloTree;
 import dendroscope.window.MultiViewer;
 import dendroscope.window.TreeViewer;
-import jloda.graph.Edge;
 import jloda.gui.commands.ICommand;
 import jloda.gui.director.IDirector;
 import jloda.phylo.PhyloTree;
-import jloda.phylo.PhyloTreeUtils;
 import jloda.util.Alert;
 import jloda.util.Basic;
 import jloda.util.ProgramProperties;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;
-
 import java.awt.event.ActionEvent;
 import java.util.Iterator;
 import java.util.Vector;
 
-public class RerrotingHybroscaleCommand extends CommandBaseMultiViewer implements ICommand {
+public class RerootingHybroscaleCommand extends CommandBaseMultiViewer implements ICommand {
 
 	public void apply(NexusStreamParser np) throws Exception {
 
@@ -73,10 +68,12 @@ public class RerrotingHybroscaleCommand extends CommandBaseMultiViewer implement
 		while (it0.hasNext()) {
 			TreeViewer tV = it0.next();
 			PhyloTree t = tV.getPhyloTree();
-			if (!PhyloTreeUtils.areSingleLabeledTrees(t)) {
+            /* todo: method not found
+            if (!PhyloTreeUtils.areSingleLabeledTrees(t)) {
 				new Alert(getViewer().getFrame(), "The selected tree '" + t.getName() + "' is NOT single-labeled!");
 				return;
 			} else
+			*/
 				selectedTrees.add(t);
 		}
 
