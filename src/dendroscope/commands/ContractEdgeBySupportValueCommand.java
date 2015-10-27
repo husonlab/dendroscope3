@@ -94,7 +94,7 @@ public class ContractEdgeBySupportValueCommand extends CommandBase implements IC
         final Document doc = ((Director) getDir()).getDocument();
         final MultiViewer multiViewer = (MultiViewer) getViewer();
 
-        for (Iterator<TreeViewer> it = multiViewer.getTreeGrid().getIterator(); it.hasNext(); ) {
+        for (Iterator<TreeViewer> it = multiViewer.getTreeGrid().getSelectedOrAllIterator(); it.hasNext(); ) {
             final TreeViewer treeViewer = it.next();
 
             final Set<Edge> toDelete = new HashSet<>();
