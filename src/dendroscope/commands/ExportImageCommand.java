@@ -91,9 +91,9 @@ public class ExportImageCommand extends CommandBase implements ICommand {
 
         java.util.List<String> tokens = np.getTokensRespectCase(null, ";");
 
-        String format = np.findIgnoreCase(tokens, "format=", "svg gif png jpg pdf file-suffix", "file-suffix");
-        boolean visibleOnly = np.findIgnoreCase(tokens, "visibleonly=", "true false", "false").equals("true");
-        boolean text2shapes = np.findIgnoreCase(tokens, "textasshapes=", "true false", "false").equals("true");
+        String format = np.findIgnoreCase(tokens, "format=", "bmp svg gif png jpg pdf file-suffix", "file-suffix");
+        boolean visibleOnly = np.findIgnoreCase(tokens, "visibleOnly=", "true false", "false").equals("true");
+        boolean text2shapes = np.findIgnoreCase(tokens, "textAsShapes=", "true false", "false").equals("true");
         String title = np.findIgnoreCase(tokens, "title=", null, "none");
         boolean replace = np.findIgnoreCase(tokens, "replace=", "true false", "false").equals("true");
         np.checkFindDone(tokens);
@@ -112,7 +112,9 @@ public class ExportImageCommand extends CommandBase implements ICommand {
             if (format.equalsIgnoreCase("eps")) {
                 graphicsType = new EPSExportType();
                 ((EPSExportType) graphicsType).setDrawTextAsOutlines(!text2shapes);
-            } else if (format.equalsIgnoreCase("png"))
+            } else if (format.equalsIgnoreCase("bmp"))
+                graphicsType = new RenderedExportType();
+            else if (format.equalsIgnoreCase("png"))
                 graphicsType = new PNGExportType();
             else if (format.equalsIgnoreCase("pdf"))
                 graphicsType = new PDFExportType();
@@ -195,7 +197,7 @@ public class ExportImageCommand extends CommandBase implements ICommand {
      * @return usage
      */
     public String getSyntax() {
-        return "exportimage file=<filename> [format={PNG|GIF|JPG|SVG|PDF|file-suffix}] [textasshapes=bool] [visibleonly={false|true}] [title=title] [replace={false|true}] ;";
+        return "exportimage file=<filename> [format={BMP|PNG|GIF|JPG|SVG|PDF|file-suffix}] [textasshapes=bool] [visibleonly={false|true}] [title=title] [replace={false|true}] ;";
     }
 
     /**
