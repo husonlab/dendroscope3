@@ -107,8 +107,10 @@ public class Dendroscope {
             Basic.hideSystemErr();
             Basic.hideSystemOut();
         }
-        if (showVersion)
+        if (showVersion) {
             System.err.println(ProgramProperties.getProgramVersion());
+            System.err.println("Java version: " + System.getProperty("java.version"));
+        }
 
         DendroscopeProperties.initializeProperties(propertiesFile);
 
