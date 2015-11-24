@@ -60,7 +60,7 @@ public class ExtractInducedNetworkCommand extends CommandBaseMultiViewer impleme
      * @return description
      */
     public String getDescription() {
-        return "Extract the subtree or subnetwork induced by selected nodes";
+        return "Extract the subtree or sub-network induced by selected nodes";
     }
 
     /**
