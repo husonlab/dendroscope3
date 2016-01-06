@@ -100,16 +100,16 @@ public class ContractEdgeBySupportValueCommand extends CommandBase implements IC
             final Set<Edge> toDelete = new HashSet<>();
 
             for (Edge e = treeViewer.getGraph().getFirstEdge(); e != null; e = e.getNext()) {
-                Node w = e.getTarget();
+                final Node w = e.getTarget();
                 if (w.getDegree() > 1 && Basic.isDouble(treeViewer.getLabel(w))) {
-                    double value = Basic.parseDouble(treeViewer.getLabel(w));
+                    final double value = Basic.parseDouble(treeViewer.getLabel(w));
                     {
                         if (value < minSupport)
                             toDelete.add(e);
                     }
                 }
             }
-            int count = toDelete.size();
+            final int count = toDelete.size();
             if (count > 0 && treeViewer.contractAll(toDelete)) {
                 treeViewer.getPhyloTree().getNode2GuideTreeChildren().clear();
                 LayoutOptimizerManager.apply(multiViewer.getEmbedderName(), treeViewer.getPhyloTree());
@@ -137,7 +137,7 @@ public class ContractEdgeBySupportValueCommand extends CommandBase implements IC
         final MultiViewer viewer = (MultiViewer) getViewer();
         double minSupport = ProgramProperties.get("CollapseEdgeThreshold", 75.0);
 
-        String result = JOptionPane.showInputDialog(viewer.getFrame(), "Enter minimum support threshold:", String.format("%.2f", minSupport));
+        final String result = JOptionPane.showInputDialog(viewer.getFrame(), "Enter minimum support threshold:", String.format("%.2f", minSupport));
         if (result != null && Basic.isDouble(result)) {
             minSupport = Basic.parseDouble(result);
             ProgramProperties.put("CollapseEdgeThreshold", minSupport);

@@ -41,8 +41,7 @@ public class PhyloTreeUtils {
      *
      * @return induced subtree   or null, if not possible
      */
-    public static PhyloTree extractInducedSubtree(PhyloTree tree, NodeSet selected, NodeSet collapsed,
-                                                  boolean reduce) {
+    public static PhyloTree extractInducedSubtree(PhyloTree tree, NodeSet selected, NodeSet collapsed, boolean reduce) {
         if (selected.size() == 0)
             return tree;
         NodeIntegerArray node2NumberInducedChildren = new NodeIntegerArray(tree);
@@ -81,8 +80,7 @@ public class PhyloTreeUtils {
      *
      * @return induced subnetwork   or null, if not possible
      */
-    public static PhyloTree extractInducedSubnetwork(PhyloTree network, NodeSet selected, NodeSet collapsed,
-                                                     boolean reduce) {
+    public static PhyloTree extractInducedSubnetwork(PhyloTree network, NodeSet selected, NodeSet collapsed, boolean reduce) {
         if (selected.size() == 0)
             return network;
 
@@ -129,8 +127,7 @@ public class PhyloTreeUtils {
      *
      * @return induced subnetwork   or null, if not possible
      */
-    public static PhyloTree extractLSAInducedSubNetwork(PhyloTree network, NodeSet selected, NodeSet collapsed,
-                                                        boolean reduce) {
+    public static PhyloTree extractLSAInducedSubNetwork(PhyloTree network, NodeSet selected, NodeSet collapsed, boolean reduce) {
 
         //System.err.println("size sel" + selected.size());
 
@@ -165,8 +162,7 @@ public class PhyloTreeUtils {
      *
      * @return induced subnetwork   or null, if not possible
      */
-    public static PhyloTree extractSubNetwork(PhyloTree network, NodeSet selected, NodeSet collapsed,
-                                              boolean reduce) {
+    public static PhyloTree extractSubNetwork(PhyloTree network, NodeSet selected, NodeSet collapsed, boolean reduce) {
         if (selected.size() == 0)
             return network;
 

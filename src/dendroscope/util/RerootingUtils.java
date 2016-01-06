@@ -40,14 +40,12 @@ import java.util.TreeSet;
 public class RerootingUtils {
 
     /**
-     * reroot tree
+     * reroot tree by edge
      *
      * @return true, if rerooted
      */
-    public static boolean reroot(TreeViewer viewer) {
+    public static boolean rerootByEdge(TreeViewer viewer, Edge e) {
         PhyloTree tree = viewer.getPhyloTree();
-        if (viewer.getNumberSelectedEdges() == 1) {
-            Edge e = viewer.getSelectedEdges().getFirstElement();
             if ((e.getSource() == tree.getRoot() || e.getTarget() == tree.getRoot()) && tree.getRoot().getDegree() == 2)
                 return false; // no need to reroot
 
@@ -87,54 +85,69 @@ public class RerootingUtils {
                 }
             }
 
+        if (viewer.getDoc().isInternalNodeLabelsAreSupportValues())
+            SupportValueUtils.setEdgeConfidencesFromNodeLabels(tree);
+
             // not under a special node, reroot in simple way
             tree.setRoot(e);
+
             tree.redirectEdgesAwayFromRoot();
 
+        if (viewer.getDoc().isInternalNodeLabelsAreSupportValues())
+            SupportValueUtils.setNodeLabelsFromEdgeConfidences(tree);
+
             Node root = tree.getRoot();
+
             if (root.getDegree() == 2 && tree.getLabel(root) == null) {
-                Edge ea = root.getFirstAdjacentEdge();
-                Edge eb = root.getLastAdjacentEdge();
-                double weight = tree.getWeight(ea) + tree.getWeight(eb);
-                double a = tree.computeAverageDistanceToALeaf(ea.getOpposite(root));
-                double b = tree.computeAverageDistanceToALeaf(eb.getOpposite(root));
+                final Edge ea = root.getFirstAdjacentEdge();
+                final Edge eb = root.getLastAdjacentEdge();
+                final double weight = tree.getWeight(ea) + tree.getWeight(eb);
+                final double a = tree.computeAverageDistanceToALeaf(ea.getOpposite(root));
+                final double b = tree.computeAverageDistanceToALeaf(eb.getOpposite(root));
                 double na = 0.5 * (b - a + weight);
                 if (na >= weight)
                     na = 0.95 * weight;
                 else if (na <= 0)
                     na = 0.05 * weight;
-                double nb = weight - na;
+                final double nb = weight - na;
                 tree.setWeight(ea, na);
                 tree.setWeight(eb, nb);
             }
 
             if (viewer.getShowEdgeWeights() && tree.getRoot() != null) {
-                Edge f = tree.getRoot().getFirstAdjacentEdge();
+                final Edge f = tree.getRoot().getFirstAdjacentEdge();
                 viewer.setLabel(f, "" + tree.getWeight(f));
                 viewer.setLabelVisible(f, true);
-                Edge g = tree.getRoot().getLastAdjacentEdge();
+                final Edge g = tree.getRoot().getLastAdjacentEdge();
                 viewer.setLabel(g, "" + tree.getWeight(g));
                 viewer.setLabelVisible(g, true);
             }
             return true;
-        } else if (viewer.getNumberSelectedNodes() == 1) {
-            Node v = viewer.getSelectedNodes().getFirstElement();
-            if (v == tree.getRoot())
-                return false;
-            if (tree.getNumberSpecialEdges() > 0) {
-                // v is source of a special edge, can't use it as root
-                for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e))
-                    if (tree.isSpecial(e))
-                        return false;
+    }
 
-                // todo: bugs need fixing
-                if (JOptionPane.showConfirmDialog(MultiViewer.getLastActiveFrame(), "Rerooting networks has major bugs, try anyway?", "Warning", JOptionPane.YES_NO_CANCEL_OPTION)
-                        != JOptionPane.YES_OPTION)
+    /**
+     * reroot tree by node
+     *
+     * @return true, if rerooted
+     */
+    public static boolean rerootByNode(TreeViewer viewer, Node v) {
+        PhyloTree tree = viewer.getPhyloTree();
+        if (v == tree.getRoot())
+            return false;
+        if (tree.getNumberSpecialEdges() > 0) {
+            // v is source of a special edge, can't use it as root
+            for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e))
+                if (tree.isSpecial(e))
                     return false;
 
+            // todo: bugs need fixing
+            if (JOptionPane.showConfirmDialog(MultiViewer.getLastActiveFrame(), "Rerooting networks has major bugs, try anyway?", "Warning", JOptionPane.YES_NO_CANCEL_OPTION)
+                    != JOptionPane.YES_OPTION)
+                return false;
 
-                if (belowSpecialEdge(tree, v)) {
-                    System.err.println("WARNING: Can't reroot below a reticulation");
+
+            if (belowSpecialEdge(tree, v)) {
+                System.err.println("WARNING: Can't reroot below a reticulation");
                     /*
                     Taxa taxa = new Taxa();
                     try {
@@ -154,24 +167,29 @@ public class RerootingUtils {
                             return false;
                     } else
                     */
-                    return false;
-                }
+                return false;
             }
-            Node root = tree.getRoot();
-            if (tree.getDegree(root) == 2 && tree.getLabel(root) == null) {
-                Edge g = tree.delDivertex(root);
-                viewer.setDirection(g, EdgeView.UNDIRECTED);
-                if (viewer.getShowEdgeWeights() == true) {
-                    viewer.setLabel(g, "" + tree.getWeight(g));
-                    viewer.setLabelVisible(g, true);
-                }
-            }
-            tree.setRoot(v);
-            tree.redirectEdgesAwayFromRoot();
-            return true;
         }
-        return false;
+        final Node root = tree.getRoot();
+        if (tree.getDegree(root) == 2 && tree.getLabel(root) == null) {
+            final Edge g = tree.delDivertex(root);
+            viewer.setDirection(g, EdgeView.UNDIRECTED);
+            if (viewer.getShowEdgeWeights() == true) {
+                viewer.setLabel(g, "" + tree.getWeight(g));
+                viewer.setLabelVisible(g, true);
+            }
+        }
 
+        if (viewer.getDoc().isInternalNodeLabelsAreSupportValues())
+            SupportValueUtils.setEdgeConfidencesFromNodeLabels(tree);
+
+        tree.setRoot(v);
+        tree.redirectEdgesAwayFromRoot();
+
+        if (viewer.getDoc().isInternalNodeLabelsAreSupportValues())
+            SupportValueUtils.setNodeLabelsFromEdgeConfidences(tree);
+
+        return true;
     }
 
     /**
@@ -264,49 +282,11 @@ public class RerootingUtils {
                 // System.err.println("node score: "+outgroupBelowV+" "+nodesBelowV);
             }
         }
-        Node oldRoot = tree.getRoot();
         if (bestNode != null && bestNode != tree.getRoot()) {
-            tree.setRoot(bestNode);
-            tree.redirectEdgesAwayFromRoot();
+            rerootByNode(viewer, bestNode);
         } else if (bestEdge != null) {
-            tree.setRoot(bestEdge);
-            tree.redirectEdgesAwayFromRoot();
-            Node root = tree.getRoot();
-            if (root.getDegree() == 2 && tree.getLabel(root) == null) {
-                Edge ea = root.getFirstAdjacentEdge();
-                Edge eb = root.getLastAdjacentEdge();
-                double weight = tree.getWeight(ea) + tree.getWeight(eb);
-                double a = tree.computeAverageDistanceToALeaf(ea.getOpposite(root));
-                double b = tree.computeAverageDistanceToALeaf(eb.getOpposite(root));
-                double na = 0.5 * (b - a + weight);
-                if (na >= weight)
-                    na = 0.95 * weight;
-                else if (na <= 0)
-                    na = 0.05 * weight;
-                double nb = weight - na;
-                tree.setWeight(ea, na);
-                tree.setWeight(eb, nb);
-            }
-            if (viewer.getShowEdgeWeights() && tree.getRoot() != null) {
-                Edge f = tree.getRoot().getFirstAdjacentEdge();
-                viewer.setLabel(f, "" + tree.getWeight(f));
-                viewer.setLabelVisible(f, true);
-                Edge g = tree.getRoot().getLastAdjacentEdge();
-                viewer.setLabel(g, "" + tree.getWeight(g));
-                viewer.setLabelVisible(g, true);
-            }
+            rerootByEdge(viewer, bestEdge);
         } else return false;
-        // if root was changed, remove old root of degree two, if necessary
-        if (oldRoot.getOwner() != null && tree.getRoot() != oldRoot) {
-            if (tree.getDegree(oldRoot) == 2 && tree.getLabel(oldRoot) == null) {
-                Edge g = tree.delDivertex(oldRoot);
-                viewer.setDirection(g, EdgeView.UNDIRECTED);
-                if (viewer.getShowEdgeWeights()) {
-                    viewer.setLabel(g, "" + tree.getWeight(g));
-                    viewer.setLabelVisible(g, true);
-                }
-            }
-        }
         return true;
     }
 
@@ -341,7 +321,7 @@ public class RerootingUtils {
         // if v is a multifurcation then we may need to use it as root
         if (v.getOutDegree() > 2) // multifurcation
         {
-            int outgroupBelowV = outgroupBelowE + node2NumberOutgroup.getValue(v);
+            final int outgroupBelowV = outgroupBelowE + node2NumberOutgroup.getValue(v);
 
             if (outgroupBelowV == totalOutgroup) // all outgroup taxa lie below here
             {
@@ -375,49 +355,36 @@ public class RerootingUtils {
     }
 
     /**
-     * reroots tree using midpoint rooting
+     * re-root tree using midpoint rooting
      *
      * @param viewer
      * @return true, if tree rerooted
      */
     public static boolean rerootByMidpoint(TreeViewer viewer) {
-        PhyloTree tree = viewer.getPhyloTree();
+        final PhyloTree tree = viewer.getPhyloTree();
 
-        SortedSet<Triplet<Edge, Float, Float>> rankedMidpointRootings = getRankedMidpointRootings(tree);
+        final SortedSet<Triplet<Edge, Float, Float>> rankedMidpointRootings = getRankedMidpointRootings(tree);
 
-        Triplet<Edge, Float, Float> best = rankedMidpointRootings.first();
-        Edge e = best.get1();
-        Node v = e.getSource();
-        Node w = e.getTarget();
-        float a = best.get2();
-        float b = best.get3();
-        float weight = (float) tree.getWeight(e);
-        float halfOfTotal = (a + b + weight) / 2;
-
-        Node oldDivertex = tree.getOutDegree(tree.getRoot()) == 2 ? tree.getRoot() : null;
+        final Triplet<Edge, Float, Float> best = rankedMidpointRootings.first();
+        final Edge e = best.get1();
+        final Node v = e.getSource();
+        final Node w = e.getTarget();
+        final float a = best.get2();
+        final float b = best.get3();
+        final float weight = (float) tree.getWeight(e);
+        final float halfOfTotal = (a + b + weight) / 2;
 
         if (halfOfTotal <= a) {
             if (tree.getRoot() == v)
                 return false;
-            tree.setRoot(v);
+            rerootByNode(viewer, v);
         } else if (halfOfTotal >= a + weight) {
             if (tree.getRoot() == w)
                 return false;
-            tree.setRoot(w);
+            rerootByNode(viewer, w);
         } else {
-            float vpWeight = halfOfTotal - a;
-            float pwWeight = a + weight - halfOfTotal;
-            Node p = tree.newNode();
-            tree.setRoot(p);
-            Edge vp = tree.newEdge(v, p);
-            tree.setWeight(vp, vpWeight);
-            Edge pw = tree.newEdge(p, w);
-            tree.setWeight(pw, pwWeight);
-            tree.deleteEdge(e);
+            rerootByEdge(viewer, e);
         }
-        tree.redirectEdgesAwayFromRoot();
-        if (oldDivertex != null)
-            tree.delDivertex(oldDivertex);
         return true;
     }
 

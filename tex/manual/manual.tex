@@ -219,6 +219,11 @@ to open one or more files containing input data. The supported formats are
 Note that the standard open dialog does not allow one to open more than one file under MacOS X.
 As a work-around, press the shift-key when selecting the  \menuitem{File}{Open}  menu item so as to obtain
 an alternative file open dialog that allows one to select more than one file for opening.
+When opening a file, Dendroscope inspects the first input tree to determine whether
+all its internal nodes are labeled by numbers. If this is the case,
+then the user is presented with a dialog to determine whether
+to interpret the numbers as node labels, as edge support values (e.g.\ bootstrap values)
+or whether to delete them.
 \item The \pmenuitem{File}{Open Recent} can be used to re-open a recently opened file.
 \item The \pmenuitem{File}{Add From File} item adds trees or networks from a file to the current document.
 \item The \pmenuitem{File}{Enter Trees or Networks} item enters trees in Newick or networks in extended Newick format.
@@ -316,6 +321,10 @@ The \pmenu{Options} menu contains items for collapsing nodes and extracting subt
 \begin{itemize}
 \item The \pmenuitem{Options}{Advanced Options} submenu contains some advanced options that are probably not
 of general interest.
+\item The \pmenuitem{Options}{Internal Node Labels Are Support Values} item
+should be used when internal tree nodes are labeled by support values (such as bootstrap values) and one wants to reroot one or more trees.
+Selecting this option will ensure that values will be correctly transformed
+when rerooting. 
 \item The \pmenuitem{Options}{Collapse} item enables to collapse subtrees or subnetworks below the  specified nodes. The former subtrees or subnetworks  are replaced by rectangles.
 \item The \pmenuitem{Options}{Uncollapse} item is used to uncollapse (expand) the selected, collapsed subtrees or  subnetworks .
 \item The \pmenuitem{Options}{Uncollapse Subtree} item is used to uncollapse (expand) all collapsed subtrees or subnetworks below  the  specified nodes.
@@ -984,6 +993,8 @@ Special purpose:
         tofront ;                                Bring window to front
 
 Other:
+	set internalNodeLabelsAreSupportValues={false|true}
+	                                         Do internal node label represent percent support (e.g. bootstrap values)?
         orderNetworks [mode=<order|filter>] [noHybrid=<name,...>] [noRecent_hybrid=<name,...>] [hybrid=<name,...>] [recentHybrid=<name,...>]
                                                  Order or filter networks by whether specified taxa appear or do not appear below reticulate nodes
         howtocite ;                              How to cite the program

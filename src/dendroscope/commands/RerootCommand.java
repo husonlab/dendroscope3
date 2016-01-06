@@ -102,8 +102,12 @@ public class RerootCommand extends CommandBaseMultiViewer implements ICommand {
                     }
                 } else
                     changed = RerootingUtils.rerootByOutgroup(treeViewer, selectedLabels);
-            } else
-                changed = RerootingUtils.reroot(treeViewer);
+            } else {
+                if (treeViewer.getNumberSelectedEdges() == 1)
+                    changed = RerootingUtils.rerootByEdge(treeViewer, treeViewer.getSelectedEdges().getFirstElement());
+                else if (treeViewer.getNumberSelectedNodes() == 1)
+                    changed = RerootingUtils.rerootByNode(treeViewer, treeViewer.getSelectedNodes().getFirstElement());
+            }
             if (changed) {
                 treeViewer.getPhyloTree().getNode2GuideTreeChildren().clear();
                 LayoutOptimizerManager.apply(multiViewer.getEmbedderName(), treeViewer.getPhyloTree());

@@ -25,6 +25,7 @@ import dendroscope.io.IOFormat;
 import dendroscope.io.IOManager;
 import dendroscope.io.nexml.Nexml;
 import dendroscope.main.DendroscopeProperties;
+import dendroscope.util.SupportValueUtils;
 import jloda.gui.ChooseFileDialog;
 import jloda.gui.commands.ICommand;
 import jloda.util.ProgramProperties;
@@ -36,6 +37,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 
 /**
@@ -133,8 +135,13 @@ public class OpenFileCommand extends CommandBaseMultiViewer implements ICommand 
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("open file=");
         String fileName = np.getWordFileNamePunctuation();
+        boolean internalNodeLabelsAreSupportValues;
+        if (np.peekMatchIgnoreCase("internalNodeLabelsAreSupportValues")) {
+            np.matchIgnoreCase("internalNodeLabelsAreSupportValues=");
+            internalNodeLabelsAreSupportValues = np.getBoolean();
+        } else
+            internalNodeLabelsAreSupportValues = false;
         np.matchIgnoreCase(";");
-        String openCommand = "open file='" + fileName + "';";
 
         if (!ProgramProperties.isUseGUI() || multiViewer.getTreeGrid().getCurrentTrees().cardinality() == 0) {
             multiViewer.getTreeGrid().setShowScrollBars(false);
@@ -148,10 +155,28 @@ public class OpenFileCommand extends CommandBaseMultiViewer implements ICommand 
             Document doc = getDir().getDocument();
             doc.setFile(file);
             IOFormat format = IOManager.createIOFormatForFile(file);
+            if (format == null)
+                throw new IOException("Unknown format in file: " + fileName);
             if (format instanceof Nexml) {
                 ((Nexml) format).setConnectors(doc.getConnectors());
             }
             doc.setTrees(format.read(file));
+            if (!internalNodeLabelsAreSupportValues && ProgramProperties.isUseGUI() && doc.getTrees().length > 0) {
+                if (SupportValueUtils.isInternalNodesLabeledByNumbers(doc.getTree(0))) {
+                    final String[] choices = new String[]{"Interpret as text labels", "Interpret as support values (in %)", "Delete"};
+                    String choice = choices[0];
+                    choice = (String) JOptionPane.showInputDialog(getViewer().getFrame(), "Internal nodes appear to be labeled by numbers, how to interpret them?",
+                            "How to interpret internal node numbers", JOptionPane.QUESTION_MESSAGE, ProgramProperties.getProgramIcon(), choices, choice);
+                    if (choice != null && choice.equals(choices[1])) { // interpret as support values
+                        doc.setInternalNodeLabelsAreSupportValues(true);
+                    } else
+                        doc.setInternalNodeLabelsAreSupportValues(false);
+
+                    if (choice != null && choice.equals(choices[2])) { // delete
+                        SupportValueUtils.deleteAllInternalNodes(doc.getTrees());
+                    }
+                }
+            }
             System.err.println("Trees loaded: " + doc.getTrees().length);
             multiViewer.chooseGridSize();
             multiViewer.loadTrees(null);
@@ -159,6 +184,7 @@ public class OpenFileCommand extends CommandBaseMultiViewer implements ICommand 
             multiViewer.setMustRecomputeCoordinates(false);
             DendroscopeProperties.addRecentFile(file);
         } else {
+            String openCommand = "open file='" + fileName + "';";
             Director theDir = Director.newProject(1, 1);
             theDir.executeImmediately(openCommand, theDir.getMainViewer().getCommandManager());
         }

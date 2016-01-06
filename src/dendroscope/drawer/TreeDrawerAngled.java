@@ -287,61 +287,6 @@ public class TreeDrawerAngled extends TreeDrawerBase implements IOptimizedGraphD
     }
 
     /**
-     * set the default label positions for nodes and edges
-     *
-     * @param resetAll
-     */
-
-
-    public void resetLabelPositionsOld(boolean resetAll) {
-        byte leafOr;
-        byte rootOr;
-
-        double angle = Geometry.moduloTwoPI(trans.getAngle());
-        if (angle >= 0.25 * Math.PI && angle < 0.75 * Math.PI) // north
-        {
-            /*
-            leafOr = (!trans.getFlipH() ? NodeView.SOUTH : NodeView.NORTH);
-            rootOr = (trans.getFlipH() ? NodeView.SOUTH : NodeView.NORTH);
-            */
-            leafOr = rootOr = NodeView.RADIAL;
-        } else if (angle >= 0.75 * Math.PI && angle < 1.25 * Math.PI) // west
-        {
-            leafOr = (!trans.getFlipH() ? NodeView.WEST : NodeView.EAST);
-            rootOr = (trans.getFlipH() ? NodeView.WEST : NodeView.EAST);
-        } else if (angle >= 1.25 * Math.PI && angle < 1.75 * Math.PI) // south
-        {
-            /*
-            leafOr = (!trans.getFlipH() ? NodeView.NORTH : NodeView.SOUTH);
-            rootOr = (trans.getFlipH() ? NodeView.NORTH : NodeView.SOUTH);
-            */
-            leafOr = rootOr = NodeView.RADIAL;
-        } else // east
-        {
-            leafOr = (!trans.getFlipH() ? NodeView.EAST : NodeView.WEST);
-            rootOr = (trans.getFlipH() ? NodeView.EAST : NodeView.WEST);
-        }
-
-        for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
-            NodeView nv = viewer.getNV(v);
-            if (resetAll || nv.getLabelLayout() != NodeView.USER) {
-                nv.setLabelPositionRelative(0, 0);
-                nv.setLabelAngle(0);
-                if (v != tree.getRoot())
-
-                    nv.setLabelLayout(leafOr);
-                else
-                    nv.setLabelLayout(rootOr);
-            }
-        }
-        for (Edge e = tree.getFirstEdge(); e != null; e = e.getNext()) {
-            EdgeView ev = viewer.getEV(e);
-            if (resetAll || ev.getLabelLayout() != EdgeView.USER)
-                ev.setLabelLayout(EdgeView.CENTRAL);
-        }
-    }
-
-    /**
      * must we visit the subtree rooted at this node when drawing or looking for a mouse click?
      *
      * @param v

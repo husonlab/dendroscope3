@@ -52,7 +52,7 @@ public class GUIConfiguration {
 
         menuConfig.defineMenu("Advanced Selection", "Select Subnetwork;Select Induced Network;Select LSA Induced Network;Select Spanned Edges;");
 
-        menuConfig.defineMenu("Options", "@Advanced Options;|;Collapse;Uncollapse;Uncollapse Subtree;|;Collapse Complement;Collapse At Level...;|;" +
+        menuConfig.defineMenu("Options", "@Advanced Options;Internal Node Labels Are Support Values;|;Collapse;Uncollapse;Uncollapse Subtree;|;Collapse Complement;Collapse At Level...;|;" +
                 (DendroscopeProperties.ALLOW_IMAGES ? "|;Load Taxon Images...;Set Image Size...;Set Image Layout...;" : "")
                 + "|;Next Tree;Next Page;Previous Tree;Previous Page;|;Go to Tree...;|;Set Tree Name...;");
         menuConfig.defineMenu("Advanced Options", "Extract Subnetwork...;Extract Induced Network...;Extract LSA Induced Network...;");

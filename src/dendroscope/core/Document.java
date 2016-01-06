@@ -35,12 +35,14 @@ import java.util.Set;
  * Daniel Huson, 1.2007
  */
 public class Document {
-    TreeData[] trees;  // list of tree obtained in input
-    int current; // index of current tree
-    String title = "Untitled";
+    private TreeData[] trees;  // list of tree obtained in input
+    private int current; // index of current tree
+    private String title = "Untitled";
     private final Connectors connectors = new Connectors();
 
     private boolean documentIsDirty;    // is any tree dirty?
+
+    private boolean internalNodeLabelsAreSupportValues = false;
 
     private ProgressListener progressListener;
     private File file;
@@ -361,6 +363,14 @@ public class Document {
      */
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public boolean isInternalNodeLabelsAreSupportValues() {
+        return internalNodeLabelsAreSupportValues;
+    }
+
+    public void setInternalNodeLabelsAreSupportValues(boolean internalNodeLabelsAreSupportValues) {
+        this.internalNodeLabelsAreSupportValues = internalNodeLabelsAreSupportValues;
     }
 
     /**
