@@ -21,6 +21,7 @@ package dendroscope.commands;
 
 import dendroscope.core.Director;
 import dendroscope.core.Document;
+import dendroscope.core.TreeData;
 import dendroscope.io.IOFormat;
 import dendroscope.io.IOManager;
 import dendroscope.io.nexml.Nexml;
@@ -28,6 +29,7 @@ import dendroscope.main.DendroscopeProperties;
 import dendroscope.util.SupportValueUtils;
 import jloda.gui.ChooseFileDialog;
 import jloda.gui.commands.ICommand;
+import jloda.gui.director.ProjectManager;
 import jloda.util.ProgramProperties;
 import jloda.util.ResourceManager;
 import jloda.util.parse.NexusStreamParser;
@@ -135,12 +137,6 @@ public class OpenFileCommand extends CommandBaseMultiViewer implements ICommand 
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("open file=");
         String fileName = np.getWordFileNamePunctuation();
-        boolean internalNodeLabelsAreSupportValues;
-        if (np.peekMatchIgnoreCase("internalNodeLabelsAreSupportValues")) {
-            np.matchIgnoreCase("internalNodeLabelsAreSupportValues=");
-            internalNodeLabelsAreSupportValues = np.getBoolean();
-        } else
-            internalNodeLabelsAreSupportValues = false;
         np.matchIgnoreCase(";");
 
         if (!ProgramProperties.isUseGUI() || multiViewer.getTreeGrid().getCurrentTrees().cardinality() == 0) {
@@ -161,18 +157,29 @@ public class OpenFileCommand extends CommandBaseMultiViewer implements ICommand 
                 ((Nexml) format).setConnectors(doc.getConnectors());
             }
             doc.setTrees(format.read(file));
-            if (!internalNodeLabelsAreSupportValues && ProgramProperties.isUseGUI() && doc.getTrees().length > 0) {
+            if (ProgramProperties.isUseGUI() && doc.getTrees().length > 0) {
                 if (SupportValueUtils.isInternalNodesLabeledByNumbers(doc.getTree(0))) {
                     final String[] choices = new String[]{"Interpret as text labels", "Interpret as support values (in %)", "Delete"};
                     String choice = choices[0];
-                    choice = (String) JOptionPane.showInputDialog(getViewer().getFrame(), "Internal nodes appear to be labeled by numbers, how to interpret them?",
+                    choice = (String) JOptionPane.showInputDialog(getViewer().getFrame(), "Internal nodes appear to be labeled by numbers, how should they be interpreted?",
                             "How to interpret internal node numbers", JOptionPane.QUESTION_MESSAGE, ProgramProperties.getProgramIcon(), choices, choice);
-                    if (choice != null && choice.equals(choices[1])) { // interpret as support values
+                    if (choice == null) {
+                        System.err.println("USER CANCELED");
+                        if (ProjectManager.getNumberOfProjects() > 1) {
+                            ProjectManager.removeProject(multiViewer.getDir());
+                            multiViewer.getDir().close();
+                        } else {
+                            doc.setFile("Untitled", true);
+                            doc.setTrees(new TreeData[0]);
+                        }
+                        return;
+                    }
+                    if (choice.equals(choices[1])) { // interpret as support values
                         doc.setInternalNodeLabelsAreSupportValues(true);
                     } else
                         doc.setInternalNodeLabelsAreSupportValues(false);
 
-                    if (choice != null && choice.equals(choices[2])) { // delete
+                    if (choice.equals(choices[2])) { // delete
                         SupportValueUtils.deleteAllInternalNodes(doc.getTrees());
                     }
                 }

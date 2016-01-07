@@ -50,9 +50,6 @@ public class Dendroscope {
         About.setVersionStringOffset(20, 20);
         About.setAbout("resources.images", "splash.jpg", Version.SHORT_DESCRIPTION, JDialog.DISPOSE_ON_CLOSE);
 
-        if (System.getProperty("mrj.version") == null)
-            System.setProperty("mrj.version", "3.1"); // browser launcher requires that this is set
-
         try {
             //run application
             application = new Dendroscope();
@@ -73,10 +70,17 @@ public class Dendroscope {
      * @throws Exception
      */
     public void parseArguments(String args[]) throws Exception {
-        ProgramProperties.setProgramName(Version.SHORT_DESCRIPTION);
+        Basic.startCollectionStdErr();
+
+        ProgramProperties.setProgramName(Version.NAME);
+        ProgramProperties.setProgramVersion(Version.SHORT_DESCRIPTION);
 
         final ArgsOptions options = new ArgsOptions(args, this, "Program for rooted phylogenetic trees and networks");
-        options.setVersion(Version.SHORT_DESCRIPTION);
+        options.setAuthors("Daniel H. Huson, with some contributions from other authors");
+        options.setVersion(ProgramProperties.getProgramVersion());
+        options.setLicense("Copyright (C) 2016 Daniel H. Huson. This program comes with ABSOLUTELY NO WARRANTY.\n" +
+                "This is free software, licensed under the terms of the GNU General Public License, Version 3.");
+        options.setVersion(ProgramProperties.getProgramVersion());
 
         options.comment("Mode:");
         ProgramProperties.setUseGUI(!options.getOption("-g", "--commandLineMode", "Run program in command-line mode", false) && !options.isDoHelp());
@@ -104,6 +108,7 @@ public class Dendroscope {
         options.done();
 
         if (silentMode) {
+            Basic.stopCollectingStdErr();
             Basic.hideSystemErr();
             Basic.hideSystemOut();
         }
@@ -122,11 +127,13 @@ public class Dendroscope {
             SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
                     try {
-                        Director dir = Director.newProject(1, 1);
+                        final Director dir = Director.newProject(1, 1);
                         MultiViewer multiViewer = (MultiViewer) dir.getViewerByClass(MultiViewer.class);
 
                         if (showMessageWindow)
                             multiViewer.getCommandManager().execute("show messageWindow;");
+
+                        System.err.println(Basic.stopCollectingStdErr());
 
                         DendroscopeProperties.notifyListChange(ProgramProperties.RECENTFILES);
                         dir.getMainViewer().updateView(Director.ALL);
@@ -139,6 +146,8 @@ public class Dendroscope {
             });
         } else // non-gui mode
         {
+            System.err.println(Basic.stopCollectingStdErr());
+
             final Document doc = new Document();
             final Director dir = new Director(doc);
             dir.setID(ProjectManager.getNextID());
