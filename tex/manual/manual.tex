@@ -321,7 +321,7 @@ The \pmenu{Options} menu contains items for collapsing nodes and extracting subt
 \begin{itemize}
 \item The \pmenuitem{Options}{Advanced Options} submenu contains some advanced options that are probably not
 of general interest.
-\item The \pmenuitem{Options}{Internal Node Labels Are Support Values} item
+\item The \pmenuitem{Options}{Internal Node Labels Interpreted As Edge Labels} item
 should be used when internal tree nodes are labeled by support values (such as bootstrap values) and one wants to reroot one or more trees.
 Selecting this option will ensure that values will be correctly transformed
 when rerooting. 
@@ -993,7 +993,7 @@ Special purpose:
         tofront ;                                Bring window to front
 
 Other:
-	set internalNodeLabelsAreSupportValues={false|true}
+	set internalNodeLabelsAreEdgeLabels={false|true}
 	                                         Do internal node label represent percent support (e.g. bootstrap values)?
         orderNetworks [mode=<order|filter>] [noHybrid=<name,...>] [noRecent_hybrid=<name,...>] [hybrid=<name,...>] [recentHybrid=<name,...>]
                                                  Order or filter networks by whether specified taxa appear or do not appear below reticulate nodes

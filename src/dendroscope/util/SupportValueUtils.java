@@ -21,9 +21,9 @@ package dendroscope.util;
 
 import dendroscope.core.TreeData;
 import jloda.graph.Edge;
+import jloda.graph.EdgeArray;
 import jloda.graph.Node;
 import jloda.phylo.PhyloTree;
-import jloda.util.Basic;
 
 /**
  * Utils for support values
@@ -31,19 +31,19 @@ import jloda.util.Basic;
  */
 public class SupportValueUtils {
     /**
-     * are all internal nodes labeled by numbers?
+     *does this tree have internal node labels
      * @param tree
-     * @return true, if all internal nodes labeled by numbers
+     * @return true, if some internal nodes have labels
      */
-    public static boolean isInternalNodesLabeledByNumbers(PhyloTree tree) {
+    public static boolean isTreeHasInternalNodeLabels(PhyloTree tree) {
         for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
             if (v.getInDegree() > 0 && v.getOutDegree() > 0) { // is internal node and not root
                 String label = tree.getLabel(v);
-                if (label == null || !Basic.isFloat(label))
-                    return false;
+                if (label != null)
+                    return true;
             }
         }
-        return true;
+        return false;
     }
 
     /**
@@ -61,32 +61,29 @@ public class SupportValueUtils {
     }
 
     /**
-     * parse node labels and interpret as edge support values
+     * set edge labels from internal node labels
      * @param tree
+     * @return edge labels
      */
-    public static void setEdgeConfidencesFromNodeLabels(PhyloTree tree) {
+    public static EdgeArray<String> setEgeLabelsFromInternalNodeLabels(PhyloTree tree) {
+        final EdgeArray<String> edgeLabels = new EdgeArray<>(tree);
         for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
-            if (v.getInDegree() == 1) {
-                final Edge e = v.getFirstInEdge();
-                if (v.getOutDegree() == 0) {
-                    tree.setConfidence(e, 100.0);
-                } else
-                    tree.setConfidence(e, Basic.parseDouble(tree.getLabel(v)));
+            if (v.getInDegree() == 1 && v.getOutDegree() > 0) {
+                edgeLabels.set(v.getFirstInEdge(), tree.getLabel(v));
             }
         }
+        return edgeLabels;
     }
 
     /**
-     * set internal node labels as edge support
+     * set internal node labels from edge labels
      * @param tree
      */
-    public static void setNodeLabelsFromEdgeConfidences(PhyloTree tree) {
+    public static void setInternalNodeLabelsFromEdgeLabels(PhyloTree tree, EdgeArray<String> edgeLabels) {
         for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
-            if (v.getInDegree() == 1) {
+            if (v.getInDegree() == 1 && v.getOutDegree() > 0) {
                 final Edge e = v.getFirstInEdge();
-                if (v.getOutDegree() > 0) {
-                    tree.setLabel(v, "" + tree.getConfidence(e));
-                }
+                tree.setLabel(v, edgeLabels.get(e));
             } else if (v.getInDegree() == 0) // root node
                 tree.setLabel(v, null);
         }

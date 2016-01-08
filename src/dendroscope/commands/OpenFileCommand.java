@@ -147,10 +147,10 @@ public class OpenFileCommand extends CommandBaseMultiViewer implements ICommand 
                 executeImmediately("zoom what=fit;");
             }
 
-            File file = new File(fileName);
+            final File file = new File(fileName);
             Document doc = getDir().getDocument();
             doc.setFile(file);
-            IOFormat format = IOManager.createIOFormatForFile(file);
+            final IOFormat format = IOManager.createIOFormatForFile(file);
             if (format == null)
                 throw new IOException("Unknown format in file: " + fileName);
             if (format instanceof Nexml) {
@@ -158,11 +158,10 @@ public class OpenFileCommand extends CommandBaseMultiViewer implements ICommand 
             }
             doc.setTrees(format.read(file));
             if (ProgramProperties.isUseGUI() && doc.getTrees().length > 0) {
-                if (SupportValueUtils.isInternalNodesLabeledByNumbers(doc.getTree(0))) {
-                    final String[] choices = new String[]{"Interpret as text labels", "Interpret as support values (in %)", "Delete"};
-                    String choice = choices[0];
-                    choice = (String) JOptionPane.showInputDialog(getViewer().getFrame(), "Internal nodes appear to be labeled by numbers, how should they be interpreted?",
-                            "How to interpret internal node numbers", JOptionPane.QUESTION_MESSAGE, ProgramProperties.getProgramIcon(), choices, choice);
+                if (SupportValueUtils.isTreeHasInternalNodeLabels(doc.getTree(0))) {
+                    final String[] choices = new String[]{"Interpret as node labels", "Interpret as edge labels (such as bootstrap values)", "Delete"};
+                    final String choice = (String) JOptionPane.showInputDialog(getViewer().getFrame(), "Internal nodes have labels, how should they be interpreted?",
+                            "How to interpret internal node numbers", JOptionPane.QUESTION_MESSAGE, ProgramProperties.getProgramIcon(), choices, choices[0]);
                     if (choice == null) {
                         System.err.println("USER CANCELED");
                         if (ProjectManager.getNumberOfProjects() > 1) {
@@ -175,12 +174,13 @@ public class OpenFileCommand extends CommandBaseMultiViewer implements ICommand 
                         return;
                     }
                     if (choice.equals(choices[1])) { // interpret as support values
-                        doc.setInternalNodeLabelsAreSupportValues(true);
+                        doc.setInternalNodeLabelsAreEdgeLabels(true);
                     } else
-                        doc.setInternalNodeLabelsAreSupportValues(false);
+                        doc.setInternalNodeLabelsAreEdgeLabels(false);
 
                     if (choice.equals(choices[2])) { // delete
                         SupportValueUtils.deleteAllInternalNodes(doc.getTrees());
+                        doc.setDocumentIsDirty(true);
                     }
                 }
             }

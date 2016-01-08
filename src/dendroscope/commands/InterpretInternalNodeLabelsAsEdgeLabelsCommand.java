@@ -29,10 +29,10 @@ import java.awt.event.ActionEvent;
 /**
  * command Daniel Huson, 6.2010
  */
-public class InterpretInternalNodeLabelsAsSupportValuesCommand extends CommandBaseMultiViewer implements ICheckBoxCommand {
+public class InterpretInternalNodeLabelsAsEdgeLabelsCommand extends CommandBaseMultiViewer implements ICheckBoxCommand {
 
     public boolean isSelected() {
-        return getDir().getDocument().isInternalNodeLabelsAreSupportValues();
+        return getDir().getDocument().isInternalNodeLabelsAreEdgeLabels();
     }
 
     /**
@@ -41,7 +41,7 @@ public class InterpretInternalNodeLabelsAsSupportValuesCommand extends CommandBa
      * @return name
      */
     public String getName() {
-        return "Internal Node Labels Are Support Values";
+        return "Internal Node Labels Interpreted As Edge Labels";
     }
 
     /**
@@ -50,7 +50,7 @@ public class InterpretInternalNodeLabelsAsSupportValuesCommand extends CommandBa
      * @return description
      */
     public String getDescription() {
-        return "Do internal node label represent percent support (e.g. bootstrap values)?";
+        return "Interpret internal node labels as edge labels (e.g. bootstrap support values)?";
     }
 
     /**
@@ -79,10 +79,10 @@ public class InterpretInternalNodeLabelsAsSupportValuesCommand extends CommandBa
      */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
-        np.matchIgnoreCase("set internalNodeLabelsAreSupportValues=");
+        np.matchIgnoreCase("set interpretInternalNodeLabelsAsEdgeLabels=");
         boolean value = np.getBoolean();
         np.matchIgnoreCase(";");
-        getDir().getDocument().setInternalNodeLabelsAreSupportValues(value);
+        getDir().getDocument().setInternalNodeLabelsAreEdgeLabels(value);
     }
 
     /**
@@ -91,7 +91,7 @@ public class InterpretInternalNodeLabelsAsSupportValuesCommand extends CommandBa
      * @param ev
      */
     public void actionPerformed(ActionEvent ev) {
-        executeImmediately("set internalNodeLabelsAreSupportValues=" + !isSelected() + ";");
+        executeImmediately("set interpretInternalNodeLabelsAsEdgeLabels=" + !isSelected() + ";");
 
     }
 
@@ -112,7 +112,7 @@ public class InterpretInternalNodeLabelsAsSupportValuesCommand extends CommandBa
      */
     @Override
     public String getSyntax() {
-        return "set internalNodeLabelsAreSupportValues={false|true};";
+        return "set interpretInternalNodeLabelsAsEdgeLabels={false|true};";
     }
 
     /**

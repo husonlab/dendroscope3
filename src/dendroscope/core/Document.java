@@ -42,7 +42,7 @@ public class Document {
 
     private boolean documentIsDirty;    // is any tree dirty?
 
-    private boolean internalNodeLabelsAreSupportValues = false;
+    private boolean internalNodeLabelsAreEdgeLabels = false;
 
     private ProgressListener progressListener;
     private File file;
@@ -365,12 +365,12 @@ public class Document {
         this.title = title;
     }
 
-    public boolean isInternalNodeLabelsAreSupportValues() {
-        return internalNodeLabelsAreSupportValues;
+    public boolean isInternalNodeLabelsAreEdgeLabels() {
+        return internalNodeLabelsAreEdgeLabels;
     }
 
-    public void setInternalNodeLabelsAreSupportValues(boolean internalNodeLabelsAreSupportValues) {
-        this.internalNodeLabelsAreSupportValues = internalNodeLabelsAreSupportValues;
+    public void setInternalNodeLabelsAreEdgeLabels(boolean internalNodeLabelsAreEdgeLabels) {
+        this.internalNodeLabelsAreEdgeLabels = internalNodeLabelsAreEdgeLabels;
     }
 
     /**

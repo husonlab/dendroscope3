@@ -181,7 +181,7 @@ public class RerootByHybridNumber {
                 float sourceLength1 = halfOfTotal1 - pair.get1().get2();
                 float targetLength1 = pair.get1().get2() + weight1 - halfOfTotal1;
                 tree1.setRoot((Node) null);
-                tree1.setRoot(e1, sourceLength1, targetLength1);
+                tree1.setRoot(e1, sourceLength1, targetLength1, null);
                 tree1.redirectEdgesAwayFromRoot();
 
 
@@ -193,7 +193,7 @@ public class RerootByHybridNumber {
                 float sourceLength2 = halfOfTotal2 - pair.get2().get2();
                 float targetLength2 = pair.get2().get2() + weight2 - halfOfTotal2;
                 tree2.setRoot((Node) null);
-                tree2.setRoot(e2, sourceLength2, targetLength2);
+                tree2.setRoot(e2, sourceLength2, targetLength2, null);
                 tree2.redirectEdgesAwayFromRoot();
 
                 try {
@@ -235,7 +235,7 @@ public class RerootByHybridNumber {
                 computeHybridNumber.done();
         }
         if (bestScore < originalH) {
-            tree1.setRoot(number2edge1[bestE1], bestSourceLength1, bestTargetLength1);
+            tree1.setRoot(number2edge1[bestE1], bestSourceLength1, bestTargetLength1, null);
             tree1.redirectEdgesAwayFromRoot();
             Set<Node> divertices1 = new HashSet<Node>();
             for (Node v = tree1.getFirstNode(); v != null; v = tree1.getNextNode(v)) {
@@ -245,7 +245,7 @@ public class RerootByHybridNumber {
             for (Node v : divertices1) {
                 tree1.delDivertex(v);
             }
-            tree2.setRoot(number2edge2[bestE2], bestSourceLength2, bestTargetLength2);
+            tree2.setRoot(number2edge2[bestE2], bestSourceLength2, bestTargetLength2, null);
             tree2.redirectEdgesAwayFromRoot();
             Set<Node> divertices2 = new HashSet<Node>();
             for (Node v = tree2.getFirstNode(); v != null; v = tree2.getNextNode(v)) {

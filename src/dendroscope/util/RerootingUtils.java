@@ -85,16 +85,19 @@ public class RerootingUtils {
                 }
             }
 
-        if (viewer.getDoc().isInternalNodeLabelsAreSupportValues())
-            SupportValueUtils.setEdgeConfidencesFromNodeLabels(tree);
+        final EdgeArray<String> edgeLabels;
+        if (viewer.getDoc().isInternalNodeLabelsAreEdgeLabels())
+            edgeLabels = SupportValueUtils.setEgeLabelsFromInternalNodeLabels(tree);
+        else
+            edgeLabels = null;
 
             // not under a special node, reroot in simple way
-            tree.setRoot(e);
+        tree.setRoot(e, edgeLabels);
 
             tree.redirectEdgesAwayFromRoot();
 
-        if (viewer.getDoc().isInternalNodeLabelsAreSupportValues())
-            SupportValueUtils.setNodeLabelsFromEdgeConfidences(tree);
+        if (viewer.getDoc().isInternalNodeLabelsAreEdgeLabels())
+            SupportValueUtils.setInternalNodeLabelsFromEdgeLabels(tree, edgeLabels);
 
             Node root = tree.getRoot();
 
@@ -180,14 +183,18 @@ public class RerootingUtils {
             }
         }
 
-        if (viewer.getDoc().isInternalNodeLabelsAreSupportValues())
-            SupportValueUtils.setEdgeConfidencesFromNodeLabels(tree);
+        final EdgeArray<String> edgeLabels;
+        if (viewer.getDoc().isInternalNodeLabelsAreEdgeLabels())
+            edgeLabels = SupportValueUtils.setEgeLabelsFromInternalNodeLabels(tree);
+        else
+            edgeLabels = null;
 
+        tree.eraseRoot(edgeLabels);
         tree.setRoot(v);
         tree.redirectEdgesAwayFromRoot();
 
-        if (viewer.getDoc().isInternalNodeLabelsAreSupportValues())
-            SupportValueUtils.setNodeLabelsFromEdgeConfidences(tree);
+        if (viewer.getDoc().isInternalNodeLabelsAreEdgeLabels())
+            SupportValueUtils.setInternalNodeLabelsFromEdgeLabels(tree, edgeLabels);
 
         return true;
     }
