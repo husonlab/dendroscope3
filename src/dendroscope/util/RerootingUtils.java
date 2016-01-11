@@ -58,29 +58,6 @@ public class RerootingUtils {
                     return false;
                 if (belowSpecialEdge(tree, e.getSource())) {
                     System.err.println("WARNING: Can't reroot below a reticulation");
-/*                
-
-                    Taxa taxa = new Taxa();
-                    try {
-                        Utilities.extractTaxa(0, tree, taxa);
-                    } catch (IOException ex) {
-                        Basic.caught(ex);
-                    }
-                    dendroscope.consensus.Partition partition = ClusterNetwork.getPartitionDefinedByEdge(tree, taxa, e);
-
-
-                    if (partition != null && partition.size() > 0) {
-                        int result = JOptionPane.showConfirmDialog(viewer.getFrame(), "Rerooting here will change the topology of the network, proceed?");
-                        if (result == JOptionPane.YES_OPTION) {
-                            SplitSystem splits = SplitSystem.getSplitsFromTree(taxa, taxa.getBits(), tree);
-                            ClusterNetwork clusterNetwork = new ClusterNetwork(taxa, splits);
-                            tree.copy(clusterNetwork.apply());
-                            return true;
-                        } else
-                            return false;
-                    } else
-                    */
-
                     return false;
                 }
             }
@@ -94,7 +71,7 @@ public class RerootingUtils {
             // not under a special node, reroot in simple way
         tree.setRoot(e, edgeLabels);
 
-            tree.redirectEdgesAwayFromRoot();
+        tree.redirectEdgesAwayFromRoot();
 
         if (viewer.getDoc().isInternalNodeLabelsAreEdgeLabels())
             SupportValueUtils.setInternalNodeLabelsFromEdgeLabels(tree, edgeLabels);
