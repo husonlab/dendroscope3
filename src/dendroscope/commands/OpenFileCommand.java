@@ -158,9 +158,10 @@ public class OpenFileCommand extends CommandBaseMultiViewer implements ICommand 
             }
             doc.setTrees(format.read(file));
             if (ProgramProperties.isUseGUI() && doc.getTrees().length > 0) {
-                if (SupportValueUtils.isTreeHasInternalNodeLabels(doc.getTree(0))) {
+                String internalLabel = SupportValueUtils.getInternalNodeLabelIfPresent(doc.getTree(0));
+                if (internalLabel != null) {
                     final String[] choices = new String[]{"Interpret as node labels", "Interpret as edge labels (such as bootstrap values)", "Delete"};
-                    final String choice = (String) JOptionPane.showInputDialog(getViewer().getFrame(), "Internal nodes have labels, how should they be interpreted?",
+                    final String choice = (String) JOptionPane.showInputDialog(getViewer().getFrame(), "Internal nodes have labels (example: '" + internalLabel + "'),\nhow should they be interpreted?",
                             "How to interpret internal node numbers", JOptionPane.QUESTION_MESSAGE, ProgramProperties.getProgramIcon(), choices, choices[0]);
                     if (choice == null) {
                         System.err.println("USER CANCELED");

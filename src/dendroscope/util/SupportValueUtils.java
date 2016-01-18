@@ -35,15 +35,15 @@ public class SupportValueUtils {
      * @param tree
      * @return true, if some internal nodes have labels
      */
-    public static boolean isTreeHasInternalNodeLabels(PhyloTree tree) {
+    public static String getInternalNodeLabelIfPresent(PhyloTree tree) {
         for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
             if (v.getInDegree() > 0 && v.getOutDegree() > 0) { // is internal node and not root
                 String label = tree.getLabel(v);
                 if (label != null)
-                    return true;
+                    return label;
             }
         }
-        return false;
+        return null;
     }
 
     /**
