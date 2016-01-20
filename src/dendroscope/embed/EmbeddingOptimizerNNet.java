@@ -171,15 +171,15 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
 
             Vector<PhyloTree>[] forests;
             forests = new Vector[2];
-            forests[0] = new Vector<PhyloTree>();
-            forests[1] = new Vector<PhyloTree>();
+            forests[0] = new Vector<>();
+            forests[1] = new Vector<>();
             Vector<List<String>> tempOrder[] = new Vector[2];
-            tempOrder[0] = new Vector<List<String>>();
-            tempOrder[1] = new Vector<List<String>>();
+            tempOrder[0] = new Vector<>();
+            tempOrder[1] = new Vector<>();
 
             List<String>[] newOrder = new List[2];
-            newOrder[0] = new LinkedList<String>();
-            newOrder[1] = new LinkedList<String>();
+            newOrder[0] = new LinkedList<>();
+            newOrder[1] = new LinkedList<>();
 
             if (DEBUG_time) {
                 timeNeeded = System.currentTimeMillis() - timeBef;

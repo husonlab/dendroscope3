@@ -128,8 +128,6 @@ public class NeighborNetCycle {
      * Agglomerates the nodes
      */
     static private int agglomNodes(ProgressListener progresslistener, Stack amalgs, double D[][], NetNode netNodes, int num_nodes) throws CanceledException {
-        //System.err.println("agglomNodes");
-
         NetNode p, q, Cx, Cy, x, y;
         double Qpq, best;
         int num_active = num_nodes;

@@ -974,17 +974,19 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     }
 
     /**
-     * gets the set of selected node labels
+     * gets the set of selected node labels that are not internal node labels that are numbers
      *
      * @return selected node labels
      */
     public Set<String> getSelectedNodeLabelsNotInternalNumbers() {
-        Set<String> selectedLabels = new HashSet<String>();
-        for (Node v = getSelectedNodes().getFirstElement(); v != null; v = getSelectedNodes().getNextElement(v))
-            if (getPhyloGraph().getLabel(v) != null && getPhyloGraph().getLabel(v).length() > 0 && !(v.getOutDegree() > 0 && Character.isDigit(getPhyloGraph().getLabel(v).charAt(0))))
+        Set<String> selectedLabels = new HashSet<>();
+        for (Node v = getSelectedNodes().getFirstElement(); v != null; v = getSelectedNodes().getNextElement(v)) {
+            String label = getPhyloTree().getLabel(v);
+            if (label != null && label.length() > 0 && !(v.getOutDegree() > 0 && Basic.isDouble(label))) {
                 selectedLabels.add(getPhyloGraph().getLabel(v));
+            }
+        }
         return selectedLabels;
-
     }
 
     /**

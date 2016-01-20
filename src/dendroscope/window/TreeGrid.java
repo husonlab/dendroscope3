@@ -756,20 +756,25 @@ public class TreeGrid extends JPanel {
      * @param treeViewer2
      */
     public void connectorAllTaxa(TreeViewer treeViewer1, TreeViewer treeViewer2) {
-        {
             for (Node node1 = treeViewer1.getGraph().getFirstNode(); node1 != null; node1 = node1.getNext()) {
-                if (treeViewer1.getSelectedNodeLabelsNotInternalNumbers().size() == 0 || treeViewer1.getSelected(node1)) {
+                if (treeViewer1.getSelectedNodes().size() == 0 || treeViewer1.getSelected(node1)) {
                     String label1 = treeViewer1.getLabel(node1);
                     if (label1 != null) {
                         label1 = label1.trim();
                         if (label1.length() > 0) {
-                            for (Node node2 = treeViewer2.getGraph().getFirstNode(); node2 != null; node2 = node2.getNext()) {
-                                if (treeViewer2.getSelectedNodeLabelsNotInternalNumbers().size() == 0 || treeViewer2.getSelected(node2)) {
-                                    String label2 = treeViewer2.getLabel(node2);
-                                    if (label2 != null) {
-                                        label2 = label2.trim();
-                                        if (label2.length() > 0 && label1.equals(label2)) {
-                                            addConnector(treeViewer1, node1, treeViewer2, node2, Color.LIGHT_GRAY);
+                            if (!multiViewer.getDir().getDocument().isInternalNodeLabelsAreEdgeLabels() || treeViewer1.getSelected(node1) || node1.getOutDegree() == 0 || !Basic.isDouble(label1)) {
+                                for (Node node2 = treeViewer2.getGraph().getFirstNode(); node2 != null; node2 = node2.getNext()) {
+                                    if (treeViewer2.getSelectedNodes().size() == 0 || treeViewer2.getSelected(node2)) {
+                                        String label2 = treeViewer2.getLabel(node2);
+                                        if (label2 != null) {
+                                            label2 = label2.trim();
+                                            if (label2.length() > 0) {
+                                                if (!multiViewer.getDir().getDocument().isInternalNodeLabelsAreEdgeLabels() || treeViewer1.getSelected(node2) || node2.getOutDegree() == 0 || !Basic.isDouble(label2)) {
+                                                    if (label1.equals(label2)) {
+                                                        addConnector(treeViewer1, node1, treeViewer2, node2, Color.LIGHT_GRAY);
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -778,7 +783,6 @@ public class TreeGrid extends JPanel {
                     }
                 }
             }
-        }
     }
 
     /**
