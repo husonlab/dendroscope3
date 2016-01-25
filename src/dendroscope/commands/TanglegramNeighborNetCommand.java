@@ -192,16 +192,16 @@ public class TanglegramNeighborNetCommand extends CommandBaseMultiViewer impleme
 
         int rows = Math.min(4, (int) (Math.sqrt(trees.length)));
         int cols = trees.length / rows;
-
-
-        Director theDir;
-        MultiViewer theMultiViewer;
-        Document theDoc;
+        
+        final Director theDir;
+        final MultiViewer theMultiViewer;
+        final Document theDoc;
 
         if (ProgramProperties.isUseGUI()) {
             theDir = Director.newProject(rows, cols);
             theMultiViewer = (MultiViewer) theDir.getViewerByClass(MultiViewer.class);
             theDoc = theDir.getDocument();
+            theDoc.setInternalNodeLabelsAreEdgeLabels(getDir().getDocument().isInternalNodeLabelsAreEdgeLabels());
         } else // in commandline mode we recycle the existing document:
         {
             theDir = getDir();
