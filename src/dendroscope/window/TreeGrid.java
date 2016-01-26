@@ -769,7 +769,7 @@ public class TreeGrid extends JPanel {
                                         if (label2 != null) {
                                             label2 = label2.trim();
                                             if (label2.length() > 0) {
-                                                if (!multiViewer.getDir().getDocument().isInternalNodeLabelsAreEdgeLabels() || treeViewer1.getSelected(node2) || node2.getOutDegree() == 0 || !Basic.isDouble(label2)) {
+                                                if (!multiViewer.getDir().getDocument().isInternalNodeLabelsAreEdgeLabels() || treeViewer2.getSelected(node2) || node2.getOutDegree() == 0 || !Basic.isDouble(label2)) {
                                                     if (label1.equals(label2)) {
                                                         addConnector(treeViewer1, node1, treeViewer2, node2, Color.LIGHT_GRAY);
                                                     }
