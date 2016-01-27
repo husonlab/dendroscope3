@@ -128,12 +128,12 @@ public class Dendroscope {
                 public void run() {
                     try {
                         final Director dir = Director.newProject(1, 1);
-                        MultiViewer multiViewer = (MultiViewer) dir.getViewerByClass(MultiViewer.class);
+                        final MultiViewer multiViewer = (MultiViewer) dir.getViewerByClass(MultiViewer.class);
 
                         if (showMessageWindow)
                             multiViewer.getCommandManager().execute("show messageWindow;");
-
-                        System.err.println(Basic.stopCollectingStdErr());
+                        else
+                            System.err.println(Basic.stopCollectingStdErr());
 
                         DendroscopeProperties.notifyListChange(ProgramProperties.RECENTFILES);
                         dir.getMainViewer().updateView(Director.ALL);
