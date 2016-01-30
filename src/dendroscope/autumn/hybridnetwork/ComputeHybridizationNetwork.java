@@ -129,7 +129,7 @@ public class ComputeHybridizationNetwork {
         root1.reorderSubTree();
         root2.reorderSubTree();
 
-        System.err.println("Computing hybridization networks using Autumn algorithm (Autumn algorithm, Huson and Linz, 2015)...");
+        System.err.println("Computing hybridization networks using Autumn algorithm (Autumn algorithm, Huson and Linz, 2016)...");
         progressListener.setTasks("Computing hybridization networks", "(Unknown how long this will really take)");
         progressListener.setMaximum(20);
         progressListener.setProgress(0);
