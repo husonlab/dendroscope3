@@ -83,43 +83,42 @@ public class SelectEdgesCommand extends CommandBase implements ICommand {
      */
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("select edges=");
-        boolean all = (np.peekMatchIgnoreCase("all"));
-        boolean none = (np.peekMatchIgnoreCase("none"));
-        boolean shortEdges = (np.peekMatchIgnoreCase("short"));
-        boolean longEdges = (np.peekMatchIgnoreCase("long"));
-        np.matchAnyTokenIgnoreCase("all none short long");
+        String what = np.getWordMatchesIgnoringCase("all none short long");
         double threshold = 0;
-        if (shortEdges || longEdges) {
+        if (what.equals("short") || what.equals("long")) {
             np.matchIgnoreCase("threshold=");
             threshold = np.getDouble(0, 1000);
         }
         np.matchIgnoreCase(";");
 
         for (Iterator<TreeViewer> it = ((MultiViewer) getViewer()).getTreeGrid().getSelectedOrAllIterator(); it.hasNext(); ) {
-            TreeViewer viewer = it.next();
-            if (all) {
-                viewer.selectAllEdges(true);
-            } else if (none) {
-                viewer.selectAllEdges(false);
+            final TreeViewer viewer = it.next();
+            switch (what) {
+                case "all":
+                    viewer.selectAllEdges(true);
+                    break;
+                case "none":
+                    viewer.selectAllEdges(false);
+                    break;
+                case "short": {
+                    final EdgeSet toSelect = new EdgeSet(viewer.getPhyloTree());
+                    for (Edge e = viewer.getGraph().getFirstEdge(); e != null; e = e.getNext()) {
+                        if (viewer.getPhyloTree().getWeight(e) < threshold)
+                            toSelect.add(e);
+                    }
+                    viewer.setSelected(toSelect, true);
+                    break;
+                }
+                case "long": {
+                    final EdgeSet toSelect = new EdgeSet(viewer.getPhyloTree());
+                    for (Edge e = viewer.getGraph().getFirstEdge(); e != null; e = e.getNext()) {
+                        if (viewer.getPhyloTree().getWeight(e) >= threshold)
+                            toSelect.add(e);
+                    }
+                    viewer.setSelected(toSelect, true);
+                    break;
+                }
             }
-            if (np.peekMatchIgnoreCase("short")) {
-                viewer.repaint();
-            } else if (shortEdges) {
-                EdgeSet toSelect = new EdgeSet(viewer.getPhyloTree());
-                for (Edge e = viewer.getGraph().getFirstEdge(); e != null; e = e.getNext()) {
-                    if (viewer.getPhyloTree().getWeight(e) < threshold)
-                        toSelect.add(e);
-                }
-                viewer.setSelected(toSelect, true);
-            } else if (longEdges) {
-                EdgeSet toSelect = new EdgeSet(viewer.getPhyloTree());
-                for (Edge e = viewer.getGraph().getFirstEdge(); e != null; e = e.getNext()) {
-                    if (viewer.getPhyloTree().getWeight(e) >= threshold)
-                        toSelect.add(e);
-                }
-                viewer.setSelected(toSelect, true);
-            } else
-                np.matchAnyTokenIgnoreCase("all none short long");
             viewer.repaint();
         }
     }
