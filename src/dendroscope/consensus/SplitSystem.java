@@ -26,7 +26,6 @@ import dendroscope.main.DendroscopeProperties;
 import jloda.graph.Edge;
 import jloda.graph.Node;
 import jloda.graph.NodeArray;
-import jloda.gui.ProgressDialog;
 import jloda.phylo.PhyloTree;
 import jloda.util.CanceledException;
 import jloda.util.ProgramProperties;
@@ -34,10 +33,8 @@ import jloda.util.ProgressListener;
 import jloda.util.ProgressSilent;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.IOException;
 import java.util.*;
-import java.util.List;
 
 /**
  * a collection of splits
@@ -245,9 +242,6 @@ public class SplitSystem {
     public PhyloTree createTreeFromSplits(Taxa taxa, boolean askToOptimize, ProgressListener progressListener) {
         if (progressListener == null)
             progressListener = new ProgressSilent();
-        Window owner = null;
-        if (progressListener instanceof ProgressDialog)
-            owner = ((ProgressDialog) progressListener).getOwner();
 
         PhyloTree tree;
         if (taxa.size() == 0)
@@ -267,7 +261,7 @@ public class SplitSystem {
             String defaultChoice = DendroscopeProperties.ALLOW_MINIMAL_NETWORKS ? MINIMAL_NETWORK : CLUSTER_NETWORK;
 
             if (DendroscopeProperties.ALLOW_OPTIMIZE_NETWORKS && askToOptimize)
-                choice = JOptionPane.showOptionDialog(owner, "Choose network type:", "Choose network algorithm - Dendroscope",
+                choice = JOptionPane.showOptionDialog(null, "Choose network type:", "Choose network algorithm - Dendroscope",
                         JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, ProgramProperties.getProgramIcon(), options, defaultChoice);
             if (choice >= 0 && options[choice].equals(MINIMAL_NETWORK)) {
                 LevelKNetwork network = new LevelKNetwork(taxa, this);

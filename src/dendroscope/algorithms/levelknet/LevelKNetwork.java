@@ -38,9 +38,7 @@ import jloda.util.Basic;
 import jloda.util.CanceledException;
 import jloda.util.ProgressListener;
 
-import java.awt.*;
 import java.util.*;
-import java.util.List;
 
 /**
  * compute a level-k network from a set of clusters
@@ -49,7 +47,6 @@ import java.util.List;
 public class LevelKNetwork {
     private final Taxa taxa;
     private final SplitSystem splits;
-    private Window owner;
 
     private boolean computeOnlyOne = false;
     private boolean checkTrees = false;
@@ -74,7 +71,6 @@ public class LevelKNetwork {
      */
     public List<PhyloTree> apply(ProgressListener progressListener) {
 
-
         long startTime = new Date().getTime();
 
         progressListener.setCancelable(false);
@@ -82,7 +78,6 @@ public class LevelKNetwork {
         progressListener.setMaximum(-1);
 
         if (progressListener instanceof ProgressDialog) {
-            owner = ((ProgressDialog) progressListener).getOwner();
             ((ProgressDialog) progressListener).show();
             ((ProgressDialog) progressListener).setCloseOnCancel(false);
         }
@@ -192,7 +187,7 @@ public class LevelKNetwork {
                     component2networks.put(n, result);
                 } catch (Exception e) {
                     Basic.caught(e);
-                    new Alert(owner, "Cass algorithm failed: " + e.getMessage());
+                    new Alert(null, "Cass algorithm failed: " + e.getMessage());
                 }
             }
         }
