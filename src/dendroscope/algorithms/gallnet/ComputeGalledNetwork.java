@@ -34,9 +34,7 @@ import jloda.util.Alert;
 import jloda.util.Basic;
 import jloda.util.ProgressListener;
 
-import java.awt.*;
 import java.util.*;
-import java.util.List;
 
 /**
  * computes an optimal network from a collection of clusters
@@ -46,7 +44,6 @@ public class ComputeGalledNetwork {
     private final Taxa taxa;
     private final SplitSystem splits;
     private PhyloTree tree;
-    private Window owner;
 
     private final boolean DEBUG = false; // when this is true, report lots of stuff
 
@@ -75,7 +72,6 @@ public class ComputeGalledNetwork {
         progressListener.setMaximum(-1);
 
         if (progressListener instanceof ProgressDialog) {
-            owner = ((ProgressDialog) progressListener).getOwner();
             ((ProgressDialog) progressListener).setCloseOnCancel(false);
         }
 
@@ -159,9 +155,9 @@ public class ComputeGalledNetwork {
             int count = checker.containsAll(splits, taxa);
             System.err.println("Verified: " + count + " of " + splits.size());
             if (count < splits.size())
-                new Alert(owner, "Internal error: computed network is not galled network or does not represent all clusters in the input");
+                new Alert(null, "Internal error: computed network is not galled network or does not represent all clusters in the input");
         } else {
-            new Alert(owner, "Internal error: computed network is not a galled network");
+            new Alert(null, "Internal error: computed network is not a galled network");
         }
 
         long seconds = (new Date().getTime() - startTime);
