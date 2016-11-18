@@ -905,13 +905,13 @@ Selection and Deselection:
                                                  Select all or none edges, or all edges
                                                  longer than or shorter than the given threshold
         select previous ;                        Select all labeled nodes as in previous window
-        select labelednodes ;                    Select all labeled nodes
-        select leaves ;                          Select all leaves
+        select nodes=labeled ;                    Select all labeled nodes
+        select nodes=leaves ;                          Select all leaves
         select subnetwork ;                      Select subtree or subnetwork below node or edge
-        select induced network ;                 Select subtree or subnetwork induced by selected nodes
-        select LSA induced network ;             Select subtree or subnetwork rooted at the LSA of the selected nodes
+        select inducedNetwork ;                 Select subtree or subnetwork induced by selected nodes
+        select lsaInducedNetwork ;             Select subtree or subnetwork rooted at the LSA of the selected nodes
         select subpart ;                         Select parts of tree that are reachable from any selected node without crossing any reticulate edges 
-        select nonterminal ;                     Select all non-terminal nodes and egdes
+        select nodes=nonterminal ;                     Select all non-terminal nodes and egdes
         select spanned ;                         Select all edges that connect any two selected nodes 
         select root ;                            Select root
         select special ;                         Select all 'special' edges

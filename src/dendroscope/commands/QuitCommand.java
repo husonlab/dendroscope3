@@ -85,7 +85,7 @@ public class QuitCommand extends CommandBase implements ICommand {
                 public void run() {
                     NewCommand.makeNewDocument();
                 }
-            });
+            }, null);
         } catch (Exception ex) {
         }
     }

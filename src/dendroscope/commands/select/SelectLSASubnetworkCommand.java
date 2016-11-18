@@ -112,7 +112,7 @@ public class SelectLSASubnetworkCommand extends CommandBaseMultiViewer implement
      * @param ev
      */
     public void actionPerformed(ActionEvent ev) {
-        executeImmediately("select LSA induced network;");
+        executeImmediately("select lsaInducedNetwork;");
     }
 
     /**

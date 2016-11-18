@@ -121,7 +121,7 @@ public class SelectInducedNetworkCommand extends CommandBaseMultiViewer implemen
      */
 
     public String getSyntax() {
-        return "select induced network;";
+        return "select inducedNetwork;";
     }
 
     /**
