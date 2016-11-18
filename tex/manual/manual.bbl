@@ -1,7 +1,7 @@
 \begin{thebibliography}{10}
 
 \bibitem{Albrecht2012}
-B.~Albrecht, C.~Scornavacca, A.~Cenci, and D.~H. Huson.
+B.~Albrecht, C.~Scornavacca, A.~Cenci, and D.H. Huson.
 \newblock Fast computation of minimum hybridization networks.
 \newblock {\em Bioinformatics}, 28(2):191--197, 2012.
 
@@ -33,9 +33,8 @@ J.P. Doyon, C.~Scornavacca, K.~Yu. Gorbunov, G.J. Sz\"oll\H{o}si, V.~Ranwez,
   Biology (RECOMB)}, volume 6398 of {\em LNCS}, pages 93--108. Springer, 2010.
 
 \bibitem{gpwg2001}
-Grass Phylogeny~Working Group.
-\newblock Phylogeny and subfamilial classification of the grasses
-  (\mbox{P}oaceae).
+{Grass Phylogeny Working Group}.
+\newblock Phylogeny and subfamilial classification of the grasses ({Poaceae}).
 \newblock {\em Annals of the Missouri Botanical Garden}, 88(3):373--457, 2001.
 
 \bibitem{HOLM2007}
@@ -43,6 +42,17 @@ Katharina~T Huber, Bengt Oxelman, Martin Lott, and Vincent Moulton.
 \newblock Reconstructing the evolutionary history of polyploids from
   multilabeled trees.
 \newblock {\em Molecular Biology and Evolution}, 23(9):1784--1791, 2006.
+
+\bibitem{SplitsTree98}
+D~H. Huson.
+\newblock {SplitsTree}: analyzing and visualizing evolutionary data.
+\newblock {\em Bioinformatics}, 14(10):68--73, 1998.
+
+\bibitem{Huson2009}
+D~H. Huson.
+\newblock Drawing rooted phylogenetic networks.
+\newblock {\em IEEE/ACM Transactions on Computational Biology and
+  Bioinformatics}, 6(1):103--109, 2009.
 
 \bibitem{HusonBryant2006}
 D.~H. Huson and D.~Bryant.
@@ -66,29 +76,17 @@ D.~H. Huson, R.~Rupp, and C.~Scornavacca.
 \newblock {\em Phylogenetic Networks}.
 \newblock Cambridge University Press, 2010.
 
-\bibitem{Huson2009}
-Daniel~H. Huson.
-\newblock Drawing rooted phylogenetic networks.
-\newblock {\em IEEE/ACM Transactions on Computational Biology and
-  Bioinformatics}, 6(1):103--109, 2009.
-
-\bibitem{SplitsTree98}
-D.H. Huson.
-\newblock {SplitsTree}: A program for analyzing and visualizing evolutionary
-  data.
-\newblock {\em Bioinformatics}, 14(10):68--73, 1998.
-
 \bibitem{zclosure}
 D.H. Huson, T.~Dezulian, T.~Kloepper, and M.~A. Steel.
 \newblock Phylogenetic super-networks from partial trees.
 \newblock {\em IEEE/ACM Transactions in Computational Biology and
   Bioinformatics}, 1(4):151--158, 2004.
 
-\bibitem{HusonLinz2012}
+\bibitem{HusonLinz2015}
 D.H. Huson and S.~Linz.
-\newblock Computing minimum hybridization networks from real phylogenetic
-  trees, 2012.
-\newblock Under review.
+\newblock Autumn algorithm - computation of hybridization networks on realistic
+  phylogenetic trees, 2015.
+\newblock To appaer in: TCBB.
 
 \bibitem{MNWRTPST2004}
 Bernard M.~E. Moret, Luay Nakhleh, Tandy Warnow, C.~Randal Linder, Anna Tholse,
@@ -114,9 +112,9 @@ C.~Scornavacca, F.~Zickmann, and D.H. Huson.
 \newblock {\em Bioinformatics}, 27(13):i248--i256, 2011.
 
 \bibitem{Primodial2013}
-Mike Steel, Simone Linz, Daniel~H. Huson, and Michael~J. Sanderson.
+M.A. Steel, S.~Linz, D.H. Huson, and M.J. Sanderson.
 \newblock Identifying a species tree subject to random lateral gene transfer.
-\newblock To appear in: Journal of Theoretical Biology, 2013.
+\newblock {\em Journal of Theoretical Biology}, 322:81--93, 2013.
 
 \bibitem{VanIersel2009}
 Leo {van Iersel} and Steven Kelk.
@@ -126,7 +124,7 @@ Leo {van Iersel} and Steven Kelk.
 \newblock DOI 10.1007/s00453-009-9333-0.
 
 \bibitem{LevelKClusters2010}
-Leo van Iersel, Steven Kelk, Regula Rupp, and Daniel~H. Huson.
+Leo van Iersel, Steven Kelk, Regula Rupp, and D~H. Huson.
 \newblock Phylogenetic networks do not need to be complex: using fewer
   reticulations to represent conflicting clusters.
 \newblock {\em Bioinformatics}, 26(12):i124--i131, June 2010.
