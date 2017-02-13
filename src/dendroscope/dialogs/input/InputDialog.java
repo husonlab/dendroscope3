@@ -65,7 +65,7 @@ public class InputDialog extends JFrame implements IDirectableViewer {
 
         setTitle();
 
-        menuBar = new MenuBar(GUIConfiguration.getMenuConfiguration(), commandManager);
+        menuBar = new MenuBar(this, GUIConfiguration.getMenuConfiguration(), commandManager);
         setJMenuBar(menuBar);
         DendroscopeProperties.addPropertiesListListener(menuBar.getRecentFilesListener());
         DendroscopeProperties.notifyListChange(ProgramProperties.RECENTFILES);

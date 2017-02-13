@@ -277,7 +277,7 @@ public class MultilabeledTree extends PhyloTree {
     }
 
     private void getAscendingNodesRec(Node v, NodeSet nodes) {
-        Edge e = this.getInEdges(v).next();
+        Edge e = v.getFirstInEdge();
         Node w = e.getSource();
         if (!w.equals(this.getRoot())) {
             nodes.add(w);

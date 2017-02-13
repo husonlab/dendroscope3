@@ -99,7 +99,7 @@ public class MultiViewer implements IDirectableViewer, IViewerWithFindToolBar, I
         MenuConfiguration menuConfig = GUIConfiguration.getMenuConfiguration();
         String toolBarConfig = GUIConfiguration.getToolBarConfiguration();
 
-        this.menuBar = new MenuBar(menuConfig, getCommandManager());
+        this.menuBar = new MenuBar(this, menuConfig, getCommandManager());
         DendroscopeProperties.addPropertiesListListener(menuBar.getRecentFilesListener());
         DendroscopeProperties.notifyListChange(ProgramProperties.RECENTFILES);
         ProjectManager.addAnotherWindowWithWindowMenu(dir, menuBar.getWindowMenu());
