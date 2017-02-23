@@ -36,8 +36,8 @@
     <!-- copy sources -->
     <target name="copy_sources" depends="copy_resources">
         <copy todir="${srcDir}">
-            <fileset dir="${jlodaSrcDir}" excludes=".svn/**"/>
-            <fileset dir="${dendroscopeSrcDir}" excludes=".svn/**"/>
+            <fileset dir="${jlodaSrcDir}" excludes="com.apple.**"/>
+            <fileset dir="${dendroscopeSrcDir}"/>
         </copy>
     </target>
 
