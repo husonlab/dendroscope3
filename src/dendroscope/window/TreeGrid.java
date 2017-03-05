@@ -22,7 +22,6 @@ package dendroscope.window;
 import dendroscope.core.Document;
 import dendroscope.drawer.IOptimizedGraphDrawer;
 import dendroscope.embed.LayoutOptimizerManager;
-import gnu.jpdf.PDFGraphics;
 import jloda.graph.EdgeSet;
 import jloda.graph.Node;
 import jloda.graph.NodeSet;
@@ -898,9 +897,6 @@ public class TreeGrid extends JPanel {
                 final Point apt = viewer.getScrollPane().getViewport().getViewPosition();
                 final Dimension extent = (Dimension) viewer.getScrollPane().getViewport().getExtentSize().clone();
 
-                if (g0 instanceof PDFGraphics)
-                    ((PDFGraphics) g0).writeSaveState();
-
                 g0.translate(xOffset, yOffset);
 
                 g0.setClip(0, 0, extent.width, extent.height);
@@ -924,8 +920,6 @@ public class TreeGrid extends JPanel {
 
                 g0.translate(apt.x, apt.y);
                 g0.translate(-xOffset, -yOffset);
-                if (g0 instanceof PDFGraphics)
-                    ((PDFGraphics) g0).writeRestoreState();
             }
         }
     }

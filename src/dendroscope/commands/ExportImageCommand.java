@@ -84,21 +84,21 @@ public class ExportImageCommand extends CommandBase implements ICommand {
      * @throws java.io.IOException
      */
     public void apply(NexusStreamParser np) throws Exception {
-        MultiViewer multiViewer = (MultiViewer) getViewer();
+        final MultiViewer multiViewer = (MultiViewer) getViewer();
 
         np.matchIgnoreCase("exportimage file=");
-        String fileName = np.getWordFileNamePunctuation();
+        final String fileName = np.getWordFileNamePunctuation();
 
-        java.util.List<String> tokens = np.getTokensRespectCase(null, ";");
+        final java.util.List<String> tokens = np.getTokensRespectCase(null, ";");
 
         String format = np.findIgnoreCase(tokens, "format=", "bmp svg gif png jpg pdf file-suffix", "file-suffix");
-        boolean visibleOnly = np.findIgnoreCase(tokens, "visibleOnly=", "true false", "false").equals("true");
-        boolean text2shapes = np.findIgnoreCase(tokens, "textAsShapes=", "true false", "false").equals("true");
-        String title = np.findIgnoreCase(tokens, "title=", null, "none");
-        boolean replace = np.findIgnoreCase(tokens, "replace=", "true false", "false").equals("true");
+        final boolean visibleOnly = np.findIgnoreCase(tokens, "visibleOnly=", "true false", "false").equals("true");
+        final boolean text2shapes = np.findIgnoreCase(tokens, "textAsShapes=", "true false", "false").equals("true");
+        final String title = np.findIgnoreCase(tokens, "title=", null, "none");
+        final boolean replace = np.findIgnoreCase(tokens, "replace=", "true false", "false").equals("true");
         np.checkFindDone(tokens);
 
-        File file = new File(fileName);
+        final File file = new File(fileName);
         if (replace == false && file.exists())
             throw new IOException("exportimage: File exists: " + fileName + ", use REPLACE=true to overwrite");
 
