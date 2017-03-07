@@ -29,14 +29,14 @@
     <!-- copy resources -->
     <target name="copy_resources" depends="init">
         <copy todir="${classDir}/resources">
-            <fileset dir="../resources" excludes="CVS files/** files/**"/>
+            <fileset dir="../resources" excludes="files/** files/**"/>
         </copy>
     </target>
 
     <!-- copy sources -->
     <target name="copy_sources" depends="copy_resources">
         <copy todir="${srcDir}">
-            <fileset dir="${jlodaSrcDir}" excludes="com.apple.**"/>
+            <fileset dir="${jlodaSrcDir}" excludes="com/apple/**"/>
             <fileset dir="${dendroscopeSrcDir}"/>
         </copy>
     </target>
