@@ -19,7 +19,6 @@
 */
 package dendroscope.algorithms.levelknet.leo;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Vector;
 
@@ -118,8 +117,9 @@ public class DiGraph {
         }
         if (cher) {
             // this is a cherry
-            Vector cherry = new Vector();
-            cherry.addAll(Arrays.asList(edgenumber).subList(0, outdeg));
+            final Vector<Integer> cherry = new Vector<>();
+            for (int i = 0; i < outdeg; i++)
+                cherry.add(edgenumber[i]);
             output.add(cherry);
             return output;
         }
