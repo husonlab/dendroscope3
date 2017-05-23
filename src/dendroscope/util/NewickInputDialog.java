@@ -36,7 +36,7 @@ import java.awt.event.ItemListener;
 
 /**
  * interactive Newick parser
- * Daniel Huson and Robin Forster 1.2020
+ * Daniel Huson and Robin Forster 1.2010
  */
 public class NewickInputDialog extends JDialog implements DocumentListener, CaretListener, ItemListener {
 

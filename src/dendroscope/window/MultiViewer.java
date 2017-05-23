@@ -130,7 +130,7 @@ public class MultiViewer implements IDirectableViewer, IViewerWithFindToolBar, I
         setTitle(dir);
         frame.setJMenuBar(menuBar);
 
-        JToolBar toolBar = new ToolBar(toolBarConfig, commandManager);
+        JToolBar toolBar = new ToolBar(this, toolBarConfig, commandManager);
         frame.add(toolBar, BorderLayout.NORTH);
 
         mainPanel = new JPanel();

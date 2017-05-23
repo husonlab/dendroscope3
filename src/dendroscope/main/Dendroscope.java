@@ -78,7 +78,7 @@ public class Dendroscope {
         final ArgsOptions options = new ArgsOptions(args, this, "Program for rooted phylogenetic trees and networks");
         options.setAuthors("Daniel H. Huson, with some contributions from other authors");
         options.setVersion(ProgramProperties.getProgramVersion());
-        options.setLicense("Copyright (C) 2016 Daniel H. Huson. This program comes with ABSOLUTELY NO WARRANTY.\n" +
+        options.setLicense("Copyright (C) 2017 Daniel H. Huson. This program comes with ABSOLUTELY NO WARRANTY.\n" +
                 "This is free software, licensed under the terms of the GNU General Public License, Version 3.");
         options.setVersion(ProgramProperties.getProgramVersion());
 

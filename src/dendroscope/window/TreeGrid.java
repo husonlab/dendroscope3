@@ -204,29 +204,58 @@ public class TreeGrid extends JPanel {
                     public void doMouseClicked(MouseEvent mouseEvent) {
                         if (multiViewer.isLocked())
                             return;
-                        if (mouseEvent.getClickCount() == 1) {
-                            if (isSelected(treeViewer) && !mouseEvent.isShiftDown()) {
+
+                        final HashSet<TreeViewer> wasCurrentlySelected = new HashSet<>();
+                        wasCurrentlySelected.addAll(selectedViewers);
+
+                        if (mouseEvent.getClickCount() == 1 || mouseEvent.getClickCount() == 2) {
+                            if (!mouseEvent.isShiftDown()) {
+                                selectAllPanels(false);
+                                setSelected(treeViewer, true);
+                            } else if (!wasCurrentlySelected.contains(treeViewer))
+                                setSelected(treeViewer, true);
+
+                            if (mouseEvent.getClickCount() == 2) {
                                 boolean changed = false;
-                                if (treeViewer.getSelectedNodes().size() > 0) {
-                                    treeViewer.selectAllNodes(false);
+                                if (wasCurrentlySelected.contains(treeViewer)) {
+                                    if (treeViewer.getSelectedNodes().size() < treeViewer.getGraph().getNumberOfNodes()) {
+                                        treeViewer.selectAllNodes(true);
                                     changed = true;
                                 }
-                                if (treeViewer.getSelectedEdges().size() > 0) {
-                                    treeViewer.selectAllEdges(false);
-                                    changed = true;
+                                    if (!changed) {
+                                        if (treeViewer.getSelectedEdges().size() < treeViewer.getGraph().getNumberOfEdges()) {
+                                            treeViewer.selectAllEdges(true);
+                                            changed = true;
+                                        }
                                 }
                                 if (changed) {
                                     treeViewer.repaint();
                                     multiViewer.updateView(IDirector.ENABLE_STATE);
                                 }
-                            } else {
-                                if (!isSelected(treeViewer))
-                                    setSelected(treeViewer, true);
-                                multiViewer.updateView(IDirector.ENABLE_STATE);
                             }
-                        } else if (mouseEvent.getClickCount() == 2) {
-                            if (mouseEvent.isShiftDown())
-                                setSelected(treeViewer, !isSelected(treeViewer));
+                                if (!changed && !mouseEvent.isShiftDown()) {
+                                    for (TreeViewer aViewer : treeViewer2TreeId.keySet()) {
+                                        if (aViewer != treeViewer) {
+                                            if (wasCurrentlySelected.contains(aViewer)) {
+                                                setSelected(aViewer, false);
+                                            } else {
+                                                changed = false;
+                                                if (aViewer.getSelectedNodes().size() > 0) {
+                                                    aViewer.selectAllNodes(false);
+                                                    changed = true;
+                                                }
+                                                if (aViewer.getSelectedEdges().size() > 0) {
+                                                    aViewer.selectAllEdges(false);
+                                                    changed = true;
+                                                }
+                                                if (changed) {
+                                                    aViewer.repaint();
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                             multiViewer.updateView(IDirector.ENABLE_STATE);
                         }
                     }

@@ -77,14 +77,11 @@ public class Newick extends IOBase implements IOFormat {
      * @throws IOException
      */
     public TreeData[] read(Reader r0) throws IOException {
-        TreeData[] trees = null;
-        BufferedReader r = new BufferedReader(r0);
-
         boolean warned = false;
-        try {
-            List<TreeData> list = new LinkedList<TreeData>();
+        try (BufferedReader r = new BufferedReader(r0)) {
+            final List<TreeData> list = new LinkedList<>();
+            final StringBuilder buf = new StringBuilder();
             String aLine;
-            StringBuilder buf = new StringBuilder();
             while ((aLine = r.readLine()) != null) {
                 aLine = aLine.trim();
                 if (!aLine.endsWith(";")) {
@@ -92,15 +89,15 @@ public class Newick extends IOBase implements IOFormat {
                 } else // got a whole tree
                 {
                     buf.append(aLine);
-                    TreeData tmp = new TreeData();
-                    tmp.setName(createNewTreeName());
+                    final TreeData tmpTreeData = new TreeData();
+                    tmpTreeData.setName(createNewTreeName());
                     if (!warned && buf.toString().contains("#")) {
                         System.err.println("Input contains the special character '#', will try to interpret as extended-Newick");
                         warned = true;
                     }
-                    tmp.parseBracketNotation(buf.toString(), true);
+                    tmpTreeData.parseBracketNotation(buf.toString(), true);
                     buf.delete(0, buf.length());
-                    list.add(tmp);
+                    list.add(tmpTreeData);
                 }
             }
             if (buf.length() > 0) {
@@ -110,11 +107,8 @@ public class Newick extends IOBase implements IOFormat {
                 buf.delete(0, buf.length());
                 list.add(tree);
             }
-            trees = list.toArray(new TreeData[list.size()]);
-        } finally {
-            r.close();
+            return list.toArray(new TreeData[list.size()]);
         }
-        return trees;
     }
 
 

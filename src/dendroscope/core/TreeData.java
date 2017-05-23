@@ -163,8 +163,8 @@ public class TreeData extends PhyloTree {
         PhyloTree targetTree = viewer.getPhyloTree();
 
         PhyloTree srcTree = this;
-        NodeArray<Node> oldNode2NewNode = new NodeArray<Node>(srcTree);
-        EdgeArray<Edge> oldEdge2NewEdge = new EdgeArray<Edge>(srcTree);
+        final NodeArray<Node> oldNode2NewNode = new NodeArray<>(srcTree);
+        final EdgeArray<Edge> oldEdge2NewEdge = new EdgeArray<>(srcTree);
 
         targetTree.clear();
         targetTree.copy(srcTree, oldNode2NewNode, oldEdge2NewEdge);

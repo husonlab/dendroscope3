@@ -81,11 +81,11 @@ public class QuitCommand extends CommandBase implements ICommand {
     public void apply(NexusStreamParser np) throws Exception {
         try {
             np.matchIgnoreCase("quit;");
-            ProjectManager.doQuit(new Runnable() {
+            ProjectManager.doQuit(null, new Runnable() {
                 public void run() {
                     NewCommand.makeNewDocument();
                 }
-            }, null);
+            });
         } catch (Exception ex) {
         }
     }
