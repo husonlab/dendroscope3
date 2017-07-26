@@ -700,26 +700,25 @@ public class GeneralMethods {
      */
 
     public static SplitSystem getSplitSystem(Set<Set<String>> clusters, Map<String, Integer> taxon2ID) {
-        SplitSystem splitSys = new SplitSystem();
-
-
-        BitSet activeTaxa = new BitSet();
+        final SplitSystem splitSys = new SplitSystem();
+        final BitSet activeTaxa = new BitSet();
         for (String s : taxon2ID.keySet()) {
             activeTaxa.set(taxon2ID.get(s));
         }
         for (Set<String> currCluster : clusters) {
             //System.err.println("currCluster " + currCluster);
 
-            BitSet siteA = new BitSet();
+            final BitSet siteA = new BitSet();
 
             for (String aCurrCluster : currCluster) {
-                siteA.set(taxon2ID.get(aCurrCluster));
+                if (taxon2ID.get(aCurrCluster) != null)
+                    siteA.set(taxon2ID.get(aCurrCluster));
             }
 
             // todo: this is surely a bug:
-            BitSet complement = (BitSet) activeTaxa.clone();
+            final BitSet complement = (BitSet) activeTaxa.clone();
             complement.andNot(siteA);
-            Split split = new Split(siteA, complement);
+            final Split split = new Split(siteA, complement);
 
             //System.err.println("split " + split);
 
@@ -1176,7 +1175,6 @@ public class GeneralMethods {
         }
     }
 
-
     /**
      * this function prints the ILP formulation of the tanglegram problems (to solve with lp_solve)
      * in the file print. Use only when tree1 and tree2 are bonary trees.
@@ -1337,7 +1335,6 @@ public class GeneralMethods {
             print.print("x_w" + Integer.toString(w) + ", ");
         print.print("x_w" + Integer.toString(numberInnerNodeTree2) + ";");
     }
-
 }
 
 
