@@ -252,11 +252,8 @@ public class HybridNetwork extends PhyloTree {
         return h;
     }
 
-    private void createSubtreeRec(Node v, Node vCopy, PhyloTree t,
-                                  Hashtable<Node, Node> created) {
-        Iterator<Edge> it = getOutEdges(v);
-        while (it.hasNext()) {
-            Edge e = it.next();
+    private void createSubtreeRec(Node v, Node vCopy, PhyloTree t, Hashtable<Node, Node> created) {
+        for (Edge e : v.outEdges()) {
             Node c = e.getTarget();
             Node cCopy;
             if (!created.containsKey(c)) {

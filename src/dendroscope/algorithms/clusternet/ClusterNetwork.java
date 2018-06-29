@@ -85,7 +85,6 @@ public class ClusterNetwork {
         }
         Cluster[] clusters = list.toArray(new Cluster[list.size()]);
 
-
         List<Triplet<Cluster, Cluster, Boolean>> additionalEdges = new LinkedList<>();
 
         NodeDoubleArray node2weight = new NodeDoubleArray(tree);

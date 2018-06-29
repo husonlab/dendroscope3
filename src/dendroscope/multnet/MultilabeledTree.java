@@ -240,9 +240,8 @@ public class MultilabeledTree extends PhyloTree {
             this.deleteEdge(edgeIt.next());
         }
         for (Node toDel : collapsedNodes) {
-            edgeIt = this.getOutEdges(toDel);
-            while (edgeIt.hasNext()) {
-                this.deleteEdge(edgeIt.next());
+            for (Edge e : toDel.outEdges()) {
+                this.deleteEdge(e);
             }
             this.deleteNode(toDel);
         }

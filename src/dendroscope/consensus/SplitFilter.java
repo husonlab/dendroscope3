@@ -19,7 +19,7 @@
 */
 package dendroscope.consensus;
 
-import jloda.phylo.HomoplasyScore;
+import jloda.phylo.Distortion;
 import jloda.phylo.PhyloTree;
 import jloda.util.Basic;
 import jloda.util.CanceledException;
@@ -123,7 +123,7 @@ public class SplitFilter {
                 if (treeTaxaAndA.cardinality() > 1 && treeTaxaAndB.cardinality() > 1) {
                     try {
                         PhyloTree tree = trees[t];
-                        totalScore += HomoplasyScore.computeBestHomoplasyScoreForSplit(tree, A, B);
+                        totalScore += Distortion.computeDistortionForSplit(tree, A, B);
                     } catch (IOException ex) {
                         Basic.caught(ex);
                     }
@@ -178,7 +178,7 @@ public class SplitFilter {
                 if (treeTaxaAndA.cardinality() > 1 && treeTaxaAndB.cardinality() > 1) {
                     try {
                         PhyloTree tree = trees[t];
-                        int score = HomoplasyScore.computeBestHomoplasyScoreForSplit(tree, A, B);
+                        int score = Distortion.computeDistortionForSplit(tree, A, B);
                         //System.err.print(" " + score);
                         if (score <= maxDistortion)
                             count++;

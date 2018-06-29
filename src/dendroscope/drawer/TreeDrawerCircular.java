@@ -241,6 +241,7 @@ public class TreeDrawerCircular extends TreeDrawerRadial implements IOptimizedGr
                 Point2D refPoint = new Point2D.Double(0, 0);
                 float angle = (float) (Geometry.computeAngle(Geometry.diff(location, refPoint)) + trans.getAngle());
                 if (radialLabels) {
+                    // angle+=0.01;
                     nv.setLabelAngle(angle);
                     nv.setLabelLayout(NodeView.RADIAL);
                     int d = Math.max(nv.getHeight(), nv.getWidth()) / 2 + 3;

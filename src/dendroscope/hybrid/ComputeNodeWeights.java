@@ -157,9 +157,8 @@ public class ComputeNodeWeights {
         else if (nodeToCluster.containsKey(v))
             cluster.or(nodeToCluster.get(v));
         else {
-            Iterator<Edge> it = n.getOutEdges(v);
-            while (it.hasNext()) {
-                Node c = it.next().getTarget();
+            for (Edge e : v.outEdges()) {
+                Node c = e.getTarget();
                 if (c.getInDegree() == 1)
                     computeClusterRec(n, c, cluster);
             }

@@ -385,6 +385,7 @@ public class MultiViewer implements IDirectableViewer, IViewerWithFindToolBar, I
         if (searchManager != null && searchManager.isLocked() && frame.isActive()) {
             searchManager.unlockUserInput();
         }
+        ProjectManager.updateWindowMenus();
     }
 
     /**
@@ -646,7 +647,9 @@ public class MultiViewer implements IDirectableViewer, IViewerWithFindToolBar, I
                 which = Math.max(-1, doc.getNumberOfTrees() - 1);
             doc.setCurrent(which);
             doc.appendTrees(trees, doc.getCurrent());
-            new Message(getFrame(), "Number of trees added: " + trees.length);
+            if (trees.length > 1) {
+                new Message(getFrame(), "Number of trees added: " + trees.length);
+            }
             doc.setCurrent(current);
 
             if (currentTrees.cardinality() == 0) {

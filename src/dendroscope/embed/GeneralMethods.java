@@ -842,9 +842,8 @@ public class GeneralMethods {
             tree.deleteEdge(edgeIt.next());
         }
         for (Node toDel : collapsedNodes) {
-            edgeIt = tree.getOutEdges(toDel);
-            while (edgeIt.hasNext()) {
-                tree.deleteEdge(edgeIt.next());
+            for (Edge e : toDel.outEdges()) {
+                tree.deleteEdge(e);
             }
             tree.deleteNode(toDel);
         }

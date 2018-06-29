@@ -22,6 +22,7 @@ package dendroscope.io;
 import dendroscope.core.TreeData;
 import jloda.graph.Node;
 import jloda.phylo.PhyloTree;
+import jloda.util.Basic;
 import jloda.util.NotOwnerException;
 import jloda.util.parse.NexusStreamParser;
 import jloda.util.parse.NexusStreamTokenizer;
@@ -46,6 +47,7 @@ public class Nexus extends IOBase implements IOFormat {
     private boolean rootedGloballySet = false; // if, true, this overrides [&R] statment
     final private Map<String, String> translate = new HashMap<>(); // maps node labels to taxa
 
+    private final static String TAG = "#nexus";
 
     /**
      * does this look like a file of the correct type?
@@ -54,20 +56,11 @@ public class Nexus extends IOBase implements IOFormat {
      * @return true, if correct type of file
      */
     public boolean isCorrectFileType(File file) {
-        boolean result = false;
-        BufferedReader r = null;
         try {
-            r = new BufferedReader(new FileReader(file));
-            if (isCorrectType(r.readLine()))
-                result = true;
+            return isCorrectType(Basic.toString(Basic.getFirstBytesFromFile(file, TAG.length())));
         } catch (Exception e) {
+            return false;
         }
-        try {
-            if (r != null)
-                r.close();
-        } catch (IOException e) {
-        }
-        return result;
     }
 
     /**
@@ -77,7 +70,7 @@ public class Nexus extends IOBase implements IOFormat {
      * @return true, if correct type of string
      */
     public boolean isCorrectType(String aLine) {
-        return aLine != null && aLine.toLowerCase().startsWith("#nexus");
+        return aLine != null && aLine.startsWith(TAG);
     }
 
     /**

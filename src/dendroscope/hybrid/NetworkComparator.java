@@ -23,7 +23,10 @@ import jloda.graph.Edge;
 import jloda.graph.Node;
 import jloda.phylo.PhyloTree;
 
-import java.util.*;
+import java.util.BitSet;
+import java.util.Comparator;
+import java.util.Hashtable;
+import java.util.Vector;
 
 public class NetworkComparator implements Comparator<HybridNetwork> {
 
@@ -92,9 +95,9 @@ public class NetworkComparator implements Comparator<HybridNetwork> {
         else if (nodeToCluster.containsKey(v))
             cluster.or(nodeToCluster.get(v));
         else {
-            Iterator<Edge> it = n.getOutEdges(v);
-            while (it.hasNext())
-                computeClusterRec(n, it.next().getTarget(), cluster);
+            for (Edge e : v.outEdges()) {
+                computeClusterRec(n, e.getTarget(), cluster);
+            }
         }
     }
 

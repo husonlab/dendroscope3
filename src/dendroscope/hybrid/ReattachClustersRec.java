@@ -176,9 +176,7 @@ public class ReattachClustersRec {
 
     private void addNetworkToNetworkRec(Node vCopy, Node v,
                                         HybridNetwork toCopy, HybridNetwork n, Hashtable<Node, Node> created, TreeMarker tM, boolean isClusterNetwork) {
-        Iterator<Edge> it = toCopy.getOutEdges(v);
-        while (it.hasNext()) {
-            Edge e = it.next();
+        for (Edge e : v.outEdges()) {
             Node c = e.getTarget();
             Node cCopy;
             if (!created.containsKey(c)) {

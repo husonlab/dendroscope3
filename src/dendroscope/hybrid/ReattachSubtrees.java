@@ -81,9 +81,8 @@ public class ReattachSubtrees {
     @SuppressWarnings("unchecked")
     private void addTreeToNetworkRec(Node vCopy, Node v, PhyloTree p,
                                      HybridNetwork n) {
-        Iterator<Edge> it = p.getOutEdges(v);
-        while (it.hasNext()) {
-            Node c = it.next().getTarget();
+        for (Edge e : v.outEdges()) {
+            Node c = e.getTarget();
             Node cCopy = n.newNode(c);
             n.setLabel(cCopy, p.getLabel(c));
             n.newEdge(vCopy, cCopy);

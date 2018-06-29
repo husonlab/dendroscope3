@@ -502,9 +502,7 @@ public class PhyloTreeUtils {
 
 
                     int idU = idTemp.getValue(u);
-                    Iterator out = graph.getOutEdges(u);
-                    while (out.hasNext()) {
-                        Edge e = (Edge) out.next();
+                    for (Edge e : u.outEdges()) {
                         Node v = graph.getOpposite(u, e);
                         int idV = idTemp.getValue(v);
                         if (distMatrixTemp[idS][idV] > distMatrixTemp[idS][idU] + 1) {

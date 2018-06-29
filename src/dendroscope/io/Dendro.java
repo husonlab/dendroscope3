@@ -46,6 +46,8 @@ public class Dendro extends IOBase implements IOFormat {
     public final static String EXTENSION = ".dendro";
     public final static String NAME = "Dendro";
 
+    private final static String TAG = "#DENDROSCOPE";
+
     /**
      * does this look like a file of the correct type?
      *
@@ -53,20 +55,11 @@ public class Dendro extends IOBase implements IOFormat {
      * @return true, if correct type of file
      */
     public boolean isCorrectFileType(File file) {
-        BufferedReader r = null;
-        boolean result = false;
         try {
-            r = new BufferedReader(new FileReader(file));
-            if (isCorrectType(r.readLine()))
-                result = true;
-        } catch (Exception ex) {
+            return isCorrectType(Basic.toString(Basic.getFirstBytesFromFile(file, TAG.length())));
+        } catch (Exception e) {
+            return false;
         }
-        try {
-            if (r != null)
-                r.close();
-        } catch (IOException e) {
-        }
-        return result;
     }
 
     /**
@@ -76,7 +69,7 @@ public class Dendro extends IOBase implements IOFormat {
      * @return true, if correct type of string
      */
     public boolean isCorrectType(String aLine) {
-        return aLine != null && aLine.startsWith("#DENDROSCOPE");
+        return aLine != null && aLine.startsWith(TAG);
     }
 
     /**
@@ -87,10 +80,10 @@ public class Dendro extends IOBase implements IOFormat {
      * @throws java.io.IOException
      */
     public TreeData[] read(Reader r) throws IOException {
-        List<TreeData> trees = new LinkedList<TreeData>();
+        List<TreeData> trees = new LinkedList<>();
         try {
             final NexusStreamParser np = new NexusStreamParser(r);
-            np.matchRespectCase("#DENDROSCOPE");
+            np.matchRespectCase(TAG);
             while (np.peekNextToken() != NexusStreamParser.TT_EOF) {
                 trees.add(read(np));
             }

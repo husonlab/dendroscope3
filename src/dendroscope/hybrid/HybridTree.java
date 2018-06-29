@@ -66,9 +66,7 @@ public class HybridTree extends HybridNetwork {
 
     @SuppressWarnings("unchecked")
     private void createSubtreeRec(Node v, Node vCopy, PhyloTree t) {
-        Iterator<Edge> it = getOutEdges(v);
-        while (it.hasNext()) {
-            Edge e = it.next();
+        for (Edge e : v.outEdges()) {
             Node c = e.getTarget();
             Node cCopy;
             cCopy = t.newNode(c);

@@ -20,6 +20,7 @@
 package dendroscope.io;
 
 import dendroscope.core.TreeData;
+import jloda.util.Basic;
 
 import java.io.*;
 import java.util.LinkedList;
@@ -43,20 +44,11 @@ public class Newick extends IOBase implements IOFormat {
      * @return true, if correct type of file
      */
     public boolean isCorrectFileType(File file) {
-        boolean result = false;
-        BufferedReader r = null;
         try {
-            r = new BufferedReader(new FileReader(file));
-            if (isCorrectType(r.readLine()))
-                result = true;
+            return isCorrectType(Basic.toString(Basic.getFirstBytesFromFile(file, 1)));
         } catch (Exception e) {
+            return false;
         }
-        try {
-            if (r != null)
-                r.close();
-        } catch (IOException e) {
-        }
-        return result;
     }
 
     /**
@@ -66,7 +58,7 @@ public class Newick extends IOBase implements IOFormat {
      * @return true, if correct type of string
      */
     public boolean isCorrectType(String aLine) {
-        return aLine != null && aLine.toLowerCase().startsWith("(");
+        return aLine != null && aLine.startsWith("(");
     }
 
     /**

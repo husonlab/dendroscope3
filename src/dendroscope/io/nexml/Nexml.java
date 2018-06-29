@@ -39,6 +39,9 @@ public class Nexml extends IOBase implements IOFormat {
     public final static String EXTENSION = ".nexml";
     public final static String NAME = "NeXML";
 
+    private final static String TAG = "<?xml";
+
+
     private Connectors connectors;
 
     public Connectors getConnectors() {
@@ -113,29 +116,21 @@ public class Nexml extends IOBase implements IOFormat {
      * @return true, if correct type of file
      */
     public boolean isCorrectFileType(File file) {
-        boolean result = false;
-        BufferedReader r = null;
         try {
-            r = new BufferedReader(new FileReader(file));
-            if (isCorrectType(r.readLine()))
-                result = true;
+            return isCorrectType(Basic.toString(Basic.getFirstBytesFromFile(file, TAG.length())));
         } catch (Exception e) {
+            return false;
         }
-        try {
-            if (r != null)
-                r.close();
-        } catch (IOException e) {
-        }
-        return result;
     }
 
     /**
-     * does this look like the first line of a file of the correct type
+     * does this look like the first line of the a file of the correct type?
      *
      * @param aLine
+     * @return true, if correct type of string
      */
     public boolean isCorrectType(String aLine) {
-        return aLine != null && aLine.toLowerCase().startsWith("<?xml");
+        return aLine != null && aLine.startsWith(TAG);
     }
 
     /**
