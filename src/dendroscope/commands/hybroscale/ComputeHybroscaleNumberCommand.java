@@ -1,6 +1,6 @@
 /**
  * ComputeHybridNumberCommand.java 
- * Copyright (C) 2015 Daniel H. Huson
+ * Copyright (C) 2018 Daniel H. Huson
  *
  * (Some files contain contributions from other authors, who are then mentioned separately.)
  *
@@ -28,7 +28,6 @@ import jloda.util.Alert;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;
-
 import java.awt.event.ActionEvent;
 import java.util.Iterator;
 import java.util.Vector;

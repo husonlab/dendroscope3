@@ -1,6 +1,6 @@
 /**
  * ExportImageCommand.java 
- * Copyright (C) 2015 Daniel H. Huson
+ * Copyright (C) 2018 Daniel H. Huson
  *
  * (Some files contain contributions from other authors, who are then mentioned separately.)
  *
@@ -104,7 +104,7 @@ public class ExportImageCommand extends CommandBase implements ICommand {
 
 
         if (format.equals("file-suffix")) {
-            format = Basic.getSuffix(fileName);
+            format = Basic.getFileSuffix(fileName);
         }
 
         try {

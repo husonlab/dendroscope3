@@ -1,7 +1,7 @@
 package dendroscope.commands;
 /**
  * ShowCheckForUpdateCommand.java
- * Copyright (C) 2015 Daniel H. Huson
+ * Copyright (C) 2018 Daniel H. Huson
  * <p/>
  * (Some files contain contributions from other authors, who are then mentioned separately.)
  * <p/>

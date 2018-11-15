@@ -1,6 +1,6 @@
 Dendroscope3 - Interactive viewer for phylogenetic trees and networks
 
-Copyright (c) 2017, Daniel H. Huson
+Copyright (C) 2018, Daniel H. Huson
 
 If you publish results obtained using this software, then we request that you cite the following paper:
 
