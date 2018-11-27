@@ -81,7 +81,6 @@ public class ExportImageCommand extends CommandBase implements ICommand {
      * parses the given command and executes it
      *
      * @param np
-     * @throws java.io.IOException
      */
     public void apply(NexusStreamParser np) throws Exception {
         final MultiViewer multiViewer = (MultiViewer) getViewer();
