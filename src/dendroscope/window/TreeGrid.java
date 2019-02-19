@@ -1,6 +1,6 @@
 /**
  * TreeGrid.java 
- * Copyright (C) 2018 Daniel H. Huson
+ * Copyright (C) 2019 Daniel H. Huson
  *
  * (Some files contain contributions from other authors, who are then mentioned separately.)
  *
@@ -39,8 +39,8 @@ import jloda.util.ResourceManager;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 /**
  * a grid of tree viewers
