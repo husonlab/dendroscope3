@@ -1,15 +1,15 @@
 package dendroscope.hybroscale.model.reductionSteps;
 
+import dendroscope.hybroscale.model.treeObjects.HybridNetwork;
+import dendroscope.hybroscale.util.graph.MyEdge;
+import dendroscope.hybroscale.util.graph.MyNode;
+import dendroscope.hybroscale.util.graph.MyPhyloTree;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
-
-import dendroscope.hybroscale.model.treeObjects.HybridNetwork;
-import dendroscope.hybroscale.util.graph.MyEdge;
-import dendroscope.hybroscale.util.graph.MyNode;
-import dendroscope.hybroscale.util.graph.MyPhyloTree;
 
 public class ReplacementInfo {
 
@@ -211,7 +211,7 @@ public class ReplacementInfo {
 				if (!treeIndexToUniqueTaxa.containsKey(treeToIndex.get(t)))
 					treeIndexToUniqueTaxa.put(treeToIndex.get(t), new Vector<String>());
 				treeIndexToUniqueTaxa.get(treeToIndex.get(t)).add(leaf.getLabel());
-				MyEdge e = leaf.getInEdges().next();
+                MyEdge e = leaf.getFirstInEdge();
 				MyNode p = e.getSource();
 				t.deleteEdge(e);
 				removeOneNode(p, t);
@@ -226,14 +226,14 @@ public class ReplacementInfo {
 
 	private void removeOneNode(MyNode v, MyPhyloTree t) {
 		if (v.getInDegree() == 1 && v.getOutDegree() == 1) {
-			MyNode p = v.getInEdges().next().getSource();
-			MyNode c = v.getOutEdges().next().getTarget();
-			t.deleteEdge(v.getInEdges().next());
-			t.deleteEdge(v.getOutEdges().next());
+            MyNode p = v.getFirstInEdge().getSource();
+            MyNode c = v.getFirstOutEdge().getTarget();
+            t.deleteEdge(v.getFirstInEdge());
+            t.deleteEdge(v.getFirstOutEdge());
 			t.newEdge(p, c);
 		} else if (v.getInDegree() == 0 && v.getOutDegree() == 1) {
-			MyNode c = v.getOutEdges().next().getTarget();
-			t.deleteEdge(v.getOutEdges().next());
+            MyNode c = v.getFirstOutEdge().getTarget();
+            t.deleteEdge(v.getFirstOutEdge());
 			t.setRoot(c);
 		}
 	}

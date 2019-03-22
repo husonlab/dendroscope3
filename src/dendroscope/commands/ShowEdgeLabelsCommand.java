@@ -23,8 +23,8 @@ import dendroscope.window.MultiViewer;
 import dendroscope.window.TreeViewer;
 import jloda.graph.Edge;
 import jloda.graph.EdgeSet;
-import jloda.gui.commands.ICheckBoxCommand;
-import jloda.util.ResourceManager;
+import jloda.swing.commands.ICheckBoxCommand;
+import jloda.swing.util.ResourceManager;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;
@@ -56,7 +56,7 @@ public class ShowEdgeLabelsCommand extends CommandBaseMultiViewer implements ICh
         for (Iterator<TreeViewer> it = multiViewer.getTreeGrid().getSelectedEdgesIterator(); it.hasNext(); ) {
             TreeViewer treeViewer = it.next();
             EdgeSet selected = treeViewer.getSelectedEdges();
-            for (Edge e = selected.getFirstElement(); e != null; e = selected.getNextElement(e)) {
+            for (Edge e : selected) {
                 if (!treeViewer.getLabelVisible(e)) {
                     result = false;
                     break;

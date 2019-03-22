@@ -139,7 +139,7 @@ public class ForestApproximation {
 
     private void removeNode(HybridTree t, Node v) {
         if (t.computeSetOfLeaves().size() > 2) {
-            Edge e = v.getInEdges().next();
+            Edge e = v.getFirstInEdge();
             Node p = e.getSource();
             t.deleteEdge(e);
             t.deleteNode(v);
@@ -149,16 +149,16 @@ public class ForestApproximation {
 
     private void removeNeedlessNode(HybridTree t, Node v) {
         if (v.getInDegree() == 1 && v.getOutDegree() == 1) {
-            Edge inEdge = v.getInEdges().next();
+            Edge inEdge = v.getFirstInEdge();
             Node pP = inEdge.getSource();
-            Edge outEdge = v.getOutEdges().next();
+            Edge outEdge = v.getFirstOutEdge();
             Node c = outEdge.getTarget();
             t.deleteEdge(inEdge);
             t.deleteEdge(outEdge);
             t.deleteNode(v);
             t.newEdge(pP, c);
         } else if (v.getInDegree() == 0 && v.getOutDegree() == 1) {
-            Edge outEdge = v.getOutEdges().next();
+            Edge outEdge = v.getFirstOutEdge();
             Node c = outEdge.getTarget();
             t.deleteEdge(outEdge);
             t.deleteNode(v);
@@ -212,13 +212,13 @@ public class ForestApproximation {
 
     private Node getOnlyPendant(Node v1, Node v2, HybridTree t) {
 
-        Node p1 = v1.getInEdges().next().getSource();
-        Node p2 = v2.getInEdges().next().getSource();
+        Node p1 = v1.getFirstInEdge().getSource();
+        Node p2 = v2.getFirstInEdge().getSource();
 
         if (p1.getInDegree() == 1) {
-            Node v = p1.getInEdges().next().getSource();
+            Node v = p1.getFirstInEdge().getSource();
             if (v.equals(p2)) {
-                Iterator<Edge> it = p1.getOutEdges();
+                Iterator<Edge> it = p1.outEdges().iterator();
                 Node p = it.next().getTarget();
                 if (v1.equals(p))
                     p = it.next().getTarget();
@@ -238,11 +238,11 @@ public class ForestApproximation {
             HybridTree t = (HybridTree) v.getOwner();
 
             if (v.getInDegree() != 0) {
-                Node p = v.getInEdges().next().getSource();
+                Node p = v.getFirstInEdge().getSource();
                 HybridTree subtree = t.getSubtree(v, false);
                 sibs.putForestLeaves(subtree);
 
-                if (subtree.getNodes().size() == 1) {
+                if (subtree.getNumberOfNodes() == 1) {
                     String label = subtree.getLabel(subtree.getFirstNode());
                     if (sibs.getT1Leaf((label)) != null) {
                         removeNode(t1, sibs.getT1Leaf(label));
@@ -262,8 +262,8 @@ public class ForestApproximation {
 
     private Node getNeighbour(Node v) {
 
-        Node p = v.getInEdges().next().getSource();
-        Iterator<Edge> it = p.getOutEdges();
+        Node p = v.getFirstInEdge().getSource();
+        Iterator<Edge> it = p.outEdges().iterator();
         Node c = it.next().getTarget();
         if (!c.equals(v))
             return c;
@@ -289,14 +289,14 @@ public class ForestApproximation {
         taxa.add(t1.getLabel(v2));
         Collections.sort(taxa);
 
-        Edge e = v1.getInEdges().next();
+        Edge e = v1.getFirstInEdge();
         Node p = e.getSource();
 
         t1.deleteEdge(e);
         sibs.removeT1Leaf(t1.getLabel(v1));
         t1.deleteNode(v1);
 
-        e = v2.getInEdges().next();
+        e = v2.getFirstInEdge();
         t1.deleteEdge(e);
         sibs.removeT1Leaf(t1.getLabel(v2));
         t1.deleteNode(v2);
@@ -310,7 +310,7 @@ public class ForestApproximation {
         t1.setLabel(p, s);
 
         Node f1 = sibs.getForestLeaf(t1Sib.get(0));
-        Edge eF = f1.getInEdges().next();
+        Edge eF = f1.getFirstInEdge();
         Node fP = eF.getSource();
         HybridTree f = (HybridTree) fP.getOwner();
 
@@ -322,7 +322,7 @@ public class ForestApproximation {
         sibs.putForestLeaf(s, fP);
 
         Node f2 = sibs.getForestLeaf(t1Sib.get(1));
-        eF = f2.getInEdges().next();
+        eF = f2.getFirstInEdge();
 
         f.deleteEdge(eF);
         sibs.removeForestLeaf(f.getLabel(f2));
@@ -334,10 +334,10 @@ public class ForestApproximation {
     private int getHeight(Node v) {
         int h = 0;
         if (v.getInDegree() != 0) {
-            Node p = v.getInEdges().next().getSource();
+            Node p = v.getFirstInEdge().getSource();
             h = 1;
             while (p.getInDegree() != 0) {
-                p = p.getInEdges().next().getSource();
+                p = p.getFirstInEdge().getSource();
                 h++;
             }
             return h;

@@ -24,10 +24,10 @@ import dendroscope.io.DistanceOutput;
 import dendroscope.util.DistanceMethods;
 import dendroscope.window.MultiViewer;
 import dendroscope.window.TreeViewer;
-import jloda.gui.Message;
-import jloda.gui.commands.ICommand;
 import jloda.phylo.PhyloTree;
-import jloda.util.Alert;
+import jloda.swing.commands.ICommand;
+import jloda.swing.util.Alert;
+import jloda.swing.util.Message;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;

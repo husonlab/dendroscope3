@@ -25,10 +25,10 @@ import dendroscope.io.IOManager;
 import dendroscope.main.DendroscopeProperties;
 import dendroscope.main.Version;
 import dendroscope.util.NewickInputDialog;
-import jloda.gui.commands.ICommand;
+import jloda.swing.commands.ICommand;
+import jloda.swing.util.ProgramProperties;
+import jloda.swing.util.ResourceManager;
 import jloda.util.Basic;
-import jloda.util.ProgramProperties;
-import jloda.util.ResourceManager;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;

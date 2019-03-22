@@ -1,17 +1,11 @@
 package dendroscope.hybroscale.model.util;
 
-import java.util.BitSet;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Vector;
-
 import dendroscope.hybroscale.model.treeObjects.HybridNetwork;
 import dendroscope.hybroscale.util.graph.MyEdge;
 import dendroscope.hybroscale.util.graph.MyNode;
 import dendroscope.hybroscale.util.graph.MyPhyloTree;
+
+import java.util.*;
 
 public class ComputeNodeWeights {
 
@@ -78,7 +72,7 @@ public class ComputeNodeWeights {
 	}
 
 	private boolean isClusterNode(MyNode v) {
-		MyEdge outEdge = v.getOutEdges().next();
+        MyEdge outEdge = v.getFirstOutEdge();
 		if (((HashSet<Integer>) outEdge.getInfo()).contains(-1))
 			return true;
 		return false;

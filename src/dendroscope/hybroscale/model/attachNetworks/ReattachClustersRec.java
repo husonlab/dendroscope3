@@ -1,12 +1,5 @@
 package dendroscope.hybroscale.model.attachNetworks;
 
-import java.util.BitSet;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Vector;
-import java.util.concurrent.ConcurrentHashMap;
-
 import dendroscope.hybroscale.model.HybridManager;
 import dendroscope.hybroscale.model.cmpMinNetworks.NetworkIsomorphismCheck;
 import dendroscope.hybroscale.model.reductionSteps.ReplacementInfo;
@@ -17,6 +10,9 @@ import dendroscope.hybroscale.util.graph.MyEdge;
 import dendroscope.hybroscale.util.graph.MyNode;
 import dendroscope.hybroscale.util.graph.MyPhyloTree;
 import dendroscope.hybroscale.view.HybridView;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This method replaces distinct leaves of a resolved network by other resolved
@@ -160,7 +156,7 @@ public class ReattachClustersRec {
 		n.setLabel(vCopy, toCopy.getLabel(toCopy.getRoot()));
 
 		// attaching the generated root
-		Iterator<MyEdge> it = leaf.getInEdges();
+        Iterator<MyEdge> it = leaf.inEdges().iterator();
 		while (it.hasNext()) {
 			MyEdge e = it.next();
 			boolean isSpecial = n.isSpecial(e);
@@ -296,8 +292,8 @@ public class ReattachClustersRec {
 		// e.getTarget().getLabel() + " "
 		// + e.getOwner().equals(n));
 
-		MyNode p = v.getInEdges().next().getSource();
-		Iterator<MyEdge> it = p.getOutEdges();
+        MyNode p = v.getFirstInEdge().getSource();
+        Iterator<MyEdge> it = p.outEdges().iterator();
 		HashSet<MyEdge> shiftingEdges = new HashSet<MyEdge>();
 		HashSet<MyNode> sourceNodes = new HashSet<MyNode>();
 		while (it.hasNext()) {
@@ -310,14 +306,14 @@ public class ReattachClustersRec {
 
 					if (getTreeIndexOutDegree(s, treeIndices, shiftedEdges, p) <= 1) {
 						sourceNodes.add(s);
-						Iterator<MyEdge> itOut = s.getOutEdges();
+                        Iterator<MyEdge> itOut = s.outEdges().iterator();
 						while (itOut.hasNext()) {
 							MyEdge eOut = itOut.next();
 							if (getEdgeIndices(eOut).containsAll(treeIndices) && !shiftedEdges.containsKey(eOut))
 								s = eOut.getTarget();
 						}
 					} else if (s.getInDegree() == 1 && s.getOutDegree() > 2 && !s.equals(v)) {
-						Iterator<MyEdge> itOut = s.getOutEdges();
+                        Iterator<MyEdge> itOut = s.outEdges().iterator();
 						while (itOut.hasNext()) {
 							MyEdge eOut = itOut.next();
 							boolean addNode = true;
@@ -416,11 +412,11 @@ public class ReattachClustersRec {
 
 					if (pCopy.getInDegree() == 1 && pCopy.getOutDegree() == 1) {
 
-						MyNode s = pCopy.getInEdges().next().getSource();
-						MyNode t = pCopy.getOutEdges().next().getTarget();
-						HashSet<Integer> eDeleteIndices = getEdgeIndices(pCopy.getInEdges().next());
-						nCopy.deleteEdge(pCopy.getInEdges().next());
-						nCopy.deleteEdge(pCopy.getOutEdges().next());
+                        MyNode s = pCopy.getFirstInEdge().getSource();
+                        MyNode t = pCopy.getFirstOutEdge().getTarget();
+                        HashSet<Integer> eDeleteIndices = getEdgeIndices(pCopy.getFirstInEdge());
+                        nCopy.deleteEdge(pCopy.getFirstInEdge());
+                        nCopy.deleteEdge(pCopy.getFirstOutEdge());
 						nCopy.deleteNode(pCopy);
 						newEdge = nCopy.newEdge(s, t);
 						addEdgeIndices(newEdge, (HashSet<Integer>) eDeleteIndices.clone());
@@ -436,7 +432,7 @@ public class ReattachClustersRec {
 
 				} else if (getTreeIndexOutDegree(xCopy, getEdgeIndices(eCopy), shiftedEdgesCopy, pCopy) > 1) {
 
-					MyEdge midEdge = xCopy.getInEdges().next();
+                    MyEdge midEdge = xCopy.getFirstInEdge();
 					MyNode midSource = midEdge.getSource();
 					HashSet<Integer> midEdgeIndices = getEdgeIndices(midEdge);
 					nCopy.deleteEdge(midEdge);
@@ -460,11 +456,11 @@ public class ReattachClustersRec {
 
 					if (pCopy.getInDegree() == 1 && pCopy.getOutDegree() == 1) {
 
-						MyNode s = pCopy.getInEdges().next().getSource();
-						MyNode t = pCopy.getOutEdges().next().getTarget();
-						HashSet<Integer> eDeleteIndices = getEdgeIndices(pCopy.getInEdges().next());
-						nCopy.deleteEdge(pCopy.getInEdges().next());
-						nCopy.deleteEdge(pCopy.getOutEdges().next());
+                        MyNode s = pCopy.getFirstInEdge().getSource();
+                        MyNode t = pCopy.getFirstOutEdge().getTarget();
+                        HashSet<Integer> eDeleteIndices = getEdgeIndices(pCopy.getFirstInEdge());
+                        nCopy.deleteEdge(pCopy.getFirstInEdge());
+                        nCopy.deleteEdge(pCopy.getFirstOutEdge());
 						nCopy.deleteNode(pCopy);
 						newEdge = nCopy.newEdge(s, t);
 						addEdgeIndices(newEdge, (HashSet<Integer>) eDeleteIndices.clone());
@@ -472,7 +468,7 @@ public class ReattachClustersRec {
 					}
 
 					Vector<MyEdge> moveEdges = new Vector<MyEdge>();
-					it = xCopy.getOutEdges();
+                    it = xCopy.outEdges().iterator();
 					while (it.hasNext()) {
 						MyEdge eOut = it.next();
 						boolean addEdge = true;
@@ -606,7 +602,7 @@ public class ReattachClustersRec {
 			HashMap<MyEdge, MyNode> shiftedEdges, HashMap<HybridNetwork, MyNode> shiftedUpNetworks,
 			boolean isClusterNetwork) {
 
-		Iterator<MyEdge> it = v.getOutEdges();
+        Iterator<MyEdge> it = v.outEdges().iterator();
 		HashSet<MyEdge> shiftingEdges = new HashSet<MyEdge>();
 		HashSet<MyNode> sourceNodes = new HashSet<MyNode>();
 		HashMap<MyNode, MyEdge> nodeToEdge = new HashMap<MyNode, MyEdge>();
@@ -619,7 +615,7 @@ public class ReattachClustersRec {
 				HashSet<Integer> treeIndices = getEdgeIndices(e);
 				MyNode s = v;
 				while (s.getInDegree() == 1) {
-					MyEdge inEdge = s.getInEdges().next();
+                    MyEdge inEdge = s.getFirstInEdge();
 					s = inEdge.getSource();
 					if (s.getInDegree() == 1) {
 						if (s.getOutDegree() > 1 && getTreeIndexOutDegree(s, treeIndices, shiftedEdges, v) == 1) {
@@ -632,7 +628,7 @@ public class ReattachClustersRec {
 							break;
 					} else {
 						boolean doBreak = true;
-						Iterator<MyEdge> itIn = s.getInEdges();
+                        Iterator<MyEdge> itIn = s.inEdges().iterator();
 						while (itIn.hasNext()) {
 							MyEdge eIn = itIn.next();
 							if (getEdgeIndices(eIn).containsAll(treeIndices)) {
@@ -737,11 +733,11 @@ public class ReattachClustersRec {
 
 					if (vCopy.getInDegree() == 1 && vCopy.getOutDegree() == 1) {
 
-						MyNode s = vCopy.getInEdges().next().getSource();
-						MyNode t = vCopy.getOutEdges().next().getTarget();
-						HashSet<Integer> eDeleteIndices = getEdgeIndices(vCopy.getInEdges().next());
-						nCopy.deleteEdge(vCopy.getInEdges().next());
-						nCopy.deleteEdge(vCopy.getOutEdges().next());
+                        MyNode s = vCopy.getFirstInEdge().getSource();
+                        MyNode t = vCopy.getFirstOutEdge().getTarget();
+                        HashSet<Integer> eDeleteIndices = getEdgeIndices(vCopy.getFirstInEdge());
+                        nCopy.deleteEdge(vCopy.getFirstInEdge());
+                        nCopy.deleteEdge(vCopy.getFirstOutEdge());
 						nCopy.deleteNode(vCopy);
 						newEdge = nCopy.newEdge(s, t);
 						addEdgeIndices(newEdge, (HashSet<Integer>) eDeleteIndices.clone());
@@ -778,7 +774,7 @@ public class ReattachClustersRec {
 					addEdgeIndices(newEdge, (HashSet<Integer>) midEdgeIndices.clone());
 
 					Vector<MyEdge> moveEdges = new Vector<MyEdge>();
-					Iterator<MyEdge> itOut = xCopy.getOutEdges();
+                    Iterator<MyEdge> itOut = xCopy.outEdges().iterator();
 					while (itOut.hasNext()) {
 						MyEdge eOut = itOut.next();
 						if (eOut.isShifted() && shiftedEdgesCopy.get(eOut) != null
@@ -799,10 +795,10 @@ public class ReattachClustersRec {
 							addEdgeIndices(newEdge, (HashSet<Integer>) eMoveIndices.clone());
 							shiftedEdgesCopy.put(newEdge, midNode);
 						}
-						MyNode s = xCopy.getInEdges().next().getSource();
-						MyNode t = xCopy.getOutEdges().next().getTarget();
-						HashSet<Integer> eDeleteIndices = getEdgeIndices(xCopy.getInEdges().next());
-						nCopy.deleteEdge(xCopy.getInEdges().next());
+                        MyNode s = xCopy.getFirstInEdge().getSource();
+                        MyNode t = xCopy.getFirstOutEdge().getTarget();
+                        HashSet<Integer> eDeleteIndices = getEdgeIndices(xCopy.getFirstInEdge());
+                        nCopy.deleteEdge(xCopy.getFirstInEdge());
 						newEdge = nCopy.newEdge(s, t);
 						addEdgeIndices(newEdge, (HashSet<Integer>) eDeleteIndices.clone());
 					}
@@ -820,7 +816,7 @@ public class ReattachClustersRec {
 					networkToShiftedEdge.put(nCopy, newEdge);
 
 					moveEdges = new Vector<MyEdge>();
-					itOut = vCopy.getOutEdges();
+                    itOut = vCopy.outEdges().iterator();
 					while (itOut.hasNext()) {
 						MyEdge eOut = itOut.next();
 						if (eOut.isShifted() && shiftedEdgesCopy.get(eOut) != null
@@ -843,11 +839,11 @@ public class ReattachClustersRec {
 
 					if (vCopy.getInDegree() == 1 && vCopy.getOutDegree() == 1) {
 
-						MyNode s = vCopy.getInEdges().next().getSource();
-						MyNode t = vCopy.getOutEdges().next().getTarget();
-						HashSet<Integer> eDeleteIndices = getEdgeIndices(vCopy.getInEdges().next());
-						nCopy.deleteEdge(vCopy.getInEdges().next());
-						nCopy.deleteEdge(vCopy.getOutEdges().next());
+                        MyNode s = vCopy.getFirstInEdge().getSource();
+                        MyNode t = vCopy.getFirstOutEdge().getTarget();
+                        HashSet<Integer> eDeleteIndices = getEdgeIndices(vCopy.getFirstInEdge());
+                        nCopy.deleteEdge(vCopy.getFirstInEdge());
+                        nCopy.deleteEdge(vCopy.getFirstOutEdge());
 						// nCopy.deleteNode(vCopy);
 						newEdge = nCopy.newEdge(s, t);
 						addEdgeIndices(newEdge, (HashSet<Integer>) eDeleteIndices.clone());
@@ -866,7 +862,7 @@ public class ReattachClustersRec {
 					}
 
 					moveEdges = new Vector<MyEdge>();
-					it = xCopy.getOutEdges();
+                    it = xCopy.outEdges().iterator();
 					while (it.hasNext()) {
 						MyEdge eOut = it.next();
 						boolean addEdge = true;
@@ -907,7 +903,7 @@ public class ReattachClustersRec {
 			if (e.getTarget().getOutDegree() == 0) {
 				b[0] = false;
 			} else if (e.getOwner().equals(n) && !n.isSpecial(e)) {
-				Iterator<MyEdge> it = e.getTarget().getOutEdges();
+                Iterator<MyEdge> it = e.getTarget().outEdges().iterator();
 				while (it.hasNext())
 					isSpecial(n, it.next(), b);
 			}
@@ -918,7 +914,7 @@ public class ReattachClustersRec {
 			HashSet<MyEdge> visitedEdges, HashMap<MyEdge, MyNode> shiftedEdges, boolean isClusterNetwork,
 			boolean shiftDown, HashMap<HybridNetwork, MyNode> shiftedNetworks,
 			HashMap<HybridNetwork, HashMap<MyEdge, MyNode>> networkToShiftedEdges) {
-		Iterator<MyEdge> it = s.getOutEdges();
+        Iterator<MyEdge> it = s.outEdges().iterator();
 		while (it.hasNext()) {
 			MyEdge e = it.next();
 			boolean isHangingEdge = true;
@@ -994,7 +990,7 @@ public class ReattachClustersRec {
 	private int getTreeIndexOutDegree(MyNode v, HashSet<Integer> treeIndices, HashMap<MyEdge, MyNode> shiftedEdges,
 			MyNode rootNode) {
 		int outDegree = 0;
-		Iterator<MyEdge> it = v.getOutEdges();
+        Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyEdge e = it.next();
 			boolean b = shiftedEdges.containsKey(e) ? !rootNode.equals(shiftedEdges.get(e)) : true;

@@ -46,7 +46,7 @@ public class GetIllegalTrees {
         while (itNode.hasNext()) {
             Node v = itNode.next();
             if (v.getInDegree() == 1) {
-                Edge e = v.getInEdges().next();
+                Edge e = v.getFirstInEdge();
                 if (!e.getSource().equals(t.getRoot()))
                     sortedEdges.add(e);
             }
@@ -75,10 +75,10 @@ public class GetIllegalTrees {
 
             if (v.getInDegree() == 1 && v.getOutDegree() == 2) {
 
-                int index1 = sortedEdges.indexOf(v.getInEdges().next());
+                int index1 = sortedEdges.indexOf(v.getFirstInEdge());
 
                 if (index1 != -1) {
-                    Iterator<Edge> out = v.getOutEdges();
+                    Iterator<Edge> out = v.outEdges().iterator();
                     int index2 = sortedEdges.indexOf(out.next());
                     int index3 = sortedEdges.indexOf(out.next());
 
@@ -151,10 +151,10 @@ public class GetIllegalTrees {
 
             if (v.getInDegree() == 1 && v.getOutDegree() == 2) {
 
-                int index1 = sortedEdges.indexOf(v.getInEdges().next());
+                int index1 = sortedEdges.indexOf(v.getFirstInEdge());
 
                 if (index1 != -1) {
-                    Iterator<Edge> out = v.getOutEdges();
+                    Iterator<Edge> out = v.outEdges().iterator();
                     int index2 = sortedEdges.indexOf(out.next());
                     int index3 = sortedEdges.indexOf(out.next());
 
@@ -194,10 +194,10 @@ public class GetIllegalTrees {
 
             if (v.getInDegree() == 1 && v.getOutDegree() == 2) {
 
-                int index1 = sortedEdges.indexOf(v.getInEdges().next());
+                int index1 = sortedEdges.indexOf(v.getFirstInEdge());
 
                 if (index1 != -1) {
-                    Iterator<Edge> out = v.getOutEdges();
+                    Iterator<Edge> out = v.outEdges().iterator();
                     int index2 = sortedEdges.indexOf(out.next());
                     int index3 = sortedEdges.indexOf(out.next());
 

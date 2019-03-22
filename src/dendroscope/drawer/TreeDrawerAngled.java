@@ -24,13 +24,13 @@ import jloda.graph.Edge;
 import jloda.graph.Node;
 import jloda.graph.NodeDoubleArray;
 import jloda.graph.NodeSet;
-import jloda.graphview.EdgeView;
-import jloda.graphview.GraphView;
-import jloda.graphview.NodeView;
 import jloda.phylo.PhyloTree;
-import jloda.util.Alert;
-import jloda.util.Geometry;
-import jloda.util.PolygonDouble;
+import jloda.swing.graphview.EdgeView;
+import jloda.swing.graphview.GraphView;
+import jloda.swing.graphview.NodeView;
+import jloda.swing.util.Alert;
+import jloda.swing.util.Geometry;
+import jloda.swing.util.PolygonDouble;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -190,7 +190,7 @@ public class TreeDrawerAngled extends TreeDrawerBase implements IOptimizedGraphD
 
         if ((v.getDegree() == 1 && v != tree.getRoot())) {
             Rectangle2D.Double bb = new Rectangle2D.Double(location.getX(), location.getY() - 1, 0, 2);
-            node2bb.set(v, bb);
+            node2bb.put(v, bb);
             return leaves + 1;
         } else {
             int firstNewLeaf = leaves + 1;
@@ -211,14 +211,14 @@ public class TreeDrawerAngled extends TreeDrawerBase implements IOptimizedGraphD
                 bb.add(node2bb.get(w));
             }
             // set bounding box
-            node2bb.set(v, bb);
+            node2bb.put(v, bb);
             // set proxy shape
             if ((leaves - firstNewLeaf) >= MIN_LEAVES_FOR_PROXY) {
                 Point2D[] points = new Point2D[]{
                         new Point2D.Double(bb.getX(), viewer.getLocation(v).getY()),
                         new Point2D.Double(bb.getMaxX(), firstNewLeaf),
                         new Point2D.Double(bb.getMaxX(), leaves)};
-                node2ProxyShape.set(v, new PolygonDouble(3, points));
+                node2ProxyShape.put(v, new PolygonDouble(3, points));
             }
             return leaves;
         }

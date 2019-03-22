@@ -1,17 +1,13 @@
 package dendroscope.hybroscale.model.cmpAllMAAFs;
 
-import java.util.BitSet;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Vector;
-
 import dendroscope.hybroscale.model.treeObjects.HybridTree;
 import dendroscope.hybroscale.model.treeObjects.SparseTree;
 import dendroscope.hybroscale.model.treeObjects.SparseTreeNode;
 import dendroscope.hybroscale.util.graph.MyEdge;
 import dendroscope.hybroscale.util.graph.MyNode;
 import dendroscope.hybroscale.util.graph.MyPhyloTree;
+
+import java.util.*;
 
 public class TreeToForestAdaptor {
 
@@ -65,7 +61,7 @@ public class TreeToForestAdaptor {
 			BitSet sibCluster = (BitSet) t.getNodeToCluster().get(v).clone();
 			sibCluster.and(insertedSet);
 			while (sibCluster.isEmpty()) {
-				v = v.getInEdges().next().getSource();
+                v = v.getFirstInEdge().getSource();
 				sibCluster = (BitSet) t.getNodeToCluster().get(v).clone();
 				sibCluster.and(insertedSet);
 			}
@@ -132,8 +128,8 @@ public class TreeToForestAdaptor {
 				copyTreeRec(tFCopy, tF.getRoot(), tFCopy.getRoot(), nodePairs, null);
 				MyNode vSibCopy = nodePairs.get(0)[1];
 
-				MyNode v1 = vSibCopy.getInEdges().next().getSource();
-				tFCopy.deleteEdge(vSibCopy.getInEdges().next());
+                MyNode v1 = vSibCopy.getFirstInEdge().getSource();
+                tFCopy.deleteEdge(vSibCopy.getFirstInEdge());
 				MyNode v2 = tFCopy.newNode();
 				MyNode v3 = tFCopy.newNode();
 				tFCopy.newEdge(v1, v2);
@@ -162,7 +158,7 @@ public class TreeToForestAdaptor {
 				compRoots.add(v3);
 				tF.update();
 
-				Iterator<MyEdge> it = v.getOutEdges();
+                Iterator<MyEdge> it = v.outEdges().iterator();
 				Vector<BitSet> sibClusters = new Vector<BitSet>();
 				while (it.hasNext()) {
 					BitSet cluster = (BitSet) t.getNodeToCluster().get(it.next().getTarget()).clone();
@@ -193,11 +189,11 @@ public class TreeToForestAdaptor {
 
 	private void addToChildren(HybridTree tF, MyNode p, MyNode v, Vector<BitSet> sibClusters, BitSet insertedSet,
 			HashSet<MyNode> compRoots, HashMap<HybridTree, HashSet<MyNode>> treeToRoots) {
-		Iterator<MyEdge> it = p.getOutEdges();
+        Iterator<MyEdge> it = p.outEdges().iterator();
 		while (it.hasNext()) {
 			MyNode c = it.next().getTarget();
 			if (c != v) {
-				Iterator<MyEdge> itC = c.getOutEdges();
+                Iterator<MyEdge> itC = c.outEdges().iterator();
 				boolean isSourceNode = true;
 				while (itC.hasNext()) {
 					MyNode cC = itC.next().getTarget();
@@ -221,7 +217,7 @@ public class TreeToForestAdaptor {
 						nodePairs.add(rootPair);
 					}
 					Vector<MyEdge[]> edgePairs = new Vector<MyEdge[]>();
-					MyEdge[] edgePair = { v.getInEdges().next(), null };
+                    MyEdge[] edgePair = {v.getFirstInEdge(), null};
 					edgePairs.add(edgePair);
 
 					HybridTree tFCopy = new HybridTree(new MyPhyloTree(), false, taxaOrdering);
@@ -258,7 +254,7 @@ public class TreeToForestAdaptor {
 			if (nodePair[0].equals(v))
 				nodePair[1] = vCopy;
 		}
-		Iterator<MyEdge> it = v.getOutEdges();
+        Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyEdge e = it.next();
 			MyNode c = e.getTarget();
@@ -308,7 +304,7 @@ public class TreeToForestAdaptor {
 			BitSet sibCluster = (BitSet) t.getNodeToCluster().get(v).clone();
 			sibCluster.and(insertedSet);
 			while (sibCluster.isEmpty()) {
-				v = v.getInEdges().next().getSource();
+                v = v.getFirstInEdge().getSource();
 
 				if (!t.getNodeToCluster().containsKey(v)) {
 					System.out.println("Error!");
@@ -324,8 +320,8 @@ public class TreeToForestAdaptor {
 			b.and(cCluster);
 			if (!b.equals(cCluster) || compRoots.contains(vSib)) {
 				// System.out.println("A");
-				MyNode v1 = vSib.getInEdges().next().getSource();
-				tF.deleteEdge(vSib.getInEdges().next());
+                MyNode v1 = vSib.getFirstInEdge().getSource();
+                tF.deleteEdge(vSib.getFirstInEdge());
 				MyNode v2 = tF.newNode();
 				MyNode v3 = tF.newNode();
 				tF.newEdge(v1, v2);
@@ -356,7 +352,7 @@ public class TreeToForestAdaptor {
 
 	private void addSubtree(MyNode v, MyNode vCopy, HybridTree t) {
 		vCopy.setLabel(v.getLabel());
-		Iterator<MyEdge> it = v.getOutEdges();
+        Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyNode c = it.next().getTarget();
 			MyNode cCopy = t.newNode();

@@ -23,7 +23,7 @@ import dendroscope.window.MultiViewer;
 import dendroscope.window.TreeViewer;
 import jloda.graph.Node;
 import jloda.graph.NodeSet;
-import jloda.gui.commands.ICheckBoxCommand;
+import jloda.swing.commands.ICheckBoxCommand;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;

@@ -19,7 +19,6 @@
 */
 package dendroscope.hybrid;
 
-import jloda.graph.Edge;
 import jloda.graph.Node;
 
 import java.util.*;
@@ -96,15 +95,14 @@ public class IsomorphismCheck {
         Vector<Node> parents = new Vector<>();
         while (it.hasNext()) {
             Node v = it.next();
-            Node p = v.getInEdges().next().getSource();
+            Node p = v.getFirstInEdge().getSource();
             if (!parents.contains(p) && isCherry(p)) {
 
                 Vector<String> taxa = new Vector<>();
-                Iterator<Edge> it2 = p.getOutEdges();
 
-                //collect taxa
-                while (it2.hasNext())
-                    taxa.add(n.getLabel(it2.next().getTarget()));
+                for (Node c : p.children()) {
+                    taxa.add(n.getLabel(c));
+                }
 
                 //sort taxas lexicographically
                 Collections.sort(taxa);
@@ -122,9 +120,8 @@ public class IsomorphismCheck {
     }
 
     private boolean isCherry(Node p) {
-        Iterator<Edge> it = p.getOutEdges();
-        while (it.hasNext()) {
-            if (it.next().getTarget().getOutDegree() != 0)
+        for (Node c : p.children()) {
+            if (c.getOutDegree() != 0)
                 return false;
         }
         return true;

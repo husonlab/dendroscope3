@@ -149,7 +149,7 @@ public class Structure {
         LinkedList<Edge> nextEdgeList = new LinkedList<Edge>();
         Iterator<Node> ic = currentSet.iterator();
         Node firstLeave = ic.next();
-        nextEdgeList.addFirst(firstLeave.getInEdges().next());
+        nextEdgeList.addFirst(firstLeave.getFirstInEdge());
         Vector<Node> firstLayer = new Vector<Node>();
         firstLayer.add(firstLeave);
         while (ic.hasNext()) {
@@ -213,18 +213,12 @@ public class Structure {
     }
 
     //return children of a node
-    @SuppressWarnings("unchecked")
     private LinkedList<Node> getChildren(Node father) {
-        Iterator<Edge> it = father.getOutEdges();
-        if (it.hasNext() == true) {
-            LinkedList<Node> children = new LinkedList<Node>();
-            while (it.hasNext()) {
-                children.add(it.next().getTarget());
-            }
-            return children;
-        } else {
-            return new LinkedList<Node>();
+        LinkedList<Node> list = new LinkedList<Node>();
+        for (Node c : father.children()) {
+            list.add(c);
         }
+        return list;
     }
 
     //use in convertToSub to create an extra Node for one subLayer
@@ -268,9 +262,8 @@ public class Structure {
     }
 
     //recursion on gennodes
-    @SuppressWarnings("unchecked")
     private void traversal(Node geneNode) {
-        Iterator it = geneNode.getOutEdges();
+        Iterator<Edge> it = geneNode.outEdges().iterator();
         if (it.hasNext()) {
             Edge first = (Edge) it.next();
             traversal(first.getTarget());
@@ -298,7 +291,7 @@ public class Structure {
                 int[] bestReceiver1 = new int[2];
                 int[] bestReceiver2 = new int[2];
                 if (degree == 2) {
-                    LinkedList<Node> children = this.getChildren(current);
+                    LinkedList<Node> children = getChildren(current);
                     int u1Id = children.getFirst().getId();
                     int u2Id = children.getLast().getId();
                     // TODO: für 2 kinder

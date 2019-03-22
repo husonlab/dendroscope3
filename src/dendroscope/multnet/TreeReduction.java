@@ -47,7 +47,7 @@ public class TreeReduction {
 
     private void applyRec(MultilabeledTree reducedTree, Node n) {
         HashMap<Integer, HeightList> childrenHeightlists = new HashMap<>();
-        Iterator<Edge> childrenIt = reducedTree.getOutEdges(n);
+        Iterator<Edge> childrenIt = n.outEdges().iterator();
         while (childrenIt.hasNext()) {
             Node target = childrenIt.next().getTarget();
             int targetHeight = reducedTree.getHeight(target);

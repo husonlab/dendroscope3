@@ -212,7 +212,7 @@ public class Apply2Component {
         NodeArray<BitSet> node2clusters = new NodeArray<>(backbone);
         for (Node v = backbone.getFirstNode(); v != null; v = v.getNext()) {
             if (v.getInfo() != null)
-                node2clusters.set(v, (BitSet) backbone2clusters.get(v.getInfo()));
+                node2clusters.put(v, (BitSet) backbone2clusters.get(v.getInfo()));
         }
         return node2clusters;
 

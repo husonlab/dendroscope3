@@ -1,16 +1,10 @@
 package dendroscope.hybroscale.util;
 
-import java.util.BitSet;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Stack;
-import java.util.Vector;
-
 import dendroscope.hybroscale.util.graph.MyEdge;
 import dendroscope.hybroscale.util.graph.MyNode;
 import dendroscope.hybroscale.util.graph.MyPhyloTree;
+
+import java.util.*;
 
 public class ClusterManager {
 
@@ -58,7 +52,7 @@ public class ClusterManager {
 				while (!stack.isEmpty()) {
 					MyNode v = clusterToNode.get(stack.pop());
 					boolean isBelow = false;
-					Iterator<MyEdge> it = v.getOutEdges();
+                    Iterator<MyEdge> it = v.outEdges().iterator();
 					while (it.hasNext()) {
 						MyNode w = it.next().getTarget();
 						BitSet wCluster = nodeToCluster.get(w);
@@ -86,7 +80,7 @@ public class ClusterManager {
 		for(MyNode v : retNodes){
 			MyNode vPrime = clusterNet.newNode();
 			Vector<MyEdge> inEdges = new Vector<MyEdge>();
-			Iterator<MyEdge> it = v.getInEdges();
+            Iterator<MyEdge> it = v.inEdges().iterator();
 			while(it.hasNext())
 				inEdges.add(it.next());
 			for(MyEdge e : inEdges){
@@ -126,7 +120,7 @@ public class ClusterManager {
 			return b;
 		} else {
 			BitSet b = new BitSet(taxaOrdering.size());
-			Iterator<MyEdge> it = v.getOutEdges();
+            Iterator<MyEdge> it = v.outEdges().iterator();
 			while (it.hasNext()) {
 				MyNode child = it.next().getTarget();
 				b.or(cmpClustersRec(child, clusterSet));

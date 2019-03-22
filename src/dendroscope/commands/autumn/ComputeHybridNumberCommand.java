@@ -24,8 +24,8 @@ import dendroscope.commands.CommandBaseMultiViewer;
 import dendroscope.core.TreeData;
 import dendroscope.window.MultiViewer;
 import dendroscope.window.TreeViewer;
-import jloda.gui.Message;
-import jloda.gui.commands.ICommand;
+import jloda.swing.commands.ICommand;
+import jloda.swing.util.Message;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;

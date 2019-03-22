@@ -1,10 +1,10 @@
 package dendroscope.hybroscale.util.graph;
 
+import dendroscope.hybroscale.util.newick.NewickParser;
+
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
-
-import dendroscope.hybroscale.util.newick.NewickParser;
 
 public class MyPhyloTree extends MyGraph {
 	
@@ -40,7 +40,7 @@ public class MyPhyloTree extends MyGraph {
 
 	private void copyTreeRec(MyPhyloTree t, MyNode v, MyNode vCopy, Hashtable<MyNode, MyNode> visited) {
 		visited.put(v, vCopy);
-		Iterator<MyEdge> it = v.getOutEdges();
+        Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyEdge e = it.next();
 			MyNode c = e.getTarget();
@@ -79,7 +79,7 @@ public class MyPhyloTree extends MyGraph {
 	private void getNodesRec(MyNode v, Vector<MyNode> nodes) {
 		if (!nodes.contains(v)) {
 			nodes.add(v);
-			Iterator<MyEdge> it = v.getOutEdges();
+            Iterator<MyEdge> it = v.outEdges().iterator();
 			while (it.hasNext())
 				getNodesRec(it.next().getTarget(), nodes);
 		}
@@ -91,7 +91,7 @@ public class MyPhyloTree extends MyGraph {
 	
 	private void getLeavesRec(MyNode v, Vector<MyNode> nodes) {
 		if (v.getOutDegree() != 0) {
-			Iterator<MyEdge> it = v.getOutEdges();
+            Iterator<MyEdge> it = v.outEdges().iterator();
 			while(it.hasNext())
 				getLeavesRec(it.next().getTarget(), nodes);
 		}else
@@ -143,7 +143,7 @@ public class MyPhyloTree extends MyGraph {
 	}
 
 	private void getEdgesRec(MyNode v, Vector<MyEdge> edges) {
-		Iterator<MyEdge> it = v.getOutEdges();
+        Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyEdge e = it.next();
 			if (!edges.contains(e)) {
@@ -155,14 +155,14 @@ public class MyPhyloTree extends MyGraph {
 
 	public Iterator<MyEdge> getInEdges(MyNode v) {
 		// if (v.getOwner() != this)
-		return v.getInEdges();
+        return v.inEdges().iterator();
 		// else
 		// throw new RuntimeException("Wrong Owner Exception");
 	}
 
 	public Iterator<MyEdge> getOutEdges(MyNode v) {
 		// if (v.getOwner() != this)
-		return v.getOutEdges();
+        return v.outEdges().iterator();
 		// else
 		// throw new RuntimeException("Wrong Owner Exception");
 	}

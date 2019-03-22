@@ -1,16 +1,10 @@
 package dendroscope.hybroscale.model.util;
 
-import java.util.BitSet;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Vector;
-
 import dendroscope.hybroscale.model.treeObjects.SparseNetEdge;
 import dendroscope.hybroscale.model.treeObjects.SparseNetNode;
 import dendroscope.hybroscale.model.treeObjects.SparseNetwork;
+
+import java.util.*;
 
 public class ComputeSparseNodeWeights {
 
@@ -103,7 +97,7 @@ public class ComputeSparseNodeWeights {
 		if (v.getOutDegree() == 0)
 			cluster.set(taxaOrdering.indexOf(v.getLabel()));
 		else {
-			Iterator<SparseNetEdge> it = v.getOutEdges().iterator();
+            Iterator<SparseNetEdge> it = v.outEdges().iterator();
 			while (it.hasNext()) {
 				SparseNetEdge e = it.next();
 				HashSet<Integer> indices = e.getIndices();

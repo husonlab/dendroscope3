@@ -1,15 +1,15 @@
 package dendroscope.hybroscale.model.cmpAllMAAFs;
 
-import java.util.BitSet;
-import java.util.HashMap;
-import java.util.Vector;
-
 import dendroscope.hybroscale.model.cmpMinNetworks.NetworkIsomorphismCheck;
 import dendroscope.hybroscale.model.treeObjects.HybridTree;
 import dendroscope.hybroscale.model.treeObjects.SparseNetwork;
 import dendroscope.hybroscale.model.treeObjects.SparseTree;
 import dendroscope.hybroscale.model.treeObjects.SparseTreeNode;
 import dendroscope.hybroscale.util.graph.MyNode;
+
+import java.util.BitSet;
+import java.util.HashMap;
+import java.util.Vector;
 
 public class AcyclicOrderingChecker {
 
@@ -88,14 +88,14 @@ public class AcyclicOrderingChecker {
 					for (HybridTree t : trees) {
 
 						MyNode lca1 = t.findLCA(getTreeSet(c1, t.getTaxaOrdering()));
-						lca1 = lca1.getOutDegree() == 0 ? lca1.getInEdges().next().getSource() : lca1;
+                        lca1 = lca1.getOutDegree() == 0 ? lca1.getFirstInEdge().getSource() : lca1;
 						BitSet b1 = t.getNodeToCluster().get(lca1);
-						MyNode p1 = lca1.getInDegree() != 0 ? lca1.getInEdges().next().getSource() : null;
+                        MyNode p1 = lca1.getInDegree() != 0 ? lca1.getFirstInEdge().getSource() : null;
 
 						MyNode lca2 = t.findLCA(getTreeSet(c2, t.getTaxaOrdering()));
-						lca2 = lca2.getOutDegree() == 0 ? lca2.getInEdges().next().getSource() : lca2;
+                        lca2 = lca2.getOutDegree() == 0 ? lca2.getFirstInEdge().getSource() : lca2;
 						BitSet b2 = t.getNodeToCluster().get(lca2);
-						MyNode p2 = lca2.getInDegree() != 0 ? lca2.getInEdges().next().getSource() : null;
+                        MyNode p2 = lca2.getInDegree() != 0 ? lca2.getFirstInEdge().getSource() : null;
 
 						boolean notTwoSingletons = c1.getNodes().size() > 1 || c2.getNodes().size() > 1;
 						if (b1.equals(b2)
@@ -367,7 +367,7 @@ public class AcyclicOrderingChecker {
 					BitSet b = t.getNodeToCluster().get(v);
 					if (b.intersects(c1Set))
 						return true;
-					v = v.getInEdges().next().getSource();
+                    v = v.getFirstInEdge().getSource();
 				}
 			}
 

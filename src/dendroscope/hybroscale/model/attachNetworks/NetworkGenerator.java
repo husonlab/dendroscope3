@@ -1,11 +1,5 @@
 package dendroscope.hybroscale.model.attachNetworks;
 
-import java.util.BitSet;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Vector;
-
 import dendroscope.hybroscale.model.HybridManager;
 import dendroscope.hybroscale.model.parallelization.MyNetPriorThreadPool;
 import dendroscope.hybroscale.model.reductionSteps.ReplacementInfo;
@@ -15,6 +9,8 @@ import dendroscope.hybroscale.util.graph.MyEdge;
 import dendroscope.hybroscale.util.graph.MyNode;
 import dendroscope.hybroscale.util.graph.MyPhyloTree;
 import dendroscope.hybroscale.util.lcaQueries.LCA_Query;
+
+import java.util.*;
 
 public class NetworkGenerator extends Thread {
 
@@ -153,11 +149,11 @@ public class NetworkGenerator extends Thread {
 	public void removeOutgroup(MyPhyloTree n) {
 		for (MyNode v : n.getLeaves()) {
 			if (v.getLabel().equals("rho")) {
-				MyEdge e = (MyEdge) v.getInEdges().next();
+                MyEdge e = (MyEdge) v.getFirstInEdge();
 				MyNode p = e.getSource();
 				n.deleteEdge(e);
 				n.deleteNode(v);
-				e = (MyEdge) p.getOutEdges().next();
+                e = (MyEdge) p.getFirstOutEdge();
 				MyNode c = e.getTarget();
 				n.deleteEdge(e);
 				n.deleteNode(p);
@@ -175,7 +171,7 @@ public class NetworkGenerator extends Thread {
 
 				boolean isAllRedundant = true;
 				for (MyEdge eRet : retEdges) {
-					MyNode p = v.getInEdges().next().getSource();
+                    MyNode p = v.getFirstInEdge().getSource();
 
 					boolean isRedundant = false;
 					if (p != null && p.getInDegree() < 2 && isRedundant(eRet, p, true))
@@ -227,7 +223,7 @@ public class NetworkGenerator extends Thread {
 
 	private Vector<MyEdge> getRetEdges(MyNode v) {
 		Vector<MyEdge> retEdges = new Vector<MyEdge>();
-		Iterator<MyEdge> it = v.getOutEdges();
+        Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyEdge e = it.next();
 			if (e.getTarget().getInDegree() > 1)
@@ -238,7 +234,7 @@ public class NetworkGenerator extends Thread {
 
 	private Vector<MyEdge> getTreeEdges(MyNode v) {
 		Vector<MyEdge> treeEdges = new Vector<MyEdge>();
-		Iterator<MyEdge> it = v.getOutEdges();
+        Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyEdge e = it.next();
 			if (e.getTarget().getInDegree() == 1)
@@ -272,7 +268,7 @@ public class NetworkGenerator extends Thread {
 		if (v.getOutDegree() == 0)
 			leafSet.add(setToLeaves.get(eIndex).get(getLeafSet(v)));
 		else {
-			Iterator<MyEdge> it = v.getOutEdges();
+            Iterator<MyEdge> it = v.outEdges().iterator();
 			while (it.hasNext()) {
 				MyEdge e = it.next();
 				if (e.getTarget().getInDegree() == 1)

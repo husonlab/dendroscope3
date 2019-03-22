@@ -56,7 +56,7 @@ public class ReplaceMaxCommonChains {
             Node v = itNode.next();
             String label = t1.getLabel(v);
             t1LeafLabelToParent.put(label,
-                    v.getInEdges().next().getSource());
+                    v.getFirstInEdge().getSource());
         }
 
         Hashtable<String, Node> t2LeafLabelToParent = new Hashtable<>();
@@ -65,7 +65,7 @@ public class ReplaceMaxCommonChains {
             Node v = itNode.next();
             String label = t2.getLabel(v);
             t2LeafLabelToParent.put(label,
-                    v.getInEdges().next().getSource());
+                    v.getFirstInEdge().getSource());
         }
 
         for (Vector<Node> chain : chainToCommonChains.keySet()) {

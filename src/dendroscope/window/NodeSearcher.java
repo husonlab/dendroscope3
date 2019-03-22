@@ -22,7 +22,7 @@ package dendroscope.window;
 import dendroscope.core.Director;
 import dendroscope.core.Document;
 import jloda.graph.Node;
-import jloda.gui.find.IObjectSearcher;
+import jloda.swing.find.IObjectSearcher;
 
 import javax.swing.*;
 import java.awt.*;

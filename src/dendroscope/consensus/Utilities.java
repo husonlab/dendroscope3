@@ -25,9 +25,13 @@ import jloda.graph.Edge;
 import jloda.graph.Node;
 import jloda.graph.NodeIntegerArray;
 import jloda.graph.NodeSet;
-import jloda.gui.Message;
 import jloda.phylo.PhyloTree;
-import jloda.util.*;
+import jloda.swing.util.Alert;
+import jloda.swing.util.Message;
+import jloda.util.Basic;
+import jloda.util.CanceledException;
+import jloda.util.Pair;
+import jloda.util.ProgressListener;
 
 import java.awt.*;
 import java.io.IOException;
@@ -176,8 +180,7 @@ public class Utilities {
             if (label != null) {
                 int t = taxa.indexOf(label);
                 if (t != -1) {
-                    tree.setTaxon2Node(t, v);
-                    tree.setNode2Taxa(v, t);
+                    tree.addTaxon(v, t);
                 }
             }
         }
@@ -189,8 +192,7 @@ public class Utilities {
      * @param tree
      */
     public static void clearNode2Taxa(PhyloTree tree) {
-        tree.clearTaxon2Node();
-        tree.clearNode2Taxa();
+        tree.clearTaxa();
     }
 
     /**
@@ -230,7 +232,7 @@ public class Utilities {
     private static void applyOrderingToTreeRec(Node v, NodeIntegerArray numbering) {
         int min;
 
-        if (numbering.get(v) != null)
+        if (numbering.getValue(v) != null)
             min = numbering.getValue(v);
         else
             min = Integer.MAX_VALUE;

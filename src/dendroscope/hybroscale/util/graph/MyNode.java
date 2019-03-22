@@ -1,15 +1,14 @@
 package dendroscope.hybroscale.util.graph;
 
 import java.util.BitSet;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
 
 public class MyNode {
 
-	private Vector<MyEdge> inEdges = new Vector<MyEdge>();
-	private Vector<MyEdge> outEdges = new Vector<MyEdge>();
+    private Vector<MyEdge> inEdges = new Vector<>();
+    private Vector<MyEdge> outEdges = new Vector<>();
 	
 	private BitSet cluster;
 	private MyGraph owner;
@@ -61,6 +60,16 @@ public class MyNode {
 		if (inEdges.contains(e))
 			inEdges.remove(e);
 	}
+
+    public Iterable<MyEdge> outEdges() {
+        return () -> outEdges.iterator();
+    }
+
+
+    public Iterable<MyEdge> inEdges() {
+        return () -> inEdges.iterator();
+    }
+
 
 	public Iterator<MyEdge> getInEdges() {
 		return inEdges.iterator();
@@ -196,5 +205,13 @@ public class MyNode {
 	public boolean isSolid() {
 		return solid;
 	}
+
+    public MyEdge getFirstInEdge() {
+        return inEdges.firstElement();
+    }
+
+    public MyEdge getFirstOutEdge() {
+        return outEdges.firstElement();
+    }
 
 }

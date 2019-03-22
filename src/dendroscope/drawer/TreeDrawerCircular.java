@@ -23,12 +23,12 @@ import dendroscope.window.TreeViewer;
 import jloda.graph.Edge;
 import jloda.graph.Node;
 import jloda.graph.NodeIntegerArray;
-import jloda.graphview.EdgeView;
-import jloda.graphview.GraphView;
-import jloda.graphview.NodeView;
 import jloda.phylo.PhyloTree;
 import jloda.phylo.PhyloTreeUtils;
-import jloda.util.Geometry;
+import jloda.swing.graphview.EdgeView;
+import jloda.swing.graphview.GraphView;
+import jloda.swing.graphview.NodeView;
+import jloda.swing.util.Geometry;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -156,7 +156,7 @@ public class TreeDrawerCircular extends TreeDrawerRadial implements IOptimizedGr
             } else if (w.getInDegree() > 1) // all in edges are 'blue' edges
             {
                 double maxDistance = 0;
-                for (Iterator it = w.getInEdges(); ok && it.hasNext(); ) {
+                for (Iterator it = w.inEdges().iterator(); ok && it.hasNext(); ) {
                     Node v = ((Edge) it.next()).getSource();
                     Point2D vPt = viewer.getLocation(v);
                     if (vPt == null) {
@@ -175,7 +175,7 @@ public class TreeDrawerCircular extends TreeDrawerRadial implements IOptimizedGr
 
             if (ok)  // add childern to end of queue:
             {
-                for (Iterator it = w.getOutEdges(); it.hasNext(); ) {
+                for (Iterator it = w.outEdges().iterator(); it.hasNext(); ) {
                     queue.add(((Edge) it.next()).getTarget());
                 }
             } else  // process this node again later

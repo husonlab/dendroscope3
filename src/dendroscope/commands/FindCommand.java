@@ -21,11 +21,11 @@ package dendroscope.commands;
 
 import dendroscope.window.MultiViewer;
 import dendroscope.window.TreeViewer;
-import jloda.gui.commands.ICommand;
-import jloda.gui.find.EdgeLabelSearcher;
-import jloda.gui.find.ISearcher;
-import jloda.gui.find.NodeLabelSearcher;
-import jloda.gui.find.SearchManager;
+import jloda.swing.commands.ICommand;
+import jloda.swing.find.EdgeLabelSearcher;
+import jloda.swing.find.ISearcher;
+import jloda.swing.find.NodeLabelSearcher;
+import jloda.swing.find.SearchManager;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;

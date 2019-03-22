@@ -22,12 +22,12 @@ package dendroscope.main;
 import dendroscope.core.Director;
 import dendroscope.core.Document;
 import dendroscope.window.MultiViewer;
-import jloda.gui.About;
-import jloda.gui.director.ProjectManager;
 import jloda.phylo.PhyloTree;
-import jloda.util.ArgsOptions;
+import jloda.swing.director.ProjectManager;
+import jloda.swing.util.About;
+import jloda.swing.util.ArgsOptions;
+import jloda.swing.util.ProgramProperties;
 import jloda.util.Basic;
-import jloda.util.ProgramProperties;
 
 import javax.swing.*;
 import java.io.*;

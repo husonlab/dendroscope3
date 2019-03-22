@@ -21,7 +21,7 @@ package dendroscope.commands;
 
 import dendroscope.embed.LayoutOptimizerManager;
 import dendroscope.window.TreeViewer;
-import jloda.gui.commands.ICheckBoxCommand;
+import jloda.swing.commands.ICheckBoxCommand;
 import jloda.util.Basic;
 import jloda.util.parse.NexusStreamParser;
 

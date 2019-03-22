@@ -20,7 +20,7 @@
 package dendroscope.commands;
 
 import dendroscope.embed.LayoutOptimizerManager;
-import jloda.gui.commands.ICheckBoxCommand;
+import jloda.swing.commands.ICheckBoxCommand;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

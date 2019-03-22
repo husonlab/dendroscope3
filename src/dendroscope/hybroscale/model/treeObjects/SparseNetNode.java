@@ -107,6 +107,15 @@ public class SparseNetNode {
 		return inEdges;
 	}
 
+    public Iterable<SparseNetEdge> outEdges() {
+        return () -> outEdges.iterator();
+    }
+
+
+    public Iterable<SparseNetEdge> inEdges() {
+        return () -> inEdges.iterator();
+    }
+
 	public String getLabel() {
 		return label;
 	}

@@ -21,9 +21,9 @@ package dendroscope.io;
 
 import dendroscope.core.Document;
 import dendroscope.io.nexml.Nexml;
-import jloda.util.Alert;
+import jloda.swing.util.Alert;
+import jloda.swing.util.TextFileFilter;
 import jloda.util.Basic;
-import jloda.util.TextFileFilter;
 
 import javax.swing.filechooser.FileFilter;
 import java.io.File;

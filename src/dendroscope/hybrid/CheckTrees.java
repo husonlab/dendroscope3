@@ -53,11 +53,11 @@ public class CheckTrees {
         return (t1Degree && t2Degree);
     }
 
-    private boolean checkInDegrees(PhyloTree t) {
+    private boolean checkInDegrees(PhyloTree tree) {
         boolean b = true;
-        for (Node v : t.getNodes()) {
+        for (Node v : tree.nodes()) {
             if (v.getInDegree() == 0) {
-                if (!t.getRoot().equals(v))
+                if (!tree.getRoot().equals(v))
                     b = false;
             } else if (v.getInDegree() != 1)
                 b = false;
@@ -67,7 +67,7 @@ public class CheckTrees {
 
     private boolean checkOutDegrees(PhyloTree t) {
         boolean b = true;
-        for (Node v : t.getNodes()) {
+        for (Node v : t.nodes()) {
             if (v.getOutDegree() != 0 && v.getOutDegree() != 2)
                 b = false;
         }

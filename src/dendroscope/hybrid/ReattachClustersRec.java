@@ -131,17 +131,14 @@ public class ReattachClustersRec {
         }
     }
 
-    private void reattachNetwork(HybridNetwork n, HybridNetwork toCopy,
-                                 Node leaf, TreeMarker tM, boolean isClusterNetwork) {
+    private void reattachNetwork(HybridNetwork n, HybridNetwork toCopy, Node leaf, TreeMarker tM, boolean isClusterNetwork) {
 
         // attach root of the attached network
         Node vCopy = n.newNode(toCopy.getRoot());
         n.setLabel(vCopy, toCopy.getLabel(toCopy.getRoot()));
 
         // attaching the generated root
-        Iterator<Edge> it = leaf.getInEdges();
-        while (it.hasNext()) {
-            Edge e = it.next();
+        for (Edge e : leaf.inEdges()) {
             boolean isSpecial = n.isSpecial(e);
             Node parent = e.getSource();
             n.deleteEdge(e);

@@ -77,7 +77,7 @@ public class GetAgreementForest {
         while (it.hasNext()) {
             Node v = it.next();
             if (v.getInDegree() == 1) {
-                Edge e = v.getInEdges().next();
+                Edge e = v.getFirstInEdge();
                 if (!e.getSource().equals(t1.getRoot()))
                     sortedEdges.add(e);
                 else if (compVal == View.Computation.rSPR_DISTANCE && t1.getLabel(e.getTarget()).equals("rho"))
@@ -332,8 +332,7 @@ public class GetAgreementForest {
         }
     }
 
-    private Vector<String> getTaxa(HybridTree t1, Vector<Node> rootNodes,
-                                   Node root) {
+    private Vector<String> getTaxa(HybridTree t1, Vector<Node> rootNodes, Node root) {
 
         Vector<String> fTaxa = new Vector<>();
 
@@ -346,11 +345,8 @@ public class GetAgreementForest {
         return fTaxa;
     }
 
-    private void initRec(HybridTree t1, Node v, Vector<Node> rootNodes,
-                         Vector<String> fTaxa) {
-        Iterator<Edge> it = v.getOutEdges();
-        while (it.hasNext()) {
-            Edge e = it.next();
+    private void initRec(HybridTree t1, Node v, Vector<Node> rootNodes, Vector<String> fTaxa) {
+        for (Edge e : v.outEdges()) {
             Node t = e.getTarget();
             if (!rootNodes.contains(t)) {
                 if (t.getOutDegree() == 0) {
@@ -382,8 +378,8 @@ public class GetAgreementForest {
         while (it.hasNext()) {
             Node v = it.next();
             if (v.getInDegree() == 1 && v.getOutDegree() == 1) {
-                Edge eP = v.getInEdges().next();
-                Edge eC = v.getOutEdges().next();
+                Edge eP = v.getFirstInEdge();
+                Edge eC = v.getFirstOutEdge();
                 Node p = eP.getSource();
                 Node c = eC.getTarget();
                 f.deleteEdge(eP);
@@ -401,7 +397,7 @@ public class GetAgreementForest {
         setRoot(f);
         if (f.getRoot().getOutDegree() == 1) {
             Node v = f.getRoot();
-            Edge e = v.getOutEdges().next();
+            Edge e = v.getFirstOutEdge();
             Node c = e.getTarget();
             f.deleteEdge(e);
             f.deleteNode(v);
@@ -425,7 +421,7 @@ public class GetAgreementForest {
             if (v.getDegree() == 0)
                 f.deleteNode(v);
             else if (v.getOutDegree() == 0 && v.getInDegree() == 1) {
-                Edge e = v.getInEdges().next();
+                Edge e = v.getFirstInEdge();
                 Node p = e.getSource();
                 f.deleteEdge(e);
                 f.deleteNode(v);

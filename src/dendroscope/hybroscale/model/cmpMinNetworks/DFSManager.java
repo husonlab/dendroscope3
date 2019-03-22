@@ -1,26 +1,17 @@
 package dendroscope.hybroscale.model.cmpMinNetworks;
 
-import java.util.BitSet;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Vector;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.CountDownLatch;
-
 import dendroscope.hybroscale.model.HybridManager.Computation;
 import dendroscope.hybroscale.model.cmpAllMAAFs.RefinedFastApproxHNumber;
 import dendroscope.hybroscale.model.parallelization.MyNetPriorThreadPool;
-import dendroscope.hybroscale.model.treeObjects.HybridTree;
-import dendroscope.hybroscale.model.treeObjects.SparseNetEdge;
-import dendroscope.hybroscale.model.treeObjects.SparseNetNode;
-import dendroscope.hybroscale.model.treeObjects.SparseNetwork;
-import dendroscope.hybroscale.model.treeObjects.SparseTree;
+import dendroscope.hybroscale.model.treeObjects.*;
 import dendroscope.hybroscale.model.util.CheckConstraints;
 import dendroscope.hybroscale.model.util.ComputeSparseNodeWeights;
 import dendroscope.hybroscale.model.util.HSumComparator;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CountDownLatch;
 
 public class DFSManager {
 
@@ -407,7 +398,7 @@ public class DFSManager {
 			for (SparseNetNode v : n1.getNodes()) {
 				if (v.getInDegree() > 1) {
 					Vector<String> labels = new Vector<String>();
-					for (SparseNetEdge e : v.getInEdges())
+                    for (SparseNetEdge e : v.inEdges())
 						labels.add(e.getIndices().toString());
 					Collections.sort(labels);
 					String s = "";
@@ -422,7 +413,7 @@ public class DFSManager {
 			for (SparseNetNode v : n2.getNodes()) {
 				if (v.getInDegree() > 1) {
 					Vector<String> labels = new Vector<String>();
-					for (SparseNetEdge e : v.getInEdges())
+                    for (SparseNetEdge e : v.inEdges())
 						labels.add(e.getIndices().toString());
 					Collections.sort(labels);
 					String s = "";

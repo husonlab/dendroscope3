@@ -1,12 +1,12 @@
 package dendroscope.hybroscale.model.reductionSteps;
 
-import java.util.BitSet;
-import java.util.Iterator;
-import java.util.Vector;
-
 import dendroscope.hybroscale.model.treeObjects.HybridTree;
 import dendroscope.hybroscale.util.graph.MyEdge;
 import dendroscope.hybroscale.util.graph.MyNode;
+
+import java.util.BitSet;
+import java.util.Iterator;
+import java.util.Vector;
 
 /**
  * This function replaces all common subtrees of two two rooted, bifurcating
@@ -110,7 +110,7 @@ public class SubtreeReduction {
 			return b;
 		} else {
 			BitSet b = new BitSet(taxaOdering.size());
-			Iterator<MyEdge> it = v.getOutEdges();
+            Iterator<MyEdge> it = v.outEdges().iterator();
 			while (it.hasNext())
 				b.or(cmpClusters(it.next().getTarget(), clusters));
 			clusters.add(b);

@@ -31,9 +31,9 @@ import jloda.graph.Edge;
 import jloda.graph.Node;
 import jloda.graph.NodeArray;
 import jloda.graph.NodeDoubleArray;
-import jloda.gui.ProgressDialog;
 import jloda.phylo.PhyloTree;
-import jloda.util.Alert;
+import jloda.swing.util.Alert;
+import jloda.swing.util.ProgressDialog;
 import jloda.util.Basic;
 import jloda.util.CanceledException;
 import jloda.util.ProgressListener;
@@ -203,7 +203,7 @@ public class LevelKNetwork {
 
 
         for (PhyloTree network : networks) {
-            ClusterNetwork.convertHasseToClusterNetwork(network, new NodeDoubleArray(network, 1), new NodeDoubleArray(network, 1));
+            ClusterNetwork.convertHasseToClusterNetwork(network, new NodeDoubleArray(network, 1.0), new NodeDoubleArray(network, 1.0));
             // convert taxon ids back to taxon labels:
                 List<Node> toDelete = new LinkedList<>();
                 for (Node v = network.getFirstNode(); v != null; v = network.getNextNode(v)) {
@@ -213,8 +213,7 @@ public class LevelKNetwork {
                         if (set != null && set.cardinality() > 0) {
                             String label = "";
                             for (int t = set.nextSetBit(0); t != -1; t = set.nextSetBit(t + 1)) {
-                                network.setTaxon2Node(t, v);
-                                network.setNode2Taxa(v, t);
+                                network.addTaxon(v, t);
                                 if (label.length() > 0)
                                     label += ",";
                                 label += taxa.getLabel(t);
@@ -380,10 +379,10 @@ public class LevelKNetwork {
                 NodeArray<Node> src2target = new NodeArray<>(componentTree);
                 for (Node src = componentTree.getFirstNode(); src != null; src = componentTree.getNextNode(src)) {
                     if (src == componentTree.getRoot())
-                        src2target.set(src, v);
+                        src2target.put(src, v);
                     else {
                         Node tar = backboneNetwork.newNode();
-                        src2target.set(src, tar);
+                        src2target.put(src, tar);
                         tar.setInfo(src.getInfo());
                         backboneNetwork.setLabel(tar, componentTree.getLabel(src));
                     }

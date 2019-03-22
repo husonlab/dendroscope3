@@ -24,7 +24,7 @@ import dendroscope.hybroscale.model.HybridManager.Computation;
 import dendroscope.window.TreeViewer;
 import jloda.phylo.PhyloTree;
 import jloda.phylo.PhyloTreeUtils;
-import jloda.util.Alert;
+import jloda.swing.util.Alert;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;

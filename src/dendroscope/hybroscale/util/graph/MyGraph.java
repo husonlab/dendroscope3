@@ -35,7 +35,7 @@ public class MyGraph {
 
 	public void deleteNode(MyNode v) {
 		if (v.getOwner().equals(this)) {
-			Iterator<MyEdge> it = v.getInEdges();
+            Iterator<MyEdge> it = v.inEdges().iterator();
 			HashSet<MyEdge> toRemove = new HashSet<MyEdge>();
 			while (it.hasNext()) {
 				MyEdge e = it.next();
@@ -44,7 +44,7 @@ public class MyGraph {
 			}
 			for(MyEdge e : toRemove)
 				v.removeInEdge(e);
-			it = v.getOutEdges();
+            it = v.outEdges().iterator();
 			toRemove = new HashSet<MyEdge>();
 			while (it.hasNext()) {
 				MyEdge e = it.next();

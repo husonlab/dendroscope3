@@ -22,8 +22,8 @@ package dendroscope.io.nexml;
 import dendroscope.core.Connectors;
 import dendroscope.core.TreeData;
 import jloda.graph.NodeArray;
-import jloda.graphview.EdgeView;
-import jloda.graphview.NodeView;
+import jloda.swing.graphview.EdgeView;
+import jloda.swing.graphview.NodeView;
 import jloda.util.Basic;
 import jloda.util.Pair;
 import jloda.util.Triplet;
@@ -179,7 +179,7 @@ public class ConvertTreeDataToNexmlDoc {
     private static void copyRec(TreeData treeData, jloda.graph.Node v, Network network, NodeArray<Node> src2tarNode, NodeView defaultNodeView, EdgeView defaultEdgeView) {
         if (src2tarNode.get(v) == null) {
             Node p = network.createNode();
-            src2tarNode.set(v, p);
+            src2tarNode.put(v, p);
             String label = treeData.getLabel(v);
             if (label != null) {
                 p.setLabel(label);

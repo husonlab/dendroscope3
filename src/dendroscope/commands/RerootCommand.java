@@ -23,10 +23,10 @@ import dendroscope.embed.LayoutOptimizerManager;
 import dendroscope.util.RerootingUtils;
 import dendroscope.window.MultiViewer;
 import dendroscope.window.TreeViewer;
-import jloda.gui.commands.ICommand;
 import jloda.phylo.PhyloTree;
-import jloda.util.Alert;
-import jloda.util.ResourceManager;
+import jloda.swing.commands.ICommand;
+import jloda.swing.util.Alert;
+import jloda.swing.util.ResourceManager;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;

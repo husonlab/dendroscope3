@@ -21,14 +21,14 @@ package dendroscope.drawer;
 
 import dendroscope.window.TreeViewer;
 import jloda.graph.*;
-import jloda.graphview.EdgeView;
-import jloda.graphview.GraphView;
-import jloda.graphview.NodeView;
 import jloda.phylo.PhyloTree;
 import jloda.phylo.PhyloTreeUtils;
-import jloda.util.Geometry;
-import jloda.util.PolygonDouble;
-import jloda.util.ProgramProperties;
+import jloda.swing.graphview.EdgeView;
+import jloda.swing.graphview.GraphView;
+import jloda.swing.graphview.NodeView;
+import jloda.swing.util.Geometry;
+import jloda.swing.util.PolygonDouble;
+import jloda.swing.util.ProgramProperties;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -227,7 +227,7 @@ public class TreeDrawerParallel extends TreeDrawerBase implements IOptimizedGrap
             boolean ok = true;
             if (w.getInDegree() == 1) // has regular in edge
             {
-                Edge e = w.getInEdges().next();
+                Edge e = w.getFirstInEdge();
                 Node v = e.getSource();
                 Point2D location = viewer.getLocation(v);
 
@@ -299,8 +299,8 @@ public class TreeDrawerParallel extends TreeDrawerBase implements IOptimizedGrap
             final double d1 = 0.10;
             final double d2 = 0.05;
             Rectangle2D.Double bb = new Rectangle2D.Double(location.getX() - d2, location.getY() - d2, d1, d1);
-            node2bb.set(v, bb);
-            node2ProxyShape.set(v, null); // leaves have no proxies
+            node2bb.put(v, bb);
+            node2ProxyShape.put(v, null); // leaves have no proxies
             leaves = 1;
         } else {
             leaves = 0;
@@ -335,10 +335,10 @@ public class TreeDrawerParallel extends TreeDrawerBase implements IOptimizedGrap
                     bbox.add(location);
                 else
                     bbox = new Rectangle2D.Double(location.getX(), location.getY(), 1, 1);
-                node2bb.set(v, bbox);
+                node2bb.put(v, bbox);
 
                 if (leaves >= MIN_LEAVES_FOR_PROXY)
-                    node2ProxyShape.set(v, new PolygonDouble(bbox));
+                    node2ProxyShape.put(v, new PolygonDouble(bbox));
             }
         }
         return leaves;

@@ -20,8 +20,8 @@
 package dendroscope.window;
 
 import jloda.graph.Node;
-import jloda.graphview.NodeImage;
-import jloda.graphview.NodeView;
+import jloda.swing.graphview.NodeImage;
+import jloda.swing.graphview.NodeView;
 import jloda.util.Basic;
 
 import java.io.File;

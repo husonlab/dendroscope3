@@ -22,9 +22,9 @@ package dendroscope.commands;
 import dendroscope.window.TreeViewer;
 import jloda.graph.Edge;
 import jloda.graph.Node;
-import jloda.gui.ReorderListDialog;
-import jloda.gui.commands.ICommand;
-import jloda.util.ResourceManager;
+import jloda.swing.commands.ICommand;
+import jloda.swing.util.ReorderListDialog;
+import jloda.swing.util.ResourceManager;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;
@@ -147,7 +147,7 @@ public class ReorderSubtreesCommand extends CommandBaseMultiViewer implements IC
                             edges.add(((EdgeListElement) aNewOrder).edge);
                         }
                         v.rearrangeAdjacentEdges(edges);
-                        viewer.getPhyloTree().getNode2GuideTreeChildren().set(v, null);
+                        viewer.getPhyloTree().getNode2GuideTreeChildren().put(v, null);
                         viewer.recomputeEmbedding(false, true);
                         viewer.setDirty(true);
                     }

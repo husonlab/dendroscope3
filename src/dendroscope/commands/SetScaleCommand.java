@@ -20,7 +20,7 @@
 package dendroscope.commands;
 
 import dendroscope.window.TreeViewer;
-import jloda.gui.commands.ICommand;
+import jloda.swing.commands.ICommand;
 import jloda.util.Basic;
 import jloda.util.parse.NexusStreamParser;
 

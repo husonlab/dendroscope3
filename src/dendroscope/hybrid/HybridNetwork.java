@@ -287,23 +287,18 @@ public class HybridNetwork extends PhyloTree {
     }
 
     public Iterator<Node> getSuccessors(Node v) {
-        Iterator<Edge> it = v.getOutEdges();
-        Vector<Node> successors = new Vector<>();
-        while (it.hasNext()) {
-            successors.add(it.next().getTarget());
-        }
-        return successors.iterator();
+        return v.children().iterator();
     }
 
     // deletes outgroup 'rho'
     public void removeOutgroup() {
         for (Node v : computeSetOfLeaves()) {
             if (getLabel(v).equals("rho")) {
-                Edge e = v.getInEdges().next();
+                Edge e = v.getFirstInEdge();
                 Node p = e.getSource();
                 deleteEdge(e);
                 deleteNode(v);
-                e = p.getOutEdges().next();
+                e = p.getFirstOutEdge();
                 Node c = e.getTarget();
                 deleteEdge(e);
                 deleteNode(p);
@@ -364,7 +359,7 @@ public class HybridNetwork extends PhyloTree {
 
     // replaces a subtree under node v by a new node newV
     public void deleteSubtree(Node v, Node newV, boolean doUpdate) {
-        Node p = v.getInEdges().next().getSource();
+        Node p = v.getFirstInEdge().getSource();
         deleteSubtreeRec(v);
         if (newV != null) {
             newEdge(p, newV);
@@ -382,7 +377,7 @@ public class HybridNetwork extends PhyloTree {
                 deleteSubtreeRec(child);
             }
         }
-        deleteEdge(v.getInEdges().next());
+        deleteEdge(v.getFirstInEdge());
         deleteNode(v);
     }
 

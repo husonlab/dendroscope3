@@ -59,7 +59,7 @@ public class ComputeNodeWeights {
             Graph g = viewer.getGraph();
             PhyloTree n = (PhyloTree) g;
 
-            for (Node v : n.getNodes()) {
+            for (Node v : n.nodes()) {
                 if (v.getInDegree() == 2) {
                     BitSet b = computeCluster(n, v);
                     double perc = (nodeToNumber.get(b) / size) * 100.0;
@@ -82,7 +82,7 @@ public class ComputeNodeWeights {
             Graph g = viewer.getGraph();
             PhyloTree n = (PhyloTree) g;
 
-            for (Node v : n.getNodes()) {
+            for (Node v : n.nodes()) {
                 if (nodeToCluster.containsKey(v)) {
                     n.setLabel(v, "");
                 }

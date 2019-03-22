@@ -88,9 +88,8 @@ public class EasyTree implements EasyTreeInterface {
     }
 
     private void copyTreeRec(PhyloTree t, Node v, EasyNode vCopy) {
-        Iterator<Edge> it = v.getOutEdges();
-        while (it.hasNext()) {
-            Node c = it.next().getTarget();
+        for (Edge e : v.outEdges()) {
+            Node c = e.getTarget();
             EasyNode cCopy = new EasyNode(vCopy, this, t.getLabel(c));
             if (c.getOutDegree() != 0)
                 copyTreeRec(t, c, cCopy);
@@ -239,10 +238,9 @@ public class EasyTree implements EasyTreeInterface {
 
 
     private void copyTreeRecNoRet(PhyloTree t, Node v, EasyNode vCopy, boolean check) {
-        Iterator<Edge> it = v.getOutEdges();
         if (!check || v.getInDegree() == 1) {
-            while (it.hasNext()) {
-                Node c = it.next().getTarget();
+            for (Edge e : v.outEdges()) {
+                Node c = e.getTarget();
                 if (c.getInDegree() == 1) {
                     EasyNode cCopy = new EasyNode(vCopy, this, t.getLabel(c));
                     if (c.getOutDegree() != 0)

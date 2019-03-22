@@ -20,7 +20,7 @@
 package dendroscope.progs;
 
 import dendroscope.consensus.Cluster;
-import jloda.util.CommandLineOptions;
+import jloda.swing.util.CommandLineOptions;
 import jloda.util.UsageException;
 
 import java.util.*;

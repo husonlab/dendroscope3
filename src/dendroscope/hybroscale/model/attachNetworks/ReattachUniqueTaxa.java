@@ -1,16 +1,12 @@
 package dendroscope.hybroscale.model.attachNetworks;
 
-import java.util.BitSet;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Vector;
-
 import dendroscope.hybroscale.model.reductionSteps.ReplacementInfo;
 import dendroscope.hybroscale.model.treeObjects.HybridNetwork;
 import dendroscope.hybroscale.util.graph.MyEdge;
 import dendroscope.hybroscale.util.graph.MyNode;
 import dendroscope.hybroscale.util.graph.MyPhyloTree;
+
+import java.util.*;
 
 public class ReattachUniqueTaxa {
 
@@ -68,8 +64,8 @@ public class ReattachUniqueTaxa {
 					MyNode v = clusterToNode.get(vCluster);
 					BitSet sibCluster = new BitSet(taxaOrdering.size());
 					while (sibCluster.isEmpty()) {
-						MyNode p = v.getInEdges().next().getSource();
-						Iterator<MyEdge> it = p.getOutEdges();
+                        MyNode p = v.getFirstInEdge().getSource();
+                        Iterator<MyEdge> it = p.outEdges().iterator();
 						while (it.hasNext()) {
 							MyNode sib = it.next().getTarget();
 							if (!sib.equals(v))
@@ -93,7 +89,7 @@ public class ReattachUniqueTaxa {
 		if (v.getOutDegree() == 0){
 			b.set(taxaOrdering.indexOf(v.getLabel()));
 		}else {
-			Iterator<MyEdge> it = v.getOutEdges();
+            Iterator<MyEdge> it = v.outEdges().iterator();
 			while (it.hasNext())
 				b.or(updateTreeClusters(it.next().getTarget(), nodeToCluster, clusterToNode, postOrderNodes));
 		}
@@ -155,7 +151,7 @@ public class ReattachUniqueTaxa {
 		} else {
 			if (s.getInDegree() == 1) {
 				// System.out.println("Case-B");
-				MyEdge eDel = s.getInEdges().next();
+                MyEdge eDel = s.getFirstInEdge();
 				MyNode p = eDel.getSource();
 				HashSet<Integer> eIndices = (HashSet<Integer>) getEdgeIndices(eDel).clone();
 				n.deleteEdge(eDel);
@@ -248,7 +244,7 @@ public class ReattachUniqueTaxa {
 		} else {
 			if (s.getInDegree() == 1) {
 				// System.out.println("Case-B");
-				MyEdge eDel = s.getInEdges().next();
+                MyEdge eDel = s.getFirstInEdge();
 				MyNode p = eDel.getSource();
 				HashSet<Integer> eIndices = (HashSet<Integer>) getEdgeIndices(eDel).clone();
 				n.deleteEdge(eDel);
@@ -291,7 +287,7 @@ public class ReattachUniqueTaxa {
 //			System.out.println("Leaf: " + v.getLabel());
 			b.set(taxaOrdering.indexOf(v.getLabel()));
 		} else {
-			Iterator<MyEdge> it = v.getOutEdges();
+            Iterator<MyEdge> it = v.outEdges().iterator();
 			while (it.hasNext()) {
 				MyEdge e = it.next();
 				if (getEdgeIndices(e).contains(index)) // || e.getTarget().getInDegree() == 1)

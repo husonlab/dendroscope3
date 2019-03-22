@@ -22,8 +22,8 @@ package dendroscope.commands;
 import dendroscope.embed.EmbeddingOptimizerNNet;
 import dendroscope.embed.LayoutOptimizerManager;
 import dendroscope.window.TreeViewer;
-import jloda.gui.commands.ICommand;
 import jloda.phylo.PhyloTree;
+import jloda.swing.commands.ICommand;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;

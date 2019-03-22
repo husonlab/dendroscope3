@@ -43,9 +43,8 @@ public class CuttingCycles {
         // System.out.println("END - cutting cycles... "+forest.size());
     }
 
-    private void cutCyclePair(HybridTree t, Vector<HybridTree> forest,
-                              HybridTree t1, HybridTree t2) {
-        Iterator<Edge> it = t.getRoot().getOutEdges();
+    private void cutCyclePair(HybridTree t, Vector<HybridTree> forest, HybridTree t1, HybridTree t2) {
+        final Iterator<Edge> it = t.getRoot().outEdges().iterator();
         Node c1 = it.next().getTarget();
         Node c2 = it.next().getTarget();
         HybridTree s1 = t.getSubtree(c1, true);
@@ -55,8 +54,7 @@ public class CuttingCycles {
         forest.add(s2);
     }
 
-    public HybridTree[] getCycle(Vector<HybridTree> forest, HybridTree t1,
-                                 HybridTree t2) {
+    public HybridTree[] getCycle(Vector<HybridTree> forest, HybridTree t1, HybridTree t2) {
 
         Hashtable<HybridTree, BitSet> treeToLCA = new Hashtable<>();
         Hashtable<BitSet, HybridTree> LCAtoTree = new Hashtable<>();

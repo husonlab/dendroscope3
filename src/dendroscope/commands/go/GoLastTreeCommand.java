@@ -20,7 +20,7 @@
 package dendroscope.commands.go;
 
 import dendroscope.window.MultiViewer;
-import jloda.gui.commands.ICommand;
+import jloda.swing.commands.ICommand;
 
 import javax.swing.*;
 import java.awt.*;

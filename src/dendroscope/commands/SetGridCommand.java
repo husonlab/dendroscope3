@@ -20,11 +20,11 @@
 package dendroscope.commands;
 
 import dendroscope.main.DendroscopeProperties;
-import jloda.gui.commands.ICommand;
-import jloda.util.Alert;
+import jloda.swing.commands.ICommand;
+import jloda.swing.util.Alert;
+import jloda.swing.util.ProgramProperties;
+import jloda.swing.util.ResourceManager;
 import jloda.util.Basic;
-import jloda.util.ProgramProperties;
-import jloda.util.ResourceManager;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;

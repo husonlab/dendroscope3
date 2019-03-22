@@ -103,12 +103,12 @@ public class Utilities {
             Pair<Integer, Integer> pairV = new Pair<Integer, Integer>();
             pairV.setFirst(0);
             pairV.setSecond(0);
-            distFromFirst.set(v, pairV);
+            distFromFirst.put(v, pairV);
         } else {
             Pair<Integer, Integer> pairV = new Pair<Integer, Integer>();
             pairV.setFirst(Integer.MAX_VALUE);
             pairV.setSecond(Integer.MAX_VALUE);
-            distFromFirst.set(v, pairV);
+            distFromFirst.put(v, pairV);
 
             for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
                 Node w = e.getTarget();

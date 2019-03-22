@@ -21,10 +21,10 @@ package dendroscope.consensus;
 
 import dendroscope.window.TreeViewer;
 import jloda.graph.*;
-import jloda.graphview.EdgeView;
-import jloda.graphview.Transform;
 import jloda.phylo.PhyloTree;
-import jloda.util.Alert;
+import jloda.swing.graphview.EdgeView;
+import jloda.swing.graphview.Transform;
+import jloda.swing.util.Alert;
 import jloda.util.Basic;
 
 import java.awt.*;

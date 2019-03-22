@@ -26,9 +26,9 @@ import dendroscope.core.TreeData;
 import dendroscope.window.MultiViewer;
 import jloda.graph.Node;
 import jloda.graph.NodeSet;
-import jloda.gui.director.IDirector;
 import jloda.phylo.PhyloTree;
-import jloda.util.Alert;
+import jloda.swing.director.IDirector;
+import jloda.swing.util.Alert;
 
 import java.util.*;
 

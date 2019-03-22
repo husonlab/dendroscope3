@@ -1,16 +1,11 @@
 package dendroscope.hybroscale.model.reductionSteps;
 
-import java.util.BitSet;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Vector;
-import java.util.concurrent.ConcurrentHashMap;
-
 import dendroscope.hybroscale.model.treeObjects.HybridTree;
 import dendroscope.hybroscale.util.graph.MyEdge;
 import dendroscope.hybroscale.util.graph.MyNode;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This function replaces a minimum common cluster of two rooted, bifurcating
@@ -146,7 +141,7 @@ public class ClusterReduction_Overlapping {
 
 	private void insertNodesRec(MyNode v, int level, HashMap<MyNode, Integer> nodeToLevel) {
 		nodeToLevel.put(v, level);
-		Iterator<MyEdge> it = v.getOutEdges();
+        Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			int newLevel = level + 1;
 			insertNodesRec(it.next().getTarget(), newLevel, nodeToLevel);
@@ -182,10 +177,10 @@ public class ClusterReduction_Overlapping {
 	private void removeOneNodes(HybridTree t) {
 		for(MyNode v : t.getNodes()){
 			if(v.getInDegree() == 1 && v.getOutDegree() == 1){
-				MyNode p = v.getInEdges().next().getSource();
-				MyNode c = v.getOutEdges().next().getTarget();
-				t.deleteEdge(v.getInEdges().next());
-				t.deleteEdge(v.getOutEdges().next());
+                MyNode p = v.getFirstInEdge().getSource();
+                MyNode c = v.getFirstOutEdge().getTarget();
+                t.deleteEdge(v.getFirstInEdge());
+                t.deleteEdge(v.getFirstOutEdge());
 				t.deleteNode(v);
 				t.newEdge(p, c);
 				removeOneNodes(t);

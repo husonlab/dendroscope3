@@ -21,9 +21,9 @@ package dendroscope.util;
 
 import dendroscope.core.TreeData;
 import jloda.graph.Node;
+import jloda.graph.NotOwnerException;
 import jloda.phylo.PhyloTree;
 import jloda.util.Basic;
-import jloda.util.NotOwnerException;
 import jloda.util.parse.NexusStreamParser;
 import jloda.util.parse.NexusStreamTokenizer;
 

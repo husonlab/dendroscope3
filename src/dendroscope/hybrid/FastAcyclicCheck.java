@@ -19,7 +19,6 @@
 */
 package dendroscope.hybrid;
 
-import jloda.graph.Edge;
 import jloda.graph.Graph;
 import jloda.graph.Node;
 
@@ -94,9 +93,7 @@ public class FastAcyclicCheck {
         // search for scc
         for (int i = g.getNumberOfNodes() - 1; i >= 0; i--) {
             Node v = levelToNode.get(i);
-            Iterator<Edge> it = v.getInEdges();
-            while (it.hasNext()) {
-                Node w = it.next().getSource();
+            for (Node w : v.parents()) {
                 if (nodeToLevel.get(w) < i)
                     return true;
             }
@@ -106,10 +103,8 @@ public class FastAcyclicCheck {
 
     private int initLevels(Node v, int level, Vector<Node> visited) {
         visited.add(v);
-        Iterator<Edge> it = v.getOutEdges();
         int value = level;
-        while (it.hasNext()) {
-            Node w = it.next().getTarget();
+        for (Node w : v.children()) {
             if (!visited.contains(w))
                 value = initLevels(w, value, visited) + 1;
         }
@@ -121,9 +116,7 @@ public class FastAcyclicCheck {
     private void computeOrder(Vector<Node> border) {
         Vector<Node> newBorder = new Vector<>();
         for (Node v : border) {
-            Iterator<Edge> it = v.getOutEdges();
-            while (it.hasNext()) {
-                Node w = it.next().getTarget();
+            for (Node w : v.children()) {
                 if (!acyclicOrder.contains(nodeToComp.get(w))) {
                     acyclicOrder.add(0, nodeToComp.get(w));
                     Vector<EasyTree> upperNodes = cloneVector(compToUpper
@@ -275,11 +268,9 @@ public class FastAcyclicCheck {
     }
 
     private void addEdge(Node v1, Node v2, Graph g) {
-        Iterator<Edge> it = v1.getOutEdges();
         boolean add = true;
-        while (it.hasNext()) {
-            Node v = it.next().getTarget();
-            if (v.equals(v2))
+        for (Node w : v1.children()) {
+            if (w.equals(v2))
                 add = false;
         }
         if (add)

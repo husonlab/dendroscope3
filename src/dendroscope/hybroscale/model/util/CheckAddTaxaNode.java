@@ -1,13 +1,13 @@
 package dendroscope.hybroscale.model.util;
 
+import dendroscope.hybroscale.util.graph.MyEdge;
+import dendroscope.hybroscale.util.graph.MyNode;
+import dendroscope.hybroscale.util.graph.MyPhyloTree;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Vector;
-
-import dendroscope.hybroscale.util.graph.MyEdge;
-import dendroscope.hybroscale.util.graph.MyNode;
-import dendroscope.hybroscale.util.graph.MyPhyloTree;
 
 public class CheckAddTaxaNode {
 
@@ -77,12 +77,12 @@ public class CheckAddTaxaNode {
 
 	private void setEdges(Vector<MyNode> subset) {
 		for (MyNode v : subset) {
-			Iterator<MyEdge> it = v.getInEdges();
+            Iterator<MyEdge> it = v.inEdges().iterator();
 			while (it.hasNext())
 				it.next().setCritical(true);
 		}
 		for (MyNode v : trivialNodes) {
-			Iterator<MyEdge> it = v.getInEdges();
+            Iterator<MyEdge> it = v.inEdges().iterator();
 			while (it.hasNext())
 				it.next().setCritical(true);
 		}
@@ -121,7 +121,7 @@ public class CheckAddTaxaNode {
 		for (MyNode v : retNodes) {
 			Vector<MyNode> parentNodes = new Vector<MyNode>();
 			Vector<MyEdge> parentEdges = new Vector<MyEdge>();
-			Iterator<MyEdge> it = v.getInEdges();
+            Iterator<MyEdge> it = v.inEdges().iterator();
 			while(it.hasNext()){
 				MyEdge e = it.next();
 				parentNodes.add(e.getSource());
@@ -142,7 +142,7 @@ public class CheckAddTaxaNode {
 	private void assingPreds(MyNode v, HashSet<MyNode> preds,
 			HashMap<MyNode, HashSet<MyNode>> nodeToPreds) {
 		boolean isCritical = false;
-		Iterator<MyEdge> it = v.getOutEdges();
+        Iterator<MyEdge> it = v.outEdges().iterator();
 		while(it.hasNext()){
 			MyEdge e = it.next();
 			if (v.getOwner().isSpecial(e)) {
@@ -153,7 +153,7 @@ public class CheckAddTaxaNode {
 		}
 		if (isCritical)
 			preds.add(v);
-		it = v.getOutEdges();
+        it = v.outEdges().iterator();
 		while(it.hasNext()){
 			MyEdge e = it.next();
 			assingPreds(e.getTarget(), (HashSet<MyNode>) preds.clone(), nodeToPreds);

@@ -84,7 +84,7 @@ public class ComputeClearHybridNetwork {
 
             // if no edge is found, f is attached to the out-edge of the
             // root
-            Iterator<Edge> it = n.getRoot().getOutEdges();
+            Iterator<Edge> it = n.getRoot().outEdges().iterator();
             Node v = it.next().getTarget();
             if (n.getLabel(v).equals("rho"))
                 v = it.next().getTarget();
@@ -103,7 +103,7 @@ public class ComputeClearHybridNetwork {
 
             // } else {
             // BitSet newR = t1.getNodeToCluster().get(
-            // l2.getInEdges().next().getSource());
+            // l2.getFirstInEdge().getSource());
             // compueSourceNodes(f, newR, t1, n, tM);
             // }
 
@@ -174,7 +174,7 @@ public class ComputeClearHybridNetwork {
 
         // if no edge is found, f is attached to the out-edge of the
         // root
-        Iterator<Edge> it = n.getRoot().getOutEdges();
+        Iterator<Edge> it = n.getRoot().outEdges().iterator();
         Node v = it.next().getTarget();
         if (n.getLabel(v).equals("rho"))
             v = it.next().getTarget();
@@ -197,7 +197,7 @@ public class ComputeClearHybridNetwork {
 
         // } else {
         // BitSet newR = t1.getNodeToCluster().get(
-        // l2.getInEdges().next().getSource());
+        // l2.getFirstInEdge().getSource());
         // insertComponent(f, newR, t1, n, tM);
         // }
 
@@ -206,15 +206,15 @@ public class ComputeClearHybridNetwork {
     private int getDepth(Node v) {
         int depth = 0;
         while (v.getInDegree() != 0) {
-            v = v.getInEdges().next().getSource();
+            v = v.getFirstInEdge().getSource();
             depth++;
         }
         return depth;
     }
 
     private Node getNeighbour(Node v, HybridTree t) {
-        Node p = v.getInEdges().next().getSource();
-        Iterator<Edge> it = p.getOutEdges();
+        Node p = v.getFirstInEdge().getSource();
+        Iterator<Edge> it = p.outEdges().iterator();
         Node c = it.next().getTarget();
 
         if (c.equals(v))
@@ -248,7 +248,7 @@ public class ComputeClearHybridNetwork {
         if (a.equals(b)) {
             // System.out.println("Rejected: "
             // + n.getLabel(n.getClusterToNode().get(cluster)));
-            return findDeepestNode(v.getInEdges().next().getSource(), t1, n, b);
+            return findDeepestNode(v.getFirstInEdge().getSource(), t1, n, b);
         } else
             return n.getClusterToNode().get(cluster);
 
@@ -294,7 +294,7 @@ public class ComputeClearHybridNetwork {
     private void insertReticulateEdges(HybridNetwork n, Node v1, Node v2,
                                        TreeMarker tM) {
 
-        Edge e = v1.getInEdges().next();
+        Edge e = v1.getFirstInEdge();
         Node s = e.getSource();
         Node t = e.getTarget();
         n.deleteEdge(e);
@@ -309,7 +309,7 @@ public class ComputeClearHybridNetwork {
         n.setWeight(e1, 0);
         // tM.insertT1Edge(e1);
 
-        e = v2.getInEdges().next();
+        e = v2.getFirstInEdge();
         boolean isSpecial = n.isSpecial(e);
         t = e.getTarget();
         s = e.getSource();

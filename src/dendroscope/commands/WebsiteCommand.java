@@ -19,10 +19,11 @@
 */
 package dendroscope.commands;
 
-import jloda.gui.commands.CommandBase;
-import jloda.gui.commands.ICommand;
+import jloda.swing.commands.CommandBase;
+import jloda.swing.commands.ICommand;
+import jloda.swing.util.BasicSwing;
+import jloda.swing.util.ResourceManager;
 import jloda.util.Basic;
-import jloda.util.ResourceManager;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;
@@ -88,7 +89,7 @@ public class WebsiteCommand extends CommandBase implements ICommand {
      */
     public void actionPerformed(ActionEvent ev) {
         try {
-            Basic.openWebPage(new URL("http://www-ab.informatik.uni-tuebingen.de/software/dendroscope/welcome.html"));
+            BasicSwing.openWebPage(new URL("http://www-ab.informatik.uni-tuebingen.de/software/dendroscope/welcome.html"));
         } catch (Exception e1) {
             Basic.caught(e1);
         }

@@ -49,14 +49,14 @@ public class NetworkComparator implements Comparator<HybridNetwork> {
     }
 
     private void initTable(Vector<HybridNetwork> networks) {
-        for (HybridNetwork n : networks) {
-            for (Node v : n.getNodes()) {
+        for (HybridNetwork network : networks) {
+            for (Node v : network.nodes()) {
                 if (v.getInDegree() == 2)
-                    computeCluster(n, v);
+                    computeCluster(network, v);
             }
         }
         for (HybridNetwork n : networks) {
-            for (Node v : n.getNodes()) {
+            for (Node v : n.nodes()) {
                 if (v.getInDegree() == 2) {
                     BitSet b = nodeToCluster.get(v);
                     if (nodeToOcc.containsKey(b)) {
@@ -70,7 +70,7 @@ public class NetworkComparator implements Comparator<HybridNetwork> {
         }
         for (HybridNetwork n : networks) {
             int weight = 0;
-            for (Node v : n.getNodes()) {
+            for (Node v : n.nodes()) {
                 if (v.getInDegree() == 2) {
                     BitSet b = nodeToCluster.get(v);
                     weight += nodeToOcc.get(b);

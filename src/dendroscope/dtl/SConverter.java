@@ -91,8 +91,8 @@ public class SConverter {
     private void checkAndGo(Node current) {
         int degree = current.getOutDegree();
         if (degree == 1) {
-            Edge in = current.getInEdges().next();
-            Edge out = current.getOutEdges().next();
+            Edge in = current.getFirstInEdge();
+            Edge out = current.getFirstOutEdge();
 
             Node father = in.getSource();
             Node son = out.getTarget();
@@ -104,7 +104,7 @@ public class SConverter {
 
             checkAndGo(son);
         } else if (degree == 2) {
-            Iterator<Edge> it = current.getOutEdges();
+            Iterator<Edge> it = current.outEdges().iterator();
             Edge first = it.next();
             checkAndGo(first.getTarget());
             Edge second = it.next();

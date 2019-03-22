@@ -22,13 +22,13 @@ package dendroscope.drawer;
 import dendroscope.consensus.TransferVisualization;
 import dendroscope.window.TreeViewer;
 import jloda.graph.*;
-import jloda.graphview.*;
 import jloda.phylo.PhyloTree;
 import jloda.phylo.PhyloTreeUtils;
-import jloda.util.Basic;
-import jloda.util.Geometry;
-import jloda.util.PolygonDouble;
-import jloda.util.ProgramProperties;
+import jloda.swing.graphview.*;
+import jloda.swing.util.BasicSwing;
+import jloda.swing.util.Geometry;
+import jloda.swing.util.PolygonDouble;
+import jloda.swing.util.ProgramProperties;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -206,7 +206,7 @@ public class TreeDrawerBase {
             final NodeView nv = viewer.getNV(v);
 
             if (nv.getLabel() != null)
-                nv.setLabelSize(Basic.getStringSize(gc, viewer.getLabel(v), viewer.getFont(v))); // ensure label rect is set
+                nv.setLabelSize(BasicSwing.getStringSize(gc, viewer.getLabel(v), viewer.getFont(v))); // ensure label rect is set
 
             if (!mustVisitSubTreeBelowNode(v)) {
                 if (visibleRect != null && trans.w2d(node2bb.get(v)).getBounds().intersects(visibleRect)) {

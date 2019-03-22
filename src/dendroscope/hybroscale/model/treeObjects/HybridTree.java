@@ -1,11 +1,11 @@
 package dendroscope.hybroscale.model.treeObjects;
 
-import java.util.Iterator;
-import java.util.Vector;
-
 import dendroscope.hybroscale.util.graph.MyEdge;
 import dendroscope.hybroscale.util.graph.MyNode;
 import dendroscope.hybroscale.util.graph.MyPhyloTree;
+
+import java.util.Iterator;
+import java.util.Vector;
 
 /**
  * This class represents a rooted, bifurcating phylogenetic tree.
@@ -47,14 +47,14 @@ public class HybridTree extends HybridNetwork {
 	}
 
 	public void deleteNode(MyNode v) {
-		MyNode p = v.getInDegree() != 0 ? v.getInEdges().next().getSource() : null;
+        MyNode p = v.getInDegree() != 0 ? v.getFirstInEdge().getSource() : null;
 		super.deleteNode(v);
 		if (p != null && p.getInDegree() == 1 && p.getOutDegree() == 1) {
-			MyNode s = p.getInEdges().next().getSource();
-			MyNode t = p.getOutEdges().next().getTarget();
+            MyNode s = p.getFirstInEdge().getSource();
+            MyNode t = p.getFirstOutEdge().getTarget();
 			t.setSolid(p.isSolid());
-			s.removeOutEdge(p.getInEdges().next());
-			t.removeInEdge(p.getOutEdges().next());
+            s.removeOutEdge(p.getFirstInEdge());
+            t.removeInEdge(p.getFirstOutEdge());
 			newEdge(s, t);
 		}
 	}

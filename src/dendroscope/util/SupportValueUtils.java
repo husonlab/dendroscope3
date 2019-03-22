@@ -69,7 +69,7 @@ public class SupportValueUtils {
         final EdgeArray<String> edgeLabels = new EdgeArray<>(tree);
         for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
             if (v.getInDegree() == 1 && v.getOutDegree() > 0) {
-                edgeLabels.set(v.getFirstInEdge(), tree.getLabel(v));
+                edgeLabels.put(v.getFirstInEdge(), tree.getLabel(v));
             }
         }
         return edgeLabels;

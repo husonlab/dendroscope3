@@ -21,8 +21,8 @@ package dendroscope.commands;
 
 import dendroscope.core.Director;
 import dendroscope.window.MultiViewer;
-import jloda.gui.commands.CommandBase;
-import jloda.gui.director.IDirector;
+import jloda.swing.commands.CommandBase;
+import jloda.swing.director.IDirector;
 
 /**
  * base-class for multi-viewer commands

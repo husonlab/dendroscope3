@@ -19,13 +19,15 @@
 */
 package dendroscope.algorithms.utils;
 
-import jloda.graph.Edge;
 import jloda.graph.Node;
 import jloda.phylo.PhyloTree;
 import jloda.phylo.PhyloTreeUtils;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Collections;
+import java.util.Hashtable;
+import java.util.Set;
+import java.util.Vector;
 
 /**
  * Given two rooted, bifurcating phylogenetic trees T1 and T2, this function
@@ -103,9 +105,7 @@ public class IsomorphismCheck {
 
             String newID = null;
             Vector<String> pIDs = new Vector<>();
-            Iterator<Edge> it = v.getInEdges();
-            while (it.hasNext()) {
-                Node p = it.next().getSource();
+            for (Node p : v.parents()) {
                 if (tree.getLabel(p) == null && newID == null) {
                     newID = String.valueOf(id);
                     while (idSet.contains(newID)) {

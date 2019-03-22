@@ -21,9 +21,9 @@ package dendroscope.commands.collapse;
 
 import dendroscope.window.MultiViewer;
 import dendroscope.window.TreeViewer;
-import jloda.gui.commands.CommandBase;
-import jloda.gui.commands.ICommand;
-import jloda.util.ResourceManager;
+import jloda.swing.commands.CommandBase;
+import jloda.swing.commands.ICommand;
+import jloda.swing.util.ResourceManager;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;

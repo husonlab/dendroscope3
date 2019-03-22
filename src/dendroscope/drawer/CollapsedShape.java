@@ -19,8 +19,8 @@
 */
 package dendroscope.drawer;
 
-import jloda.graphview.Transform;
-import jloda.util.PolygonDouble;
+import jloda.swing.graphview.Transform;
+import jloda.swing.util.PolygonDouble;
 
 import java.awt.*;
 import java.awt.geom.Point2D;

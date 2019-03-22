@@ -63,7 +63,7 @@ public class ExactNetFromMultree {
                 //take the first tree T(t_max) of the current heightlist and add all children of height j (j < i) to
                 //the map h_max for later iterations.
                 Node t_max = (Node) l_h.get(0);
-                Iterator outEdgesIt = t_max.getOutEdges();
+                Iterator<Edge> outEdgesIt = t_max.outEdges().iterator();
                 while (outEdgesIt.hasNext()) {
                     Node target = ((Edge) outEdgesIt.next()).getTarget();
                     int targetHeight = t.getHeight(target);

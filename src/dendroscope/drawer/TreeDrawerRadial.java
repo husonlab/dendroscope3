@@ -22,20 +22,19 @@ package dendroscope.drawer;
 import dendroscope.util.convexhull.GiftWrap;
 import dendroscope.window.TreeViewer;
 import jloda.graph.*;
-import jloda.graphview.EdgeView;
-import jloda.graphview.GraphView;
-import jloda.graphview.NodeView;
 import jloda.phylo.PhyloTree;
 import jloda.phylo.PhyloTreeUtils;
+import jloda.swing.graphview.EdgeView;
+import jloda.swing.graphview.GraphView;
+import jloda.swing.graphview.NodeView;
+import jloda.swing.util.Geometry;
+import jloda.swing.util.PolygonDouble;
+import jloda.swing.util.ProgramProperties;
 import jloda.util.Basic;
-import jloda.util.Geometry;
-import jloda.util.PolygonDouble;
-import jloda.util.ProgramProperties;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Set;
 import java.util.Stack;
@@ -237,8 +236,7 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
                 double x = 0;
                 double y = 0;
                 int count = 0;
-                for (Iterator it = w.getInEdges(); ok && it.hasNext(); ) {
-                    Node v = ((Edge) it.next()).getSource();
+                for (Node v : w.parents()) {
                     Point2D vPt = viewer.getLocation(v);
                     if (vPt == null) {
                         ok = false;
@@ -260,8 +258,8 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
 
             if (ok)  // add childern to end of queue:
             {
-                for (Iterator it = w.getOutEdges(); it.hasNext(); ) {
-                    queue.add(((Edge) it.next()).getTarget());
+                for (Edge e : w.outEdges()) {
+                    queue.add(e.getTarget());
                 }
             } else  // process this node again later
                 queue.add(w);
@@ -308,7 +306,7 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
                 recomputeOptimizationRec(w);
                 bbox.add(node2bb.get(w));
             }
-            node2bb.set(root, bbox);
+            node2bb.put(root, bbox);
         }
 
 
@@ -365,11 +363,11 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
             vSTP.add(vp);
         }
         node2NumberLeaves.set(v, leaves);
-        node2bb.set(v, bbox);
+        node2bb.put(v, bbox);
 
         if (v.getDegree() > 1) { // no proxy of root, leaves  or collapsed nodes
             if (leaves > MIN_LEAVES_FOR_PROXY && leaves <= tree.getNumberOfNodes() / 10) {
-                node2ProxyShape.set(v, new PolygonDouble(vSTP.enter, vSTP.left, vSTP, vSTP.right));
+                node2ProxyShape.put(v, new PolygonDouble(vSTP.enter, vSTP.left, vSTP, vSTP.right));
             }
         }
         return vSTP;

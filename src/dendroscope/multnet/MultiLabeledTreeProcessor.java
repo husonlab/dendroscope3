@@ -21,8 +21,8 @@ package dendroscope.multnet;
 
 import dendroscope.core.TreeData;
 import jloda.graph.Node;
-import jloda.phylo.PhyloGraphView;
 import jloda.phylo.PhyloTree;
+import jloda.swing.graphview.PhyloGraphView;
 import jloda.util.Basic;
 
 import java.util.HashSet;

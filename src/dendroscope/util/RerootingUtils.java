@@ -22,9 +22,10 @@ package dendroscope.util;
 import dendroscope.window.MultiViewer;
 import dendroscope.window.TreeViewer;
 import jloda.graph.*;
-import jloda.graphview.EdgeView;
 import jloda.phylo.PhyloTree;
-import jloda.util.Alert;
+import jloda.phylo.PhyloTreeUtils;
+import jloda.swing.graphview.EdgeView;
+import jloda.swing.util.Alert;
 import jloda.util.Triplet;
 
 import javax.swing.*;
@@ -82,8 +83,8 @@ public class RerootingUtils {
                 final Edge ea = root.getFirstAdjacentEdge();
                 final Edge eb = root.getLastAdjacentEdge();
                 final double weight = tree.getWeight(ea) + tree.getWeight(eb);
-                final double a = tree.computeAverageDistanceToALeaf(ea.getOpposite(root));
-                final double b = tree.computeAverageDistanceToALeaf(eb.getOpposite(root));
+                final double a = PhyloTreeUtils.computeAverageDistanceToALeaf(tree, ea.getOpposite(root));
+                final double b = PhyloTreeUtils.computeAverageDistanceToALeaf(tree, eb.getOpposite(root));
                 double na = 0.5 * (b - a + weight);
                 if (na >= weight)
                     na = 0.95 * weight;
@@ -236,8 +237,8 @@ public class RerootingUtils {
         int nodesBelowBestEdge = 0;
 
         for (Edge e = tree.getFirstEdge(); e != null; e = e.getNext()) {
-            int outgroupBelowE = edge2OutgroupBelow.getValue(e);
-            int nodesBelowE = edge2NodesBelow.getValue(e);
+            int outgroupBelowE = edge2OutgroupBelow.get(e);
+            int nodesBelowE = edge2NodesBelow.get(e);
             if (outgroupBelowE < 0.5 * totalOutgroup) {
                 outgroupBelowE = totalOutgroup - outgroupBelowE;
                 nodesBelowE = totalNodes - nodesBelowE;
@@ -294,8 +295,8 @@ public class RerootingUtils {
 
         for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
             rerootByOutgroupRec(f.getTarget(), f, node2NumberOutgroup, edge2OutgroupBelow, edge2NodesBelow, node2OutgroupBelow, node2NodesBelow, totalNodes, totalOutgroup);
-            outgroupBelowE += edge2OutgroupBelow.getValue(f);
-            nodesBelowE += edge2NodesBelow.getValue(f);
+            outgroupBelowE += edge2OutgroupBelow.get(f);
+            nodesBelowE += edge2NodesBelow.get(f);
         }
         if (e != null) {
             edge2NodesBelow.set(e, nodesBelowE);
@@ -314,8 +315,8 @@ public class RerootingUtils {
 
                 int nodesBelowV = 1;
                 for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
-                    if (edge2OutgroupBelow.getValue(f) > 0)
-                        nodesBelowV += edge2NodesBelow.getValue(f);
+                    if (edge2OutgroupBelow.get(f) > 0)
+                        nodesBelowV += edge2NodesBelow.get(f);
                 }
                 node2NodesBelow.set(v, nodesBelowV);
             } else // outgroupBelowE<totalOutgroup, i.e. some outgroup nodes lie above e
@@ -325,10 +326,10 @@ public class RerootingUtils {
                 boolean keep = false;
                 int nodesBelowV = 0;
                 for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
-                    if (edge2OutgroupBelow.getValue(f) > 0)
+                    if (edge2OutgroupBelow.get(f) > 0)
                         keep = true;   // need to have at least one node below that contains outgroup taxa
                     else
-                        nodesBelowV += edge2NodesBelow.getValue(f);
+                        nodesBelowV += edge2NodesBelow.get(f);
                 }
                 if (keep) {
                     node2OutgroupBelow.set(v, totalOutgroup);
@@ -430,7 +431,7 @@ public class RerootingUtils {
 
         EdgeArray<Float> scores = new EdgeArray<Float>(tree);
         for (Edge e = tree.getRoot().getFirstOutEdge(); e != null; e = tree.getRoot().getNextOutEdge(e)) {
-            scores.set(e, Math.abs(maxBottomUpDistance.get(e) - maxTopDownDistance.get(e)));
+            scores.put(e, Math.abs(maxBottomUpDistance.get(e) - maxTopDownDistance.get(e)));
         }
         return scores;
     }
@@ -487,7 +488,7 @@ public class RerootingUtils {
         for (Edge f = w.getFirstOutEdge(); f != null; f = w.getNextOutEdge(f)) {
             depth = Math.max(computeMaxBottomUpDistance(tree, f, maxDownDistance), depth);
         }
-        maxDownDistance.set(e, depth);
+        maxDownDistance.put(e, depth);
         return depth + (float) tree.getWeight(e);
     }
 
@@ -514,7 +515,7 @@ public class RerootingUtils {
                     best = Math.max(best, maxDownDistance.get(f) + (float) tree.getWeight(f));
                 }
             }
-            maxUpDistance.set(e, best);
+            maxUpDistance.put(e, best);
         }
         for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
             computeMaxTopDownDistanceRec(tree, e.getTarget(), maxDownDistance, maxUpDistance);

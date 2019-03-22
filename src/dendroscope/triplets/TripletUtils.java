@@ -21,7 +21,6 @@ package dendroscope.triplets;
 
 import jloda.graph.Edge;
 import jloda.graph.Node;
-import jloda.graph.NodeSet;
 import jloda.phylo.PhyloTree;
 
 import java.util.Iterator;
@@ -74,8 +73,7 @@ public class TripletUtils {
 
 
     static void setClade(PhyloTreeTri tree) {
-        NodeSet nodes = (tree).getNodes();
-        for (Node node : nodes) {
+        for (Node node : tree.nodes()) {
             setClade(tree, node);
         }
     }

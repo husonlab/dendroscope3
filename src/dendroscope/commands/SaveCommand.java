@@ -26,9 +26,9 @@ import dendroscope.io.Newick;
 import dendroscope.io.nexml.Nexml;
 import dendroscope.main.DendroscopeProperties;
 import dendroscope.window.TreeViewer;
-import jloda.gui.commands.ICommand;
-import jloda.util.Alert;
-import jloda.util.ResourceManager;
+import jloda.swing.commands.ICommand;
+import jloda.swing.util.Alert;
+import jloda.swing.util.ResourceManager;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;

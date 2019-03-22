@@ -24,7 +24,6 @@ import jloda.graph.Node;
 import jloda.phylo.PhyloTree;
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.Vector;
 
 /**
@@ -78,23 +77,22 @@ public class HybridTree extends HybridNetwork {
 
     // removes leaf from tree
     public void removeLeafNode(Node v) {
-        Node p = v.getInEdges().next().getSource();
-        deleteEdge(v.getInEdges().next());
+        Node p = v.getFirstInEdge().getSource();
+        deleteEdge(v.getFirstInEdge());
         deleteNode(v);
         if (getRoot().equals(p)) {
-            Node c = p.getOutEdges().next().getTarget();
+            Node c = p.getFirstOutEdge().getTarget();
 
-            deleteEdge(p.getOutEdges().next());
+            deleteEdge(p.getFirstOutEdge());
             deleteNode(p);
 
             setRoot(c);
         } else {
-            Node pP = p.getInEdges().next().getSource();
-            Edge e = p.getOutEdges().next();
-            Node c = e.getTarget();
+            Node pP = p.getFirstInEdge().getSource();
+            Node c = p.getFirstOutEdge().getTarget();
 
-            deleteEdge(p.getInEdges().next());
-            deleteEdge(p.getOutEdges().next());
+            deleteEdge(p.getFirstInEdge());
+            deleteEdge(p.getFirstOutEdge());
             deleteNode(p);
 
             newEdge(pP, c);
@@ -110,16 +108,14 @@ public class HybridTree extends HybridNetwork {
         Vector<Node> nodesToBeRemoved = new Vector<>();
 
         for (int i = 1; i < chainLabels.size() - 1; i++) {
-            Node p = v.getInEdges().next().getSource();
+            Node p = v.getFirstInEdge().getSource();
             Node c = getLeaves(p).firstElement();
 
-            Iterator<Edge> it = p.getOutEdges();
-            while (it.hasNext()) {
-                Edge e = it.next();
+            for (Edge e : p.outEdges()) {
                 if (!edgesToBeRemoved.contains(e))
                     edgesToBeRemoved.add(e);
             }
-            edgesToBeRemoved.add(p.getInEdges().next());
+            edgesToBeRemoved.add(p.getFirstInEdge());
 
             nodesToBeRemoved.add(p);
             nodesToBeRemoved.add(c);
@@ -127,7 +123,7 @@ public class HybridTree extends HybridNetwork {
             v = p;
         }
 
-        Node start = v.getInEdges().next().getSource();
+        Node start = v.getFirstInEdge().getSource();
 
         int edgeWeight = chainLabels.size() - 2;
         for (Edge e : edgesToBeRemoved) {
@@ -150,5 +146,4 @@ public class HybridTree extends HybridNetwork {
         initTaxaOrdering();
         update();
     }
-
 }

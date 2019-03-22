@@ -95,10 +95,9 @@ public class DistanceMethods {
 
     private static int numOfPaths = 0;
 
-    private static HashSet<String> collectPathMultiplicityVectors(PhyloTree t,
-                                                                  Vector<String> taxa) {
+    private static HashSet<String> collectPathMultiplicityVectors(PhyloTree t, Vector<String> taxa) {
         HashSet<String> pathVectors = new HashSet<String>();
-        for (Node v : t.getNodes()) {
+        for (Node v : t.nodes()) {
             if (v.getOutDegree() != 0) {
                 String s = "";
                 for (String taxon : taxa) {
@@ -113,9 +112,7 @@ public class DistanceMethods {
     }
 
     private static void computeMultiplicity(PhyloTree t, Node v, String taxon) {
-        Iterator<Edge> it = v.getOutEdges();
-        while (it.hasNext()) {
-            Node w = it.next().getTarget();
+        for (Node w : v.children()) {
             if (t.getLabel(w) != null && t.getLabel(w).equals(taxon))
                 numOfPaths++;
             else
@@ -165,10 +162,8 @@ public class DistanceMethods {
     private static String computeNestedLabels(Node v) {
         if (!nodeToLabel.containsKey(v)) {
 
-            Iterator<Edge> it = v.getOutEdges();
-            Vector<String> childLabels = new Vector<String>();
-            while (it.hasNext()) {
-                Node c = it.next().getTarget();
+            Vector<String> childLabels = new Vector<>();
+            for (Node c : v.children()) {
                 if (nodeToLabel.containsKey(c))
                     childLabels.add(nodeToLabel.get(c));
                 else
@@ -287,9 +282,7 @@ public class DistanceMethods {
     @SuppressWarnings("unchecked")
     private static void initPathTable(Node v, HashSet<Edge> path, PhyloTree t) {
         if (v.getOutDegree() != 0) {
-            Iterator<Edge> it = v.getOutEdges();
-            while (it.hasNext()) {
-                Edge e = it.next();
+            for (Edge e : v.outEdges()) {
                 HashSet<Edge> pathCopy = (HashSet<Edge>) path.clone();
                 if (!t.isSpecial(e) && e.getTarget().getOutDegree() != 0)
                     pathCopy.add(e);
@@ -356,11 +349,11 @@ public class DistanceMethods {
         displayedTrees.clear();
 
         int id = 0;
-        for (Node v : t.getNodes()) {
+        for (Node v : t.nodes()) {
             if (v.getInDegree() > 1) {
                 v.setInfo(id);
                 id++;
-                Iterator<Edge> it = v.getInEdges();
+                Iterator<Edge> it = v.inEdges().iterator();
                 for (int i = 0; i < v.getInDegree(); i++)
                     it.next().setInfo(i);
             }
@@ -385,7 +378,7 @@ public class DistanceMethods {
 
                 PhyloTree tCopy = new PhyloTree();
                 tCopy.copy(t);
-                for (Node v : tCopy.getNodes()) {
+                for (Node v : tCopy.nodes()) {
                     if (v.getInDegree() == 0)
                         tCopy.setRoot(v);
                 }
@@ -393,13 +386,13 @@ public class DistanceMethods {
                 Node rCopy = getNodeFromID(tCopy, id);
                 Edge treeEdge = null;
 
-                Iterator<Edge> it = rCopy.getInEdges();
-                while (it.hasNext()) {
-                    Edge e = it.next();
-                    if (!e.getInfo().equals(i))
-                        tCopy.deleteEdge(e);
-                    else
-                        treeEdge = e;
+                if (rCopy != null) {
+                    for (Edge e : rCopy.inEdges()) {
+                        if (!e.getInfo().equals(i))
+                            tCopy.deleteEdge(e);
+                        else
+                            treeEdge = e;
+                    }
                 }
 
                 if (treeEdge != null) {
@@ -418,7 +411,7 @@ public class DistanceMethods {
     }
 
     private static Node getNodeFromID(PhyloTree t, int id) {
-        for (Node v : t.getNodes()) {
+        for (Node v : t.nodes()) {
             if (v.getInfo() != null && v.getInfo().equals(id))
                 return v;
         }
@@ -426,7 +419,7 @@ public class DistanceMethods {
     }
 
     private static void refineTree(PhyloTree t) {
-        for (Node v : t.getNodes()) {
+        for (Node v : t.nodes()) {
             if (v.getInDegree() == 1 && v.getOutDegree() == 1) {
                 removeNode(t, v);
                 refineTree(t);
@@ -447,22 +440,22 @@ public class DistanceMethods {
 
     private static void removeNode(PhyloTree t, Node v) {
         if (v.getInDegree() == 1 && v.getOutDegree() == 1) {
-            Node v1 = v.getInEdges().next().getSource();
-            Node v2 = v.getOutEdges().next().getTarget();
-            t.deleteEdge(v.getInEdges().next());
-            t.deleteEdge(v.getOutEdges().next());
+            Node v1 = v.getFirstInEdge().getSource();
+            Node v2 = v.getFirstOutEdge().getTarget();
+            t.deleteEdge(v.getFirstInEdge());
+            t.deleteEdge(v.getFirstOutEdge());
             t.deleteNode(v);
             t.newEdge(v1, v2);
         } else if (v.getInDegree() == 1 && v.getOutDegree() == 0
                 && t.getLabel(v) == null) {
-            Node v1 = v.getInEdges().next().getSource();
-            t.deleteEdge(v.getInEdges().next());
+            Node v1 = v.getFirstInEdge().getSource();
+            t.deleteEdge(v.getFirstInEdge());
             t.deleteNode(v);
             removeNode(t, v1);
         } else if (v.getInDegree() == 0 && v.getOutDegree() == 1
                 && t.getLabel(v) == null) {
-            Node c = v.getOutEdges().next().getTarget();
-            t.deleteEdge(v.getOutEdges().next());
+            Node c = v.getFirstOutEdge().getTarget();
+            t.deleteEdge(v.getFirstOutEdge());
             t.deleteNode(v);
             t.setRoot(c);
             removeNode(t, v);
@@ -537,7 +530,7 @@ public class DistanceMethods {
 
     public static HashSet<PhyloTree> collectSubnetworks(PhyloTree t) {
         HashSet<PhyloTree> multiSet = new HashSet<PhyloTree>();
-        for (Node v : t.getNodes()) {
+        for (Node v : t.nodes()) {
 
             PhyloTree subnet = new PhyloTree();
             nodeToCopy.clear();
@@ -555,17 +548,12 @@ public class DistanceMethods {
         return multiSet;
     }
 
-    private static void computeSubnetwork(Node v, PhyloTree t, Node vCopy,
-                                          PhyloTree subnet) {
-        Iterator<Edge> it = v.getOutEdges();
-        while (it.hasNext()) {
-            Node c = it.next().getTarget();
+    private static void computeSubnetwork(Node v, PhyloTree t, Node vCopy, PhyloTree subnet) {
+        for (Node c : v.children()) {
             if (nodeToCopy.containsKey(c)) {
                 Node cCopy = nodeToCopy.get(c);
                 subnet.newEdge(vCopy, cCopy);
-                Iterator<Edge> itChild = cCopy.getInEdges();
-                while (itChild.hasNext()) {
-                    Edge e = itChild.next();
+                for (Edge e : cCopy.inEdges()) {
                     subnet.setSpecial(e, true);
                     subnet.setWeight(e, 0.0);
                 }
@@ -608,7 +596,7 @@ public class DistanceMethods {
         while (it.hasNext())
             edgeOrder.add(it.next());
 
-        for (Node v : tree.getNodes()) {
+        for (Node v : tree.nodes()) {
             if (v.getInDegree() > 1)
                 collectBiComponents(v);
         }
@@ -646,13 +634,13 @@ public class DistanceMethods {
 
     private static void collectBiComponents(Node v) {
         Vector<Edge> inEdges = new Vector<Edge>();
-        Iterator<Edge> it = v.getInEdges();
-        while (it.hasNext())
-            inEdges.add(it.next());
+        for (Edge e : v.inEdges())
+            inEdges.add(e);
+
+
         for (int i = 0; i < inEdges.size() - 1; i++) {
             for (int j = i + 1; j < inEdges.size(); j++)
-                computeBiComponentsStepOne(new Vector<Edge>(), inEdges.get(i),
-                        inEdges.get(j), v);
+                computeBiComponentsStepOne(new Vector<Edge>(), inEdges.get(i), inEdges.get(j), v);
         }
     }
 
@@ -665,17 +653,15 @@ public class DistanceMethods {
         else if (s.getInDegree() > 1) {
             isGalledTree = false;
             isGalledNetwork = false;
-            Iterator<Edge> it = s.getInEdges();
-            while (it.hasNext()) {
+            for (Edge e : s.inEdges()) {
                 Vector<Edge> e1EdgesCopy = (Vector<Edge>) e1Edges.clone();
-                computeBiComponentsStepOne(e1EdgesCopy, it.next(), e2, v);
+                computeBiComponentsStepOne(e1EdgesCopy, e, e2, v);
             }
         } else
-            computeBiComponentsStepOne(e1Edges, s.getInEdges().next(), e2, v);
+            computeBiComponentsStepOne(e1Edges, s.getFirstInEdge(), e2, v);
     }
 
-    private static void computeBiComponentsStepTwo(Vector<Edge> e1Edges,
-                                                   Edge e2, HashSet<Edge> e2Edges, Node v) {
+    private static void computeBiComponentsStepTwo(Vector<Edge> e1Edges, Edge e2, HashSet<Edge> e2Edges, Node v) {
         if (!e1Edges.contains(e2)) {
             e2Edges.add(e2);
             Node s = e2.getSource();
@@ -687,14 +673,12 @@ public class DistanceMethods {
             } else if (s.getInDegree() > 1) {
                 isGalledTree = false;
                 isGalledNetwork = false;
-                Iterator<Edge> it = s.getInEdges();
-                while (it.hasNext()) {
+                for (Edge e : s.inEdges()) {
                     HashSet<Edge> e2EdgesCopy = (HashSet<Edge>) e2Edges.clone();
-                    computeBiComponentsStepTwo(e1Edges, it.next(), e2EdgesCopy,
-                            v);
+                    computeBiComponentsStepTwo(e1Edges, e, e2EdgesCopy, v);
                 }
             } else
-                computeBiComponentsStepTwo(e1Edges, s.getInEdges().next(),
+                computeBiComponentsStepTwo(e1Edges, s.getFirstInEdge(),
                         e2Edges, v);
         } else {
             int index = e1Edges.indexOf(e2);
@@ -726,12 +710,10 @@ public class DistanceMethods {
 
     public static boolean hasTreeChildProperty(PhyloTree t) {
         boolean hasTreeChildProp = true;
-        for (Node v : t.getNodes()) {
+        for (Node v : t.nodes()) {
             if (v.getOutDegree() != 0) {
                 boolean hasProp = false;
-                Iterator<Edge> it = v.getOutEdges();
-                while (it.hasNext()) {
-                    Node c = it.next().getTarget();
+                for (Node c : v.children()) {
                     if (c.getInDegree() == 1)
                         hasProp = true;
                 }
@@ -750,16 +732,12 @@ public class DistanceMethods {
 
     public static boolean hasTreeSiblingProperty(PhyloTree t) {
         boolean hasTreeSibProp = true;
-        for (Node v : t.getNodes()) {
+        for (Node v : t.nodes()) {
             if (v.getInDegree() > 1) {
                 boolean hasProp = false;
-                Iterator<Edge> it = v.getInEdges();
-                while (it.hasNext()) {
-                    Edge e1 = it.next();
+                for (Edge e1 : v.inEdges()) {
                     Node p = e1.getSource();
-                    Iterator<Edge> pOut = p.getOutEdges();
-                    while (pOut.hasNext()) {
-                        Edge e2 = pOut.next();
+                    for (Edge e2 : p.outEdges()) {
                         if (!e2.equals(e1)) {
                             Node s = e2.getTarget();
                             if (s.getInDegree() == 1)
@@ -793,7 +771,7 @@ public class DistanceMethods {
 
             HashSet<HashSet<Node>> retSets = new HashSet<HashSet<Node>>();
             Vector<Node> reticulations = new Vector<Node>();
-            for (Node v : t.getNodes()) {
+            for (Node v : t.nodes()) {
                 if (v.getInDegree() > 1)
                     reticulations.add(v);
             }
@@ -840,9 +818,7 @@ public class DistanceMethods {
 
         for (int i = g.getNumberOfNodes() - 1; i >= 0; i--) {
             Node v = levelToNode.get(i);
-            Iterator<Edge> it = v.getInEdges();
-            while (it.hasNext()) {
-                Node w = it.next().getSource();
+            for (Node w : v.parents()) {
                 if (nodeToLevel.get(w) <= i)
                     return true;
             }
@@ -853,12 +829,10 @@ public class DistanceMethods {
 
     private static int initLevels(Node v, int level, Vector<Node> visited) {
         visited.add(v);
-        Iterator<Edge> it = v.getOutEdges();
         int value = level;
-        while (it.hasNext()) {
-            Node w = it.next().getTarget();
-            if (!visited.contains(w))
-                value = initLevels(w, value, visited) + 1;
+        for (Node c : v.children()) {
+            if (!visited.contains(c))
+                value = initLevels(c, value, visited) + 1;
         }
         levelToNode.put(value, v);
         nodeToLevel.put(v, value);
@@ -890,9 +864,7 @@ public class DistanceMethods {
     private static void createEdges(Node v, Graph g,
                                     Hashtable<Integer, HashSet<Node>> idToRetSet,
                                     Hashtable<HashSet<Node>, Node> retSetToNode, Integer lastID) {
-        Iterator<Edge> it = v.getOutEdges();
-        while (it.hasNext()) {
-            Node c = it.next().getTarget();
+        for (Node c : v.children()) {
             if (c.getInfo() != null) {
                 if (lastID != null) {
                     Node v1 = retSetToNode.get(idToRetSet.get(lastID));
@@ -916,21 +888,19 @@ public class DistanceMethods {
         if (v.getInDegree() > 1) {
             reticulations.remove(v);
             reticulationSet.add(v);
-            Iterator<Edge> it = v.getInEdges();
+            Iterator<Edge> it = v.inEdges().iterator();
             while (it.hasNext()) {
                 Node p = it.next().getSource();
                 reticulationSet.add(p);
                 collectRetSet(p, reticulations, reticulationSet);
-                Iterator<Edge> pIt = p.getOutEdges();
+                Iterator<Edge> pIt = p.outEdges().iterator();
                 while (pIt.hasNext()) {
                     Node c = pIt.next().getTarget();
                     if (!c.equals(v))
                         collectRetSet(c, reticulations, reticulationSet);
                 }
             }
-            it = v.getOutEdges();
-            while (it.hasNext()) {
-                Node c = it.next().getTarget();
+            for (Node c : v.children()) {
                 collectRetSet(c, reticulations, reticulationSet);
             }
         }

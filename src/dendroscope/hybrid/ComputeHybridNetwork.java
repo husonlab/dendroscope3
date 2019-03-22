@@ -52,8 +52,7 @@ public class ComputeHybridNetwork {
 	public HybridNetwork run(Vector<HybridTree> forest, HybridTree t1,
 							 HybridTree t2, ReplacementInfo rI, TreeMarker tM) throws Exception {
 
-		HybridNetwork newN = new HybridNetwork(forest.lastElement(), false,
-				t1.getTaxaOrdering());
+        HybridNetwork newN = new HybridNetwork(forest.lastElement(), false, t1.getTaxaOrdering());
 
 		updateClusters(true, newN);
 		updateClusters(false, newN);
@@ -76,19 +75,18 @@ public class ComputeHybridNetwork {
 			// System.out.println();
 			BitSet mask = new BitSet(newN.getTaxaOrdering().size());
 			for (int j = 0; j <= i; j++)
-				mask.or(forest.get(j).getNodeToCluster()
-						.get(forest.get(j).getRoot()));
+                mask.or(forest.get(j).getNodeToCluster().get(forest.get(j).getRoot()));
 
 			// attach tree f to the so far computed network...
 			BitSet r = f.getNodeToCluster().get(f.getRoot());
 
 			// compute parent of the node representing f in t1
 			Node l1 = t1.findLCA(r);
-			Node p1 = l1.getInEdges().next().getSource();
+            Node p1 = l1.getFirstInEdge().getSource();
 
 			// compute parent of the node representing f in t2
 			Node l2 = t2.findLCA(r);
-			Node p2 = l2.getInEdges().next().getSource();
+            Node p2 = l2.getFirstInEdge().getSource();
 
 			// System.out.println("l1: " + t1.getLabel(l1));
 			// System.out.println("l2: " + t2.getLabel(l2));
@@ -100,7 +98,7 @@ public class ComputeHybridNetwork {
 			Node v2 = findChildNode(getSibling(l2, t2), t2, newN, false, mask);
 
 			// if no edge is found, f is attached to the out-edge of the root
-			Iterator<Edge> it = newN.getRoot().getOutEdges();
+            Iterator<Edge> it = newN.getRoot().outEdges().iterator();
 			Node v = it.next().getTarget();
 			if (newN.getLabel(v).equals("rho"))
 				v = it.next().getTarget();
@@ -135,8 +133,8 @@ public class ComputeHybridNetwork {
 	}
 
 	private Node getSibling(Node v, HybridNetwork t) {
-		Node p = v.getInEdges().next().getSource();
-		Iterator<Edge> it = p.getOutEdges();
+        Node p = v.getFirstInEdge().getSource();
+        Iterator<Edge> it = p.outEdges().iterator();
 		Node sibling = it.next().getTarget();
 		if (sibling.equals(v))
 			sibling = it.next().getTarget();
@@ -147,7 +145,7 @@ public class ComputeHybridNetwork {
 							   boolean isTree1, BitSet mask) {
 
 		// searching for first node in n whose subtree contains all leaves in f
-		// Iterator<Edge> it = p.getOutEdges();
+        // Iterator<Edge> it = p.outEdges().iterator();
 		// BitSet c = t.getNodeToCluster().get(it.next().getTarget());
 		// if (c.equals(r))
 		// c = t.getNodeToCluster().get(it.next().getTarget());
@@ -170,7 +168,7 @@ public class ComputeHybridNetwork {
 			// System.out.println("FALSE: " + t.getLabel(v));
 			// System.out.println(c);
 			if (v.getInDegree() != 0) {
-				Node p = v.getInEdges().next().getSource();
+                Node p = v.getFirstInEdge().getSource();
 				return findChildNode(p, t, newN, isTree1, mask);
 			} else
 				return null;
@@ -211,7 +209,7 @@ public class ComputeHybridNetwork {
 	private void insertReticulateEdges(HybridNetwork n, Node v1, Node v2,
 									   HybridTree f, TreeMarker tM) {
 
-		Edge e = v1.getInEdges().next();
+        Edge e = v1.getFirstInEdge();
 		boolean isSpecial = n.isSpecial(e);
 		Node t = e.getTarget();
 		Node s = e.getSource();
@@ -235,7 +233,7 @@ public class ComputeHybridNetwork {
 		tM.insertT1Edge(e1);
 		t1Edges.add(e1);
 
-		e = v2.getInEdges().next();
+        e = v2.getFirstInEdge();
 		isSpecial = n.isSpecial(e);
 		t = e.getTarget();
 		s = e.getSource();
@@ -283,14 +281,11 @@ public class ComputeHybridNetwork {
 		updateClustersRec(newN.getRoot(), isTree1, newN);
 	}
 
-	private Vector<String> updateClustersRec(Node v, boolean isTree1,
-											 HybridNetwork newN) {
+    private Vector<String> updateClustersRec(Node v, boolean isTree1, HybridNetwork newN) {
 		Vector<String> vTaxa = new Vector<>();
 		BitSet cluster = new BitSet(newN.getTaxaOrdering().size());
-		Iterator<Edge> it = v.getOutEdges();
-		if (v.getOutDegree() != 0) {
-			while (it.hasNext()) {
-				Edge e = it.next();
+        if (v.getOutDegree() > 0) {
+            for (Edge e : v.outEdges()) {
 				if (!newN.isSpecial(e) || (t1Edges.contains(e) && isTree1)
 						|| (!t1Edges.contains(e) && !isTree1)) {
 					Node child = e.getTarget();

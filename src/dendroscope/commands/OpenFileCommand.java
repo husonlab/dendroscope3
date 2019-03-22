@@ -27,11 +27,11 @@ import dendroscope.io.IOManager;
 import dendroscope.io.nexml.Nexml;
 import dendroscope.main.DendroscopeProperties;
 import dendroscope.util.SupportValueUtils;
-import jloda.gui.ChooseFileDialog;
-import jloda.gui.commands.ICommand;
-import jloda.gui.director.ProjectManager;
-import jloda.util.ProgramProperties;
-import jloda.util.ResourceManager;
+import jloda.swing.commands.ICommand;
+import jloda.swing.director.ProjectManager;
+import jloda.swing.util.ChooseFileDialog;
+import jloda.swing.util.ProgramProperties;
+import jloda.swing.util.ResourceManager;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;
@@ -101,7 +101,7 @@ public class OpenFileCommand extends CommandBaseMultiViewer implements ICommand 
             StringBuilder buf = new StringBuilder();
             for (File file : files) {
                 if (file != null && file.exists() && file.canRead()) {
-                    jloda.util.ProgramProperties.put(ProgramProperties.OPENFILE, file.getAbsolutePath());
+                    ProgramProperties.put(ProgramProperties.OPENFILE, file.getAbsolutePath());
                     buf.append("open file='").append(file.getPath()).append("';");
                 }
             }

@@ -332,7 +332,7 @@ public class Hybrid {
 
     public Vector<HybridNetwork> getNetworks() {
         for (HybridNetwork n : networks) {
-            for (Node v : n.getNodes())
+            for (Node v : n.nodes())
                 n.setInfo(v, null);
         }
         return networks;

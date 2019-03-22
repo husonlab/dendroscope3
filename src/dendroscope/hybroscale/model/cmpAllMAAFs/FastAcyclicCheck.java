@@ -1,14 +1,10 @@
 package dendroscope.hybroscale.model.cmpAllMAAFs;
 
-import java.util.BitSet;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Vector;
-
 import dendroscope.hybroscale.util.graph.MyEdge;
 import dendroscope.hybroscale.util.graph.MyGraph;
 import dendroscope.hybroscale.util.graph.MyNode;
+
+import java.util.*;
 
 public class FastAcyclicCheck {
 
@@ -115,7 +111,7 @@ public class FastAcyclicCheck {
 	}
 
 	public void checkCycleRec(MyGraph g, MyNode v, MyNode start, Vector<MyEdge> visited) {
-		Iterator<MyEdge> it = v.getOutEdges();
+        Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyEdge e = it.next();
 			MyNode w = e.getTarget();
@@ -138,7 +134,7 @@ public class FastAcyclicCheck {
 		// search for scc
 		for (int i = g.getNumberOfNodes() - 1; i >= 0; i--) {
 			MyNode v = levelToNode.get(i);
-			Iterator<MyEdge> it = v.getInEdges();
+            Iterator<MyEdge> it = v.inEdges().iterator();
 			while (it.hasNext()) {
 				MyNode w = it.next().getSource();
 				if (nodeToLevel.get(w) < i)
@@ -150,7 +146,7 @@ public class FastAcyclicCheck {
 
 	private int initLevels(MyNode v, int level, Vector<MyNode> visited) {
 		visited.add(v);
-		Iterator<MyEdge> it = v.getOutEdges();
+        Iterator<MyEdge> it = v.outEdges().iterator();
 		int value = level;
 		while (it.hasNext()) {
 			MyNode w = it.next().getTarget();
@@ -165,7 +161,7 @@ public class FastAcyclicCheck {
 	private void computeOrder(Vector<MyNode> border) {
 		Vector<MyNode> newBorder = new Vector<MyNode>();
 		for (MyNode v : border) {
-			Iterator<MyEdge> it = v.getOutEdges();
+            Iterator<MyEdge> it = v.outEdges().iterator();
 			while (it.hasNext()) {
 				MyNode w = it.next().getTarget();
 				if (!acyclicOrder.contains(nodeToComp.get(w))) {
@@ -264,7 +260,7 @@ public class FastAcyclicCheck {
 	}
 
 	private void addEdge(MyNode v1, MyNode v2, MyGraph g) {
-		Iterator<MyEdge> it = v1.getOutEdges();
+        Iterator<MyEdge> it = v1.outEdges().iterator();
 		boolean add = true;
 		while (it.hasNext()) {
 			MyNode v = it.next().getTarget();

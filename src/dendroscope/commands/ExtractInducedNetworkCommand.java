@@ -24,10 +24,10 @@ import dendroscope.core.Document;
 import dendroscope.embed.LayoutOptimizerManager;
 import dendroscope.window.MultiViewer;
 import dendroscope.window.TreeViewer;
-import jloda.gui.commands.ICommand;
-import jloda.gui.director.IDirector;
 import jloda.phylo.PhyloTree;
-import jloda.util.ResourceManager;
+import jloda.swing.commands.ICommand;
+import jloda.swing.director.IDirector;
+import jloda.swing.util.ResourceManager;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;

@@ -27,7 +27,6 @@ import jloda.graph.NodeSet;
 import jloda.phylo.PhyloTree;
 
 import java.util.HashMap;
-import java.util.Iterator;
 
 /**
  * This class represents MUL-trees
@@ -116,16 +115,14 @@ public class MultilabeledTree extends PhyloTree {
          * edge. in this case ignore this node.
          */
         boolean hasNormalEdge = false;
-        Iterator<Edge> edgeIt = this.getInEdges(v);
-        while (edgeIt.hasNext()) {
-            Edge e = edgeIt.next();
+        for (Edge e : v.inEdges()) {
             if (!this.isSpecial(e)) {
                 hasNormalEdge = true;
                 break;
             }
         }
         if (v.getOutDegree() == 1 && !hasNormalEdge) {
-            Node w = this.getTarget(v.getOutEdges().next());
+            Node w = this.getTarget(v.getFirstOutEdge());
             return (getMultisetsRec(w, clusterSet));
         }
 
@@ -235,9 +232,8 @@ public class MultilabeledTree extends PhyloTree {
     public void deleteSubtree(Node v) {
         NodeSet collapsedNodes = getDescendingNodes(v);
         //delete the in edges of v.
-        Iterator<Edge> edgeIt = this.getInEdges(v);
-        while (edgeIt.hasNext()) {
-            this.deleteEdge(edgeIt.next());
+        for (Edge e : v.inEdges()) {
+            this.deleteEdge(e);
         }
         for (Node toDel : collapsedNodes) {
             for (Edge e : toDel.outEdges()) {
@@ -245,7 +241,6 @@ public class MultilabeledTree extends PhyloTree {
             }
             this.deleteNode(toDel);
         }
-
     }
 
     /**

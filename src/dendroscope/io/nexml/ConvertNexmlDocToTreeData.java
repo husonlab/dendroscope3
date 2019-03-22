@@ -21,8 +21,8 @@ package dendroscope.io.nexml;
 
 import dendroscope.core.Connectors;
 import dendroscope.core.TreeData;
-import jloda.graphview.EdgeView;
-import jloda.graphview.NodeView;
+import jloda.swing.graphview.EdgeView;
+import jloda.swing.graphview.NodeView;
 import jloda.util.Basic;
 import jloda.util.Pair;
 import org.nexml.model.*;

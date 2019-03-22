@@ -1,16 +1,12 @@
 package dendroscope.hybroscale.terminals;
 
-import java.util.BitSet;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Vector;
-import java.util.concurrent.ConcurrentHashMap;
-
 import dendroscope.hybroscale.util.graph.MyEdge;
 import dendroscope.hybroscale.util.graph.MyGraph;
 import dendroscope.hybroscale.util.graph.MyNode;
 import dendroscope.hybroscale.util.graph.MyPhyloTree;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class TerminalAlg_Light {
 
@@ -182,7 +178,7 @@ public class TerminalAlg_Light {
 	}
 
 	private void deleteLeafNode(MyNode v) {
-		MyEdge e = v.getInEdges().next();
+        MyEdge e = v.getFirstInEdge();
 		MyNode p = e.getSource();
 		p.getOwner().deleteEdge(e);
 		p.removeOutEdge(e);
@@ -192,16 +188,16 @@ public class TerminalAlg_Light {
 	private void contractNode(MyNode v) {
 		if (v.getOutDegree() == 1 && v.getInDegree() == 1) {
 			MyGraph t = v.getOwner();
-			MyEdge eUp = v.getInEdges().next();
+            MyEdge eUp = v.getFirstInEdge();
 			MyNode p = eUp.getSource();
-			MyEdge eDown = v.getOutEdges().next();
+            MyEdge eDown = v.getFirstOutEdge();
 			MyNode c = eDown.getTarget();
 			t.deleteEdge(eUp);
 			t.deleteEdge(eDown);
 			t.newEdge(p, c);
 		} else if (v.getOutDegree() == 1 && v.getInDegree() == 0) {
 			MyPhyloTree t = (MyPhyloTree) v.getOwner();
-			MyEdge eDown = v.getOutEdges().next();
+            MyEdge eDown = v.getFirstOutEdge();
 			MyNode c = eDown.getTarget();
 			t.deleteEdge(eDown);
 			t.setRoot(c);
@@ -303,10 +299,10 @@ public class TerminalAlg_Light {
 		for (BitSet termCluster : terminalSet) {
 
 			MyNode v1 = getLeaf(t1Leaves, termCluster);
-			MyNode p1 = v1.getInEdges().next().getSource();
+            MyNode p1 = v1.getFirstInEdge().getSource();
 			BitSet p1Cluster = p1.getCluster();
 			MyNode v2 = getLeaf(t2Leaves, termCluster);
-			MyNode p2 = v2.getInEdges().next().getSource();
+            MyNode p2 = v2.getFirstInEdge().getSource();
 			BitSet p2Cluster = p2.getCluster();
 			if (p1Cluster.cardinality() == 2 && p2Cluster.cardinality() == 2) {
 				BitSet pCluster = (BitSet) p1Cluster.clone();
@@ -329,12 +325,12 @@ public class TerminalAlg_Light {
 		HashSet<HashSet<MyNode>> cherries = new HashSet<HashSet<MyNode>>();
 		HashSet<MyNode> visited = new HashSet<MyNode>();
 		for (MyNode v : t.getLeaves()) {
-			MyNode p = v.getInEdges().next().getSource();
+            MyNode p = v.getFirstInEdge().getSource();
 			if (!visited.contains(p)) {
 				visited.add(p);
 				if (isCherry(p)) {
 					HashSet<MyNode> cherry = new HashSet<MyNode>();
-					Iterator<MyEdge> it = p.getOutEdges();
+                    Iterator<MyEdge> it = p.outEdges().iterator();
 					while (it.hasNext())
 						cherry.add(it.next().getTarget());
 					cherries.add(cherry);
@@ -345,7 +341,7 @@ public class TerminalAlg_Light {
 	}
 
 	private boolean isCherry(MyNode v) {
-		Iterator<MyEdge> it = v.getOutEdges();
+        Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			if (it.next().getTarget().getOutDegree() != 0)
 				return false;
@@ -356,8 +352,8 @@ public class TerminalAlg_Light {
 	private boolean isTerminalNode(MyNode v1, MyNode[] t2Leaves) {
 		BitSet b = v1.getCluster();
 		MyNode v2 = getLeaf(t2Leaves, b);
-		MyNode p1 = v1.getInEdges().next().getSource();
-		MyNode p2 = v2.getInEdges().next().getSource();
+        MyNode p1 = v1.getFirstInEdge().getSource();
+        MyNode p2 = v2.getFirstInEdge().getSource();
 		BitSet b1 = (BitSet) p1.getCluster().clone();
 		BitSet b2 = (BitSet) p2.getCluster().clone();
 		b1.xor(b);
@@ -402,7 +398,7 @@ public class TerminalAlg_Light {
 	private void contractLeafNode(MyNode v, HashSet<MyNode> contractedNodes, HashSet<MyNode> endNodes) {
 		if (v.getInDegree() != 0) {
 			BitSet vSet = (BitSet) v.getInfo();
-			MyEdge e = v.getInEdges().next();
+            MyEdge e = v.getFirstInEdge();
 			MyNode p = e.getSource();
 			p.getOwner().deleteEdge(e);
 			p.removeOutEdge(e);
@@ -413,14 +409,14 @@ public class TerminalAlg_Light {
 				if (endNodes.contains(p))
 					endNodes.remove(p);
 				if (p.getInDegree() > 0)
-					contractNodesRec(p.getInEdges().next().getSource(), contractedNodes, endNodes);
+                    contractNodesRec(p.getFirstInEdge().getSource(), contractedNodes, endNodes);
 			} else
 				contractNodesRec(p, contractedNodes, endNodes);
 		}
 	}
 
 	private void contractNodesRec(MyNode v, HashSet<MyNode> contractedNodes, HashSet<MyNode> endNodes) {
-		Iterator<MyEdge> it = v.getOutEdges();
+        Iterator<MyEdge> it = v.outEdges().iterator();
 		Vector<MyNode> conChildren = new Vector<MyNode>();
 		while (it.hasNext()) {
 			MyNode c = it.next().getTarget();
@@ -482,7 +478,7 @@ public class TerminalAlg_Light {
 
 			HashSet<HashSet<MyNode>> subNodeSet = new HashSet<HashSet<MyNode>>();
 			Vector<MyNode> stChildren = new Vector<MyNode>();
-			Iterator<MyEdge> it = v.getOutEdges();
+            Iterator<MyEdge> it = v.outEdges().iterator();
 			while (it.hasNext()) {
 				MyNode c = it.next().getTarget();
 				HashSet<MyNode> nodes = cmpSTNodesRec(c, stNodeSet, stMulNodes, t2Leaves);
@@ -573,7 +569,7 @@ public class TerminalAlg_Light {
 
 		MyNode lca = cmpLCA_naive(cluster, t2Leaves);
 
-		Iterator<MyEdge> it = lca.getOutEdges();
+        Iterator<MyEdge> it = lca.outEdges().iterator();
 		while (it.hasNext()) {
 			BitSet childCluster = it.next().getTarget().getCluster();
 			BitSet b = (BitSet) childCluster.clone();
@@ -589,7 +585,7 @@ public class TerminalAlg_Light {
 		BitSet b = (BitSet) v.getCluster().clone();
 		b.and(cluster);
 		while (!b.equals(cluster)) {
-			v = v.getInEdges().next().getSource();
+            v = v.getFirstInEdge().getSource();
 			b = (BitSet) v.getCluster().clone();
 			b.and(cluster);
 		}
@@ -607,7 +603,7 @@ public class TerminalAlg_Light {
 			int index = Integer.parseInt(v.getLabel()) - labelOffset;
 			b.set(index);
 		} else {
-			Iterator<MyEdge> it = v.getOutEdges();
+            Iterator<MyEdge> it = v.outEdges().iterator();
 			while (it.hasNext())
 				b.or(cmpClustersRec(it.next().getTarget(), leafArray));
 		}
@@ -632,7 +628,7 @@ public class TerminalAlg_Light {
 	}
 
 	private void copyTreeRec(MyNode v, MyNode vCopy, MyNode[] nodePair) {
-		Iterator<MyEdge> it = v.getOutEdges();
+        Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyGraph tCopy = vCopy.getOwner();
 			MyNode c = it.next().getTarget();

@@ -19,8 +19,8 @@
 */
 package dendroscope.commands.formatting;
 
-import jloda.gui.commands.CommandBase;
-import jloda.gui.commands.ICommand;
+import jloda.swing.commands.CommandBase;
+import jloda.swing.commands.ICommand;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;

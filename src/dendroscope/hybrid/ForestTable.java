@@ -19,7 +19,7 @@
 */
 package dendroscope.hybrid;
 
-import jloda.util.ResourceManager;
+import jloda.swing.util.ResourceManager;
 
 import javax.swing.*;
 import java.awt.*;

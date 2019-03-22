@@ -132,7 +132,7 @@ public class FastNodeDisjointCheck {
                 vec.add(t2.getLabel(v) + " ");
                 // collect clusters up to the root
                 while (!v.equals(t2Root)) {
-                    v = v.getInEdges().next().getSource();
+                    v = v.getFirstInEdge().getSource();
                     vec.add(t2.getLabel(v) + " ");
                     s.add(t2.getNodeToCluster().get(v));
                 }
@@ -145,8 +145,7 @@ public class FastNodeDisjointCheck {
         return s;
     }
 
-    private Vector<Node> getTaxa(HybridTree t1, Vector<Node> rootNodes,
-                                 Node root) {
+    private Vector<Node> getTaxa(HybridTree t1, Vector<Node> rootNodes, Node root) {
 
         Vector<Node> fTaxa = new Vector<>();
         initRec(t1, root, rootNodes, fTaxa);
@@ -154,9 +153,8 @@ public class FastNodeDisjointCheck {
         return fTaxa;
     }
 
-    private void initRec(HybridTree t1, Node v, Vector<Node> rootNodes,
-                         Vector<Node> fTaxa) {
-        Iterator<Edge> it = v.getOutEdges();
+    private void initRec(HybridTree t1, Node v, Vector<Node> rootNodes, Vector<Node> fTaxa) {
+        Iterator<Edge> it = v.outEdges().iterator();
         while (it.hasNext()) {
             Edge e = it.next();
             Node t = e.getTarget();
@@ -171,7 +169,7 @@ public class FastNodeDisjointCheck {
     }
 
     private boolean hasRootChild(Node p, Vector<Node> rootNodes) {
-        Iterator<Edge> it = p.getOutEdges();
+        Iterator<Edge> it = p.outEdges().iterator();
         while (it.hasNext()) {
             if (rootNodes.contains(it.next().getTarget()))
                 return true;

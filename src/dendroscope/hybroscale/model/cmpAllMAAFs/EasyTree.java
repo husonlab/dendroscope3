@@ -1,11 +1,11 @@
 package dendroscope.hybroscale.model.cmpAllMAAFs;
 
-import java.util.Iterator;
-import java.util.Vector;
-
 import dendroscope.hybroscale.util.graph.MyEdge;
 import dendroscope.hybroscale.util.graph.MyNode;
 import dendroscope.hybroscale.util.graph.MyPhyloTree;
+
+import java.util.Iterator;
+import java.util.Vector;
 
 public class EasyTree {
 
@@ -80,7 +80,7 @@ public class EasyTree {
 	}
 
 	private void copyTreeRec(MyPhyloTree t, MyNode v, EasyNode vCopy) {
-		Iterator<MyEdge> it = v.getOutEdges();
+        Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyNode c = it.next().getTarget();
 			EasyNode cCopy = new EasyNode(vCopy, this, t.getLabel(c));
@@ -240,7 +240,7 @@ public class EasyTree {
 	/* copy the tree t rec without copying the reticulate nodes */
 
 	private void copyTreeRecNoRet(MyPhyloTree t, MyNode v, EasyNode vCopy, boolean check) {
-		Iterator<MyEdge> it = v.getOutEdges();
+        Iterator<MyEdge> it = v.outEdges().iterator();
 		if (!check || v.getInDegree() == 1) {
 			while (it.hasNext()) {
 				MyNode c = it.next().getTarget();

@@ -1,13 +1,5 @@
 package dendroscope.hybroscale.rerooting;
 
-import java.util.HashMap;
-import java.util.Vector;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
 import dendroscope.hybroscale.model.HybridManager;
 import dendroscope.hybroscale.model.HybridManager.Computation;
 import dendroscope.hybroscale.model.attachNetworks.ReattachSubtrees;
@@ -18,6 +10,10 @@ import dendroscope.hybroscale.model.treeObjects.HybridTree;
 import dendroscope.hybroscale.util.graph.MyEdge;
 import dendroscope.hybroscale.util.graph.MyNode;
 import dendroscope.hybroscale.util.graph.MyPhyloTree;
+
+import java.util.HashMap;
+import java.util.Vector;
+import java.util.concurrent.*;
 
 public class RerootByHNumber extends Thread {
 
@@ -186,7 +182,7 @@ public class RerootByHNumber extends Thread {
 		for (MyPhyloTree t : trees) {
 			MyNode r = t.getRoot();
 			if (r.getOutDegree() == 2)
-				invalidEdges.add(r.getOutEdges().next());
+                invalidEdges.add(r.getFirstOutEdge());
 		}
 		return invalidEdges;
 	}
@@ -227,10 +223,10 @@ public class RerootByHNumber extends Thread {
 		MyNode p = v;
 		while (p.getInDegree() != 0) {
 			modNodes.add(p);
-			p = p.getInEdges().next().getSource();
+            p = p.getFirstInEdge().getSource();
 		}
 		for (MyNode y : modNodes) {
-			MyEdge e = y.getInEdges().next();
+            MyEdge e = y.getFirstInEdge();
 			MyNode x = e.getSource();
 			t.deleteEdge(e);
 			t.newEdge(y, x);
@@ -239,9 +235,9 @@ public class RerootByHNumber extends Thread {
 
 	private void supressNode(MyNode v, MyPhyloTree t) {
 		if (v.getInDegree() == 1 && v.getOutDegree() == 1) {
-			MyEdge e1 = v.getInEdges().next();
+            MyEdge e1 = v.getFirstInEdge();
 			MyNode p = e1.getSource();
-			MyEdge e2 = v.getOutEdges().next();
+            MyEdge e2 = v.getFirstOutEdge();
 			MyNode c = e2.getTarget();
 			t.deleteEdge(e1);
 			t.deleteEdge(e2);

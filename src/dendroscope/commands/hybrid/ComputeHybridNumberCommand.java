@@ -22,10 +22,10 @@ package dendroscope.commands.hybrid;
 import dendroscope.hybrid.Controller;
 import dendroscope.hybrid.View;
 import dendroscope.window.TreeViewer;
-import jloda.gui.Message;
 import jloda.phylo.PhyloTree;
 import jloda.phylo.PhyloTreeUtils;
-import jloda.util.Alert;
+import jloda.swing.util.Alert;
+import jloda.swing.util.Message;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;

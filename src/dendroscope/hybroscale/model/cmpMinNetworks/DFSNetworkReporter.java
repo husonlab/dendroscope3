@@ -1,23 +1,13 @@
 package dendroscope.hybroscale.model.cmpMinNetworks;
 
-import java.util.BitSet;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Vector;
-import java.util.concurrent.ConcurrentHashMap;
-
 import dendroscope.hybroscale.model.HybridManager.Computation;
 import dendroscope.hybroscale.model.parallelization.MyNetPriorThreadPool;
-import dendroscope.hybroscale.model.treeObjects.HybridTree;
-import dendroscope.hybroscale.model.treeObjects.SparseNetEdge;
-import dendroscope.hybroscale.model.treeObjects.SparseNetNode;
-import dendroscope.hybroscale.model.treeObjects.SparseNetwork;
-import dendroscope.hybroscale.model.treeObjects.SparseTree;
-import dendroscope.hybroscale.model.treeObjects.SparseTreeNode;
+import dendroscope.hybroscale.model.treeObjects.*;
 import dendroscope.hybroscale.model.util.CheckConstraints;
 import dendroscope.hybroscale.util.graph.MyNode;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class DFSNetworkReporter {
 
@@ -228,7 +218,7 @@ public class DFSNetworkReporter {
 			Vector<SparseNetNode> visited, ConcurrentHashMap<SparseNetNode, SparseNetNode> nodeToCopy,
 			Vector<SparseNetEdge> nonTreeEdges, Vector<SparseNetEdge> solidTreeEdges,
 			ConcurrentHashMap<SparseNetEdge, SparseNetEdge> edgeToEdgeCopy) {
-		Iterator<SparseNetEdge> it = v.getOutEdges().iterator();
+        Iterator<SparseNetEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			SparseNetEdge e = it.next();
 			SparseNetNode c = e.getTarget();
@@ -397,7 +387,7 @@ public class DFSNetworkReporter {
 		if (v.getOutDegree() == 0 && prevTreeToTaxa.get(index).contains(v.getLabel())) {
 			b.set(taxaOrdering.indexOf(v.getLabel()));
 		} else {
-			Iterator<SparseNetEdge> it = v.getOutEdges().iterator();
+            Iterator<SparseNetEdge> it = v.outEdges().iterator();
 			while (it.hasNext()) {
 				SparseNetEdge e = it.next();
 				if (e.getIndices().contains(index) || e.getTarget().getInDegree() <= 1)

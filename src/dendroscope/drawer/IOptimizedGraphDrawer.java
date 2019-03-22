@@ -20,7 +20,7 @@
 package dendroscope.drawer;
 
 import jloda.graph.NodeSet;
-import jloda.graphview.IGraphDrawer;
+import jloda.swing.graphview.IGraphDrawer;
 
 /**
  * interface for optimized graph drawer

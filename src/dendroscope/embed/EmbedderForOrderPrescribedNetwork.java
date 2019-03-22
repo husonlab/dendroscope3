@@ -392,7 +392,7 @@ public class EmbedderForOrderPrescribedNetwork {
      */
     private static void computeNode2SubTreeIdRec(Node v, int subTreeId, NodeArray<Integer> node2SubTreeId) {
         if (node2SubTreeId.get(v) == null) {
-            node2SubTreeId.set(v, subTreeId);
+            node2SubTreeId.put(v, subTreeId);
             for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
                 Node w = e.getTarget();
                 if (w.getInDegree() == 1) // e not a reticulate edge
@@ -453,8 +453,9 @@ public class EmbedderForOrderPrescribedNetwork {
                     return 0;
             }
         });
-        for (Iterator<Edge> it = v.getAdjacentEdges(); it.hasNext(); )
-            edges.add(it.next());
+        for (Edge e : v.adjacentEdges()) {
+            edges.add(e);
+        }
         v.rearrangeAdjacentEdges(edges);
     }
 

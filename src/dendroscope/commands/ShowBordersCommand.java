@@ -20,8 +20,8 @@
 package dendroscope.commands;
 
 import dendroscope.window.MultiViewer;
-import jloda.gui.commands.ICheckBoxCommand;
-import jloda.util.ResourceManager;
+import jloda.swing.commands.ICheckBoxCommand;
+import jloda.swing.util.ResourceManager;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;

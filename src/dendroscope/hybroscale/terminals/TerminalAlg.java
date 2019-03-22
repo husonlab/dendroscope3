@@ -1,18 +1,13 @@
 package dendroscope.hybroscale.terminals;
 
-import java.util.BitSet;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Vector;
-import java.util.concurrent.ConcurrentHashMap;
-
 import dendroscope.hybroscale.util.graph.MyEdge;
 import dendroscope.hybroscale.util.graph.MyGraph;
 import dendroscope.hybroscale.util.graph.MyNode;
 import dendroscope.hybroscale.util.graph.MyPhyloTree;
 import dendroscope.hybroscale.util.lcaQueries.LCA_Query_LogN;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class TerminalAlg {
 
@@ -162,7 +157,7 @@ public class TerminalAlg {
 	}
 
 	private void deleteLeafNode(MyNode v) {
-		MyEdge e = v.getInEdges().next();
+        MyEdge e = v.getFirstInEdge();
 		MyNode p = e.getSource();
 		p.getOwner().deleteEdge(e);
 		p.removeOutEdge(e);
@@ -172,16 +167,16 @@ public class TerminalAlg {
 	private void contractNode(MyNode v) {
 		if (v.getOutDegree() == 1 && v.getInDegree() == 1) {
 			MyGraph t = v.getOwner();
-			MyEdge eUp = v.getInEdges().next();
+            MyEdge eUp = v.getFirstInEdge();
 			MyNode p = eUp.getSource();
-			MyEdge eDown = v.getOutEdges().next();
+            MyEdge eDown = v.getFirstOutEdge();
 			MyNode c = eDown.getTarget();
 			t.deleteEdge(eUp);
 			t.deleteEdge(eDown);
 			t.newEdge(p, c);
 		} else if (v.getOutDegree() == 1 && v.getInDegree() == 0) {
 			MyPhyloTree t = (MyPhyloTree) v.getOwner();
-			MyEdge eDown = v.getOutEdges().next();
+            MyEdge eDown = v.getFirstOutEdge();
 			MyNode c = eDown.getTarget();
 			t.deleteEdge(eDown);
 			t.setRoot(c);
@@ -286,10 +281,10 @@ public class TerminalAlg {
 		for (BitSet termCluster : terminalSet) {
 
 			MyNode v1 = t1ClusterToNode.get(termCluster);
-			MyNode p1 = v1.getInEdges().next().getSource();
+            MyNode p1 = v1.getFirstInEdge().getSource();
 			BitSet p1Cluster = nodeToCluster.get(p1);
 			MyNode v2 = t2ClusterToNode.get(termCluster);
-			MyNode p2 = v2.getInEdges().next().getSource();
+            MyNode p2 = v2.getFirstInEdge().getSource();
 			BitSet p2Cluster = nodeToCluster.get(p2);
 			if (p1Cluster.cardinality() == 2 && p2Cluster.cardinality() == 2) {
 				BitSet pCluster = (BitSet) p1Cluster.clone();
@@ -312,12 +307,12 @@ public class TerminalAlg {
 		HashSet<HashSet<MyNode>> cherries = new HashSet<HashSet<MyNode>>();
 		HashSet<MyNode> visited = new HashSet<MyNode>();
 		for (MyNode v : t.getLeaves()) {
-			MyNode p = v.getInEdges().next().getSource();
+            MyNode p = v.getFirstInEdge().getSource();
 			if (!visited.contains(p)) {
 				visited.add(p);
 				if (isCherry(p)) {
 					HashSet<MyNode> cherry = new HashSet<MyNode>();
-					Iterator<MyEdge> it = p.getOutEdges();
+                    Iterator<MyEdge> it = p.outEdges().iterator();
 					while (it.hasNext())
 						cherry.add(it.next().getTarget());
 					cherries.add(cherry);
@@ -328,7 +323,7 @@ public class TerminalAlg {
 	}
 
 	private boolean isCherry(MyNode v) {
-		Iterator<MyEdge> it = v.getOutEdges();
+        Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			if (it.next().getTarget().getOutDegree() != 0)
 				return false;
@@ -340,8 +335,8 @@ public class TerminalAlg {
 			HashMap<BitSet, MyNode> t2ClusterToNode) {
 		BitSet b = nodeToCluster.get(v1);
 		MyNode v2 = t2ClusterToNode.get(b);
-		MyNode p1 = v1.getInEdges().next().getSource();
-		MyNode p2 = v2.getInEdges().next().getSource();
+        MyNode p1 = v1.getFirstInEdge().getSource();
+        MyNode p2 = v2.getFirstInEdge().getSource();
 		BitSet b1 = (BitSet) nodeToCluster.get(p1).clone();
 		BitSet b2 = (BitSet) nodeToCluster.get(p2).clone();
 		b1.xor(b);
@@ -386,7 +381,7 @@ public class TerminalAlg {
 	private void contractLeafNode(MyNode v, HashSet<MyNode> contractedNodes, HashSet<MyNode> endNodes) {
 		if (v.getInDegree() != 0) {
 			BitSet vSet = (BitSet) v.getInfo();
-			MyEdge e = v.getInEdges().next();
+            MyEdge e = v.getFirstInEdge();
 			MyNode p = e.getSource();
 			p.getOwner().deleteEdge(e);
 			p.removeOutEdge(e);
@@ -397,14 +392,14 @@ public class TerminalAlg {
 				if (endNodes.contains(p))
 					endNodes.remove(p);
 				if (p.getInDegree() > 0)
-					contractNodesRec(p.getInEdges().next().getSource(), contractedNodes, endNodes);
+                    contractNodesRec(p.getFirstInEdge().getSource(), contractedNodes, endNodes);
 			} else
 				contractNodesRec(p, contractedNodes, endNodes);
 		}
 	}
 
 	private void contractNodesRec(MyNode v, HashSet<MyNode> contractedNodes, HashSet<MyNode> endNodes) {
-		Iterator<MyEdge> it = v.getOutEdges();
+        Iterator<MyEdge> it = v.outEdges().iterator();
 		Vector<MyNode> conChildren = new Vector<MyNode>();
 		while (it.hasNext()) {
 			MyNode c = it.next().getTarget();
@@ -469,7 +464,7 @@ public class TerminalAlg {
 
 			HashSet<HashSet<MyNode>> subNodeSet = new HashSet<HashSet<MyNode>>();
 			Vector<MyNode> stChildren = new Vector<MyNode>();
-			Iterator<MyEdge> it = v.getOutEdges();
+            Iterator<MyEdge> it = v.outEdges().iterator();
 			while (it.hasNext()) {
 				MyNode c = it.next().getTarget();
 				HashSet<MyNode> nodes = cmpSTNodesRec(c, nodeToCluster, stNodeSet, stMulNodes, t2ClusterToNode,
@@ -573,7 +568,7 @@ public class TerminalAlg {
 		}
 		MyNode lca = rmqQuery_logN.cmpLCA(t2Nodes);
 
-		Iterator<MyEdge> it = lca.getOutEdges();
+        Iterator<MyEdge> it = lca.outEdges().iterator();
 		while (it.hasNext()) {
 			BitSet childCluster = nodeToCluster.get(it.next().getTarget());
 			BitSet b = (BitSet) childCluster.clone();
@@ -597,7 +592,7 @@ public class TerminalAlg {
 			b.set(index);
 			// b.set(taxaOrdering.indexOf(v.getLabel()));
 		} else {
-			Iterator<MyEdge> it = v.getOutEdges();
+            Iterator<MyEdge> it = v.outEdges().iterator();
 			while (it.hasNext())
 				b.or(cmpClustersRec(it.next().getTarget(), nodeToCluster, clusterToNode));
 		}
@@ -614,7 +609,7 @@ public class TerminalAlg {
 	}
 
 	private void copyTreeRec(MyNode v, MyNode vCopy, MyNode[] nodePair) {
-		Iterator<MyEdge> it = v.getOutEdges();
+        Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyGraph tCopy = vCopy.getOwner();
 			MyNode c = it.next().getTarget();

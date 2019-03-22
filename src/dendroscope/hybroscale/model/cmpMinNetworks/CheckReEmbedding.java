@@ -1,15 +1,11 @@
 package dendroscope.hybroscale.model.cmpMinNetworks;
 
+import dendroscope.hybroscale.model.HybridManager.Computation;
+import dendroscope.hybroscale.model.treeObjects.*;
+
 import java.util.BitSet;
 import java.util.HashSet;
 import java.util.Vector;
-
-import dendroscope.hybroscale.model.HybridManager.Computation;
-import dendroscope.hybroscale.model.treeObjects.HybridTree;
-import dendroscope.hybroscale.model.treeObjects.SparseNetEdge;
-import dendroscope.hybroscale.model.treeObjects.SparseNetNode;
-import dendroscope.hybroscale.model.treeObjects.SparseNetwork;
-import dendroscope.hybroscale.model.treeObjects.SparseTree;
 
 public class CheckReEmbedding {
 
@@ -129,14 +125,14 @@ public class CheckReEmbedding {
 	// for (SparseNetEdge e : n.getEdges()) {
 	// if (e.getTarget().getInDegree() > 1 && e.getIndices().contains(curIndex)
 	// && e.getIndices().size() == 1) {
-	// for (SparseNetEdge eIn : e.getTarget().getInEdges()) {
+    // for (SparseNetEdge eIn : e.getTarget().inEdges().iterator()) {
 	// if (eIn != e) {
-	// SparseNetNode p = eIn.getSource().getInEdges().get(0).getSource();
-	// for (SparseNetEdge e2 : p.getOutEdges()) {
+    // SparseNetNode p = eIn.getSource().inEdges().iterator().get(0).getSource();
+    // for (SparseNetEdge e2 : p.outEdges().iterator()) {
 	// if (e2.getTarget() != eIn.getSource() && e2.getTarget().getInDegree() ==
 	// 1
 	// && e2.getTarget().getOutDegree() == 1) {
-	// SparseNetEdge e1 = e2.getTarget().getOutEdges().get(0);
+    // SparseNetEdge e1 = e2.getTarget().outEdges().iterator().get(0);
 	// for (int e1Index : e1.getIndices()) {
 	// if (eIn.getIndices().contains(e1Index)
 	// && treeMapping.get(e1Index) < treeMapping.get(curIndex))
@@ -175,7 +171,7 @@ public class CheckReEmbedding {
 
 			SparseNetNode retNode = e.getTarget();
 			SparseNetNode x = e.getSource();
-			SparseNetEdge eX = x.getInEdges().get(0);
+            SparseNetEdge eX = x.inEdges().iterator().next();
 			SparseNetNode p = eX.getSource();
 
 			x.removeOutEdge(e);
@@ -185,9 +181,9 @@ public class CheckReEmbedding {
 			potIsolatedNodes.add(p);
 			if (retNode.getInDegree() == 1) {
 				potIsolatedNodes.add(retNode);
-				for (SparseNetEdge eIn : retNode.getInEdges()) {
+                for (SparseNetEdge eIn : retNode.inEdges()) {
 					potIsolatedNodes.add(eIn.getSource());
-					potIsolatedNodes.add(eIn.getSource().getInEdges().get(0).getSource());
+                    potIsolatedNodes.add(eIn.getSource().inEdges().iterator().next().getSource());
 				}
 			}
 
@@ -201,12 +197,12 @@ public class CheckReEmbedding {
 
 	private void removeIsolatedNode(SparseNetNode v, SparseNetwork n) {
 		if (v.getInDegree() == 1 && v.getOutDegree() == 1) {
-			SparseNetNode p = v.getInEdges().get(0).getSource();
-			if (p.getInDegree() == 1 || (!n.isSpecial(v.getInEdges().get(0)) && !n.isSpecial(v.getOutEdges().get(0)))) {
-				HashSet<Integer> indices = (HashSet<Integer>) v.getOutEdges().get(0).getIndices().clone();
-				SparseNetNode c = v.getOutEdges().get(0).getTarget();
-				p.removeOutEdge(v.getInEdges().get(0));
-				v.removeOutEdge(v.getOutEdges().get(0));
+            SparseNetNode p = v.inEdges().iterator().next().getSource();
+            if (p.getInDegree() == 1 || (!n.isSpecial(v.inEdges().iterator().next()) && !n.isSpecial(v.outEdges().iterator().next()))) {
+                HashSet<Integer> indices = (HashSet<Integer>) v.outEdges().iterator().next().getIndices().clone();
+                SparseNetNode c = v.outEdges().iterator().next().getTarget();
+                p.removeOutEdge(v.inEdges().iterator().next());
+                v.removeOutEdge(v.outEdges().iterator().next());
 				SparseNetEdge e = p.addChild(c);
 				e.addIndices(indices);
 			}

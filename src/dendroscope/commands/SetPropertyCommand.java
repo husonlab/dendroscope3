@@ -19,11 +19,14 @@
 */
 package dendroscope.commands;
 
-import jloda.gui.commands.ICommand;
+import jloda.swing.commands.ICommand;
+import jloda.swing.util.ProgramProperties;
+import jloda.util.Basic;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 
 /**
  * the set property command
@@ -70,22 +73,21 @@ public class SetPropertyCommand extends CommandBaseMultiViewer implements IComma
      * parses the given command and executes it
      *
      * @param np
-     * @throws java.io.IOException
      */
     @Override
-    public void apply(NexusStreamParser np) throws Exception {
+    public void apply(NexusStreamParser np) throws IOException {
         np.matchIgnoreCase("set prop");
         String label = np.getWordRespectCase();
         np.matchIgnoreCase("=");
         String value = np.getWordRespectCase();
-        if (NexusStreamParser.isBoolean(value)) {
-            jloda.util.ProgramProperties.put(label, Boolean.parseBoolean(value));
-        } else if (NexusStreamParser.isInteger(value)) {
-            jloda.util.ProgramProperties.put(label, Integer.parseInt(value));
-        } else if (NexusStreamParser.isFloat(value)) {
-            jloda.util.ProgramProperties.put(label, Float.parseFloat(value));
+        if (Basic.isBoolean(value)) {
+            ProgramProperties.put(label, Boolean.parseBoolean(value));
+        } else if (Basic.isInteger(value)) {
+            ProgramProperties.put(label, Integer.parseInt(value));
+        } else if (Basic.isFloat(value)) {
+            ProgramProperties.put(label, Float.parseFloat(value));
         } else
-            jloda.util.ProgramProperties.put(label, value);
+            ProgramProperties.put(label, value);
         np.matchIgnoreCase(";");
     }
 

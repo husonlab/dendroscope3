@@ -60,11 +60,11 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
                 for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
                     if (!tree.isSpecial(e) || tree.getWeight(e) > 0) {
                         children.add(e.getTarget());
-                        retNode2GuideParent.set(e.getTarget(), e.getSource());
+                        retNode2GuideParent.put(e.getTarget(), e.getSource());
                     }
 
                 }
-                tree.getNode2GuideTreeChildren().set(v, children);
+                tree.getNode2GuideTreeChildren().put(v, children);
 
             }
         } else // must be combining network
@@ -82,13 +82,13 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
                 BitSet sources = node2SpecialSource.get(e.getSource());
                 if (sources == null) {
                     sources = new BitSet();
-                    node2SpecialSource.set(e.getSource(), sources);
+                    node2SpecialSource.put(e.getSource(), sources);
                 }
                 sources.set(num);
                 BitSet targets = node2SpecialTarget.get(e.getTarget());
                 if (targets == null) {
                     targets = new BitSet();
-                    node2SpecialTarget.set(e.getTarget(), targets);
+                    node2SpecialTarget.put(e.getTarget(), targets);
                 }
                 targets.set(num);
             }
@@ -112,7 +112,7 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
                 set = (BitSet) targets.clone();
             }
             if (set != null)
-                node2Special.set(v, set);
+                node2Special.put(v, set);
         }
         node2SpecialSource.clear();
         node2SpecialTarget.clear();
@@ -319,8 +319,8 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
      */
     private AttractionMatrix computeAttractionMatrix(Node v, Node before, Node after, NodeArray<List<Node>> node2GuideTreeChildren, NodeArray<Node> retNode2GuideParent, NodeArray<BitSet> node2Special) {
         // clear boundary nodes:
-        node2Special.set(before, new BitSet());
-        node2Special.set(after, new BitSet());
+        node2Special.put(before, new BitSet());
+        node2Special.put(after, new BitSet());
         // compute values for boundary nodes by heading up toward the root
         Node w = v;
         while (true) {
@@ -401,8 +401,8 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
         openSources.andNot(targets);
         BitSet openTargets = (BitSet) targets.clone();
         openTargets.andNot(sources);
-        node2SpecialSource.set(v, openSources);
-        node2SpecialTarget.set(v, openTargets);
+        node2SpecialSource.put(v, openSources);
+        node2SpecialTarget.put(v, openTargets);
     }
 
     /**
@@ -413,7 +413,7 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
      */
     public static boolean isTransferNetwork(PhyloTree tree) {
         boolean isTransferNetwork = false;
-        for (Edge e = tree.getSpecialEdges().getFirstElement(); e != null; e = tree.getSpecialEdges().getNextElement(e)) {
+        for (Edge e : tree.getSpecialEdges()) {
             if (tree.getWeight(e) != 0) {
                 isTransferNetwork = true;
                 break;

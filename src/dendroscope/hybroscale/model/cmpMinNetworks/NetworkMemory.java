@@ -1,14 +1,10 @@
 package dendroscope.hybroscale.model.cmpMinNetworks;
 
-import java.util.BitSet;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Vector;
-
 import dendroscope.hybroscale.model.treeObjects.SparseNetEdge;
 import dendroscope.hybroscale.model.treeObjects.SparseNetNode;
 import dendroscope.hybroscale.model.treeObjects.SparseNetwork;
+
+import java.util.*;
 
 public class NetworkMemory {
 
@@ -122,7 +118,7 @@ public class NetworkMemory {
 		if (v.getOutDegree() == 0)
 			bV.set(taxaOrdering.indexOf(v.getLabel()));
 		else {
-			for (SparseNetEdge e : v.getOutEdges())
+            for (SparseNetEdge e : v.outEdges())
 				cmpLeafSet(e.getTarget(), bV);
 		}
 	}

@@ -21,8 +21,8 @@ package dendroscope.multnet;
 
 import dendroscope.algorithms.levelknet.LevelKNetwork;
 import dendroscope.window.MultiViewer;
-import jloda.gui.ProgressDialog;
 import jloda.phylo.PhyloTree;
+import jloda.swing.util.ProgressDialog;
 import jloda.util.ProgressListener;
 
 import java.util.List;

@@ -19,7 +19,7 @@
 */
 package dendroscope.commands.formatting;
 
-import jloda.gui.commands.ICommand;
+import jloda.swing.commands.ICommand;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

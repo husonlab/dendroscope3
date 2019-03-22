@@ -20,7 +20,7 @@
 package dendroscope.consensus;
 
 import jloda.graph.Edge;
-import jloda.gui.ProgressDialog;
+import jloda.swing.util.ProgressDialog;
 import jloda.util.CanceledException;
 import jloda.util.Pair;
 import jloda.util.ProgressListener;

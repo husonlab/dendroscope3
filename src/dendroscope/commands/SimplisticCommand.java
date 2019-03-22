@@ -22,9 +22,9 @@ package dendroscope.commands;
 import dendroscope.core.TreeData;
 import dendroscope.tripletMethods.Simplistic;
 import dendroscope.window.TreeViewer;
-import jloda.gui.commands.ICommand;
 import jloda.phylo.PhyloTree;
-import jloda.util.Alert;
+import jloda.swing.commands.ICommand;
+import jloda.swing.util.Alert;
 import jloda.util.Basic;
 import jloda.util.parse.NexusStreamParser;
 

@@ -1,11 +1,11 @@
 package dendroscope.hybroscale.util.newick;
 
-import java.util.Hashtable;
-import java.util.Vector;
-
 import dendroscope.hybroscale.util.graph.MyEdge;
 import dendroscope.hybroscale.util.graph.MyNode;
 import dendroscope.hybroscale.util.graph.MyPhyloTree;
+
+import java.util.Hashtable;
+import java.util.Vector;
 
 public class NewickParser {
 
@@ -59,7 +59,7 @@ public class NewickParser {
 			for (MyNode v : hTagToNodes.get(hTag)) {
 				if (v.getLabel() != null)
 					target.setLabel(v.getLabel());
-				MyEdge inEdge = v.getInEdges().next();
+                MyEdge inEdge = v.getFirstInEdge();
 				Object info = inEdge.getInfo();
 				MyNode source = inEdge.getSource();
 				t.deleteEdge(inEdge);

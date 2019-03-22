@@ -28,9 +28,9 @@ import dendroscope.consensus.Taxa;
 import dendroscope.util.IntegerVariable;
 import jloda.graph.Node;
 import jloda.graph.NodeDoubleArray;
-import jloda.gui.ProgressDialog;
 import jloda.phylo.PhyloTree;
-import jloda.util.Alert;
+import jloda.swing.util.Alert;
+import jloda.swing.util.ProgressDialog;
 import jloda.util.Basic;
 import jloda.util.ProgressListener;
 

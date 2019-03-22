@@ -19,8 +19,8 @@
 */
 package dendroscope.commands.go;
 
-import jloda.gui.commands.ICommand;
-import jloda.util.ResourceManager;
+import jloda.swing.commands.ICommand;
+import jloda.swing.util.ResourceManager;
 
 import javax.swing.*;
 import java.awt.*;

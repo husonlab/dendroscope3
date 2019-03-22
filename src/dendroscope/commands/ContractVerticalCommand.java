@@ -21,10 +21,10 @@ package dendroscope.commands;
 
 import dendroscope.window.MultiViewer;
 import dendroscope.window.TreeViewer;
-import jloda.graphview.GraphView;
-import jloda.graphview.ScrollPaneAdjuster;
-import jloda.gui.commands.ICommand;
-import jloda.util.ResourceManager;
+import jloda.swing.commands.ICommand;
+import jloda.swing.graphview.GraphView;
+import jloda.swing.graphview.ScrollPaneAdjuster;
+import jloda.swing.util.ResourceManager;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;

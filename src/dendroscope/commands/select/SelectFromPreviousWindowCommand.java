@@ -22,7 +22,7 @@ package dendroscope.commands.select;
 import dendroscope.commands.CommandBaseMultiViewer;
 import dendroscope.window.MultiViewer;
 import dendroscope.window.TreeViewer;
-import jloda.gui.commands.ICommand;
+import jloda.swing.commands.ICommand;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;

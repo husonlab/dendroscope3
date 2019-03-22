@@ -1,13 +1,13 @@
 package dendroscope.hybroscale.model.treeObjects;
 
+import dendroscope.hybroscale.util.graph.MyEdge;
+import dendroscope.hybroscale.util.graph.MyNode;
+import dendroscope.hybroscale.util.graph.MyPhyloTree;
+
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
-
-import dendroscope.hybroscale.util.graph.MyEdge;
-import dendroscope.hybroscale.util.graph.MyNode;
-import dendroscope.hybroscale.util.graph.MyPhyloTree;
 
 public class SparseNetwork {
 
@@ -40,7 +40,7 @@ public class SparseNetwork {
 	private void copyTreeRec(SparseNetwork t, SparseNetNode v,
 			SparseNetNode vCopy, Hashtable<SparseNetNode, SparseNetNode> visited) {
 		visited.put(v, vCopy);
-		for (SparseNetEdge e : v.getOutEdges()) {
+        for (SparseNetEdge e : v.outEdges()) {
 			SparseNetNode c = e.getTarget();
 			if (visited.containsKey(c)) {
 				SparseNetNode cCopy = visited.get(c);
@@ -50,7 +50,7 @@ public class SparseNetwork {
 			} else {
 				SparseNetNode cCopy = new SparseNetNode(vCopy, this,
 						c.getLabel());
-				SparseNetEdge eCopy = cCopy.getInEdges().firstElement();
+                SparseNetEdge eCopy = cCopy.inEdges().iterator().next();
 				eCopy.addIndices((HashSet<Integer>) e.getIndices().clone());
 				eCopy.addEdgeIndices((HashSet<Integer>) e.getEdgeIndex().clone());
 				if (c.getOutDegree() != 0)
@@ -70,7 +70,7 @@ public class SparseNetwork {
 	private void copyTreeRec(MyPhyloTree t, MyNode v, SparseNetNode vCopy,
 			Hashtable<MyNode, SparseNetNode> visited) {
 		visited.put(v, vCopy);
-		Iterator<MyEdge> it = v.getOutEdges();
+        Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyEdge e = it.next();
 			MyNode c = e.getTarget();
@@ -113,10 +113,9 @@ public class SparseNetwork {
 		return t;
 	}
 
-	private void getPhyloTreeRec(MyPhyloTree t, SparseNetNode v, MyNode vCopy,
-			Hashtable<SparseNetNode, MyNode> visited) {
+    private void getPhyloTreeRec(MyPhyloTree t, SparseNetNode v, MyNode vCopy, Hashtable<SparseNetNode, MyNode> visited) {
 		visited.put(v, vCopy);
-		for (SparseNetEdge eOut : v.getOutEdges()) {
+        for (SparseNetEdge eOut : v.outEdges()) {
 			SparseNetNode c = eOut.getTarget();
 			MyEdge newEdge = null;
 			if (visited.containsKey(c)) {
@@ -124,7 +123,7 @@ public class SparseNetwork {
 				if (c.getLabel() != null)
 					t.setLabel(cCopy, c.getLabel());
 				newEdge = t.newEdge(vCopy, cCopy);
-				Iterator<MyEdge> it = cCopy.getInEdges();
+                Iterator<MyEdge> it = cCopy.inEdges().iterator();
 				while (it.hasNext()) {
 					MyEdge e = it.next();
 					t.setSpecial(e, true);

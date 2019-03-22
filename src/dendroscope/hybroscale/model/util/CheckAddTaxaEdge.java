@@ -1,13 +1,13 @@
 package dendroscope.hybroscale.model.util;
 
+import dendroscope.hybroscale.util.graph.MyEdge;
+import dendroscope.hybroscale.util.graph.MyNode;
+import dendroscope.hybroscale.util.graph.MyPhyloTree;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Vector;
-
-import dendroscope.hybroscale.util.graph.MyEdge;
-import dendroscope.hybroscale.util.graph.MyNode;
-import dendroscope.hybroscale.util.graph.MyPhyloTree;
 
 public class CheckAddTaxaEdge {
 
@@ -34,7 +34,7 @@ public class CheckAddTaxaEdge {
 			Vector<MyEdge> retEdges = new Vector<MyEdge>();
 			for (MyNode v : n.getNodes()) {
 				if (v.getInDegree() > 1) {
-					Iterator<MyEdge> it = v.getInEdges();
+                    Iterator<MyEdge> it = v.inEdges().iterator();
 					while (it.hasNext()) {
 						MyEdge e = it.next();
 						if (!trivialEdges.contains(e))
@@ -144,7 +144,7 @@ public class CheckAddTaxaEdge {
 		for (MyNode v : retNodes) {
 			Vector<MyNode> parentNodes = new Vector<MyNode>();
 			Vector<MyEdge> parentEdges = new Vector<MyEdge>();
-			Iterator<MyEdge> it = v.getInEdges();
+            Iterator<MyEdge> it = v.inEdges().iterator();
 			while (it.hasNext()) {
 				MyEdge e = it.next();
 				parentNodes.add(e.getSource());
@@ -172,7 +172,7 @@ public class CheckAddTaxaEdge {
 
 	private void cmpImplicitAncestorsRec(boolean b, MyNode v, Vector<MyNode> implicitAncestors) {
 		if (v.getInDegree() > 1 || b) {
-			Iterator<MyEdge> it = v.getInEdges();
+            Iterator<MyEdge> it = v.inEdges().iterator();
 			while (it.hasNext()) {
 				MyEdge e = it.next();
 				MyNode a = e.getSource();
@@ -184,7 +184,7 @@ public class CheckAddTaxaEdge {
 
 	private void assingPreds(MyNode v, HashSet<MyNode> preds, HashMap<MyNode, HashSet<MyNode>> nodeToPreds) {
 		boolean isCritical = false;
-		Iterator<MyEdge> it = v.getOutEdges();
+        Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyEdge e = it.next();
 			if (v.getOwner().isSpecial(e)) {
@@ -198,7 +198,7 @@ public class CheckAddTaxaEdge {
 		}
 		if (isCritical)
 			preds.add(v);
-		it = v.getOutEdges();
+        it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyEdge e = it.next();
 			assingPreds(e.getTarget(), (HashSet<MyNode>) preds.clone(), nodeToPreds);

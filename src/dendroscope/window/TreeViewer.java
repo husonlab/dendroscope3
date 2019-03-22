@@ -26,15 +26,14 @@ import dendroscope.drawer.IOptimizedGraphDrawer;
 import dendroscope.drawer.TreeDrawerAngled;
 import dendroscope.drawer.TreeDrawerBase;
 import jloda.graph.*;
-import jloda.graphview.*;
-import jloda.gui.director.IDirector;
-import jloda.gui.find.SearchManager;
-import jloda.phylo.PhyloGraphView;
 import jloda.phylo.PhyloTree;
 import jloda.phylo.PhyloTreeUtils;
+import jloda.swing.director.IDirector;
+import jloda.swing.find.SearchManager;
+import jloda.swing.graphview.*;
+import jloda.swing.util.ProgramProperties;
 import jloda.util.Basic;
 import jloda.util.Pair;
-import jloda.util.ProgramProperties;
 
 import javax.swing.*;
 import java.awt.*;
@@ -109,7 +108,7 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
         setDefaultNodeHeight(2);
         setDefaultNodeWidth(2);
 
-        Font font = jloda.util.ProgramProperties.get(ProgramProperties.DEFAULT_FONT, (Font) null);
+        Font font = ProgramProperties.get(ProgramProperties.DEFAULT_FONT, (Font) null);
         if (font != null) {
             setDefaultNodeFont(font);
             setDefaultEdgeFont(font);
@@ -457,7 +456,7 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
         if (nodes.contains(v)) {
             v.reverseOrderAdjacentEdges();
             if (getPhyloTree().getNode2GuideTreeChildren().get(v) != null) {
-                getPhyloTree().getNode2GuideTreeChildren().set(v, Basic.reverseList(getPhyloTree().getNode2GuideTreeChildren().get(v)));
+                getPhyloTree().getNode2GuideTreeChildren().put(v, Basic.reverseList(getPhyloTree().getNode2GuideTreeChildren().get(v)));
             }
             found++;
         }
@@ -498,7 +497,7 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
         if (nodes.contains(v)) {
             v.rotateOrderAdjacentEdges();
             if (getPhyloTree().getNode2GuideTreeChildren().get(v) != null) {
-                getPhyloTree().getNode2GuideTreeChildren().set(v, Basic.rotateList(getPhyloTree().getNode2GuideTreeChildren().get(v)));
+                getPhyloTree().getNode2GuideTreeChildren().put(v, Basic.rotateList(getPhyloTree().getNode2GuideTreeChildren().get(v)));
             }
 
             found++;
@@ -833,7 +832,7 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
                 }
             }
             List<Edge> newOrder = new LinkedList<Edge>();
-            for (Iterator<Edge> it = Basic.randomize(v.getAdjacentEdges(), v.getId()); it.hasNext(); )
+            for (Iterator<Edge> it = Basic.randomize(v.adjacentEdges().iterator(), v.getId()); it.hasNext(); )
                 newOrder.add(it.next());
 
             v.rearrangeAdjacentEdges(newOrder);
@@ -1212,7 +1211,7 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     }
 
     public void setCollapsedShape(Node v, CollapsedShape collapsedShape) {
-        node2CollapsedShape.set(v, collapsedShape);
+        node2CollapsedShape.put(v, collapsedShape);
     }
 
     public boolean getShowEdgeWeights() {

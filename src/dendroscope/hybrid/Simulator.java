@@ -65,18 +65,18 @@ public class Simulator {
     // Node v1 = nodePair.get(0);
     // Node v2 = nodePair.get(1);
     //
-    // Node p1 = v1.getInEdges().next().getSource();
-    // t.deleteEdge(v1.getInEdges().next());
-    // Node c = p1.getOutEdges().next().getTarget();
-    // t.deleteEdge(p1.getOutEdges().next());
-    // Node pP = p1.getInEdges().next().getSource();
-    // t.deleteEdge(p1.getInEdges().next());
+    // Node p1 = v1.getFirstInEdge().getSource();
+    // t.deleteEdge(v1.getFirstInEdge());
+    // Node c = p1.getFirstOutEdge().getTarget();
+    // t.deleteEdge(p1.getFirstOutEdge());
+    // Node pP = p1.getFirstInEdge().getSource();
+    // t.deleteEdge(p1.getFirstInEdge());
     // t.newEdge(pP, c);
     // t.deleteNode(p1);
     //
-    // Node p2 = v2.getInEdges().next().getSource();
+    // Node p2 = v2.getFirstInEdge().getSource();
     // Node v = t.newNode();
-    // t.deleteEdge(v2.getInEdges().next());
+    // t.deleteEdge(v2.getFirstInEdge());
     // t.newEdge(p2, v);
     // t.newEdge(v, v2);
     // t.newEdge(v, v1);
@@ -91,20 +91,20 @@ public class Simulator {
 
             Node v1 = getRandomNode(collectFirstNodes(t));
 
-            Node p1 = v1.getInEdges().next().getSource();
-            t.deleteEdge(v1.getInEdges().next());
-            Node c = p1.getOutEdges().next().getTarget();
-            t.deleteEdge(p1.getOutEdges().next());
-            Node pP = p1.getInEdges().next().getSource();
-            t.deleteEdge(p1.getInEdges().next());
+            Node p1 = v1.getFirstInEdge().getSource();
+            t.deleteEdge(v1.getFirstInEdge());
+            Node c = p1.getFirstOutEdge().getTarget();
+            t.deleteEdge(p1.getFirstOutEdge());
+            Node pP = p1.getFirstInEdge().getSource();
+            t.deleteEdge(p1.getFirstInEdge());
             t.newEdge(pP, c);
             t.deleteNode(p1);
 
             Node v2 = getRandomNode(getRandom2ndNode(t, pP));
 
-            Node p2 = v2.getInEdges().next().getSource();
+            Node p2 = v2.getFirstInEdge().getSource();
             Node v = t.newNode();
-            t.deleteEdge(v2.getInEdges().next());
+            t.deleteEdge(v2.getFirstInEdge());
             t.newEdge(p2, v);
             t.newEdge(v, v2);
             t.newEdge(v, v1);
@@ -120,7 +120,7 @@ public class Simulator {
         Vector<Node> nodes = new Vector<>();
         while (dist < lcaDist) {
             if (v1.getInDegree() == 1) {
-                v1 = v1.getInEdges().next().getSource();
+                v1 = v1.getFirstInEdge().getSource();
                 if (v1.getInDegree() == 1) {
                     nodes.add(v1);
                     getNodesBelow(v1, nodes);
@@ -134,7 +134,7 @@ public class Simulator {
     }
 
     private void getNodesBelow(Node v1, Vector<Node> nodes) {
-        Iterator<Edge> it = v1.getOutEdges();
+        Iterator<Edge> it = v1.outEdges().iterator();
         while (it.hasNext()) {
             Node c = it.next().getTarget();
             if (!nodes.contains(c) && c.getInDegree() == 1) {
@@ -146,13 +146,13 @@ public class Simulator {
 
     private Vector<Node> collectFirstNodes(HybridTree t) {
         Vector<Node> nodes = new Vector<>();
-        for (Node v : t.getNodes()) {
+        for (Node v : t.nodes()) {
             if (v.getInDegree() == 1) {
-                Node p = v.getInEdges().next().getSource();
+                Node p = v.getFirstInEdge().getSource();
                 if (p.getInDegree() == 1) {
-                    Node pP = p.getInEdges().next().getSource();
+                    Node pP = p.getFirstInEdge().getSource();
                     if (pP.getInDegree() == 1) {
-                        Node pPp = pP.getInEdges().next().getSource();
+                        Node pPp = pP.getFirstInEdge().getSource();
                         if (pPp.getInDegree() == 1)
                             nodes.add(v);
                     }
@@ -164,7 +164,7 @@ public class Simulator {
 
     private Vector<Node> collectSecondNodes(HybridTree t) {
         Vector<Node> nodes = new Vector<>();
-        for (Node v : t.getNodes()) {
+        for (Node v : t.nodes()) {
             if (v.getInDegree() == 1)
                 nodes.add(v);
         }
@@ -233,7 +233,7 @@ public class Simulator {
                     search = true;
 
             }
-            Node p = v.get(0).getInEdges().next().getSource();
+            Node p = v.get(0).getFirstInEdge().getSource();
             if (p.equals(v.get(1)))
                 search = true;
         }
@@ -268,7 +268,7 @@ public class Simulator {
     }
 
     private boolean isCorrect(HybridTree t) {
-        for (Node v : t.getNodes()) {
+        for (Node v : t.nodes()) {
             if (!(((v.getInDegree() == 0 && v.equals(t.getRoot())) && v
                     .getOutDegree() == 2)
                     || (v.getInDegree() == 1 && v.getOutDegree() == 2) || (v

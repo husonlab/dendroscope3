@@ -1,11 +1,11 @@
 package dendroscope.hybroscale.model.treeObjects;
 
-import java.util.Iterator;
-import java.util.Vector;
-
 import dendroscope.hybroscale.util.graph.MyEdge;
 import dendroscope.hybroscale.util.graph.MyNode;
 import dendroscope.hybroscale.util.graph.MyPhyloTree;
+
+import java.util.Iterator;
+import java.util.Vector;
 
 public class SparseTree {
 
@@ -67,7 +67,7 @@ public class SparseTree {
 	}
 
 	private void copyNetworkRec(SparseNetwork n, SparseNetNode v, SparseTreeNode vCopy) {
-		for (SparseNetEdge e : v.getOutEdges()) {
+        for (SparseNetEdge e : v.outEdges()) {
 			SparseNetNode c = e.getTarget();
 			SparseTreeNode cCopy = new SparseTreeNode(vCopy, this, c.getLabel());
 			if(e.isSolid())
@@ -95,7 +95,7 @@ public class SparseTree {
 	}
 
 	private void copyTreeRec(MyPhyloTree t, MyNode v, SparseTreeNode vCopy) {
-		Iterator<MyEdge> it = v.getOutEdges();
+        Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyNode c = it.next().getTarget();
 			SparseTreeNode cCopy = new SparseTreeNode(vCopy, this, t.getLabel(c));
@@ -261,7 +261,7 @@ public class SparseTree {
 	/* copy the tree t rec without copying the reticulate nodes */
 	private void copyTreeRecNoRet(MyPhyloTree t, MyNode v, SparseTreeNode vCopy,
 			boolean check) {
-		Iterator<MyEdge> it = v.getOutEdges();
+        Iterator<MyEdge> it = v.outEdges().iterator();
 		if (!check || v.getInDegree() == 1) {
 			while (it.hasNext()) {
 				MyNode c = it.next().getTarget();

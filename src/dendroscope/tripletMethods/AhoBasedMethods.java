@@ -24,9 +24,9 @@ import dendroscope.core.Director;
 import dendroscope.core.Document;
 import dendroscope.core.TreeData;
 import dendroscope.window.MultiViewer;
-import jloda.gui.director.IDirector;
 import jloda.phylo.PhyloTree;
-import jloda.util.Alert;
+import jloda.swing.director.IDirector;
+import jloda.swing.util.Alert;
 
 import java.util.HashMap;
 import java.util.LinkedList;

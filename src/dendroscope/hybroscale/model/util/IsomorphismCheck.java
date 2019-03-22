@@ -1,14 +1,10 @@
 package dendroscope.hybroscale.model.util;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Vector;
-
 import dendroscope.hybroscale.model.treeObjects.HybridTree;
 import dendroscope.hybroscale.util.graph.MyEdge;
 import dendroscope.hybroscale.util.graph.MyNode;
+
+import java.util.*;
 
 /**
  * Given two rooted, bifurcating phylogenetic trees T1 and T2, this function
@@ -83,11 +79,11 @@ public class IsomorphismCheck {
 		Vector<MyNode> parents = new Vector<MyNode>();
 		while (it.hasNext()) {
 			MyNode v = it.next();
-			MyNode p = ((MyEdge) v.getInEdges().next()).getSource();
+            MyNode p = ((MyEdge) v.getFirstInEdge()).getSource();
 			if (!parents.contains(p) && isCherry(p)) {
 				
 				Vector<String> taxa = new Vector<String>();
-				Iterator<MyEdge> it2 = p.getOutEdges();
+                Iterator<MyEdge> it2 = p.outEdges().iterator();
 				
 				//collect taxa
 				while (it2.hasNext())
@@ -109,7 +105,7 @@ public class IsomorphismCheck {
 	}
 
 	private boolean isCherry(MyNode p) {
-		Iterator<MyEdge> it = p.getOutEdges();
+        Iterator<MyEdge> it = p.outEdges().iterator();
 		while (it.hasNext()) {
 			if (it.next().getTarget().getOutDegree() != 0)
 				return false;

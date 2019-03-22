@@ -102,7 +102,7 @@ public class FastIsomorphismCheck {
         while (it.hasNext()) {
             Node v = it.next();
             if (rootNodes.contains(v) && v.getInDegree() == 1) {
-                Node p = v.getInEdges().next().getSource();
+                Node p = v.getFirstInEdge().getSource();
                 if (blockedNodes.contains(p))
                     rootNodes.add(p);
                 else
@@ -119,7 +119,7 @@ public class FastIsomorphismCheck {
         for (Node v : roots)
             rootClusters.add(n1.getNodeToCluster().get(v));
 
-        for (Node v : n1Mod.getNodes()) {
+        for (Node v : n1Mod.nodes()) {
             BitSet b = n1Mod.getNodeToCluster().get(v);
             if (b.equals(n1.getNodeToCluster().get(r)))
                 root = v;
@@ -136,9 +136,7 @@ public class FastIsomorphismCheck {
     }
 
     private void initRec(Node v, Vector<Node> rootNodes) {
-        Iterator<Edge> it = v.getOutEdges();
-        while (it.hasNext()) {
-            Edge e = it.next();
+        for (Edge e : v.outEdges()) {
             Node t = e.getTarget();
             if (!rootNodes.contains(t)) {
                 if (!hasRootChild(v, rootNodes))
@@ -182,17 +180,17 @@ public class FastIsomorphismCheck {
 
 //			System.out.println("Leaf " + n.getLabel(v));
 
-            Node p = v.getInEdges().next().getSource();
+            Node p = v.getFirstInEdge().getSource();
 
             while (hasRootChild(p, rootNodes))
-                p = p.getInEdges().next().getSource();
+                p = p.getFirstInEdge().getSource();
 
 //			System.out.println("P " + n.getLabel(p));
 
             if (!parents.contains(p) && isCherry(p)) {
 
                 Vector<String> taxa = new Vector<>();
-                Iterator<Edge> it2 = p.getOutEdges();
+                Iterator<Edge> it2 = p.outEdges().iterator();
 
                 // collect taxa
                 while (it2.hasNext()) {
@@ -238,9 +236,7 @@ public class FastIsomorphismCheck {
 
     private Node getChild(Node child, Vector<Node> rootNodes) {
         while (hasRootChild(child, rootNodes)) {
-            Iterator<Edge> it = child.getOutEdges();
-            while (it.hasNext()) {
-                Node v = it.next().getTarget();
+            for (Node v : child.children()) {
                 if (!rootNodes.contains(v))
                     child = v;
             }
@@ -249,9 +245,8 @@ public class FastIsomorphismCheck {
     }
 
     private boolean hasRootChild(Node p, Vector<Node> rootNodes) {
-        Iterator<Edge> it = p.getOutEdges();
-        while (it.hasNext()) {
-            if (rootNodes.contains(it.next().getTarget()))
+        for (Node c : p.children()) {
+            if (rootNodes.contains(c))
                 return true;
         }
         return false;
@@ -263,15 +258,14 @@ public class FastIsomorphismCheck {
         Vector<Node> parents = new Vector<>();
         while (it.hasNext()) {
             Node v = it.next();
-            Node p = v.getInEdges().next().getSource();
+            Node p = v.getFirstInEdge().getSource();
             if (!parents.contains(p) && isCherry(p)) {
 
                 Vector<String> taxa = new Vector<>();
-                Iterator<Edge> it2 = p.getOutEdges();
 
-                // collect taxa
-                while (it2.hasNext())
-                    taxa.add(n.getLabel(it2.next().getTarget()));
+                for (Node c : p.children()) {
+                    taxa.add(n.getLabel(c));
+                }
 
                 // sort taxas lexicographically
                 Collections.sort(taxa);
@@ -289,9 +283,7 @@ public class FastIsomorphismCheck {
     }
 
     private boolean isCherry(Node p) {
-        Iterator<Edge> it = p.getOutEdges();
-        while (it.hasNext()) {
-            Node v = it.next().getTarget();
+        for (Node v : p.children()) {
             if (v.getOutDegree() != 0)
                 return false;
         }

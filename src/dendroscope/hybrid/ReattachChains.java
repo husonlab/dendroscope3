@@ -63,7 +63,7 @@ public class ReattachChains {
                     .getLabel(start)));
 
             boolean b = true;
-            Node p = start.getInEdges().next().getSource();
+            Node p = start.getFirstInEdge().getSource();
             if (p.getOutDegree() == 2) {
                 Edge e = getChainEdge(n, p, n.getLabel(start));
                 Node c = e.getTarget();
@@ -91,11 +91,10 @@ public class ReattachChains {
 
     }
 
-    private Vector<Node> insertNormalChain(HybridNetwork n, Node start,
-                                           Vector<String> chain) {
+    private Vector<Node> insertNormalChain(HybridNetwork n, Node start, Vector<String> chain) {
 
         Vector<Node> newLeaves = new Vector<>();
-        Node p = start.getInEdges().next().getSource();
+        Node p = start.getFirstInEdge().getSource();
 
         for (int i = chain.size() - 2; i > 0; i--) {
 
@@ -119,9 +118,8 @@ public class ReattachChains {
     }
 
     @SuppressWarnings("unchecked")
-    private void insertHybridChain(HybridNetwork n, Node start, Node end,
-                                   Vector<String> chain, TreeMarker tM) {
-        Edge inEdge = start.getInEdges().next();
+    private void insertHybridChain(HybridNetwork n, Node start, Node end, Vector<String> chain, TreeMarker tM) {
+        Edge inEdge = start.getFirstInEdge();
         Node p = inEdge.getSource();
 
         Vector<Node> newLeaves = new Vector<>();
@@ -149,7 +147,7 @@ public class ReattachChains {
 
         int i = 0;
         for (Node v : newLeaves) {
-            Edge inEdge = end.getInEdges().next();
+            Edge inEdge = end.getFirstInEdge();
             Node p = inEdge.getSource();
             n.deleteEdge(inEdge);
             Node newP = n.newNode();
@@ -166,7 +164,7 @@ public class ReattachChains {
         n.initTaxaOrdering();
         n.update();
 
-        Edge inEdge = v.getInEdges().next();
+        Edge inEdge = v.getFirstInEdge();
         Node p = inEdge.getSource();
 
         n.deleteEdge(inEdge);
@@ -187,9 +185,7 @@ public class ReattachChains {
     }
 
     private Edge getChainEdge(HybridNetwork n, Node v, String label) {
-        Iterator<Edge> it = v.getOutEdges();
-        while (it.hasNext()) {
-            Edge e = it.next();
+        for (Edge e : v.outEdges()) {
             Node c = e.getTarget();
             if (!n.getLabel(c).equals(label)) {
                 return e;

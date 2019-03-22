@@ -23,7 +23,7 @@ import jloda.graph.Edge;
 import jloda.graph.Node;
 import jloda.graph.NodeArray;
 import jloda.graph.NodeSet;
-import jloda.phylo.PhyloGraph;
+import jloda.phylo.PhyloSplitsGraph;
 import jloda.phylo.PhyloTree;
 import jloda.util.ProgressListener;
 
@@ -64,7 +64,7 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
             while (it2.hasNext()) {
                 Node n = (Node) it2.next();
                 System.out.print("Node: " + n + "label: " + tree.getLabel(n) + "\tdecendants: ");
-                Iterator it3 = n.getAdjacentNodes();
+                Iterator it3 = n.adjacentNodes().iterator();
                 while (it3.hasNext()) {
                     Node d = (Node) it3.next();
                     if (n.getCommonEdge(d).getSource().equals(n)) System.out.print(d + "\t");
@@ -108,7 +108,7 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
 
         // copy result:
         for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
-            tree.getNode2GuideTreeChildren().set(v, nodes2Orderings.get(v));
+            tree.getNode2GuideTreeChildren().put(v, nodes2Orderings.get(v));
         }
     }
 
@@ -120,7 +120,7 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
      * @return contains as keys nodes and as values Maps which contain the reticulations for which the inEdge is contained
      * in the tree cycle of the reticulations
      */
-    private Map getActiveRNodesForInEdges(PhyloGraph graph, Map rNode2ReticulationNodeData) {
+    private Map getActiveRNodesForInEdges(PhyloSplitsGraph graph, Map rNode2ReticulationNodeData) {
         Map nodes = new HashMap();
         Iterator it = graph.nodeIterator();
         while (it.hasNext()) nodes.put(it.next(), new HashSet());
@@ -175,7 +175,7 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
      * @param rNode2ReticulationNodeData
      * @throws Exception
      */
-    private void createAuxiliaryEdges(PhyloGraph graph, Node root, Map rNode2ReticulationNodeData) {
+    private void createAuxiliaryEdges(PhyloSplitsGraph graph, Node root, Map rNode2ReticulationNodeData) {
         Map node2parent = new HashMap();
         Iterator it = graph.nodeIterator();
         // find first common anceestor
@@ -219,7 +219,7 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
             Node parent = (Node) node2parent.get(rNode);
             Edge p = null;
             Edge q = null;
-            Iterator it2 = rNode.getInEdges();
+            Iterator it2 = rNode.inEdges().iterator();
             int count = 0;
             while (it2.hasNext()) {
                 Edge e = (Edge) it2.next();
@@ -256,7 +256,7 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
         if (debug)
             System.out.println("orderedRNodes.size() = " + orderedRNodes.size() + "\tactiveRNodes: " + node2ActiverNodes.get(start));
         if (orderedRNodes.size() == 0 && node2ActiverNodes.get(start) == null) {
-            Iterator itN = start.getAdjacentNodes();
+            Iterator itN = start.adjacentNodes().iterator();
             while (itN.hasNext()) {
                 Node n = (Node) itN.next();
                 if (n.getInDegree() == 1 && n.getCommonEdge(start).getSource().equals(start))
@@ -265,7 +265,7 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
         } else {
             // the list of tree decendants of start
             TreeSet tmp = new TreeSet(new NodeComparator());
-            Iterator itN = start.getAdjacentNodes();
+            Iterator itN = start.adjacentNodes().iterator();
             while (itN.hasNext()) {
                 Node n = (Node) itN.next();
                 if (n.getInDegree() == 1 && n.getCommonEdge(start).getSource().equals(start))
@@ -542,7 +542,7 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
             }
         } else {
             path.addFirst(decendant);
-            Node next = decendant.getInEdges().next().getSource();
+            Node next = decendant.getFirstInEdge().getSource();
             recFindPath2Ancestor(next, ancestor, path, rNode2ReticulationNodeData);
         }
     }
@@ -557,7 +557,7 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
      * @param rNode2ReticulationNodeData
      */
     private void recFindPathesInOrgGraph2Ancestor(Node decendant, Node ancestor, LinkedList visitedNodes, HashSet pathes, Map rNode2ReticulationNodeData) {
-        Iterator it = decendant.getAdjacentNodes();
+        Iterator it = decendant.adjacentNodes().iterator();
         visitedNodes.add(decendant);
         while (it.hasNext()) {
             Node next = (Node) it.next();
@@ -597,7 +597,7 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
      * @return
      */
     private ArrayList buildLocalWorkFlow(Set rNodes, Map rNode2ReticulationNodeData) {
-        PhyloGraph ordGraph = new PhyloGraph();
+        PhyloSplitsGraph ordGraph = new PhyloSplitsGraph();
         Iterator it = rNodes.iterator();
         Map rNode2ordNode = new HashMap();
         Map ordNode2rNode = new HashMap();
@@ -635,9 +635,9 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
      * @param graph
      * @param rNode2ReticulationNodeData
      */
-    private void buildReticulationDependency(PhyloGraph graph, Map rNode2ReticulationNodeData) {
+    private void buildReticulationDependency(PhyloSplitsGraph graph, Map rNode2ReticulationNodeData) {
         Map rNode2DepRetNode = new HashMap();
-        PhyloGraph depRet = new PhyloGraph();
+        PhyloSplitsGraph depRet = new PhyloSplitsGraph();
         // init depRet
         Iterator it = graph.nodeIterator();
         while (it.hasNext()) {
@@ -659,7 +659,7 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
             seenNodes.add(retN);
             // init toWork
             Vector nodes2Work = new Vector();
-            Iterator it2 = retN.getAdjacentNodes();
+            Iterator it2 = retN.adjacentNodes().iterator();
             while (it2.hasNext()) {
                 Node n = (Node) it2.next();
                 if (n.getCommonEdge(retN).getSource().equals(retN))
@@ -669,7 +669,7 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
                 Node next = (Node) nodes2Work.remove(0);
                 if (!seenNodes.contains(next) && next.getInDegree() == 1) {
                     dependentTreeNodes.add(next);
-                    it2 = next.getAdjacentNodes();
+                    it2 = next.adjacentNodes().iterator();
                     while (it2.hasNext()) {
                         Node toAdd = (Node) it2.next();
                         if (next.getCommonEdge(toAdd).getSource().equals(next)) {
@@ -695,7 +695,7 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
     private final Integer black = new Integer(2);
     private int time = -1;
 
-    private LinkedList DFS(PhyloGraph graph, boolean breakCycles, boolean removeForwardEdges) {
+    private LinkedList DFS(PhyloSplitsGraph graph, boolean breakCycles, boolean removeForwardEdges) {
         Map node2Color = new HashMap();
         Map node2Predecessor = new HashMap();
         Map node2time = new HashMap();
@@ -730,7 +730,7 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
         node2Color.put(u, gray);
         int[] uTimes = (int[]) node2time.get(u);
         uTimes[0] = ++time;
-        Iterator it = u.getAdjacentNodes();
+        Iterator it = u.adjacentNodes().iterator();
         HashSet edges2Delete = new HashSet();
         while (it.hasNext()) {
             Node v = (Node) it.next();
@@ -907,7 +907,7 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
                 }
 
             }
-            node2ChildrenInNetwork.set(v, nodes);
+            node2ChildrenInNetwork.put(v, nodes);
         }
     }
 }

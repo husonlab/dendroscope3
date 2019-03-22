@@ -20,7 +20,7 @@
 package dendroscope.commands;
 
 import dendroscope.window.TreeViewer;
-import jloda.gui.commands.ICheckBoxCommand;
+import jloda.swing.commands.ICheckBoxCommand;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;

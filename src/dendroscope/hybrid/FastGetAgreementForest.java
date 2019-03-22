@@ -149,7 +149,7 @@ public class FastGetAgreementForest {
         int index = 0;
         for (HybridTree t : forest) {
             if (t.computeSetOfLeaves().size() > 1) {
-                Iterator<Edge> it = t.getRoot().getOutEdges();
+                Iterator<Edge> it = t.getRoot().outEdges().iterator();
                 String l1 = t.getLabel(it.next().getTarget());
                 String l2 = t.getLabel(it.next().getTarget());
                 if (l1.equals("rho") || l2.equals("rho")) {
@@ -168,7 +168,7 @@ public class FastGetAgreementForest {
     private void initNodeLabelings(HybridTree t1, HybridTree t2, HybridTree t3) {
         int i = 0;
         Vector<String> t1Taxa = getTaxa(t1);
-        for (Node v : t1.getNodes()) {
+        for (Node v : t1.nodes()) {
             if (v.getOutDegree() != 0 && v.getInDegree() != 0) {
                 while (t1Taxa.contains(String.valueOf(i)))
                     i++;
@@ -177,7 +177,7 @@ public class FastGetAgreementForest {
             }
         }
         Vector<String> t2Taxa = getTaxa(t1);
-        for (Node v : t2.getNodes()) {
+        for (Node v : t2.nodes()) {
             if (v.getOutDegree() != 0 && v.getInDegree() != 0) {
                 while (t2Taxa.contains(String.valueOf(i)))
                     i++;
@@ -186,7 +186,7 @@ public class FastGetAgreementForest {
             }
         }
         Vector<String> t3Taxa = getTaxa(t1);
-        for (Node v : t3.getNodes()) {
+        for (Node v : t3.nodes()) {
             if (v.getOutDegree() != 0 && v.getInDegree() != 0) {
                 while (t3Taxa.contains(String.valueOf(i)))
                     i++;
@@ -322,7 +322,7 @@ public class FastGetAgreementForest {
 
     private void removeNode(HybridTree t, Node v) {
         if (t.computeSetOfLeaves().size() > 2) {
-            Edge e = v.getInEdges().next();
+            Edge e = v.getFirstInEdge();
             Node p = e.getSource();
             t.deleteEdge(e);
             t.deleteNode(v);
@@ -332,16 +332,16 @@ public class FastGetAgreementForest {
 
     private void removeNeedlessNode(HybridTree t, Node v) {
         if (v.getInDegree() == 1 && v.getOutDegree() == 1) {
-            Edge inEdge = v.getInEdges().next();
+            Edge inEdge = v.getFirstInEdge();
             Node pP = inEdge.getSource();
-            Edge outEdge = v.getOutEdges().next();
+            Edge outEdge = v.getFirstOutEdge();
             Node c = outEdge.getTarget();
             t.deleteEdge(inEdge);
             t.deleteEdge(outEdge);
             t.deleteNode(v);
             t.newEdge(pP, c);
         } else if (v.getInDegree() == 0 && v.getOutDegree() == 1) {
-            Edge outEdge = v.getOutEdges().next();
+            Edge outEdge = v.getFirstOutEdge();
             Node c = outEdge.getTarget();
             t.deleteEdge(outEdge);
             t.deleteNode(v);
@@ -474,18 +474,18 @@ public class FastGetAgreementForest {
         double newWeight = weight;
 
         if (t.computeSetOfLeaves().size() > 1) {
-            Node p = v.getInEdges().next().getSource();
+            Node p = v.getFirstInEdge().getSource();
 
             if (compValue != 2 && !t.getLabel(p).equals(rootLabel)) {
                 HybridTree subtree = t.getSubtree(v, false);
 
-                // if(t.getWeight(v.getInEdges().next())!=0){
+                // if(t.getWeight(v.getFirstInEdge())!=0){
                 // System.out.println();
-                // System.out.println("Weight: "+t.getWeight(v.getInEdges().next()));
+                // System.out.println("Weight: "+t.getWeight(v.getFirstInEdge()));
                 // }
 
                 if (compValue != 2)
-                    newWeight += t.getWeight(v.getInEdges().next()) - 1;
+                    newWeight += t.getWeight(v.getFirstInEdge()) - 1;
 
                 t.deleteSubtree(v, null, false);
                 forest.add(subtree);
@@ -497,7 +497,7 @@ public class FastGetAgreementForest {
                 HybridTree subtree = t.getSubtree(v, false);
 
                 if (compValue != 2)
-                    newWeight += t.getWeight(v.getInEdges().next()) - 1;
+                    newWeight += t.getWeight(v.getFirstInEdge()) - 1;
 
                 t.deleteSubtree(v, null, false);
                 forest.add(subtree);
@@ -518,12 +518,12 @@ public class FastGetAgreementForest {
             HybridTree t = (HybridTree) v.getOwner();
 
             if (t.computeSetOfLeaves().size() > 1) {
-                Node p = v.getInEdges().next().getSource();
+                Node p = v.getFirstInEdge().getSource();
                 if (compValue != 2 && !t.getLabel(p).equals(rootLabel)) {
                     HybridTree subtree = t.getSubtree(v, false);
 
                     if (compValue != 2)
-                        newWeight += t.getWeight(v.getInEdges().next()) - 1;
+                        newWeight += t.getWeight(v.getFirstInEdge()) - 1;
 
                     t.deleteSubtree(v, null, false);
                     forest.add(subtree);
@@ -532,7 +532,7 @@ public class FastGetAgreementForest {
                     HybridTree subtree = t.getSubtree(v, false);
 
                     if (compValue != 2)
-                        newWeight += t.getWeight(v.getInEdges().next()) - 1;
+                        newWeight += t.getWeight(v.getFirstInEdge()) - 1;
 
                     t.deleteSubtree(v, null, false);
                     forest.add(subtree);
@@ -550,8 +550,8 @@ public class FastGetAgreementForest {
 
     private Node getNeighbour(Node v) {
 
-        Node p = v.getInEdges().next().getSource();
-        Iterator<Edge> it = p.getOutEdges();
+        Node p = v.getFirstInEdge().getSource();
+        Iterator<Edge> it = p.outEdges().iterator();
 
         Node c = it.next().getTarget();
         if (!c.equals(v))
@@ -562,11 +562,11 @@ public class FastGetAgreementForest {
 
     private String getOnlyPendant(Node v1, Node v2, HybridTree t) {
 
-        Node p1 = v1.getInEdges().next().getSource();
-        Node p2 = v2.getInEdges().next().getSource();
+        Node p1 = v1.getFirstInEdge().getSource();
+        Node p2 = v2.getFirstInEdge().getSource();
 
         if (p1.getInDegree() == 1) {
-            Node v = p1.getInEdges().next().getSource();
+            Node v = p1.getFirstInEdge().getSource();
             if (v.equals(p2))
                 return t.getLabel(v1);
         }
@@ -588,19 +588,19 @@ public class FastGetAgreementForest {
         Vector<Node> upperNodesV2 = getUpperNodes(v2);
 
         Node pendant = v1;
-        Node p = pendant.getInEdges().next().getSource();
+        Node p = pendant.getFirstInEdge().getSource();
         while (!upperNodesV2.contains(p)) {
             pendantNodes.add(getNeighbour(pendant));
             pendant = p;
-            p = pendant.getInEdges().next().getSource();
+            p = pendant.getFirstInEdge().getSource();
         }
 
         pendant = v2;
-        p = pendant.getInEdges().next().getSource();
+        p = pendant.getFirstInEdge().getSource();
         while (!upperNodesV1.contains(p)) {
             pendantNodes.add(getNeighbour(pendant));
             pendant = p;
-            p = pendant.getInEdges().next().getSource();
+            p = pendant.getFirstInEdge().getSource();
         }
 
         return pendantNodes;
@@ -609,7 +609,7 @@ public class FastGetAgreementForest {
     private Vector<Node> getUpperNodes(Node v) {
         Vector<Node> upperNodes = new Vector<>();
         while (v.getInDegree() == 1) {
-            v = v.getInEdges().next().getSource();
+            v = v.getFirstInEdge().getSource();
             upperNodes.add(v);
         }
         return upperNodes;
@@ -636,13 +636,13 @@ public class FastGetAgreementForest {
         taxa.add(t1.getLabel(v2));
         Collections.sort(taxa);
 
-        Edge e = v1.getInEdges().next();
+        Edge e = v1.getFirstInEdge();
         Node p = e.getSource();
 
         t1.deleteEdge(e);
         t1.deleteNode(v1);
 
-        e = v2.getInEdges().next();
+        e = v2.getFirstInEdge();
         t1.deleteEdge(e);
         t1.deleteNode(v2);
 
@@ -659,7 +659,7 @@ public class FastGetAgreementForest {
         // setting forest label
 
         Node f1 = sibs.getForestLeaf(t1Sib.get(0));
-        Edge eF = f1.getInEdges().next();
+        Edge eF = f1.getFirstInEdge();
         Node fP = eF.getSource();
         HybridTree f = (HybridTree) fP.getOwner();
         f.setLabel(fP, s);
@@ -668,7 +668,7 @@ public class FastGetAgreementForest {
         f.deleteNode(f1);
 
         Node f2 = sibs.getForestLeaf(t1Sib.get(1));
-        eF = f2.getInEdges().next();
+        eF = f2.getFirstInEdge();
 
         f.deleteEdge(eF);
         f.deleteNode(f2);
@@ -681,10 +681,10 @@ public class FastGetAgreementForest {
     private int getHeight(Node v) {
         int h = 0;
         if (v.getInDegree() != 0) {
-            Node p = v.getInEdges().next().getSource();
+            Node p = v.getFirstInEdge().getSource();
             h = 1;
             while (p.getInDegree() != 0) {
-                p = p.getInEdges().next().getSource();
+                p = p.getFirstInEdge().getSource();
                 h++;
             }
             return h;

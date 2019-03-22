@@ -1,17 +1,13 @@
 package dendroscope.hybroscale.model.cmpMinNetworks;
 
-import java.util.BitSet;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Vector;
-import java.util.concurrent.ConcurrentHashMap;
-
 import dendroscope.hybroscale.model.treeObjects.HybridTree;
 import dendroscope.hybroscale.model.treeObjects.SparseNetEdge;
 import dendroscope.hybroscale.model.treeObjects.SparseNetNode;
 import dendroscope.hybroscale.model.treeObjects.SparseNetwork;
 import dendroscope.hybroscale.util.graph.MyNode;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class UpdateEmbeddings {
 
@@ -230,7 +226,7 @@ public class UpdateEmbeddings {
 			clusters.add((BitSet) b.clone());
 			return b;
 		} else {
-			Iterator<SparseNetEdge> it = v.getOutEdges().iterator();
+            Iterator<SparseNetEdge> it = v.outEdges().iterator();
 			BitSet b = new BitSet(taxaOrdering.size());
 			while (it.hasNext()) {
 				SparseNetEdge e = it.next();

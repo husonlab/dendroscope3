@@ -18,10 +18,11 @@ package dendroscope.commands;
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import jloda.gui.commands.CommandBase;
-import jloda.gui.commands.ICommand;
+import jloda.swing.commands.CommandBase;
+import jloda.swing.commands.ICommand;
+import jloda.swing.util.BasicSwing;
+import jloda.swing.util.ResourceManager;
 import jloda.util.Basic;
-import jloda.util.ResourceManager;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;
@@ -42,7 +43,7 @@ public class ShowReferenceManualCommand extends CommandBase implements ICommand 
 
     public void actionPerformed(ActionEvent event) {
         try {
-            Basic.openWebPage(new URL("http://ab.inf.uni-tuebingen.de/data/software/dendroscope/download/manual.pdf"));
+            BasicSwing.openWebPage(new URL("http://ab.inf.uni-tuebingen.de/data/software/dendroscope/download/manual.pdf"));
         } catch (Exception e1) {
             Basic.caught(e1);
         }

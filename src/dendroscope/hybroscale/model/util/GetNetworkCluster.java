@@ -1,13 +1,13 @@
 package dendroscope.hybroscale.model.util;
 
+import dendroscope.hybroscale.util.graph.MyEdge;
+import dendroscope.hybroscale.util.graph.MyNode;
+import dendroscope.hybroscale.util.graph.MyPhyloTree;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Vector;
-
-import dendroscope.hybroscale.util.graph.MyEdge;
-import dendroscope.hybroscale.util.graph.MyNode;
-import dendroscope.hybroscale.util.graph.MyPhyloTree;
 
 public class GetNetworkCluster {
 
@@ -46,7 +46,7 @@ public class GetNetworkCluster {
 
 	private void cmpNetClusterRec(MyNode v, MyNode vCopy, HashMap<MyNode, MyNode> vistedNodes,
 			HashSet<MyNode> rootOfClusters) {
-		Iterator<MyEdge> it = v.getOutEdges();
+        Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyNode c = it.next().getTarget();
 			if (vistedNodes.containsKey(c)) {
@@ -68,7 +68,7 @@ public class GetNetworkCluster {
 			boolean bV = isRootOfCluster(v);
 			if (!bC && bV)
 				rootOfClusters.add(v);
-			Iterator<MyEdge> it = v.getInEdges();
+            Iterator<MyEdge> it = v.inEdges().iterator();
 			while (it.hasNext()) {
 				MyNode p = it.next().getSource();
 				cmpRootOfClustersRec(p, bV, rootOfClusters, visited);
@@ -88,7 +88,7 @@ public class GetNetworkCluster {
 		else
 			nodeToRetPreds.get(v).addAll(retPreds);
 
-		Iterator<MyEdge> it = v.getInEdges();
+        Iterator<MyEdge> it = v.inEdges().iterator();
 		while (it.hasNext()) {
 			MyNode p = it.next().getSource();
 			HashSet<MyNode> predsClone = (HashSet<MyNode>) preds.clone();
@@ -105,7 +105,7 @@ public class GetNetworkCluster {
 		HashSet<MyNode> preds = nodeToPreds.get(v);
 		HashSet<MyNode> retPreds = nodeToRetPreds.get(v);
 		for (MyNode r : retPreds) {
-			Iterator<MyEdge> it = r.getInEdges();
+            Iterator<MyEdge> it = r.inEdges().iterator();
 			while (it.hasNext()) {
 				MyNode p = it.next().getSource();
 				if (!preds.contains(p))

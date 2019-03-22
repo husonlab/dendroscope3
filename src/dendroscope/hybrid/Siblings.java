@@ -51,13 +51,13 @@ public class Siblings {
             HashSet<Node> parents = new HashSet<>();
             while (it.hasNext()) {
                 Node v = it.next();
-                Node p = v.getInEdges().next().getSource();
+                Node p = v.getFirstInEdge().getSource();
                 if (!parents.contains(p) && isCherry(p)) {
 
                     parents.add(p);
 
                     Vector<String> taxa = new Vector<>();
-                    Iterator<Edge> it2 = p.getOutEdges();
+                    Iterator<Edge> it2 = p.outEdges().iterator();
 
                     // collecting taxa
                     while (it2.hasNext())
@@ -76,9 +76,8 @@ public class Siblings {
     }
 
     private boolean isCherry(Node p) {
-        Iterator<Edge> it = p.getOutEdges();
-        while (it.hasNext()) {
-            if (it.next().getTarget().getOutDegree() != 0)
+        for (Edge e : p.outEdges()) {
+            if (e.getTarget().getOutDegree() != 0)
                 return false;
         }
         return true;
@@ -140,7 +139,7 @@ public class Siblings {
     }
 
     public void removeForestLeaves(HybridTree t) {
-        for (Node v : t.getNodes())
+        for (Node v : t.nodes())
             forestTaxaToNode.remove(t.getLabel(v));
     }
 
@@ -149,7 +148,7 @@ public class Siblings {
     }
 
     public void putForestLeaves(HybridTree t) {
-        for (Node v : t.getNodes()) {
+        for (Node v : t.nodes()) {
             forestTaxaToNode.remove(t.getLabel(v));
             forestTaxaToNode.put(t.getLabel(v), v);
         }

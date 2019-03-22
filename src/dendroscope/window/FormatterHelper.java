@@ -21,10 +21,10 @@ package dendroscope.window;
 
 import jloda.graph.EdgeSet;
 import jloda.graph.NodeSet;
-import jloda.graphview.EdgeActionListener;
-import jloda.graphview.INodeEdgeFormatable;
-import jloda.graphview.NodeActionListener;
-import jloda.gui.director.IDirector;
+import jloda.swing.director.IDirector;
+import jloda.swing.graphview.EdgeActionListener;
+import jloda.swing.graphview.INodeEdgeFormatable;
+import jloda.swing.graphview.NodeActionListener;
 
 import javax.swing.*;
 import java.awt.*;

@@ -24,9 +24,9 @@ import dendroscope.embed.LayoutOptimizerManager;
 import dendroscope.window.MultiViewer;
 import dendroscope.window.TreeViewer;
 import jloda.graph.Node;
-import jloda.gui.commands.CommandBase;
-import jloda.gui.commands.ICommand;
-import jloda.util.Alert;
+import jloda.swing.commands.CommandBase;
+import jloda.swing.commands.ICommand;
+import jloda.swing.util.Alert;
 import jloda.util.Basic;
 import jloda.util.parse.NexusStreamParser;
 

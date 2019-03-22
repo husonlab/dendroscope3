@@ -24,11 +24,11 @@ import dendroscope.dtl.DTL;
 import dendroscope.main.Version;
 import dendroscope.window.MultiViewer;
 import dendroscope.window.TreeViewer;
-import jloda.gui.Message;
-import jloda.gui.commands.ICommand;
 import jloda.phylo.PhyloTree;
-import jloda.util.Alert;
-import jloda.util.ProgramProperties;
+import jloda.swing.commands.ICommand;
+import jloda.swing.util.Alert;
+import jloda.swing.util.Message;
+import jloda.swing.util.ProgramProperties;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;

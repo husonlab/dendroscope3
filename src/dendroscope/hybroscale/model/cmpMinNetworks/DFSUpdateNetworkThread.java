@@ -1,25 +1,21 @@
 package dendroscope.hybroscale.model.cmpMinNetworks;
 
-import java.util.BitSet;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Vector;
-import java.util.concurrent.ConcurrentHashMap;
-
 import dendroscope.hybroscale.model.HybridManager.Computation;
 import dendroscope.hybroscale.model.cmpAllMAAFs.AcyclicOrderingChecker;
 import dendroscope.hybroscale.model.cmpAllMAAFs.RefinedFastGetAgreementForest;
 import dendroscope.hybroscale.model.cmpAllMAAFs.ResolveTreeToForest;
 import dendroscope.hybroscale.model.cmpAllMAAFs.TreeToForestAdaptor;
 import dendroscope.hybroscale.model.parallelization.MyNetPriorThreadPool;
-import dendroscope.hybroscale.model.treeObjects.HybridTree;
-import dendroscope.hybroscale.model.treeObjects.SparseNetEdge;
-import dendroscope.hybroscale.model.treeObjects.SparseNetNode;
-import dendroscope.hybroscale.model.treeObjects.SparseNetwork;
-import dendroscope.hybroscale.model.treeObjects.SparseTree;
+import dendroscope.hybroscale.model.treeObjects.*;
 import dendroscope.hybroscale.model.util.CheckConstraints;
 import dendroscope.hybroscale.terminals.TerminalManager;
 import dendroscope.hybroscale.util.graph.MyNode;
+
+import java.util.BitSet;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class DFSUpdateNetworkThread extends Thread {
 
@@ -265,7 +261,7 @@ public class DFSUpdateNetworkThread extends Thread {
 
 		for (SparseNetEdge e : edgeToEdgeCopy.keySet()) {
 			SparseNetEdge e1 = edgeToEdgeCopy.get(e);
-			SparseNetEdge e2 = e1.getSource().getInEdges().get(0);
+            SparseNetEdge e2 = e1.getSource().inEdges().iterator().next();
 			SparseNetNode s1 = e1.getSource();
 			SparseNetNode s2 = e2.getSource();
 
@@ -292,7 +288,7 @@ public class DFSUpdateNetworkThread extends Thread {
 			Vector<SparseNetNode> visited, ConcurrentHashMap<SparseNetNode, SparseNetNode> nodeToCopy,
 			Vector<SparseNetEdge> nonTreeEdges, Vector<SparseNetEdge> solidTreeEdges,
 			ConcurrentHashMap<SparseNetEdge, SparseNetEdge> edgeToEdgeCopy) {
-		Iterator<SparseNetEdge> it = v.getOutEdges().iterator();
+        Iterator<SparseNetEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			SparseNetEdge e = it.next();
 			SparseNetNode c = e.getTarget();
@@ -305,7 +301,7 @@ public class DFSUpdateNetworkThread extends Thread {
 				cCopy = new SparseNetNode(vCopy, nCopy, c.getLabel());
 				if (c.getOrder() != null)
 					cCopy.setOrder(c.getOrder());
-				eCopy = cCopy.getInEdges().firstElement();
+                eCopy = cCopy.inEdges().iterator().next();
 			}
 			if (nonTreeEdges != null && nonTreeEdges.contains(e))
 				edgeToEdgeCopy.put(e, eCopy);
@@ -325,7 +321,7 @@ public class DFSUpdateNetworkThread extends Thread {
 	private void removeNonLeaf(SparseNetNode v) {
 		if (v.getOutDegree() == 0 && !taxaOrdering.contains(v.getLabel())) {
 			ConcurrentHashMap<SparseNetNode, SparseNetEdge> nodeToEdge = new ConcurrentHashMap<SparseNetNode, SparseNetEdge>();
-			for (SparseNetEdge e : v.getInEdges())
+            for (SparseNetEdge e : v.inEdges())
 				nodeToEdge.put(e.getSource(), e);
 			for (SparseNetNode s : nodeToEdge.keySet()) {
 				s.removeOutEdge(nodeToEdge.get(s));
@@ -337,7 +333,7 @@ public class DFSUpdateNetworkThread extends Thread {
 
 	public boolean hasOneNode(SparseNetwork n) {
 		for (SparseNetNode v : n.getNodes()) {
-			if (v.getInDegree() == 1 && v.getOutDegree() == 1 && !n.isSpecial(v.getOutEdges().get(0)))
+            if (v.getInDegree() == 1 && v.getOutDegree() == 1 && !n.isSpecial(v.outEdges().iterator().next()))
 				return true;
 		}
 		return false;
@@ -359,14 +355,14 @@ public class DFSUpdateNetworkThread extends Thread {
 
 	private void removeOneNode(SparseNetNode v, SparseNetwork n) {
 		if (v.getInDegree() == 1 && v.getOutDegree() == 1) {
-			SparseNetNode p = v.getInEdges().get(0).getSource();
-			if (p.getInDegree() == 1 || (!n.isSpecial(v.getInEdges().get(0)) && !n.isSpecial(v.getOutEdges().get(0)))) {
-				boolean isSolid = v.getInEdges().get(0).isSolid();
-				isSolid = isSolid ? isSolid : v.getOutEdges().get(0).isSolid();
-				HashSet<Integer> indices = (HashSet<Integer>) v.getOutEdges().get(0).getIndices().clone();
-				SparseNetNode c = v.getOutEdges().get(0).getTarget();
-				p.removeOutEdge(v.getInEdges().get(0));
-				v.removeOutEdge(v.getOutEdges().get(0));
+            SparseNetNode p = v.inEdges().iterator().next().getSource();
+            if (p.getInDegree() == 1 || (!n.isSpecial(v.inEdges().iterator().next()) && !n.isSpecial(v.outEdges().iterator().next()))) {
+                boolean isSolid = v.inEdges().iterator().next().isSolid();
+                isSolid = isSolid ? isSolid : v.outEdges().iterator().next().isSolid();
+                HashSet<Integer> indices = (HashSet<Integer>) v.outEdges().iterator().next().getIndices().clone();
+                SparseNetNode c = v.outEdges().iterator().next().getTarget();
+                p.removeOutEdge(v.inEdges().iterator().next());
+                v.removeOutEdge(v.outEdges().iterator().next());
 				SparseNetEdge e = p.addChild(c);
 				e.addIndices(indices);
 				e.setSolid(isSolid);

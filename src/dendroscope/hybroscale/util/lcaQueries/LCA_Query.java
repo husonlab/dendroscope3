@@ -1,13 +1,13 @@
 package dendroscope.hybroscale.util.lcaQueries;
 
+import dendroscope.hybroscale.util.graph.MyEdge;
+import dendroscope.hybroscale.util.graph.MyNode;
+import dendroscope.hybroscale.util.graph.MyPhyloTree;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Vector;
-
-import dendroscope.hybroscale.util.graph.MyEdge;
-import dendroscope.hybroscale.util.graph.MyNode;
-import dendroscope.hybroscale.util.graph.MyPhyloTree;
 
 public class LCA_Query {
 
@@ -72,7 +72,7 @@ public class LCA_Query {
 			nodeToIndex.put(v, depthArray.size() - 1);
 		} else {
 			int pos = -1;
-			Iterator<MyEdge> it = v.getOutEdges();
+            Iterator<MyEdge> it = v.outEdges().iterator();
 			while (it.hasNext()) {
 				int newDepth = depth + 1;
 				initRec(it.next().getTarget(), newDepth);

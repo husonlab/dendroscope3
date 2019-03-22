@@ -1,17 +1,11 @@
 package dendroscope.hybroscale.model.treeObjects;
 
-import java.util.BitSet;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Vector;
-
 import dendroscope.hybroscale.model.reductionSteps.ReplacementInfo;
 import dendroscope.hybroscale.util.graph.MyEdge;
 import dendroscope.hybroscale.util.graph.MyNode;
 import dendroscope.hybroscale.util.graph.MyPhyloTree;
+
+import java.util.*;
 
 /**
  * This class represents a resolved network.
@@ -274,7 +268,7 @@ public class HybridNetwork extends MyPhyloTree {
 	}
 
 	public Iterator<MyNode> getSuccessors(MyNode v) {
-		Iterator<MyEdge> it = v.getOutEdges();
+        Iterator<MyEdge> it = v.outEdges().iterator();
 		Vector<MyNode> successors = new Vector<MyNode>();
 		while (it.hasNext()) {
 			successors.add(it.next().getTarget());
@@ -289,11 +283,11 @@ public class HybridNetwork extends MyPhyloTree {
 		while (it.hasNext()) {
 			MyNode v = it.next();
 			if (getLabel(v).equals("rho")) {
-				MyEdge e = (MyEdge) v.getInEdges().next();
+                MyEdge e = (MyEdge) v.getFirstInEdge();
 				MyNode p = e.getSource();
 				deleteEdge(e);
 				deleteNode(v);
-				e = (MyEdge) p.getOutEdges().next();
+                e = (MyEdge) p.getFirstOutEdge();
 				MyNode c = e.getTarget();
 				deleteEdge(e);
 				deleteNode(p);
@@ -362,7 +356,7 @@ public class HybridNetwork extends MyPhyloTree {
 
 	// replaces a subtree under node v by a new node newV
 	public void deleteSubtree(MyNode v, MyNode newV, boolean doUpdate) {
-		MyNode p = ((MyEdge) v.getInEdges().next()).getSource();
+        MyNode p = ((MyEdge) v.getFirstInEdge()).getSource();
 		deleteSubtreeRec(v);
 		if (newV != null) {
 			newEdge(p, newV);
@@ -381,7 +375,7 @@ public class HybridNetwork extends MyPhyloTree {
 				deleteSubtreeRec(child);
 			}
 		}
-		deleteEdge((MyEdge) v.getInEdges().next());
+        deleteEdge((MyEdge) v.getFirstInEdge());
 		deleteNode(v);
 	}
 

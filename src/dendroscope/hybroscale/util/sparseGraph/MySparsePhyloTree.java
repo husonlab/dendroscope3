@@ -1,12 +1,12 @@
 package dendroscope.hybroscale.util.sparseGraph;
 
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Vector;
-
 import dendroscope.hybroscale.util.graph.MyEdge;
 import dendroscope.hybroscale.util.graph.MyNode;
 import dendroscope.hybroscale.util.graph.MyPhyloTree;
+
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Vector;
 
 public class MySparsePhyloTree extends MySparseGraph {
 
@@ -41,7 +41,7 @@ public class MySparsePhyloTree extends MySparseGraph {
 	}
 
 	private void copyTreeRec(MyPhyloTree t, MyNode v, MySparseNode vCopy) {
-		Iterator<MyEdge> it = v.getOutEdges();
+        Iterator<MyEdge> it = v.outEdges().iterator();
 		while(it.hasNext()){
 			MyNode c = it.next().getTarget();
 			MySparseNode cCopy = newNode(c);

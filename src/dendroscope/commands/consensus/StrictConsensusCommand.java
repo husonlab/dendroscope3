@@ -22,8 +22,8 @@ package dendroscope.commands.consensus;
 import dendroscope.consensus.StrictConsensus;
 import dendroscope.window.MultiViewer;
 import dendroscope.window.TreeViewer;
-import jloda.gui.commands.CommandBase;
-import jloda.gui.commands.ICommand;
+import jloda.swing.commands.CommandBase;
+import jloda.swing.commands.ICommand;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;

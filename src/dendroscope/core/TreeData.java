@@ -21,10 +21,10 @@ package dendroscope.core;
 
 import dendroscope.window.TreeViewer;
 import jloda.graph.*;
-import jloda.graphview.EdgeView;
-import jloda.graphview.NodeView;
-import jloda.graphview.Transform;
 import jloda.phylo.PhyloTree;
+import jloda.swing.graphview.EdgeView;
+import jloda.swing.graphview.NodeView;
+import jloda.swing.graphview.Transform;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -114,9 +114,9 @@ public class TreeData extends PhyloTree {
                     for (Node u : srcTree.getNode2GuideTreeChildren().get(v)) {
                         children.add(oldNode2NewNode.get(u));
                     }
-                    targetTree.getNode2GuideTreeChildren().set(w, children);
+                    targetTree.getNode2GuideTreeChildren().put(w, children);
                 } else
-                    targetTree.getNode2GuideTreeChildren().set(w, null);
+                    targetTree.getNode2GuideTreeChildren().put(w, null);
             }
         } else
             clearLSA();
@@ -181,9 +181,9 @@ public class TreeData extends PhyloTree {
                     for (Node u : srcTree.getNode2GuideTreeChildren().get(v)) {
                         children.add(oldNode2NewNode.get(u));
                     }
-                    targetTree.getNode2GuideTreeChildren().set(w, children);
+                    targetTree.getNode2GuideTreeChildren().put(w, children);
                 } else
-                    targetTree.getNode2GuideTreeChildren().set(w, null);
+                    targetTree.getNode2GuideTreeChildren().put(w, null);
             }
         }
 
@@ -211,9 +211,9 @@ public class TreeData extends PhyloTree {
                     for (Node u : srcTree.getNode2GuideTreeChildren().get(v)) {
                         children.add(oldNode2NewNode.get(u));
                     }
-                    targetTree.getNode2GuideTreeChildren().set(w, children);
+                    targetTree.getNode2GuideTreeChildren().put(w, children);
                 } else
-                    targetTree.getNode2GuideTreeChildren().set(w, null);
+                    targetTree.getNode2GuideTreeChildren().put(w, null);
             }
             for (Edge e = srcTree.getFirstEdge(); e != null; e = e.getNext()) {
                 Edge f = oldEdge2NewEdge.get(e);
@@ -264,9 +264,9 @@ public class TreeData extends PhyloTree {
                     for (Node u : srcTree.getNode2GuideTreeChildren().get(v)) {
                         children.add(oldNode2NewNode.get(u));
                     }
-                    target.getNode2GuideTreeChildren().set(w, children);
+                    target.getNode2GuideTreeChildren().put(w, children);
                 } else
-                    target.getNode2GuideTreeChildren().set(w, null);
+                    target.getNode2GuideTreeChildren().put(w, null);
             }
         }
 
@@ -283,14 +283,14 @@ public class TreeData extends PhyloTree {
                 target.getCollapsedNodes().clear();
                 for (Node v = srcTree.getFirstNode(); v != null; v = v.getNext()) {
                     Node w = oldNode2NewNode.get(v);
-                    target.node2NodeView.set(w, new NodeView(getNV(v)));
+                    target.node2NodeView.put(w, new NodeView(getNV(v)));
                     target.setLabel(w, srcTree.getLabel(v));
                     if (getCollapsedNodes().contains(v))
                         target.getCollapsedNodes().add(w);
                 }
                 for (Edge e = srcTree.getFirstEdge(); e != null; e = e.getNext()) {
                     Edge f = oldEdge2NewEdge.get(e);
-                    target.edge2EdgeView.set(f, new EdgeView(getEV(e)));
+                    target.edge2EdgeView.put(f, new EdgeView(getEV(e)));
                     target.setLabel(f, srcTree.getLabel(e));
                 }
             }
@@ -399,7 +399,7 @@ public class TreeData extends PhyloTree {
      * @param nv
      */
     public void setNV(Node v, NodeView nv) {
-        node2NodeView.set(v, nv);
+        node2NodeView.put(v, nv);
 
     }
 
@@ -420,7 +420,7 @@ public class TreeData extends PhyloTree {
      * @param ev
      */
     public void setEV(Edge e, EdgeView ev) {
-        edge2EdgeView.set(e, ev);
+        edge2EdgeView.put(e, ev);
     }
 
     /**

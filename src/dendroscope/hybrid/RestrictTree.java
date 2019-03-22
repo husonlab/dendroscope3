@@ -23,7 +23,6 @@ import jloda.graph.Edge;
 import jloda.graph.Node;
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.Vector;
 
 /**
@@ -78,11 +77,9 @@ public class RestrictTree {
         return fTaxa;
     }
 
-    private void initRec(HybridTree t1, Node v, Vector<Node> rootNodes,
-                         Vector<String> fTaxa) {
-        Iterator<Edge> it = v.getOutEdges();
-        while (it.hasNext()) {
-            Edge e = it.next();
+    private void initRec(HybridTree t1, Node v, Vector<Node> rootNodes, Vector<String> fTaxa) {
+
+        for (Edge e : v.outEdges()) {
             Node t = e.getTarget();
             if (!rootNodes.contains(t)) {
                 if (t.getOutDegree() == 0) {

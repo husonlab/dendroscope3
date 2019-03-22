@@ -137,7 +137,7 @@ public class ComputeNetworkConsensus implements IConsensusTreeMethod {
                     tree.setLabel(v, name);
                     BitSet set = new BitSet();
                     set.set(t);
-                    node2taxa.set(v, set);
+                    node2taxa.put(v, set);
                     Split split = splits.getTrivial(t);
                     if (split != null) {
                         tree.setWeight(e, split.getWeight());
@@ -145,7 +145,7 @@ public class ComputeNetworkConsensus implements IConsensusTreeMethod {
                     }
                 }
             }
-            node2taxa.set(center, centerTaxa);
+            node2taxa.put(center, centerTaxa);
 
             // process all non-trivial splits
             for (Iterator it = splits.iterator(); it.hasNext(); ) {

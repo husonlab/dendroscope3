@@ -22,8 +22,9 @@ package dendroscope.algorithms.clusternet;
 import dendroscope.consensus.*;
 import jloda.graph.*;
 import jloda.phylo.PhyloTree;
+import jloda.phylo.PhyloTreeUtils;
+import jloda.swing.util.ProgramProperties;
 import jloda.util.Basic;
-import jloda.util.ProgramProperties;
 import jloda.util.Triplet;
 
 import java.util.*;
@@ -200,8 +201,7 @@ public class ClusterNetwork {
                 }
             }
             for (int t = cluster.nextSetBit(0); t != -1 && t <= maxTaxonId; t = cluster.nextSetBit(t + 1)) {
-                tree.setTaxon2Node(t, v);
-                tree.setNode2Taxa(v, t);
+                tree.addTaxon(v, t);
                 if (tree.getLabel(v) == null)
                     tree.setLabel(v, taxa.getLabel(t));
                 else
@@ -286,7 +286,7 @@ public class ClusterNetwork {
             if (v.getInDegree() > 1) {
                 Node w = tree.newNode();
                 List<Edge> toDelete = new LinkedList<>();
-                for (Iterator ite = v.getInEdges(); ite.hasNext(); ) {
+                for (Iterator ite = v.inEdges().iterator(); ite.hasNext(); ) {
                     Edge e = (Edge) ite.next();
                     Node u = e.getSource();
                     Edge f = tree.newEdge(u, w);
@@ -309,7 +309,7 @@ public class ClusterNetwork {
                 }
                 //treeView.setLocation(w, treeView.getLocation(v).getX(), treeView.getLocation(v).getY() + 0.1);
             } else if (v.getInDegree() == 1) {
-                Edge e = v.getInEdges().next();
+                Edge e = v.getFirstInEdge();
                 if (node2weight != null)
                     tree.setWeight(e, node2weight.getValue(v));
             }
@@ -320,8 +320,8 @@ public class ClusterNetwork {
             Edge e = root.getFirstAdjacentEdge();
             Edge f = root.getLastAdjacentEdge();
             double weight = 0.5 * (tree.getWeight(e) + tree.getWeight(f));
-            double a = tree.computeAverageDistanceToALeaf(e.getOpposite(root));
-            double b = tree.computeAverageDistanceToALeaf(f.getOpposite(root));
+            double a = PhyloTreeUtils.computeAverageDistanceToALeaf(tree, e.getOpposite(root));
+            double b = PhyloTreeUtils.computeAverageDistanceToALeaf(tree, f.getOpposite(root));
             double na = 0.5 * (b - a + weight);
             if (na >= weight)
                 na = 0.95 * weight;

@@ -1,17 +1,13 @@
 package dendroscope.hybroscale.model.cmpMinNetworks;
 
-import java.util.BitSet;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Vector;
-
 import dendroscope.hybroscale.model.treeObjects.HybridTree;
 import dendroscope.hybroscale.model.treeObjects.SparseNetEdge;
 import dendroscope.hybroscale.model.treeObjects.SparseNetNode;
 import dendroscope.hybroscale.model.treeObjects.SparseNetwork;
 import dendroscope.hybroscale.util.graph.MyEdge;
 import dendroscope.hybroscale.util.graph.MyNode;
+
+import java.util.*;
 
 public class NetworkToTreeAdaptor {
 
@@ -45,7 +41,7 @@ public class NetworkToTreeAdaptor {
 
 			if (vTree != null) {
 
-				Iterator<MyEdge> it = vTree.getOutEdges();
+                Iterator<MyEdge> it = vTree.outEdges().iterator();
 				while (it.hasNext()) {
 					BitSet cTreeCluster = t.getNodeToCluster().get(it.next().getTarget());
 					childBuckets.put(cTreeCluster, new Vector<SparseNetNode>());

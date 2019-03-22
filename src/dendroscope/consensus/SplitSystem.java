@@ -27,8 +27,8 @@ import jloda.graph.Edge;
 import jloda.graph.Node;
 import jloda.graph.NodeArray;
 import jloda.phylo.PhyloTree;
+import jloda.swing.util.ProgramProperties;
 import jloda.util.CanceledException;
-import jloda.util.ProgramProperties;
 import jloda.util.ProgressListener;
 import jloda.util.ProgressSilent;
 
@@ -211,7 +211,7 @@ public class SplitSystem {
                     prevSplit.setWeight(prevSplit.getWeight() + split.getWeight());
                 }
             } else
-                reticulateNode2Taxa.set(w, f_taxa);
+                reticulateNode2Taxa.put(w, f_taxa);
 
             e_taxa.or(f_taxa);
         }
@@ -298,7 +298,7 @@ public class SplitSystem {
                     tree.setLabel(v, name);
                     BitSet set = new BitSet();
                     set.set(t);
-                    node2taxa.set(v, set);
+                    node2taxa.put(v, set);
                     Split split = getTrivial(t);
                     if (split != null) {
                         tree.setWeight(e, split.getWeight());
@@ -306,7 +306,7 @@ public class SplitSystem {
                     }
                 }
             }
-            node2taxa.set(center, centerTaxa);
+            node2taxa.put(center, centerTaxa);
 
             // process all non-trivial splits
             for (Iterator it = iterator(); it.hasNext(); ) {
@@ -351,7 +351,7 @@ public class SplitSystem {
                 v = f.getTarget();
             } else if (edgesToPush.size() > 1) { // more than one subtree contains taxa from the set, time to split
                 Node u = tree.newNode();
-                node2taxa.set(u, partB);
+                node2taxa.put(u, partB);
                 Edge h = tree.newEdge(v, u);
                 tree.setWeight(h, weight);
 

@@ -20,10 +20,9 @@
 package dendroscope.util;
 
 import jloda.graph.*;
-import jloda.phylo.PhyloGraphView;
 import jloda.phylo.PhyloTree;
+import jloda.swing.graphview.PhyloGraphView;
 import jloda.util.Basic;
-import jloda.util.NotOwnerException;
 
 import java.util.*;
 
@@ -326,7 +325,7 @@ public class PhyloTreeUtils {
                     newW = (Node) old2new.get(w);
                 else {
                     newW = newTree.newNode();
-                    old2new.set(w, newW);
+                    old2new.put(w, newW);
                 }
 
                 if (tree.getLabel(w) != null && tree.getLabel(w).length() > 0)
@@ -454,14 +453,13 @@ public class PhyloTreeUtils {
 
 
             NodeSet leaves = graph.computeSetOfLeaves();
-            NodeSet allNodes = graph.getNodes();
-            int[][] distMatrixTemp = new int[allNodes.size()][allNodes.size()];   // temp matrix
+            int[][] distMatrixTemp = new int[graph.getNumberOfNodes()][graph.getNumberOfNodes()];   // temp matrix
 
             NodeIntegerArray idTemp = new NodeIntegerArray(graph);   //temp id used to fill distMatrixTemp
             int nN = 0;
 
 
-            for (Node tempNode : allNodes) {
+            for (Node tempNode : graph.nodes()) {
                 idTemp.set(tempNode, nN);     //set temp id
                 nN++;
 
@@ -472,7 +470,7 @@ public class PhyloTreeUtils {
             The values are saved in distMatrixTemp, dist is used to order the priorityQueue.
             */
 
-            for (Node source : allNodes) {
+            for (Node source : graph.nodes()) {
                 int idS = idTemp.getValue(source);
                 //System.out.println("idS" + idS);
 
@@ -540,8 +538,7 @@ public class PhyloTreeUtils {
                     //System.out.println("labelS " + labelS+ " labelT " + labelT);
 
                     int min = 1000000;
-                    for (Iterator i = allNodes.iterator(); i.hasNext(); ) {
-                        Node node = (Node) i.next();
+                    for (Node node : graph.nodes()) {
                         int nodeID = idTemp.getValue(node);
                         if (distMatrixTemp[nodeID][idS] + distMatrixTemp[nodeID][idT] < min)
                             min = distMatrixTemp[nodeID][idS] + distMatrixTemp[nodeID][idT];

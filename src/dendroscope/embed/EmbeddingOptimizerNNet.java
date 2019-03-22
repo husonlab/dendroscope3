@@ -24,11 +24,11 @@ import dendroscope.consensus.NeighborNetCycle;
 import dendroscope.consensus.SplitSystem;
 import dendroscope.consensus.Taxa;
 import dendroscope.hybrid.EasyTree;
+import dendroscope.tanglegram.TanglegramUtils;
 import dendroscope.util.PhyloTreeUtils;
 import jloda.graph.Edge;
 import jloda.graph.Node;
 import jloda.graph.NodeArray;
-import jloda.graph.NodeSet;
 import jloda.phylo.PhyloTree;
 import jloda.util.Basic;
 import jloda.util.CanceledException;
@@ -58,14 +58,10 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
     public void apply(PhyloTree tree, ProgressListener progressListener) throws CanceledException {
 
         if (printILP) {
-            NodeSet nodes1 = tree.getNodes();
-
-            Iterator<Node> tempIt = nodes1.iterator();
             int tempIndex = 1;
-            while (tempIt.hasNext()) {
-                Node tempNode = tempIt.next();
-                if (tempNode.getOutDegree() != 0) {
-                    tree.setLabel(tempNode, Integer.toString(tempIndex));
+            for (Node v : tree.nodes()) {
+                if (v.getOutDegree() != 0) {
+                    tree.setLabel(v, Integer.toString(tempIndex));
                     tempIndex++;
                 }
             }
@@ -115,7 +111,7 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
             tree.setRoot(newRoot);
             tree.setLabel(dummyLeaf, "rho****");
 
-            Taxa tax = GeneralMethods.getTaxaForTanglegram(tree);
+            Taxa tax = TanglegramUtils.getTaxaForTanglegram(tree);
             for (Iterator<String> taxIt = tax.iterator(); taxIt.hasNext(); ) {
                 String taxName = taxIt.next();
                 if (!taxon2Id.keySet().contains(taxName)) {
@@ -157,7 +153,6 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
             for (int i = 1; i < lenghtCircOrdering; i++)
                 circularOrderingPair[1][i] = circularOrderingPair[0][lenghtCircOrdering - i];
 
-            GeneralMethods methodLsa = new GeneralMethods();
 
             if (DEBUG) {
                 //System.err.println("Best score: " + bestScore);
@@ -268,11 +263,9 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
 
 
                     for (int a = 0; a < forests[s].size(); a++) {
-                        List<String> tempOrd = new LinkedList<String>();
-
-                        methodLsa.lsaOptimizationRec(forests[s].get(a), forests[s].get(a).getRoot(), currOrderingListNew, 0, null, null);
-                        tempOrd.clear();
-                        tempOrd = GeneralMethods.getLsaOrderRec(forests[s].get(a), forests[s].get(a).getRoot(), tempOrd);
+                        TanglegramUtils.lsaOptimization(forests[s].get(a), currOrderingListNew, 0, null, null);
+                        final List<String> tempOrd = new ArrayList<>();
+                        TanglegramUtils.getLsaOrderRec(forests[s].get(a), forests[s].get(a).getRoot(), tempOrd);
 
                         //todo : some trees have "?" as leaves (ex paper) solve this problem
                         //for now we do
@@ -288,11 +281,8 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
 
                         }
 
-
                         tempOrder[s].add(tempOrd);
-
                     }
-
 
                     List<String> bestOrdForNow = new LinkedList<String>();
                     for (int ss = 0; ss < tempOrder[s].get(0).size(); ss++) {
@@ -407,7 +397,7 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
                                         taxaSetsThatAgree = alreadyInsertedSets.size(); //the first is always good
                                     }
                                     if (taxaSetsThatAgree == alreadyInsertedSets.size()) {
-                                        int value = GeneralMethods.computeCrossingNum(copy, currOrderingListNew);
+                                        int value = TanglegramUtils.computeCrossingNum(copy, currOrderingListNew);
                                         if (value <= min) {
                                             min = value;
                                             bestOrdTemp.clear();
@@ -442,7 +432,7 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
                         }
                     }
                 }
-                int score = GeneralMethods.computeCrossingNum(newOrder[0], newOrder[1]);
+                int score = TanglegramUtils.computeCrossingNum(newOrder[0], newOrder[1]);
                 if (score == best)
                     break;
             }
@@ -450,7 +440,7 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
             LSATree.computeLSAOrdering(trees[0]);
             LSATree.computeLSAOrdering(trees[1]);
 
-            int finalScore = GeneralMethods.computeCrossingNum(newOrder[0], newOrder[1]);   // the two orderings for Daniel
+            int finalScore = TanglegramUtils.computeCrossingNum(newOrder[0], newOrder[1]);   // the two orderings for Daniel
 
             // get rid of dummy leaves
             for (Node v : dummyLeaves) {
@@ -583,7 +573,7 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
                         if (bestOrdering[z] == id) {
                             BitSet below = new BitSet();
                             below.set(z);
-                            taxaBelow.set(v, below);
+                            taxaBelow.put(v, below);
                             break;
                         }
                 }
@@ -693,7 +683,7 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
                 computeTaxaBelowRec(w, taxaBelow);
                 below.or(taxaBelow.get(w));
             }
-            taxaBelow.set(v, below);
+            taxaBelow.put(v, below);
         }
     }
 
@@ -775,7 +765,6 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
      * @param taxon2ID
      * @param id2Taxon
      * @return
-     * @throws Exception
      */
     //working
     public int[] computerCircularOrderingHardwiredMatrix(PhyloTree[] trees, Map<String, Integer> taxon2ID, Map<Integer, String> id2Taxon) {
@@ -785,8 +774,8 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
 
             Taxa[] taxaTrees = new Taxa[2];
             if (trees.length == 2) {
-                taxaTrees[0] = GeneralMethods.getTaxaForTanglegram(trees[0]);
-                taxaTrees[1] = GeneralMethods.getTaxaForTanglegram(trees[1]);
+                taxaTrees[0] = TanglegramUtils.getTaxaForTanglegram(trees[0]);
+                taxaTrees[1] = TanglegramUtils.getTaxaForTanglegram(trees[1]);
             }
 
             Taxa[] taxaNotInTrees = new Taxa[2];
@@ -851,8 +840,8 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
                 Set<Set<String>> clustersAll = PhyloTreeUtils.collectAllHardwiredClusters(newTrees[0]);
                 clustersAll.addAll(PhyloTreeUtils.collectAllHardwiredClusters(newTrees[1]));
 
-                SplitSystem sys = GeneralMethods.getSplitSystem(clustersAll, taxon2ID);
-                distMat = GeneralMethods.setMatForDiffSys(distMat, taxon2ID.size(), sys, false);
+                SplitSystem sys = TanglegramUtils.getSplitSystem(clustersAll, taxon2ID);
+                distMat = TanglegramUtils.setMatForDiffSys(distMat, taxon2ID.size(), sys, false);
             } else {
 
 // create a new distance matrix and update it for every split system induced by the given networks
@@ -860,9 +849,9 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
                     //System.err.println("tree ");
 
                     Set<Set<String>> clusters = PhyloTreeUtils.collectAllHardwiredClusters(tree);
-                    SplitSystem sys = GeneralMethods.getSplitSystem(clusters, taxon2ID);
+                    SplitSystem sys = TanglegramUtils.getSplitSystem(clusters, taxon2ID);
 
-                    distMat = GeneralMethods.setMatForDiffSys(distMat, taxon2ID.size(), sys, false);
+                    distMat = TanglegramUtils.setMatForDiffSys(distMat, taxon2ID.size(), sys, false);
                 }
             }
 
@@ -913,7 +902,6 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
      * @param taxon2ID
      * @param id2Taxon
      * @return
-     * @throws Exception
      */
     public int[] computerCircularOrderingShortestPathMatrix(PhyloTree[] trees, Map<String, Integer> taxon2ID, Map<Integer, String> id2Taxon) {
 
@@ -924,7 +912,7 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
 // with different taxa sets)
 
             for (PhyloTree tree : trees) {
-                Taxa tax = GeneralMethods.getTaxaForTanglegram(tree);
+                Taxa tax = TanglegramUtils.getTaxaForTanglegram(tree);
                 for (Iterator<String> taxIt = tax.iterator(); taxIt.hasNext(); ) {
                     String taxName = taxIt.next();
                     if (!taxon2ID.keySet().contains(taxName)) {

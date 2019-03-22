@@ -19,7 +19,7 @@
 */
 package dendroscope.io;
 
-import jloda.util.ProgramProperties;
+import jloda.swing.util.ProgramProperties;
 
 import java.io.StringWriter;
 

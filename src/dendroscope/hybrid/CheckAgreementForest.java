@@ -87,7 +87,7 @@ public class CheckAgreementForest {
                                    GetAgreementForest gAf) {
         BitSet b = new BitSet(gAf.getSortedEdges().size());
         if (v.getInDegree() == 1) {
-            Edge e = v.getInEdges().next();
+            Edge e = v.getFirstInEdge();
             getEdgeSetRec(e, b, rootNodes, gAf);
             gAf.reportIllegalTree(gAf.getSortedEdges().indexOf(e), b);
         }
@@ -96,7 +96,7 @@ public class CheckAgreementForest {
     private void getEdgeSetRec(Edge e, BitSet b, Vector<Node> rootNodes,
                                GetAgreementForest gAf) {
         Node v = e.getTarget();
-        Iterator<Edge> it = v.getOutEdges();
+        Iterator<Edge> it = v.outEdges().iterator();
         while (it.hasNext()) {
             Edge out = it.next();
             Node t = out.getTarget();
@@ -124,7 +124,7 @@ public class CheckAgreementForest {
 
     private void initRec(HybridTree t1, Node v, Vector<Node> rootNodes,
                          Vector<String> fTaxa) {
-        Iterator<Edge> it = v.getOutEdges();
+        Iterator<Edge> it = v.outEdges().iterator();
         while (it.hasNext()) {
             Edge e = it.next();
             Node t = e.getTarget();

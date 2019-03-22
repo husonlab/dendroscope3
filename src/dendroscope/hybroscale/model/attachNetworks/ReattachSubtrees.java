@@ -1,13 +1,13 @@
 package dendroscope.hybroscale.model.attachNetworks;
 
-import java.util.HashSet;
-import java.util.Iterator;
-
 import dendroscope.hybroscale.model.reductionSteps.ReplacementInfo;
 import dendroscope.hybroscale.model.treeObjects.HybridNetwork;
 import dendroscope.hybroscale.util.graph.MyEdge;
 import dendroscope.hybroscale.util.graph.MyNode;
 import dendroscope.hybroscale.util.graph.MyPhyloTree;
+
+import java.util.HashSet;
+import java.util.Iterator;
 
 /**
  * This method replaces distinct leaves of a resolved network by rooted,
@@ -43,7 +43,7 @@ public class ReattachSubtrees {
 
 		// attaching tree p to network n
 		// -> connect all in-edges of taxon to the root of the tree
-		Iterator<MyEdge> it = taxon.getInEdges();
+        Iterator<MyEdge> it = taxon.inEdges().iterator();
 		while (it.hasNext()) {
 			MyEdge e = it.next();
 			boolean isSpecial = n.isSpecial(e);
@@ -112,7 +112,7 @@ public class ReattachSubtrees {
 
 		// attaching tree p to network n
 		// -> connect all in-edges of taxon to the root of the tree
-		Iterator<MyEdge> it = taxon.getInEdges();
+        Iterator<MyEdge> it = taxon.inEdges().iterator();
 		while (it.hasNext()) {
 			MyEdge e = it.next();
 			boolean isSpecial = n.isSpecial(e);

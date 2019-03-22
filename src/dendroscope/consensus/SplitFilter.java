@@ -133,7 +133,8 @@ public class SplitFilter {
                 result.addSplit(split);
             progressListener.incrementProgress();
         }
-        for (PhyloTree tree : trees) Utilities.clearNode2Taxa(tree);
+        for (PhyloTree tree : trees)
+            tree.clearTaxa();
 
         return result;
     }
@@ -205,7 +206,8 @@ public class SplitFilter {
             progressListener.incrementProgress();
         }
 
-        for (PhyloTree tree : trees) Utilities.clearNode2Taxa(tree);
+        for (PhyloTree tree : trees)
+            tree.clearTaxa();
 
         return result;
     }

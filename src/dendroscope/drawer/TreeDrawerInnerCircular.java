@@ -23,11 +23,11 @@ import dendroscope.window.TreeViewer;
 import jloda.graph.Edge;
 import jloda.graph.Node;
 import jloda.graph.NodeIntegerArray;
-import jloda.graphview.EdgeView;
-import jloda.graphview.GraphView;
-import jloda.graphview.NodeView;
 import jloda.phylo.PhyloTree;
-import jloda.util.Geometry;
+import jloda.swing.graphview.EdgeView;
+import jloda.swing.graphview.GraphView;
+import jloda.swing.graphview.NodeView;
+import jloda.swing.util.Geometry;
 
 import java.awt.*;
 import java.awt.geom.Point2D;

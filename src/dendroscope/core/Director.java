@@ -20,11 +20,16 @@
 package dendroscope.core;
 
 import dendroscope.window.MultiViewer;
-import jloda.gui.ProgressDialog;
-import jloda.gui.commands.CommandManager;
-import jloda.gui.director.*;
-import jloda.gui.message.MessageWindow;
-import jloda.util.*;
+import jloda.swing.commands.CommandManager;
+import jloda.swing.director.*;
+import jloda.swing.message.MessageWindow;
+import jloda.swing.util.Alert;
+import jloda.swing.util.ProgramProperties;
+import jloda.swing.util.ProgressDialog;
+import jloda.util.Basic;
+import jloda.util.CanceledException;
+import jloda.util.ProgressCmdLine;
+import jloda.util.ProgressListener;
 
 import javax.swing.*;
 import java.awt.*;

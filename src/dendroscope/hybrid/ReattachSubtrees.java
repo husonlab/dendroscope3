@@ -23,8 +23,6 @@ import jloda.graph.Edge;
 import jloda.graph.Node;
 import jloda.phylo.PhyloTree;
 
-import java.util.Iterator;
-
 /**
  * This method replaces distinct leaves of a resolved network by rooted,
  * bifurcating phylogenetic trees.
@@ -58,9 +56,7 @@ public class ReattachSubtrees {
 
         // attaching tree p to network n
         // -> connect all in-edges of taxon to the root of the tree
-        Iterator<Edge> it = taxon.getInEdges();
-        while (it.hasNext()) {
-            Edge e = it.next();
+        for (Edge e : taxon.inEdges()) {
             boolean isSpecial = n.isSpecial(e);
             Node parent = e.getSource();
             n.deleteEdge(e);
@@ -79,8 +75,7 @@ public class ReattachSubtrees {
     }
 
     @SuppressWarnings("unchecked")
-    private void addTreeToNetworkRec(Node vCopy, Node v, PhyloTree p,
-                                     HybridNetwork n) {
+    private void addTreeToNetworkRec(Node vCopy, Node v, PhyloTree p, HybridNetwork n) {
         for (Edge e : v.outEdges()) {
             Node c = e.getTarget();
             Node cCopy = n.newNode(c);

@@ -23,8 +23,8 @@ import dendroscope.commands.CommandBaseMultiViewer;
 import dendroscope.window.TreeViewer;
 import jloda.graph.Edge;
 import jloda.graph.Node;
-import jloda.gui.commands.ICommand;
 import jloda.phylo.PhyloTree;
+import jloda.swing.commands.ICommand;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;

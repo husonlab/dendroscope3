@@ -28,13 +28,13 @@ import dendroscope.hybrid.View;
 import dendroscope.window.MultiViewer;
 import dendroscope.window.TreeViewer;
 import jloda.graph.Edge;
-import jloda.gui.commands.ICommand;
-import jloda.gui.director.IDirector;
 import jloda.phylo.PhyloTree;
 import jloda.phylo.PhyloTreeUtils;
-import jloda.util.Alert;
+import jloda.swing.commands.ICommand;
+import jloda.swing.director.IDirector;
+import jloda.swing.util.Alert;
+import jloda.swing.util.ProgramProperties;
 import jloda.util.Basic;
-import jloda.util.ProgramProperties;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;

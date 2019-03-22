@@ -80,7 +80,7 @@ public class GalledNetworkChecker {
                     List edge2sets = new LinkedList();
                     edge2sets.add(alwaysOn);
                     edge2sets.addAll(optional);
-                    edge2TaxonSets.set(e, edge2sets);
+                    edge2TaxonSets.put(e, edge2sets);
                 }
             }
 
@@ -126,7 +126,7 @@ public class GalledNetworkChecker {
 
         // todo: no, only below // if(v.getInDegree()>1) reticulate.add(v);
 
-        for (Integer integer : tree.getNode2Taxa(v)) {
+        for (Integer integer : tree.getTaxa(v)) {
             int t = integer;
             taxaBelow.set(t);
         }
@@ -153,10 +153,10 @@ public class GalledNetworkChecker {
 
             taxaBelow.or((BitSet) node2AllTaxaBelow.get(w));
         }
-        node2AllTaxaBelow.set(v, taxaBelow);
-        node2AllNodesBelow.set(v, nodesBelow);
-        node2leaves.set(v, leaves);
-        node2reticulate.set(v, reticulate);
+        node2AllTaxaBelow.put(v, taxaBelow);
+        node2AllNodesBelow.put(v, nodesBelow);
+        node2leaves.put(v, leaves);
+        node2reticulate.put(v, reticulate);
 
         if (!nodesBelow.containsAll(leaves))
             System.err.println("WARNING: error in GalledNetworkChecker: nodes below doesn't contain all leaves");
@@ -232,7 +232,7 @@ public class GalledNetworkChecker {
         for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f))  // visit all children
         {
             Node w = f.getTarget();
-            if (node2component.get(w) == null) // not yet visited
+            if (node2component.getValue(w) == null) // not yet visited
                 labelNodesByTreeComponentsRec(w, f, maxComponentNumber, node2component);
         }
     }

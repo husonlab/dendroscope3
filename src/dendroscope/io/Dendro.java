@@ -20,14 +20,11 @@
 package dendroscope.io;
 
 import dendroscope.core.TreeData;
-import jloda.graph.Edge;
-import jloda.graph.Node;
-import jloda.graph.Num2EdgeArray;
-import jloda.graph.Num2NodeArray;
-import jloda.graphview.EdgeView;
-import jloda.graphview.GraphView;
-import jloda.graphview.NodeView;
+import jloda.graph.*;
 import jloda.phylo.PhyloTree;
+import jloda.swing.graphview.EdgeView;
+import jloda.swing.graphview.GraphView;
+import jloda.swing.graphview.NodeView;
 import jloda.util.Basic;
 import jloda.util.parse.NexusStreamParser;
 
@@ -77,7 +74,6 @@ public class Dendro extends IOBase implements IOFormat {
      *
      * @param r
      * @return trees
-     * @throws java.io.IOException
      */
     public TreeData[] read(Reader r) throws IOException {
         List<TreeData> trees = new LinkedList<>();
@@ -101,7 +97,6 @@ public class Dendro extends IOBase implements IOFormat {
      *
      * @param np
      * @return tree
-     * @throws IOException
      */
     private TreeData read(NexusStreamParser np) throws IOException {
         TreeData tree = new TreeData();
@@ -113,7 +108,7 @@ public class Dendro extends IOBase implements IOFormat {
             num2edge = new Num2EdgeArray();
             tree.setName(createNewTreeName());
             String str = np.getTokensFileNamePunctuation(null, "}") + "}";
-            tree.read(new StringReader(str), num2node, num2edge);
+            GraphIO.read(new StringReader(str), tree, num2node, num2edge);
         }
         if (np.peekMatchIgnoreCase("{NETWORK")) {
             num2node = new Num2NodeArray();
@@ -142,7 +137,7 @@ public class Dendro extends IOBase implements IOFormat {
                 int vid = np.getInt(1, tree.getNumberOfNodes());
                 Node v = num2node.get(vid);
                 List<Node> order = new LinkedList<Node>();
-                tree.getNode2GuideTreeChildren().set(v, order);
+                tree.getNode2GuideTreeChildren().put(v, order);
                 np.matchRespectCase(":");
 
                 while (!np.peekMatchRespectCase(";")) {
@@ -254,7 +249,6 @@ public class Dendro extends IOBase implements IOFormat {
      *
      * @param w0
      * @param trees
-     * @throws java.io.IOException
      */
     public void write(Writer w0, TreeData[] trees) throws IOException {
 
@@ -276,7 +270,6 @@ public class Dendro extends IOBase implements IOFormat {
      *
      * @param w
      * @param tree
-     * @throws IOException
      */
     private void write(BufferedWriter w, TreeData tree) throws IOException {
         Map<Integer, Integer> nodeId2Number = new HashMap<Integer, Integer>();
@@ -402,7 +395,6 @@ public class Dendro extends IOBase implements IOFormat {
      * @param w
      * @param nodeId2Number after write, maps node-ids to numbers 1..numberOfNodes
      * @param edgeId2Number after write, maps edge-ids to numbers 1..numberOfEdge
-     * @throws IOException
      */
     private void write(PhyloTree tree, Writer w, Map<Integer, Integer> nodeId2Number, Map<Integer, Integer> edgeId2Number) throws IOException {
         w.write("{NETWORK\n");
@@ -459,7 +451,6 @@ public class Dendro extends IOBase implements IOFormat {
      * @param np
      * @param num2node after read, contains mapping of numbers used in file to nodes created in Graph
      * @param num2edge after read, contains mapping of numbers used in file to edges created in Graph
-     * @throws IOException
      */
     private void read(PhyloTree tree, NexusStreamParser np, Num2NodeArray num2node, Num2EdgeArray num2edge) throws IOException {
         tree.clear();

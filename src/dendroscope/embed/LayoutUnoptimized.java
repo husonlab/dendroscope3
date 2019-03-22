@@ -57,11 +57,11 @@ public class LayoutUnoptimized implements ILayoutOptimizer {
                 for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
                     if (!tree.isSpecial(e) || tree.getWeight(e) > 0) {
                         children.add(e.getTarget());
-                        retNode2GuideParent.set(e.getTarget(), e.getSource());
+                        retNode2GuideParent.put(e.getTarget(), e.getSource());
                     }
 
                 }
-                tree.getNode2GuideTreeChildren().set(v, children);
+                tree.getNode2GuideTreeChildren().put(v, children);
 
             }
         } else // must be combining network
@@ -138,7 +138,7 @@ public class LayoutUnoptimized implements ILayoutOptimizer {
                 sorted.addAll(children);
                 List<Node> list = new LinkedList<Node>();
                 list.addAll(sorted);
-                tree.getNode2GuideTreeChildren().set(v, list);
+                tree.getNode2GuideTreeChildren().put(v, list);
                 /*
                 System.err.println("LSA children new:");
                  for(Node u: list) {
@@ -158,7 +158,7 @@ public class LayoutUnoptimized implements ILayoutOptimizer {
      */
     public static boolean isTransferNetwork(PhyloTree tree) {
         boolean isTransferNetwork = false;
-        for (Edge e = tree.getSpecialEdges().getFirstElement(); e != null; e = tree.getSpecialEdges().getNextElement(e)) {
+        for (Edge e : tree.getSpecialEdges()) {
             if (tree.getWeight(e) != 0) {
                 isTransferNetwork = true;
                 break;

@@ -28,20 +28,19 @@ import dendroscope.dialogs.input.InputDialog;
 import dendroscope.embed.LayoutOptimizerManager;
 import dendroscope.main.DendroscopeProperties;
 import dendroscope.main.Version;
-import jloda.graphview.INodeEdgeFormatable;
-import jloda.gui.MenuBar;
-import jloda.gui.MenuConfiguration;
-import jloda.gui.Message;
-import jloda.gui.ToolBar;
-import jloda.gui.commands.CommandManager;
-import jloda.gui.commands.ICommand;
-import jloda.gui.director.*;
-import jloda.gui.find.FindToolBar;
-import jloda.gui.find.SearchManager;
-import jloda.gui.format.Formatter;
-import jloda.gui.message.MessageWindow;
 import jloda.phylo.PhyloTree;
-import jloda.util.*;
+import jloda.swing.commands.CommandManager;
+import jloda.swing.commands.ICommand;
+import jloda.swing.director.*;
+import jloda.swing.find.FindToolBar;
+import jloda.swing.find.SearchManager;
+import jloda.swing.format.Formatter;
+import jloda.swing.graphview.INodeEdgeFormatable;
+import jloda.swing.message.MessageWindow;
+import jloda.swing.util.MenuBar;
+import jloda.swing.util.*;
+import jloda.util.Basic;
+import jloda.util.CanceledException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -67,7 +66,7 @@ public class MultiViewer implements IDirectableViewer, IViewerWithFindToolBar, I
     final private TreeGrid treeGrid;
     final private MenuBar menuBar;
     final private CommandManager commandManager;
-    final private jloda.gui.StatusBar statusBar;
+    final private StatusBar statusBar;
     final private FormatterHelper formattingHelper;
 
     private String embedderName = LayoutOptimizerManager.ALGORITHM2010;
@@ -139,7 +138,7 @@ public class MultiViewer implements IDirectableViewer, IViewerWithFindToolBar, I
         mainPanel.add(treeGrid.getMainScrollBar(), BorderLayout.EAST);
         frame.getContentPane().add(mainPanel, BorderLayout.CENTER);
 
-        statusBar = new jloda.gui.StatusBar();
+        statusBar = new StatusBar();
         frame.getContentPane().add(statusBar, BorderLayout.SOUTH);
 
         // frame.getContentPane().add(new JScrollPane(treeGrid), BorderLayout.CENTER);
@@ -152,7 +151,7 @@ public class MultiViewer implements IDirectableViewer, IViewerWithFindToolBar, I
             geometry = new int[]{lastActiveFrame.getLocationOnScreen().x + 20, lastActiveFrame.getLocationOnScreen().y + 20, lastActiveFrame.getWidth(), lastActiveFrame.getHeight()};
             frame.setLocation(geometry[0], geometry[1]);
         } else {
-            geometry = jloda.util.ProgramProperties.get(ProgramProperties.MAIN_WINDOW_GEOMETRY, new int[]{100, 100, 500, 400});
+            geometry = ProgramProperties.get(ProgramProperties.MAIN_WINDOW_GEOMETRY, new int[]{100, 100, 500, 400});
             frame.setLocation(geometry[0] + (dir.getID() - 1) * 20, geometry[1] + (dir.getID() - 1) * 20);
         }
         frame.setSize(geometry[2], geometry[3]);
@@ -162,7 +161,7 @@ public class MultiViewer implements IDirectableViewer, IViewerWithFindToolBar, I
                 if (event.getID() == ComponentEvent.COMPONENT_RESIZED &&
                         (frame.getExtendedState() & JFrame.MAXIMIZED_HORIZ) == 0
                         && (frame.getExtendedState() & JFrame.MAXIMIZED_VERT) == 0) {
-                    jloda.util.ProgramProperties.put(ProgramProperties.MAIN_WINDOW_GEOMETRY,
+                    ProgramProperties.put(ProgramProperties.MAIN_WINDOW_GEOMETRY,
                             new int[]{frame.getLocation().x, frame.getLocation().y, frame.getSize().width, frame.getSize().height});
                 }
                 getTreeGrid().gridGeometryChanged();
@@ -173,7 +172,7 @@ public class MultiViewer implements IDirectableViewer, IViewerWithFindToolBar, I
                 if (event.getID() == ComponentEvent.COMPONENT_RESIZED &&
                         (frame.getExtendedState() & JFrame.MAXIMIZED_HORIZ) == 0
                         && (frame.getExtendedState() & JFrame.MAXIMIZED_VERT) == 0) {
-                    jloda.util.ProgramProperties.put(ProgramProperties.MAIN_WINDOW_GEOMETRY, new int[]
+                    ProgramProperties.put(ProgramProperties.MAIN_WINDOW_GEOMETRY, new int[]
                             {frame.getLocation().x, frame.getLocation().y, frame.getSize().width,
                                     frame.getSize().height});
                 }
@@ -459,7 +458,7 @@ public class MultiViewer implements IDirectableViewer, IViewerWithFindToolBar, I
             throw ex;
         }
 
-        jloda.util.ProgramProperties.put(ProgramProperties.MULTI_WINDOW_GEOMETRY, new int[]
+        ProgramProperties.put(ProgramProperties.MULTI_WINDOW_GEOMETRY, new int[]
                 {frame.getLocation().x, frame.getLocation().y, frame.getSize().width,
                         frame.getSize().height});
         if (getDir().getDocument().getProgressListener() != null) {

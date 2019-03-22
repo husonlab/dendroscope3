@@ -24,17 +24,17 @@ import dendroscope.core.Document;
 import dendroscope.core.TreeData;
 import dendroscope.embed.EmbedderForOrderPrescribedNetwork;
 import dendroscope.embed.EmbeddingOptimizerNNet;
-import dendroscope.embed.GeneralMethods;
 import dendroscope.embed.LayoutOptimizerManager;
+import dendroscope.tanglegram.TanglegramUtils;
 import dendroscope.window.MultiViewer;
 import dendroscope.window.TreeViewer;
 import jloda.graph.Node;
-import jloda.gui.commands.ICommand;
-import jloda.gui.director.IDirector;
 import jloda.phylo.PhyloTree;
-import jloda.util.Alert;
+import jloda.swing.commands.ICommand;
+import jloda.swing.director.IDirector;
+import jloda.swing.util.Alert;
+import jloda.swing.util.ProgramProperties;
 import jloda.util.Basic;
-import jloda.util.ProgramProperties;
 import jloda.util.ProgressListener;
 import jloda.util.parse.NexusStreamParser;
 
@@ -170,7 +170,7 @@ public class TanglegramNeighborNetCommand extends CommandBaseMultiViewer impleme
         orderFin[0] = optimizer.getFirstOrder();
         orderFin[1] = optimizer.getSecondOrder();
 
-        int bestScore = GeneralMethods.computeCrossingNum(orderFin[0], orderFin[1]);
+        int bestScore = TanglegramUtils.computeCrossingNum(orderFin[0], orderFin[1]);
         if (verbose) {
             System.err.println("--------------------------");
             System.err.println("Actual number of crossings in the current embedding: " + bestScore);
