@@ -29,8 +29,8 @@ import dendroscope.window.TreeViewer;
 import jloda.swing.commands.ICommand;
 import jloda.swing.director.IDirector;
 import jloda.swing.util.Message;
-import jloda.swing.util.ProgramProperties;
 import jloda.util.Basic;
+import jloda.util.ProgramProperties;
 import jloda.util.Single;
 import jloda.util.parse.NexusStreamParser;
 

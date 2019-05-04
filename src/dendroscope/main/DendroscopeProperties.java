@@ -20,8 +20,8 @@
 package dendroscope.main;
 
 import jloda.swing.export.ExportImageDialog;
-import jloda.swing.util.ProgramProperties;
 import jloda.swing.util.ResourceManager;
+import jloda.util.ProgramProperties;
 import jloda.util.PropertiesListListener;
 
 import java.io.File;

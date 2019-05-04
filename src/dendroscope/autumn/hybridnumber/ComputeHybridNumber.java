@@ -24,7 +24,6 @@ import dendroscope.consensus.Cluster;
 import dendroscope.consensus.Taxa;
 import jloda.graph.Node;
 import jloda.phylo.PhyloTree;
-import jloda.swing.util.ProgramProperties;
 import jloda.util.*;
 import org.apache.commons.collections.map.LRUMap;
 

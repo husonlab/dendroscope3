@@ -31,9 +31,9 @@ import jloda.phylo.PhyloTreeUtils;
 import jloda.swing.director.IDirector;
 import jloda.swing.find.SearchManager;
 import jloda.swing.graphview.*;
-import jloda.swing.util.ProgramProperties;
 import jloda.util.Basic;
 import jloda.util.Pair;
+import jloda.util.ProgramProperties;
 
 import javax.swing.*;
 import java.awt.*;

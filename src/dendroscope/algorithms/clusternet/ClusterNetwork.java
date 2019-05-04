@@ -23,8 +23,8 @@ import dendroscope.consensus.*;
 import jloda.graph.*;
 import jloda.phylo.PhyloTree;
 import jloda.phylo.PhyloTreeUtils;
-import jloda.swing.util.ProgramProperties;
 import jloda.util.Basic;
+import jloda.util.ProgramProperties;
 import jloda.util.Triplet;
 
 import java.util.*;

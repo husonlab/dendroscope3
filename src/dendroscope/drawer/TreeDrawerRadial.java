@@ -29,8 +29,8 @@ import jloda.swing.graphview.GraphView;
 import jloda.swing.graphview.NodeView;
 import jloda.swing.util.Geometry;
 import jloda.swing.util.PolygonDouble;
-import jloda.swing.util.ProgramProperties;
 import jloda.util.Basic;
+import jloda.util.ProgramProperties;
 
 import java.awt.*;
 import java.awt.geom.Point2D;

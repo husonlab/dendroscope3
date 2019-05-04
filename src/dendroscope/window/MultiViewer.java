@@ -41,6 +41,7 @@ import jloda.swing.util.MenuBar;
 import jloda.swing.util.*;
 import jloda.util.Basic;
 import jloda.util.CanceledException;
+import jloda.util.ProgramProperties;
 
 import javax.swing.*;
 import java.awt.*;

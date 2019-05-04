@@ -21,7 +21,7 @@ package dendroscope.commands.draw;
 
 import dendroscope.commands.CommandBaseMultiViewer;
 import dendroscope.window.TreeViewer;
-import jloda.swing.util.ProgramProperties;
+import jloda.util.ProgramProperties;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;

@@ -32,9 +32,9 @@ import jloda.swing.graphview.EdgeActionAdapter;
 import jloda.swing.graphview.NodeActionAdapter;
 import jloda.swing.graphview.PanelActionListener;
 import jloda.swing.util.GraphViewPopupListener;
-import jloda.swing.util.ProgramProperties;
 import jloda.swing.util.ResourceManager;
 import jloda.util.Basic;
+import jloda.util.ProgramProperties;
 
 import javax.swing.*;
 import java.awt.*;

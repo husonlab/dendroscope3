@@ -21,7 +21,7 @@ package dendroscope.commands.select;
 
 import dendroscope.commands.CommandBaseMultiViewer;
 import jloda.swing.commands.ICommand;
-import jloda.swing.util.ProgramProperties;
+import jloda.util.ProgramProperties;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;

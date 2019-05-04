@@ -24,7 +24,6 @@ import dendroscope.util.RerootingUtils;
 import jloda.graph.Edge;
 import jloda.graph.Node;
 import jloda.phylo.PhyloTree;
-import jloda.swing.util.ProgramProperties;
 import jloda.util.*;
 
 import javax.swing.*;

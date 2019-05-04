@@ -21,7 +21,7 @@ package dendroscope.window;
 
 import dendroscope.main.DendroscopeProperties;
 import jloda.swing.util.MenuConfiguration;
-import jloda.swing.util.ProgramProperties;
+import jloda.util.ProgramProperties;
 
 /**
  * configuration for menu and toolbar

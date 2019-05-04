@@ -26,8 +26,8 @@ import jloda.phylo.PhyloTree;
 import jloda.swing.director.ProjectManager;
 import jloda.swing.util.About;
 import jloda.swing.util.ArgsOptions;
-import jloda.swing.util.ProgramProperties;
 import jloda.util.Basic;
+import jloda.util.ProgramProperties;
 
 import javax.swing.*;
 import java.io.*;
