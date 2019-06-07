@@ -58,7 +58,7 @@ public class UndoCommand extends CommandBaseMultiViewer implements ICommand {
      * @return icon
      */
     public ImageIcon getIcon() {
-        return ResourceManager.getIcon("sun/toolbarButtonGraphics/general/Undo16.gif");
+        return ResourceManager.getIcon("sun/Undo16.gif");
     }
 
     /**

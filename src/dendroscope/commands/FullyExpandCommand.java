@@ -59,7 +59,7 @@ public class FullyExpandCommand extends ZoomToFitCommand implements ICommand {
      * @return icon
      */
     public ImageIcon getIcon() {
-        return ResourceManager.getIcon("sun/toolbarButtonGraphics/general/AlignJustifyVertical16.gif");
+        return ResourceManager.getIcon("sun/AlignJustifyVertical16.gif");
     }
 
     /**

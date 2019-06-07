@@ -64,7 +64,7 @@ public class PasteCommand extends CommandBaseMultiViewer implements ICommand {
      * @return icon
      */
     public ImageIcon getIcon() {
-        return ResourceManager.getIcon("sun/toolbarButtonGraphics/general/Paste16.gif");
+        return ResourceManager.getIcon("sun/Paste16.gif");
     }
 
     /**

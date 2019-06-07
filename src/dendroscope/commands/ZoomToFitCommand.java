@@ -59,7 +59,7 @@ public class ZoomToFitCommand extends CommandBaseMultiViewer implements ICommand
      * @return icon
      */
     public ImageIcon getIcon() {
-        return ResourceManager.getIcon("sun/toolbarButtonGraphics/general/AlignCenter16.gif");
+        return ResourceManager.getIcon("sun/AlignCenter16.gif");
     }
 
     /**

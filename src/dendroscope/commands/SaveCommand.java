@@ -66,7 +66,7 @@ public class SaveCommand extends CommandBaseMultiViewer implements ICommand {
      * @return icon
      */
     public ImageIcon getIcon() {
-        return ResourceManager.getIcon("sun/toolbarButtonGraphics/general/Save16.gif");
+        return ResourceManager.getIcon("sun/Save16.gif");
     }
 
     /**

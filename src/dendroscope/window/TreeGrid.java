@@ -195,7 +195,7 @@ public class TreeGrid extends JPanel {
                 });
 
                 treeViewers[i][j] = treeViewer;
-                ((JButton) treeViewer.getScrollPane().getCorner(JScrollPane.LOWER_RIGHT_CORNER)).setIcon(ResourceManager.getIcon("sun/toolbarButtonGraphics/general/AlignCenter16.gif"));
+                ((JButton) treeViewer.getScrollPane().getCorner(JScrollPane.LOWER_RIGHT_CORNER)).setIcon(ResourceManager.getIcon("sun/AlignCenter16.gif"));
 
                 if (commandManager != null)
                     treeViewer.setPopupListener(new GraphViewPopupListener(treeViewer, nodePopupConfig, edgePopupConfig, panelPopupConfig, commandManager));

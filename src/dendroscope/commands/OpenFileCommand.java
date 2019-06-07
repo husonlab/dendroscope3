@@ -72,7 +72,7 @@ public class OpenFileCommand extends CommandBaseMultiViewer implements ICommand 
      * @return icon
      */
     public ImageIcon getIcon() {
-        return ResourceManager.getIcon("sun/toolbarButtonGraphics/general/Open16.gif");
+        return ResourceManager.getIcon("sun/Open16.gif");
     }
 
     /**

@@ -35,18 +35,13 @@ import java.util.StringTokenizer;
  *         Date: 11-Nov-2004
  */
 public class DendroscopeProperties {
-    public static boolean ALLOW_SPLITPANE = true;
-    public static final boolean ALLOW_CONSENSUS = true;
     public static final boolean ALLOW_IMAGES = true;
     public static final boolean ALLOW_OPTIMIZE_NETWORKS = true;
     public static final boolean ALLOW_MINIMAL_NETWORKS = true;
-    public static final boolean ALLOW_TANGLEGRAM = true;
-    public static final boolean ALLOW_MULTIVIEWER = true;
 
     public static final String LASTTREE = "LastTree";
     public static final String IMAGE_DIRECTORY = "TaxonImageDirectory";
     public static final String IMAGE_HEIGHT = "TaxonImageHeight";
-    public static final String TAXONOMY_PROFILE_FILE = "TaxonomyProfileFile";
     public static final String MULTIVIEWER_ROWS = "ViewerRows";
     public static final String MULTIVIEWER_COLS = "ViewerCols";
 

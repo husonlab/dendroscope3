@@ -59,7 +59,7 @@ public class QuitCommand extends CommandBase implements ICommand {
      * @return icon
      */
     public ImageIcon getIcon() {
-        return ResourceManager.getIcon("sun/toolbarButtonGraphics/general/Stop16.gif");
+        return ResourceManager.getIcon("sun/Stop16.gif");
     }
 
     /**

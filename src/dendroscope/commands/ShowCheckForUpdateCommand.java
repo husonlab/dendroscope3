@@ -26,11 +26,12 @@ import com.install4j.api.update.UpdateChecker;
 import com.install4j.api.update.UpdateDescriptor;
 import com.install4j.api.update.UpdateDescriptorEntry;
 import dendroscope.window.MultiViewer;
+import jloda.Switches;
 import jloda.swing.commands.CommandBase;
 import jloda.swing.commands.ICommand;
 import jloda.swing.director.IDirector;
 import jloda.swing.director.ProjectManager;
-import jloda.swing.util.Alert;
+import jloda.swing.util.InfoMessage;
 import jloda.swing.util.ResourceManager;
 import jloda.util.Basic;
 import jloda.util.ProgramProperties;
@@ -70,7 +71,7 @@ public class ShowCheckForUpdateCommand extends CommandBase implements ICommand {
      * @return icon
      */
     public ImageIcon getIcon() {
-        return ResourceManager.getIcon("sun/toolbarButtonGraphics/general/About16.gif");
+        return ResourceManager.getIcon("sun/About16.gif");
     }
 
     /**
@@ -93,11 +94,7 @@ public class ShowCheckForUpdateCommand extends CommandBase implements ICommand {
         np.matchIgnoreCase(getSyntax());
     }
 
-    /**
-     * action to be performed
-     *
-     * @param ev
-     */
+
     public void actionPerformed(ActionEvent ev) {
 
         ApplicationDisplayMode applicationDisplayMode = ProgramProperties.isUseGUI() ? ApplicationDisplayMode.GUI : ApplicationDisplayMode.CONSOLE;
@@ -106,27 +103,23 @@ public class ShowCheckForUpdateCommand extends CommandBase implements ICommand {
             updateDescriptor = UpdateChecker.getUpdateDescriptor("http://www-ab.informatik.uni-tuebingen.de/data/software/dendroscope/download/updates.xml", applicationDisplayMode);
         } catch (Exception e) {
             Basic.caught(e);
-            new Alert(MultiViewer.getLastActiveFrame(), "Installed version is up-to-date");
+            new InfoMessage(MultiViewer.getLastActiveFrame(), "Installed version is up-to-date");
             return;
         }
         if (updateDescriptor.getEntries().length > 0) {
-            if (!ProgramProperties.isUseGUI()) {
+            if (Switches.Install4JLaunchBug || !ProgramProperties.isUseGUI()) {
                 UpdateDescriptorEntry entry = updateDescriptor.getEntries()[0];
-                new Alert(MultiViewer.getLastActiveFrame(), "New version available: " + entry.getNewVersion()
-                        + "\nPlease download from: http://www-ab.informatik.uni-tuebingen.de/data/software/dendroscope/download/");
+                new InfoMessage(MultiViewer.getLastActiveFrame(), "New version available: " + entry.getNewVersion()
+                        + "\nPlease download from: http://www-ab.informatik.uni-tuebingen.de/data/software/dendroscope/download/", true);
                 return;
             }
         } else {
-            new Alert(MultiViewer.getLastActiveFrame(), "Installed version is up-to-date");
+            new InfoMessage(MultiViewer.getLastActiveFrame(), "Installed version is up-to-date", true);
             return;
         }
 
-
-        // This will return immediately if you call it from the EDT,
-// otherwise it will block until the installer application exits
         ApplicationLauncher.launchApplicationInProcess("1691242312", null, new ApplicationLauncher.Callback() {
             public void exited(int exitValue) {
-                //TODO add your code here (not invoked on event dispatch thread)
             }
 
             public void prepareShutdown() {

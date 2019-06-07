@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<install4j version="7.0.8" transformSequenceNumber="7">
-  <directoryPresets config="../../jloda/jars/VectorGraphics2D-0.11.jar" />
-  <application name="Dendroscope" distributionSourceDir="" applicationId="3637-0812-9190-9529" mediaDir="../../../builds" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" commonExternalFiles="false" createMd5Sums="true" shrinkRuntime="true" shortName="Dendroscope" publisher="Center for Bioinformatics Tübingen" publisherWeb="www.zbit.informatik.uni-tuebingen.de" version="3.0" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" macVolumeId="f94969a45be0d53a" javaMinVersion="1.7" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
+<install4j version="7.0.12" transformSequenceNumber="7">
+  <directoryPresets config="../antbuild/jloda.jar" />
+  <application name="Dendroscope" distributionSourceDir="" applicationId="3637-0812-9190-9529" mediaDir="../../../builds" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" commonExternalFiles="false" createMd5Sums="true" shrinkRuntime="true" shortName="Dendroscope" publisher="Center for Bioinformatics Tübingen" publisherWeb="www.zbit.informatik.uni-tuebingen.de" version="3.0" allPathsRelative="true" backupOnSave="true" autoSave="false" convertDotsToUnderscores="true" macSignature="????" macVolumeId="f94969a45be0d53a" javaMinVersion="12" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="false" languageSelectionInPrincipalLanguage="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages />
@@ -23,31 +23,49 @@
     <roots />
     <mountPoints>
       <mountPoint id="1691242151" root="" location="jars" mode="755" />
+      <mountPoint id="1691242766" root="" location="openjfx" mode="755" />
+      <mountPoint id="1691242935" root="" location="openjfx/macos" mode="755" />
+      <mountPoint id="1691242945" root="" location="openjfx/unix" mode="755" />
+      <mountPoint id="1691243102" root="" location="openjfx/windows-x64" mode="755" />
+      <mountPoint id="1691242756" root="" location="Examples" mode="755" />
       <mountPoint id="1691242160" root="" location="" mode="755" />
     </mountPoints>
     <entries>
-      <fileEntry mountPoint="1691242151" file="../jars/nexml.jar" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" />
-      <fileEntry mountPoint="1691242151" file="../antbuild/Dendroscope.jar" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="true" overrideOverwriteMode="true" overrideUninstallMode="true" />
-      <fileEntry mountPoint="1691242151" file="../jars/commons-collections-3.2.1.jar" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" />
-      <fileEntry mountPoint="1691242151" file="../jars/LICENSE-commons-collections-3.2.1.txt" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" />
-      <fileEntry mountPoint="1691242151" file="../../jloda/jars/Jama-1.0.3.jar" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" />
-      <fileEntry mountPoint="1691242151" file="../../jloda/jars/Jama-NOTICE.txt" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" />
-      <dirEntry mountPoint="1691242151" file="../../jloda/jars/batik-1.8" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="batik-1.8" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+      <dirEntry mountPoint="1691242151" file="../../jloda/jars" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="jars" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude>
+          <entry location=".DS_Store" fileType="regular" />
+        </exclude>
+      </dirEntry>
+      <dirEntry mountPoint="1691242151" file="../jars" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="jars" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude>
+          <entry location="i4jruntime.jar" fileType="regular" />
+        </exclude>
+      </dirEntry>
+      <fileEntry mountPoint="1691242151" file="../antbuild/dendroscope3.jar" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" />
+      <fileEntry mountPoint="1691242151" file="../antbuild/jloda.jar" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" />
+      <dirEntry mountPoint="1691242935" file="../../javafx/macos/javafx" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="" excludeSuffixes="" dirMode="755" overrideDirMode="false">
         <exclude />
       </dirEntry>
-      <fileEntry mountPoint="1691242151" file="../../jloda/jars/VectorGraphics2D-License.txt" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" />
-      <fileEntry mountPoint="1691242151" file="../../jloda/jars/VectorGraphics2D-0.11.jar" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" />
+      <dirEntry mountPoint="1691242945" file="../../javafx/unix/javafx" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="1691243102" file="../../javafx/windows/javafx" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="1691242756" file="../examples" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="examples" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude>
+          <entry location=".DS_Store" fileType="regular" />
+        </exclude>
+      </dirEntry>
       <fileEntry mountPoint="1691242160" file="./License.txt" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="true" overrideOverwriteMode="true" overrideUninstallMode="true" />
       <fileEntry mountPoint="1691242160" file="../tex/manual/manual.pdf" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="true" overrideOverwriteMode="true" overrideUninstallMode="true" />
-      <dirEntry mountPoint="1691242160" file="../examples" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="subdir" subDirectory="examples" excludeSuffixes="" dirMode="755" overrideDirMode="false">
-        <exclude />
-      </dirEntry>
     </entries>
     <components>
       <component name="Dendroscope Program" id="1691242261" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
         <description />
         <include all="false">
           <entry location="jars" fileType="regular" />
+          <entry location="openjfx" fileType="regular" />
           <entry location="License.txt" fileType="regular" />
           <entry location="Dendroscope" fileType="launcher" />
         </include>
@@ -63,16 +81,16 @@
       <component name="Examples" id="1691242183" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
         <description />
         <include all="false">
-          <entry location="examples" fileType="regular" />
+          <entry location="Examples" fileType="regular" />
         </include>
         <dependencies />
       </component>
     </components>
   </files>
   <launchers>
-    <launcher name="Dendroscope" id="1691242142" customizedId="" external="false" excludeFromMenu="false" unixMode="755" unixAutoStart="true" menuName="" icnsFile="../resources/icons/Dendroscope.icns" customMacBundleIdentifier="false" macBundleIdentifier="" swtApp="false" fileset="" macBundleBinary="JavaApplicationStub" addMacEntitlements="false" macEntitlementsFile="" useCustomMacosExecutableName="false" customMacosExecutableName="" useJavaMinVersionOverride="false" javaMinVersionOverride="" useJavaMaxVersionOverride="false" javaMaxVersionOverride="" checkUpdater="false" updateExecutionMode="unattendedProgress" unattendedUpdateTitle="${i18n:updater.WindowTitle(&quot;${compiler:sys.fullName}&quot;)}">
+    <launcher name="Dendroscope" id="1691242142" customizedId="" external="false" excludeFromMenu="false" unixMode="755" unixAutoStart="true" menuName="" icnsFile="../src/dendroscope/resources/icons/Dendroscope.icns" customMacBundleIdentifier="false" macBundleIdentifier="" swtApp="false" fileset="" macBundleBinary="JavaApplicationStub" addMacEntitlements="false" macEntitlementsFile="" useCustomMacosExecutableName="false" customMacosExecutableName="" useJavaMinVersionOverride="false" javaMinVersionOverride="" useJavaMaxVersionOverride="false" javaMaxVersionOverride="" checkUpdater="false" updateExecutionMode="unattendedProgress" unattendedUpdateTitle="${i18n:updater.WindowTitle(&quot;${compiler:sys.fullName}&quot;)}">
       <executable name="Dendroscope" type="1" iconSet="true" iconFile="" executableDir="" redirectStderr="true" stderrFile="error.log" stderrMode="overwrite" redirectStdout="false" stdoutFile="output.log" stdoutMode="overwrite" failOnStderrOutput="true" executableMode="1" changeWorkingDirectory="false" workingDirectory="." singleInstance="false" serviceStartType="2" serviceDependencies="" serviceDescription="" jreLocation="" executionLevel="asInvoker" checkConsoleParameter="false" globalSingleInstance="false" singleInstanceActivate="true" dpiAware="false">
-        <versionInfo include="false" fileVersion="" fileDescription="" legalCopyright="" internalName="" productName="" />
+        <versionInfo include="true" fileVersion="" fileDescription="Dendroscope3 phylogenetic tree viewer" legalCopyright="Copyright 2019" internalName="Dendroscope3" productName="" />
       </executable>
       <splashScreen show="false" width="450" height="300" bitmapFile="" textOverlay="false">
         <text>
@@ -80,19 +98,18 @@
           <versionLine x="17" y="10" text="SplitsTree ${compiler:sys.version}" fontSize="12" fontColor="0,0,0" bold="false" />
         </text>
       </splashScreen>
-      <java mainClass="dendroscope.main.Dendroscope" mainMode="1" vmParameters="-Dapple.laf.useScreenMenuBar=true -server -Xmx400M -Duser.language=en -Duser.region=US" arguments="-d" allowVMPassthroughParameters="true" preferredVM="" bundleRuntime="true">
-        <classPath>
-          <scanDirectory location="jars" failOnError="false" />
-          <directory location="class" failOnError="false" />
-          <scanDirectory location="jars/batik-1.8" failOnError="false" />
-        </classPath>
-        <modulePath />
+      <java mainClass="dendroscope/dendroscope.main.Dendroscope" mainMode="2" vmParameters="-Dapple.laf.useScreenMenuBar=true -Xmx400M -Duser.language=en -Duser.region=US --add-modules=dendroscope" arguments="-d" allowVMPassthroughParameters="true" preferredVM="" bundleRuntime="true">
+        <classPath />
+        <modulePath>
+          <directory location="jars" failOnError="false" />
+          <directory location="openjfx/${compiler:sys.platform}/lib" failOnError="false" />
+        </modulePath>
         <nativeLibraryDirectories />
         <vmOptions />
       </java>
       <includedFiles />
       <unextractableFiles />
-      <vmOptionsFile mode="none" overwriteMode="0" fileMode="644">
+      <vmOptionsFile mode="template" overwriteMode="0" fileMode="644">
         <content />
       </vmOptionsFile>
       <customScript mode="1" file="">
@@ -102,8 +119,8 @@
         <content />
       </infoPlist>
       <iconImageFiles>
-        <file path="../resources/icons/Dendroscope16.png" />
-        <file path="../resources/icons/Dendroscope32.png" />
+        <file path="../src/dendroscope/resources/icons/Dendroscope16.png" />
+        <file path="../src/dendroscope/resources/icons/Dendroscope32.png" />
       </iconImageFiles>
     </launcher>
   </launchers>
@@ -2173,26 +2190,16 @@ context.goForward(1, true, true);
     </styles>
   </installerGui>
   <mediaSets>
-    <windows name="Windows" id="1280490036" customizedId="" mediaFileName="" installDir="Dendroscope" overridePrincipalLanguage="true" jreBitType="32" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" downloadURL="" includeAllDownloadableComponents="false" includedJRE="windows-x86-1.8.0_131" manualJREEntry="false" bundleType="1" jreURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" customInstallBaseDir="" contentFilesType="1" verifyIntegrity="true">
-      <excludedComponents />
-      <includedDownloadableComponents />
-      <excludedLaunchers />
-      <excludedBeans />
-      <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
-      <exclude />
-      <variables />
-      <autoUpdate useMinUpdatableVersion="false" minUpdatableVersion="" useMaxUpdatableVersion="false" maxUpdatableVersion="">
-        <commentFiles />
-        <customAttributes />
-      </autoUpdate>
-    </windows>
     <unixInstaller name="Unix Installer" id="1691242146" customizedId="" mediaFileName="" installDir="dendroscope" overridePrincipalLanguage="true" jreBitType="all" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" downloadURL="" includeAllDownloadableComponents="false" includedJRE="" manualJREEntry="false" bundleType="1" jreURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" customInstallBaseDir="" contentFilesType="1">
       <excludedComponents />
       <includedDownloadableComponents />
       <excludedLaunchers />
       <excludedBeans />
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
-      <exclude />
+      <exclude>
+        <entry location="openjfx/macos" fileType="regular" />
+        <entry location="openjfx/windows-x64" fileType="regular" />
+      </exclude>
       <variables />
       <autoUpdate useMinUpdatableVersion="false" minUpdatableVersion="" useMaxUpdatableVersion="false" maxUpdatableVersion="">
         <commentFiles />
@@ -2202,13 +2209,16 @@ context.goForward(1, true, true);
         <content />
       </installerScript>
     </unixInstaller>
-    <macosFolder name="Mac OS X Folder" id="1691242149" customizedId="" mediaFileName="" installDir="Dendroscope" overridePrincipalLanguage="true" jreBitType="all" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" downloadURL="" includeAllDownloadableComponents="false" includedJRE="macosx-amd64-1.8.0_131" manualJREEntry="false" bundleType="1" jreURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" requiredVmIdPrefix="" customInstallBaseDir="" contentFilesType="1" installerName="${i18n:InstallerName(${compiler:sys.fullName})}" volumeName="${compiler:sys.shortName}" compressDmg="false" signLaunchers="false">
+    <macosFolder name="Mac OS X Folder" id="1691242149" customizedId="" mediaFileName="" installDir="Dendroscope" overridePrincipalLanguage="true" jreBitType="all" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" downloadURL="" includeAllDownloadableComponents="false" includedJRE="macosx-amd64-12.0.1" manualJREEntry="false" bundleType="1" jreURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" requiredVmIdPrefix="" customInstallBaseDir="" contentFilesType="1" installerName="${i18n:InstallerName(${compiler:sys.fullName})}" volumeName="${compiler:sys.shortName}" compressDmg="false" signLaunchers="false">
       <excludedComponents />
       <includedDownloadableComponents />
       <excludedLaunchers />
       <excludedBeans />
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
-      <exclude />
+      <exclude>
+        <entry location="openjfx/unix" fileType="regular" />
+        <entry location="openjfx/windows-x64" fileType="regular" />
+      </exclude>
       <variables />
       <autoUpdate useMinUpdatableVersion="false" minUpdatableVersion="" useMaxUpdatableVersion="false" maxUpdatableVersion="">
         <commentFiles />
@@ -2216,13 +2226,16 @@ context.goForward(1, true, true);
       </autoUpdate>
       <topLevelFiles />
     </macosFolder>
-    <windows name="Windows64bit" id="1691242421" customizedId="" mediaFileName="" installDir="Dendroscope" overridePrincipalLanguage="true" jreBitType="64" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" downloadURL="" includeAllDownloadableComponents="false" includedJRE="windows-amd64-1.8.0_131" manualJREEntry="false" bundleType="1" jreURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" customInstallBaseDir="" contentFilesType="1" verifyIntegrity="true">
+    <windows name="Windows64bit" id="1691242421" customizedId="" mediaFileName="" installDir="Dendroscope" overridePrincipalLanguage="true" jreBitType="64" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" downloadURL="" includeAllDownloadableComponents="false" includedJRE="windows-amd64-12.0.1" manualJREEntry="false" bundleType="1" jreURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" customInstallBaseDir="" contentFilesType="1" verifyIntegrity="true">
       <excludedComponents />
       <includedDownloadableComponents />
       <excludedLaunchers />
       <excludedBeans />
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
-      <exclude />
+      <exclude>
+        <entry location="openjfx/macos" fileType="regular" />
+        <entry location="openjfx/unix" fileType="regular" />
+      </exclude>
       <variables />
       <autoUpdate useMinUpdatableVersion="false" minUpdatableVersion="" useMaxUpdatableVersion="false" maxUpdatableVersion="">
         <commentFiles />

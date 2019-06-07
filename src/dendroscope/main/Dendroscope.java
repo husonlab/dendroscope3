@@ -26,7 +26,9 @@ import jloda.phylo.PhyloTree;
 import jloda.swing.director.ProjectManager;
 import jloda.swing.util.About;
 import jloda.swing.util.ArgsOptions;
+import jloda.swing.util.ResourceManager;
 import jloda.util.Basic;
+import jloda.util.Pair;
 import jloda.util.ProgramProperties;
 
 import javax.swing.*;
@@ -46,9 +48,11 @@ public class Dendroscope {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
+        ResourceManager.getClassLoadersAndRoots().add(new Pair<>(Dendroscope.class, "dendroscope.resources"));
+
         PhyloTree.setWarnMultiLabeled(false);
         About.setVersionStringOffset(20, 20);
-        About.setAbout("resources.images", "splash.jpg", Version.SHORT_DESCRIPTION, JDialog.DISPOSE_ON_CLOSE);
+        About.setAbout("Dendroscope3-splash.png", Version.SHORT_DESCRIPTION, JDialog.DISPOSE_ON_CLOSE);
 
         try {
             //run application
@@ -70,6 +74,7 @@ public class Dendroscope {
      * @throws Exception
      */
     public void parseArguments(String args[]) throws Exception {
+        ResourceManager.addResourceRoot(Dendroscope.class, "dendroscope/resources");
         Basic.startCollectionStdErr();
 
         ProgramProperties.setProgramName(Version.NAME);
@@ -101,20 +106,16 @@ public class Dendroscope {
         final String propertiesFile = options.getOption("-p", "propertiesFile", "Properties file", defaultPreferenceFile);
 
         final boolean showMessageWindow = !options.getOption("+w", "hideMessageWindow", "Hide message window", false);
-        final boolean showVersion = options.getOption("-V", "version", "Show version string", false);
         final boolean silentMode = options.getOption("-S", "silentMode", "Silent mode", false);
         Basic.setDebugMode(options.getOption("-d", "debug", "Debug mode", false));
         final boolean showSplash = (!options.getOption("+s", "hideSplash", "Hide startup splash screen", false)) && ProgramProperties.isUseGUI();
         options.done();
 
+        System.err.println("Java version: " + System.getProperty("java.version"));
         if (silentMode) {
             Basic.stopCollectingStdErr();
             Basic.hideSystemErr();
             Basic.hideSystemOut();
-        }
-        if (showVersion) {
-            System.err.println(ProgramProperties.getProgramVersion());
-            System.err.println("Java version: " + System.getProperty("java.version"));
         }
 
         DendroscopeProperties.initializeProperties(propertiesFile);

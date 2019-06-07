@@ -1,91 +1,101 @@
-<!-- builds Dendroscope -->
+<!--
+	~  build.xml Copyright (C) 2019 Daniel H. Huson
+	~
+	~  (Some files contain contributions from other authors, who are then mentioned separately.)
+	~
+	~  This program is free software: you can redistribute it and/or modify
+	~  it under the terms of the GNU General Public License as published by
+	~  the Free Software Foundation, either version 3 of the License, or
+	~  (at your option) any later version.
+	~
+	~  This program is distributed in the hope that it will be useful,
+	~  but WITHOUT ANY WARRANTY; without even the implied warranty of
+	~  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	~  GNU General Public License for more details.
+	~
+	~  You should have received a copy of the GNU General Public License
+	~  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+	<project name="Dendroscope3" default="jar" basedir=".">
 
-<project name="project" default="jar" basedir=".">
+		<property name="jfxDir" value="../../javafx/lib"/>
+		<property name="jlodaAntDir" value="../../jloda/antbuild"/>
+		<property name="buildSrcDir" value="../antbuild/src"/>
+		<property name="buildModulesDir" value="../antbuild/modules"/>
 
-    <!-- edit the following lines to your needs -->
-    <property name="project_name" value="Dendroscope"/>
-    <property name="jlodaSrcDir" value="../../jloda/src"/>
-    <property name="dendroscopeSrcDir" value="../src"/>
-    <property name="srcDir" value="src"/>
-    <property name="classDir" value="classes"/>
-    <property name="jar" value="${project_name}.jar"/>
-    <property name="mainclass" value="dendroscope.main.Dendroscope"/>
+		<path id="build.classpath">
+			<fileset dir="../../dendroscope3/jars"  includes="*.jar"/>
+			<fileset dir="${jlodaAntDir}"  includes="jloda.jar"/>
+		</path>
 
-    <!-- class path -->
+		<path id="build.modulepath">
+			<fileset dir="../../dendroscope3/jars"  includes="*.jar"/>
+			<fileset dir="${jfxDir}"  includes="*.jar"/>
+			<fileset dir="../antbuild"  includes="jloda.jar"/>
+		</path>
 
-    <path id="build.classpath">
-        <fileset dir="../../jloda/jars/batik-1.8" includes="*.jar"/>
-        <fileset dir="../../jloda/jars" includes="*.jar"/>
-        <fileset dir="../jars" includes="*.jar"/>
-    </path>
+		<path id="run.modulepath">
+			<fileset dir="../../jloda/jars"  includes="*.jar"/>
+			<fileset dir="../../dendroscope3/jars"  includes="*.jar"/>
+			<fileset dir="${jfxDir}"  includes="*.jar"/>
+			<fileset dir="../antbuild"  includes="jloda.jar"/>
+			<fileset dir="../antbuild"  includes="dendroscope3.jar"/>
+		</path>
 
-    <!-- init -->
-    <target name="init">
-        <mkdir dir="${srcDir}"/>
-        <mkdir dir="${classDir}"/>
-        <mkdir dir="${classDir}/resources"/>
-    </target>
+		<target name="init">
+			<mkdir dir="${buildSrcDir}/dendroscope3"/>
+			<mkdir dir="${buildModulesDir}/dendroscope3"/>
+		</target>
 
-    <!-- copy resources -->
-    <target name="copy_resources" depends="init">
-        <copy todir="${classDir}/resources">
-		<fileset dir="../src/resources" excludes="files/** files/**"/>
-        </copy>
-    </target>
+		<target name="jloda" depends="init">
+			<ant antfile="${jlodaAntDir}/build.xml" target="jar"/>
+		</target>
 
-    <!-- copy sources -->
-    <target name="copy_sources" depends="copy_resources">
-        <copy todir="${srcDir}">
-		<fileset dir="${jlodaSrcDir}" excludes="com/** resources/*"/>
-            <fileset dir="${dendroscopeSrcDir}"/>
-        </copy>
-    </target>
+		<target name="copy_sources" depends="jloda">
+			<copy todir="${buildSrcDir}/dendroscope3">
+				<fileset dir="../../dendroscope3/src"/>
+			</copy>
+		</target>
 
-    <!-- compile  Dendroscope -->
-    <target name="compile" depends="copy_sources">
-	    <javac includeantruntime="false"
-	    srcdir="${srcDir}"
-               compiler="javac1.7"
-               destdir="${classDir}"
-               debug="off"
-               source="1.7"
-	       target="1.7"
-	       classpathref="build.classpath">
-	       <compilerarg value="-XDignore.symbol.file=true"/> 
-        </javac>
-    </target>
+		<target name="copy_resources" depends="copy_sources">
+			<copy todir="${buildModulesDir}/dendroscope3">
+				<fileset dir="../../dendroscope3/src" includes="**/*.fxml **/*.png **/*.gif **/*.css"/>
+			</copy>
+		</target>
 
-    <!-- create .jar -->
-    <target name="jar" depends="compile">
-        <jar jarfile="${jar}"
-             basedir="${classDir}"
-             includes="jloda/** dendroscope/** resources/**">
-        </jar>
-    </target>
+		<target name="compile" depends="copy_resources">
+			<javac  includeantruntime="false"
+				srcdir="../antbuild/src/dendroscope3"
+				destdir="${buildModulesDir}/dendroscope3"
+				debug="on"
+				modulepathref="build.modulepath"
+				>
+			</javac>
+		</target>
 
+		<target name="jar" depends="compile">
+			<jar jarfile="dendroscope3.jar" basedir="${buildModulesDir}/dendroscope3"/>
+		</target>
 
-    <!-- run project -->
-    <target name="run" depends="jar">
-        <java classname="${mainclass}" fork="true"
-		classpathref="build.classpath">
-            <classpath>
-                <pathelement location="${jar}"/>
-            </classpath>
-            <arg value="-d"/>
-            <jvmarg value="-Dapple.laf.useScreenMenuBar=true"/>
-            <jvmarg value="-server"/>
-            <jvmarg value="-Xmx500M"/>
-            <jvmarg value="-Duser.language=en"/>
-            <jvmarg value="-Duser.region=US"/>
-        </java>
-    </target>
+		<target name="run" depends="jar">
+			<java classname="dendroscope.main.Dendroscope" fork="true"
+				modulepathref="run.modulepath">
+				<jvmarg value="-Xshare:off"/>
+				<jvmarg value="-Dapple.laf.useScreenMenuBar=true"/>
+				<jvmarg value="-server"/>
+				<jvmarg value="-Xmx1G"/>
+				<jvmarg value="-Duser.language=en"/>
+				<jvmarg value="-Duser.region=US"/>
+				<jvmarg value="--add-modules=jloda,dendroscope"/>
+			</java>
+		</target>
 
-    <!-- removes all that has been built -->
-    <target name="clean">
-        <delete dir="${classDir}" includeEmptyDirs="true"/>
-        <delete dir="${srcDir}" includeEmptyDirs="true"/>
-        <delete file="${jar}"/>
-    </target>
-</project>
+		<target name="clean">
+			<delete dir="${buildModulesDir}" includeEmptyDirs="true"/>
+			<delete dir="${buildSrcDir}" includeEmptyDirs="true"/>
+			<delete file="dendroscope3.jar"/>
+			<delete file="jloda.jar"/>
+		</target>
 
-        <!-- end file build.xml -->
+	</project>
+

@@ -234,14 +234,14 @@ public class ExploreClusters {
             }
         }
         BitSet visited = new BitSet();
-        Stack stack = new Stack();
-        stack.push(new Integer(0));
+        Stack<Integer> stack = new Stack<>();
+        stack.push(0);
         while (stack.size() > 0) {
-            int i = ((Integer) stack.pop()).intValue();
+            int i = stack.pop();
             for (int j = 0; j < array.length; j++) {
                 if (j != i && incompatible[i][j] && !visited.get(j)) {
                     visited.set(j);
-                    stack.push(new Integer(j));
+                    stack.push(j);
                 }
             }
         }

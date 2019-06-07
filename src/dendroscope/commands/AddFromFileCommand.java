@@ -69,7 +69,7 @@ public class AddFromFileCommand extends CommandBaseMultiViewer implements IComma
      * @return icon
      */
     public ImageIcon getIcon() {
-        return ResourceManager.getIcon("sun/toolbarButtonGraphics/general/Open16.gif");
+        return ResourceManager.getIcon("sun/Open16.gif");
     }
 
     /**

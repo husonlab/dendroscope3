@@ -67,7 +67,7 @@ public class ShowReplaceDialogCommand extends CommandBaseMultiViewer implements 
      * @return icon
      */
     public ImageIcon getIcon() {
-        return ResourceManager.getIcon("sun/toolbarButtonGraphics/general/Replace16.gif");
+        return ResourceManager.getIcon("sun/Replace16.gif");
     }
 
     /**

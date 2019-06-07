@@ -65,7 +65,7 @@ public class NewCommand extends CommandBaseMultiViewer implements ICommand {
      * @return icon
      */
     public ImageIcon getIcon() {
-        return ResourceManager.getIcon("sun/toolbarButtonGraphics/general/New16.gif");
+        return ResourceManager.getIcon("sun/New16.gif");
     }
 
     /**

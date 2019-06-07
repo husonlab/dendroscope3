@@ -63,7 +63,7 @@ public class ShowFindDialogCommand extends CommandBaseMultiViewer implements ICo
      * @return icon
      */
     public ImageIcon getIcon() {
-        return ResourceManager.getIcon("sun/toolbarButtonGraphics/general/Find16.gif");
+        return ResourceManager.getIcon("sun/Find16.gif");
     }
 
     /**

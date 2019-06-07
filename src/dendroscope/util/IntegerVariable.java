@@ -31,16 +31,16 @@ public class IntegerVariable {
     }
 
     public IntegerVariable(int value) {
-        this.value = new Integer(value);
+        this.value = value;
     }
 
     public int getValue() {
-        return value.intValue();
+        return value;
     }
 
-    public int setValue(int n) {
-        value = new Integer(n);
-        return n;
+    public int setValue(int value) {
+        this.value = value;
+        return value;
     }
 
     public String toString() {

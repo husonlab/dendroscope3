@@ -61,7 +61,7 @@ public class GoPrevPageCommand extends GoToTreeCommand implements ICommand {
      * @return icon
      */
     public ImageIcon getIcon() {
-        return ResourceManager.getIcon("sun/toolbarButtonGraphics/navigation/Back16.gif");
+        return ResourceManager.getIcon("sun/Back16.gif");
     }
 
     /**
