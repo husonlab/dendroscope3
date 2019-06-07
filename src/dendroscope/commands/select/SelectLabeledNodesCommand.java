@@ -70,7 +70,7 @@ public class SelectLabeledNodesCommand extends CommandBase implements ICommand {
      */
     public KeyStroke getAcceleratorKey() {
         return KeyStroke.getKeyStroke(KeyEvent.VK_L,
-                Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+                Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
     }
 
     /**

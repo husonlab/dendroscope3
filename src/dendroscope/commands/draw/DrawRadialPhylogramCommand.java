@@ -91,7 +91,7 @@ public class DrawRadialPhylogramCommand extends DrawCommand implements ICheckBox
      */
 
     public KeyStroke getAcceleratorKey() {
-        return KeyStroke.getKeyStroke(KeyEvent.VK_7, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+        return KeyStroke.getKeyStroke(KeyEvent.VK_7, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
     }
 
     /**

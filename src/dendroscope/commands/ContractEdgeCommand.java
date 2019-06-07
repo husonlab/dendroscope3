@@ -74,7 +74,7 @@ public class ContractEdgeCommand extends CommandBaseMultiViewer implements IComm
      */
     public KeyStroke getAcceleratorKey() {
         return KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, Toolkit
-                .getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK);
+                .getDefaultToolkit().getMenuShortcutKeyMaskEx() | InputEvent.SHIFT_DOWN_MASK);
     }
 
     /**

@@ -27,7 +27,7 @@ public class IntegerVariable {
     private Integer value;
 
     public IntegerVariable() {
-        value = new Integer(0);
+        value = (int) (0);
     }
 
     public IntegerVariable(int value) {

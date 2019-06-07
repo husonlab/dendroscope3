@@ -91,7 +91,7 @@ public class ShowEdgeLabelsCommand extends CommandBaseMultiViewer implements ICh
      */
     public KeyStroke getAcceleratorKey() {
         return KeyStroke.getKeyStroke(KeyEvent.VK_Y,
-                Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+                Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
     }
 
     /**

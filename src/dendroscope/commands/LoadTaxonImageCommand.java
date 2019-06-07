@@ -28,7 +28,6 @@ import jloda.util.ProgramProperties;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FilenameFilter;
@@ -105,7 +104,7 @@ public class LoadTaxonImageCommand extends CommandBaseMultiViewer implements ICo
         File file = null;
 
 
-        if (ProgramProperties.isMacOS() && (event != null && (event.getModifiers() & Event.SHIFT_MASK) == 0)) {
+        if (ProgramProperties.isMacOS() && (event != null && (event.getModifiers() & ActionEvent.SHIFT_MASK) == 0)) {
             //Use native file dialog on mac
             java.awt.FileDialog dialog = new java.awt.FileDialog(getViewer().getFrame(), "Open image directory", java.awt.FileDialog.LOAD);
             dialog.setFilenameFilter(new FilenameFilter() {

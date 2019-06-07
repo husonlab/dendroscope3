@@ -74,7 +74,7 @@ public class RemoveTaxaCommand extends CommandBaseMultiViewer implements IComman
      */
     public KeyStroke getAcceleratorKey() {
         return KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, Toolkit
-                .getDefaultToolkit().getMenuShortcutKeyMask());
+                .getDefaultToolkit().getMenuShortcutKeyMaskEx());
     }
 
     /**

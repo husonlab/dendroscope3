@@ -690,9 +690,9 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
      * Graph stuff *
      */
 
-    private final Integer white = new Integer(0);
-    private final Integer gray = new Integer(1);
-    private final Integer black = new Integer(2);
+    private final Integer white = (int) (0);
+    private final Integer gray = (int) (1);
+    private final Integer black = (int) (2);
     private int time = -1;
 
     private LinkedList DFS(PhyloSplitsGraph graph, boolean breakCycles, boolean removeForwardEdges) {

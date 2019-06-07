@@ -90,7 +90,7 @@ public class DrawSlantedCladogramCommand extends DrawCommand implements ICheckBo
      */
 
     public KeyStroke getAcceleratorKey() {
-        return KeyStroke.getKeyStroke(KeyEvent.VK_3, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+        return KeyStroke.getKeyStroke(KeyEvent.VK_3, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
     }
 
     /**

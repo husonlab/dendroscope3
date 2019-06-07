@@ -103,7 +103,7 @@ public class DrawRectangularPhylogramCommand extends DrawCommand implements IChe
 
     public KeyStroke getAcceleratorKey() {
         return KeyStroke.getKeyStroke(KeyEvent.VK_1,
-                Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+                Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
     }
 
     /**

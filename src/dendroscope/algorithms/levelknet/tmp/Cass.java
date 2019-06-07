@@ -409,16 +409,16 @@ class ClusterSet {
                 // loop through each pair of edges
                 for (int e1 = 0; e1 < e; e1++) {
                     // skip this edge if it is not a cherry-edge and there are two cherries
-                    if (cherries.size() == 2 && !cherry1.contains(new Integer(e1)) && !cherry2.contains(new Integer(e1)) && xint[0] != Cass.DUMMY_NUMBER) {
+                    if (cherries.size() == 2 && !cherry1.contains((int) (e1)) && !cherry2.contains((int) (e1)) && xint[0] != Cass.DUMMY_NUMBER) {
                         continue;
                     }
                     for (int e2 = e1; e2 < e; e2++) {
                         // if there is a cherry we have to hit it
-                        if (cherries.size() > 0 && !cherry1.contains(new Integer(e1)) && !cherry1.contains(new Integer(e2)) && xint[0] != Cass.DUMMY_NUMBER) {
+                        if (cherries.size() > 0 && !cherry1.contains((int) (e1)) && !cherry1.contains((int) (e2)) && xint[0] != Cass.DUMMY_NUMBER) {
                             continue;
                         }
                         // if there are two cherries we have to hit both of them
-                        if (cherries.size() == 2 && !cherry2.contains(new Integer(e1)) && !cherry2.contains(new Integer(e2)) && xint[0] != Cass.DUMMY_NUMBER) {
+                        if (cherries.size() == 2 && !cherry2.contains((int) (e1)) && !cherry2.contains((int) (e2)) && xint[0] != Cass.DUMMY_NUMBER) {
                             continue;
                         }
                         // if e1 = e2 we subdivide this edge twice
@@ -630,7 +630,7 @@ class ClusterSet {
             vecCluster.add(aCluster);
             Vector singleton = new Vector(0);
             singleton.add(aCluster);
-            if (!taxa.contains(new Integer(aCluster))) {
+            if (!taxa.contains((int) (aCluster))) {
                 clusterVec.add(singleton);
                 taxa.add(aCluster);
                 taxaInTaxa.add(singleton);

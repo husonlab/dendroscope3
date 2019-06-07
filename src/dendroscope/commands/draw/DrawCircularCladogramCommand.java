@@ -99,7 +99,7 @@ public class DrawCircularCladogramCommand extends DrawCommand implements ICheckB
 
     public KeyStroke getAcceleratorKey() {
         return KeyStroke.getKeyStroke(KeyEvent.VK_5,
-                Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+                Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
     }
 
     /**
