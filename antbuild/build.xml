@@ -28,11 +28,13 @@
 		<property name="buildModulesDir" value="../antbuild/modules"/>
 
 		<path id="build.classpath">
+			<fileset dir="../../jloda/jars"  includes="*.jar"/>
 			<fileset dir="../../dendroscope3/jars"  includes="*.jar"/>
 			<fileset dir="${jlodaAntDir}"  includes="jloda.jar"/>
 		</path>
 
 		<path id="build.modulepath">
+			<fileset dir="../../jloda/jars"  includes="*.jar"/>
 			<fileset dir="../../dendroscope3/jars"  includes="*.jar"/>
 			<fileset dir="${jfxDir}"  includes="*.jar"/>
 			<fileset dir="../antbuild"  includes="jloda.jar"/>
