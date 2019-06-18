@@ -26,7 +26,6 @@ import com.install4j.api.update.UpdateChecker;
 import com.install4j.api.update.UpdateDescriptor;
 import com.install4j.api.update.UpdateDescriptorEntry;
 import dendroscope.window.MultiViewer;
-import jloda.Switches;
 import jloda.swing.commands.CommandBase;
 import jloda.swing.commands.ICommand;
 import jloda.swing.director.IDirector;
@@ -107,7 +106,7 @@ public class ShowCheckForUpdateCommand extends CommandBase implements ICommand {
             return;
         }
         if (updateDescriptor.getEntries().length > 0) {
-            if (Switches.Install4JLaunchBug || !ProgramProperties.isUseGUI()) {
+            if (!ProgramProperties.isUseGUI()) {
                 UpdateDescriptorEntry entry = updateDescriptor.getEntries()[0];
                 new InfoMessage(MultiViewer.getLastActiveFrame(), "New version available: " + entry.getNewVersion()
                         + "\nPlease download from: http://www-ab.informatik.uni-tuebingen.de/data/software/dendroscope/download/", true);
