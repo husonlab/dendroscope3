@@ -1,8 +1,11 @@
 module dendroscope {
     requires transitive jloda;
+
+    requires transitive java.desktop;
+    requires transitive com.install4j.runtime;
+
     requires commons.collections;
     requires nexml;
-    requires com.install4j.runtime;
 
     exports dendroscope.algorithms.clusternet;
     exports dendroscope.algorithms.gallnet;
