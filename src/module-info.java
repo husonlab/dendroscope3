@@ -57,16 +57,6 @@ module dendroscope {
     exports dendroscope.io;
     exports dendroscope.io.nexml;
     exports dendroscope.main;
-    exports dendroscope.multnet;
-    exports dendroscope.progs;
-    exports dendroscope.resources.icons;
-    exports dendroscope.resources.images;
-    exports dendroscope.tanglegram;
-    exports dendroscope.tripletMethods;
-    exports dendroscope.triplets;
-    exports dendroscope.util;
-    exports dendroscope.util.convexhull;
-    exports dendroscope.window;
 
     opens dendroscope.main;
     opens dendroscope.resources.icons;
