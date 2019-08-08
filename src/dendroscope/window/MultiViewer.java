@@ -38,6 +38,7 @@ import jloda.swing.format.Formatter;
 import jloda.swing.graphview.INodeEdgeFormatable;
 import jloda.swing.message.MessageWindow;
 import jloda.swing.util.*;
+import jloda.swing.window.MenuBar;
 import jloda.swing.window.MenuConfiguration;
 import jloda.util.Basic;
 import jloda.util.CanceledException;

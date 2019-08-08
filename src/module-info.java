@@ -7,7 +7,6 @@ module dendroscope {
     requires commons.collections;
     requires nexml;
 
-
     exports dendroscope.commands;
     exports dendroscope.commands.autumn;
     exports dendroscope.commands.collapse;
