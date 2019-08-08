@@ -144,8 +144,7 @@ public class MultiViewer implements IDirectableViewer, IViewerWithFindToolBar, I
         frame.getContentPane().add(statusBar, BorderLayout.SOUTH);
 
         // frame.getContentPane().add(new JScrollPane(treeGrid), BorderLayout.CENTER);
-        if (ProgramProperties.getProgramIcon() != null)
-            frame.setIconImage(ProgramProperties.getProgramIcon().getImage());
+        frame.setIconImages(ProgramProperties.getProgramIconImages());
 
         int[] geometry;
         JFrame lastActiveFrame = getLastActiveFrame();

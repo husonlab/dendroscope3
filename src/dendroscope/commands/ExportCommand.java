@@ -95,8 +95,7 @@ public class ExportCommand extends CommandBaseMultiViewer implements ICommand {
         String lastSaveFormat = ProgramProperties.get(ProgramProperties.SAVEFORMAT, Nexml.NAME);
 
         String format = (String) JOptionPane.showInputDialog(getViewer().getFrame(), "Output format:", "Choose output format",
-                JOptionPane.QUESTION_MESSAGE, ProgramProperties.getProgramIcon(),
-                IOManager.getAvailableFormats(), lastSaveFormat);
+                JOptionPane.QUESTION_MESSAGE, ProgramProperties.getProgramIcon(), IOManager.getAvailableFormats(), lastSaveFormat);
 
         if (format == null) {
             return; // must have canceled
