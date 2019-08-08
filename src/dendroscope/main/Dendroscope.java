@@ -24,7 +24,7 @@ import dendroscope.core.Document;
 import dendroscope.window.MultiViewer;
 import jloda.phylo.PhyloTree;
 import jloda.swing.director.ProjectManager;
-import jloda.swing.util.About;
+import jloda.swing.window.About;
 import jloda.swing.util.ArgsOptions;
 import jloda.swing.util.ResourceManager;
 import jloda.util.Basic;

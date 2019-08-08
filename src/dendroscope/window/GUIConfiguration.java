@@ -20,7 +20,7 @@
 package dendroscope.window;
 
 import dendroscope.main.DendroscopeProperties;
-import jloda.swing.util.MenuConfiguration;
+import jloda.swing.window.MenuConfiguration;
 import jloda.util.ProgramProperties;
 
 /**
