@@ -57,7 +57,7 @@ public class DendroscopeProperties {
      * @param propertiesFile
      */
     public static void initializeProperties(String propertiesFile) {
-        ProgramProperties.getProgramIcons().addAll(ResourceManager.getIcons("Dendroscope16.png", "Dendroscope32.png", "Dendroscope64.png", "Dendroscope128.png"));
+        ProgramProperties.setProgramIcons(ResourceManager.getIcons("Dendroscope16.png", "Dendroscope32.png", "Dendroscope48.png", "Dendroscope128.png"));
         ProgramProperties.setProgramVersion(Version.SHORT_DESCRIPTION);
         ProgramProperties.setProgramName(Version.NAME);
         ProgramProperties.setPropertiesFileName(propertiesFile);
