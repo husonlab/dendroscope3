@@ -44,7 +44,7 @@ public class Site3d extends Object3dAdaptor {
     private static int[][] iy = new int[Cube.nfront][Cube.npoints + 1]; // screen space
     private static Color[] icols = new Color[Cube.nfront];
     private static Color[] iselectcols = new Color[Cube.nfront];
-    private static Point ip[] = new Point[Cube.unitCube.length];
+    private static Point[] ip = new Point[Cube.unitCube.length];
 
     public String toString() {
         return centre.toString();

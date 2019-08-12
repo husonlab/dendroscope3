@@ -70,7 +70,7 @@ public class Simplistic {
 
         //ToDo: [Celine] Can we avoid to copy the trees?
 
-        PhyloTreeTri trees[] = new PhyloTreeTri[tempTrees.length];
+        PhyloTreeTri[] trees = new PhyloTreeTri[tempTrees.length];
         for (int n = 0; n < tempTrees.length; n++) {
             PhyloTreeTri tempTree = new PhyloTreeTri(tempTrees[n]);
             trees[n] = tempTree;
@@ -112,7 +112,7 @@ public class Simplistic {
 
         System.out.println(t.getTripVec().size() + " triplets " + " for " + allTaxa.size() + " taxa");
 
-        int errorTrip[] = new int[3];
+        int[] errorTrip = new int[3];
 
         List<TreeData> simplisticNetwork = new LinkedList<>();
 

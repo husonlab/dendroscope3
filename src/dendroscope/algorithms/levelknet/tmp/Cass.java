@@ -388,7 +388,7 @@ class ClusterSet {
                 if (Cass.PRINT_EXTRA_INFO) {
                     top.network.printDiGraph(false, true);
                 }
-                int xint[] = new int[1];
+                int[] xint = new int[1];
                 xint[0] = (Integer) top.removedLeaves[top.step];
                 // if there are 2 cherries, we should only really sub cherries, unless the last leaf we removed was a dummy leaf, because then we haven't collapsed properly
                 // if there are more cherries we can stop, unless the last leaf we removed was a dummy leaf, because then we haven't collapsed properly
@@ -926,7 +926,7 @@ class DiGraph {
     public boolean displays(ClusterSet CS, int k) {
         boolean disp = true;
         // number all reticulation edges
-        int num[] = new int[1];
+        int[] num = new int[1];
         num[0] = 0;
         numberRetEdges(num);
         cleanDiGraph();

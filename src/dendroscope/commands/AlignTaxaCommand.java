@@ -95,7 +95,7 @@ public class AlignTaxaCommand extends CommandBaseMultiViewer implements ICommand
 
         EmbeddingOptimizerNNet optimizer = new EmbeddingOptimizerNNet();
 
-        optimizer.apply(trees.toArray(new PhyloTree[trees.size()]), null, false, true);
+        optimizer.apply(trees.toArray(new PhyloTree[0]), null, false, true);
 
         multiViewer.setEmbedderName(LayoutOptimizerManager.UNOPTIMIZED);
 

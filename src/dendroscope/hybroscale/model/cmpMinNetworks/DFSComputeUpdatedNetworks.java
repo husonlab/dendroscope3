@@ -694,9 +694,8 @@ public class DFSComputeUpdatedNetworks extends Thread {
 	}
 
 	private void modT2EdgesRecDown(SparseNetwork n, int treeIndex) {
-		Vector<SparseNetNode> nodes = new Vector<SparseNetNode>();
-		for (SparseNetNode v : n.getNodes())
-			nodes.add(v);
+        Vector<SparseNetNode> nodes = new Vector<>(n.getNodes());
+
 		for (SparseNetNode v : nodes) {
 			if (dragOneEdgeDown(v, n, treeIndex)) {
 				updateNetwork(n, null, null);
@@ -707,9 +706,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 	}
 
 	private void modT2EdgesRecUp(SparseNetwork n, int treeIndex) {
-		Vector<SparseNetNode> nodes = new Vector<SparseNetNode>();
-		for (SparseNetNode v : n.getNodes())
-			nodes.add(v);
+        Vector<SparseNetNode> nodes = new Vector<>(n.getNodes());
 		for (SparseNetNode v : nodes) {
 			if (dragOneEdgeUp(v, n, treeIndex)) {
 				updateNetwork(n, null, null);

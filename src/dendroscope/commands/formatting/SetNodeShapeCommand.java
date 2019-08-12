@@ -116,7 +116,7 @@ public class SetNodeShapeCommand extends CommandBase implements ICommand {
      * @param ev
      */
     public void actionPerformed(ActionEvent ev) {
-        String choices[] = new String[]{"oval", "rectangle", "none"};
+        String[] choices = new String[]{"oval", "rectangle", "none"};
 
         String result = (String) JOptionPane.showInputDialog(getViewer().getFrame(), "Set node shape", "Set node shape", JOptionPane.QUESTION_MESSAGE, ProgramProperties.getProgramIcon(), choices, choices[0]);
 

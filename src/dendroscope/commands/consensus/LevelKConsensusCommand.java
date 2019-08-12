@@ -50,7 +50,7 @@ public class LevelKConsensusCommand extends CommandBase implements ICommand {
         }
         */
 
-        String param[] = createPanelForInput();
+        String[] param = createPanelForInput();
         if (param[2] != null) {
             float threshold = Basic.parseFloat(param[2]);
 
@@ -84,9 +84,9 @@ public class LevelKConsensusCommand extends CommandBase implements ICommand {
 
     public static String[] createPanelForInput() {
 
-        String param[] = new String[3];
+        String[] param = new String[3];
 
-        JLabel JLabelparam[] = new JLabel[3];
+        JLabel[] JLabelparam = new JLabel[3];
 
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints grid = new GridBagConstraints();
@@ -102,7 +102,7 @@ public class LevelKConsensusCommand extends CommandBase implements ICommand {
         JLabelparam[1] = new JLabel("Construct only networks that display the trees");
         JLabelparam[2] = new JLabel("Use clusters that appear in at least this percentage of the trees");
 
-        JCheckBox JCheckBoxparam[] = new JCheckBox[2];
+        JCheckBox[] JCheckBoxparam = new JCheckBox[2];
         for (int i = 0; i < 2; i++)
             JCheckBoxparam[i] = new JCheckBox();
 

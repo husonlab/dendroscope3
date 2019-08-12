@@ -47,7 +47,7 @@ public class SimplisticCommand extends CommandBaseMultiViewer implements IComman
             list.add(np.getWordRespectCase());
         }
 
-        String param[] = list.toArray(new String[list.size()]);
+        String[] param = list.toArray(new String[list.size()]);
 
 
         //String param[] = createPanelForInput();
@@ -93,7 +93,7 @@ public class SimplisticCommand extends CommandBaseMultiViewer implements IComman
 
 
     public void actionPerformed(ActionEvent ev) {
-        String param[] = createPanelForInput();
+        String[] param = createPanelForInput();
         if (param != null) {
             execute("compute triplets2network method=simplistic parameters=" + Basic.toString(param, " ") + ";");
         }
@@ -142,9 +142,9 @@ public class SimplisticCommand extends CommandBaseMultiViewer implements IComman
 
     public static String[] createPanelForInput() {
 
-        String param[] = new String[6];
+        String[] param = new String[6];
 
-        JLabel JLabelparam[] = new JLabel[6];
+        JLabel[] JLabelparam = new JLabel[6];
 
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints grid = new GridBagConstraints();
@@ -167,11 +167,11 @@ public class SimplisticCommand extends CommandBaseMultiViewer implements IComman
         JLabelparam[4] = new JLabel("Split subsets of size (see documentation at http://skelk.sdf-eu.org/simplistic.html):");
         JLabelparam[5] = new JLabel("Stop at level (if -1, the default value is used, i.e., number of taxa -1):");
 
-        JCheckBox JCheckBoxparam[] = new JCheckBox[3];
+        JCheckBox[] JCheckBoxparam = new JCheckBox[3];
         for (int i = 0; i < 3; i++)
             JCheckBoxparam[i] = new JCheckBox();
 
-        JTextField JTextFieldparam[] = new JTextField[3];
+        JTextField[] JTextFieldparam = new JTextField[3];
 
         JTextFieldparam[0] = new JTextField(12);
         JTextFieldparam[0].setText("1");

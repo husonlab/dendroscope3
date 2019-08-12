@@ -132,8 +132,8 @@ public class Apply2Component {
         BitSet maximalReticulate = Cluster.extractTaxa(maximalOptionalClusters);
 
         // set of all nodes in backbone tree for which some reticulate chain ends
-        NodeSet attachmentNodes[] = new NodeSet[maximalReticulate.length()];
-        NodeSet usedAttachmentNodes[] = new NodeSet[maximalReticulate.length()];
+        NodeSet[] attachmentNodes = new NodeSet[maximalReticulate.length()];
+        NodeSet[] usedAttachmentNodes = new NodeSet[maximalReticulate.length()];
         for (int t = maximalReticulate.nextSetBit(0); t != -1; t = maximalReticulate.nextSetBit(t + 1)) {
             attachmentNodes[t] = new NodeSet(backbone);
             usedAttachmentNodes[t] = new NodeSet(backbone);

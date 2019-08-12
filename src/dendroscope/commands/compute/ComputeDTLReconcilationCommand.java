@@ -106,7 +106,7 @@ public class ComputeDTLReconcilationCommand extends CommandBaseMultiViewer imple
 
 
     public void actionPerformed(ActionEvent ev) {
-        JLabel JLabelparam[] = new JLabel[3];
+        JLabel[] JLabelparam = new JLabel[3];
 
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints grid = new GridBagConstraints();
@@ -125,7 +125,7 @@ public class ComputeDTLReconcilationCommand extends CommandBaseMultiViewer imple
         JLabelparam[1] = new JLabel("transCost");
         JLabelparam[2] = new JLabel("lossCost");
 
-        JTextField JTextFieldparam[] = new JTextField[3];
+        JTextField[] JTextFieldparam = new JTextField[3];
 
         JTextFieldparam[0] = new JTextField(12);
         JTextFieldparam[0].setText("1");

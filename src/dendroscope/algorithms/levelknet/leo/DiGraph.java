@@ -37,7 +37,7 @@ public class DiGraph {
     public final int[] edgenumber;
     public int retnumber;
     public final int[] retside; // 0 = this is the left parent of the reticulation, 1 = right parent, 2 = this child is not a reticulation
-    public Vector<Vector<Integer>> clusters[];
+    public Vector<Vector<Integer>>[] clusters;
     public int number;
     public int outdeg;
     public int indeg;
@@ -299,7 +299,7 @@ public class DiGraph {
     public boolean displays(ClusterSet CS, int k) {
         boolean disp = true;
         // number all reticulation edges
-        int num[] = new int[1];
+        int[] num = new int[1];
         num[0] = 0;
         numberRetEdges(num);
         cleanDiGraph();
@@ -324,7 +324,7 @@ public class DiGraph {
 
         Vector allTreeNums = CS.updateAllTreeNums();
         // number all reticulation edges
-        int num[] = new int[1];
+        int[] num = new int[1];
         num[0] = 0;
         numberRetEdges(num);
         cleanDiGraph();

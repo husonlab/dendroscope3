@@ -168,7 +168,7 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
             forests = new Vector[2];
             forests[0] = new Vector<>();
             forests[1] = new Vector<>();
-            Vector<List<String>> tempOrder[] = new Vector[2];
+            Vector<List<String>>[] tempOrder = new Vector[2];
             tempOrder[0] = new Vector<>();
             tempOrder[1] = new Vector<>();
 

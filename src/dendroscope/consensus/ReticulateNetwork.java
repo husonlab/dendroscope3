@@ -48,7 +48,7 @@ public class ReticulateNetwork {
         this.progressListener = new ProgressDialog("Computing reduced network", "Initializing", null);
         progressListener.setMaximum(-1);
 
-        boolean incompatible[][] = new boolean[clusters.length][clusters.length];
+        boolean[][] incompatible = new boolean[clusters.length][clusters.length];
         for (int i = 0; i < clusters.length; i++) {
             for (int j = i + 1; j < clusters.length; j++)
                 incompatible[i][j] = incompatible[j][i] = Cluster.incompatible(clusters[i], clusters[j]);

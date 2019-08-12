@@ -26,7 +26,7 @@ import java.util.Random;
 import java.util.StringTokenizer;
 
 public class Point3d {
-    public double v[];
+    public double[] v;
     public static Point3d o = new Point3d(0, 0, 0);
     public static Point3d i = new Point3d(1, 0, 0);
     public static Point3d j = new Point3d(0, 1, 0);

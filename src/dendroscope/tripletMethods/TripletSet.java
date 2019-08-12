@@ -34,7 +34,7 @@ class TripletSet {
     private Vector tripVec;
     private int numLeaves;
     private boolean finalised;
-    private boolean lookup[][][];
+    private boolean[][][] lookup;
 
     public TripletSet() {
         tripVec = new Vector();
@@ -133,7 +133,7 @@ class TripletSet {
         }
 
 
-        int myTriplet[] = new int[3];
+        int[] myTriplet = new int[3];
         myTriplet[0] = a;
         myTriplet[1] = b;
         myTriplet[2] = c;
@@ -168,7 +168,7 @@ class TripletSet {
 
         if (this.containsTripletFast(a, b, c)) return;
 
-        int myTriplet[] = new int[3];
+        int[] myTriplet = new int[3];
         myTriplet[0] = a;
         myTriplet[1] = b;
         myTriplet[2] = c;
@@ -194,7 +194,7 @@ class TripletSet {
 
         Enumeration e = tripVec.elements();
         while (e.hasMoreElements()) {
-            int triplet[] = (int[]) e.nextElement();
+            int[] triplet = (int[]) e.nextElement();
             if ((triplet[0] == a) && (triplet[1] == b) && (triplet[2] == c)) return true;
         }
 
@@ -212,7 +212,7 @@ class TripletSet {
         Enumeration e = this.tripVec.elements();
 
         while (e.hasMoreElements()) {
-            int t[] = (int[]) e.nextElement();
+            int[] t = (int[]) e.nextElement();
 
             int x = t[0];
             int y = t[1];
@@ -300,7 +300,7 @@ class TripletSet {
 
         //! snrank begins at [1], goes up until [this.numLeaves]
 
-        Vector snrank[] = new Vector[this.numLeaves + 1];
+        Vector[] snrank = new Vector[this.numLeaves + 1];
         for (int x = 1; x < snrank.length; x++) {
             snrank[x] = new Vector();
         }
@@ -318,7 +318,7 @@ class TripletSet {
         //! This creates an SN-set array which has
         //! elements of increasing size...
 
-        KSet ordered[] = new KSet[sn.size()];
+        KSet[] ordered = new KSet[sn.size()];
 
         int at = 0;
         for (int x = 1; x < snrank.length; x++) {
@@ -383,7 +383,7 @@ class TripletSet {
         // for only TBRs
         TripletSet base;
         KSet builtTBR;    //! The TBR that brought us here, labels are correct?
-        int bmap[];
+        int[] bmap;
 
         //! for edges only...
         dagExplore netBase;
@@ -454,7 +454,7 @@ class TripletSet {
 
                 int leavesLeft = trip.numLeaves - ctbr.size();
 
-                int backmap[] = new int[leavesLeft + 1];
+                int[] backmap = new int[leavesLeft + 1];
                 //! backmap will tell me what the numbers of the remaining leaves, used to be
 
                 TripletSet nextLevel;
@@ -631,8 +631,8 @@ class TripletSet {
                     dagExplore netBase = top.netBase;
                     Vector edges = top.list;    //! should be the same as netBase's list!
 
-                    biDAG firstEdge[] = (biDAG[]) edges.elementAt(top.busyWith);
-                    biDAG secondEdge[] = (biDAG[]) edges.elementAt(top.alsoBusyWith);
+                    biDAG[] firstEdge = (biDAG[]) edges.elementAt(top.busyWith);
+                    biDAG[] secondEdge = (biDAG[]) edges.elementAt(top.alsoBusyWith);
 
                     if ((firstEdge[1].isDummy) && (firstEdge[0].parent != null) && (firstEdge[0].secondParent == null)) {
                         //Simplistic.doublereport("Skipping, no need to subdivide already subdivided dummy edge [first edge]");
@@ -667,13 +667,13 @@ class TripletSet {
 
                     KSet findTheTree = lookback.builtTBR;
 
-                    int switchback[] = lookback.bmap;    //! lets us relabel stuff
+                    int[] switchback = lookback.bmap;    //! lets us relabel stuff
 
                     //! Need to clone the biDAG. This is a very annoying
                     //! thing to do, I must improve this later.
 
                     //! This should simultaneously relabel the leaves too using the backmap...
-                    biDAG newNodes[] = netBase.clonebiDAG(switchback);    //! So we clone the netBase...
+                    biDAG[] newNodes = netBase.clonebiDAG(switchback);    //! So we clone the netBase...
 
                     biDAG newDAG = newNodes[0];
 
@@ -820,7 +820,7 @@ class TripletSet {
                                 int numCon = 0;
 
                                 for (int t = 0; t < tripVec.size(); t++) {
-                                    int trip[] = (int[]) tripVec.elementAt(t);
+                                    int[] trip = (int[]) tripVec.elementAt(t);
                                     if (!exploreAgain.consistent(trip[0], trip[1], trip[2])) {
                                         isConsistent = false;
                                         break;
@@ -856,7 +856,7 @@ class TripletSet {
                         Vector zoom = oldTrips.tripVec;
 
                         for (int spin = 0; spin < zoom.size(); spin++) {
-                            int trip[] = (int[]) zoom.elementAt(spin);
+                            int[] trip = (int[]) zoom.elementAt(spin);
                             if (!exploreAgain.consistent(trip[0], trip[1], trip[2])) {
                                 proceed = false;
                                 //! System.out.println("Premature departure: early non-consistency detected.");
@@ -977,7 +977,7 @@ class TripletSet {
         }
 
         //! not sure numLeaves+1 here is necessary but who cares
-        int forwardmap[] = new int[numLeaves + 1];
+        int[] forwardmap = new int[numLeaves + 1];
 
         int at = 1;
         for (int x = 1; x <= numLeaves; x++) {
@@ -996,7 +996,7 @@ class TripletSet {
         TripletSet t = new TripletSet();
 
         for (int scan = 0; scan < tripVec.size(); scan++) {
-            int trip[] = (int[]) tripVec.elementAt(scan);
+            int[] trip = (int[]) tripVec.elementAt(scan);
 
             int x = trip[0];
             int y = trip[1];
@@ -1008,7 +1008,7 @@ class TripletSet {
             int yp = forwardmap[y];
             int zp = forwardmap[z];
 
-            int fall[] = new int[3];
+            int[] fall = new int[3];
 
             fall[0] = xp;
             fall[1] = yp;
@@ -1033,7 +1033,7 @@ class TripletSet {
 
         Enumeration e = tripVec.elements();
         while (e.hasMoreElements()) {
-            int t[] = (int[]) e.nextElement();
+            int[] t = (int[]) e.nextElement();
 
             aho.addEdge(t[0], t[1]);
         }
@@ -1050,7 +1050,7 @@ class TripletSet {
 
         //! Split into two cliques...
 
-        int partition[] = g.getDoubleClique();
+        int[] partition = g.getDoubleClique();
 
         if (partition == null) return null;
 
@@ -1075,12 +1075,12 @@ class TripletSet {
         int rCount = 0;
 
         //! The 0 element of these guys will not be used...
-        int leftList[] = new int[partition.length];
-        int rightList[] = new int[partition.length];
+        int[] leftList = new int[partition.length];
+        int[] rightList = new int[partition.length];
 
         //! The 0 element of these guys will not be used...
-        int leftBackMap[] = new int[partition.length];
-        int rightBackMap[] = new int[partition.length];
+        int[] leftBackMap = new int[partition.length];
+        int[] rightBackMap = new int[partition.length];
 
         //! Note here that we begin at 1
         for (int scan = 1; scan < partition.length; scan++) {
@@ -1161,7 +1161,7 @@ class TripletSet {
 
             Enumeration e = tripVec.elements();
             while (e.hasMoreElements()) {
-                int v[] = (int[]) e.nextElement();
+                int[] v = (int[]) e.nextElement();
 
                 //! We want all 3 of its elements to be in the left
                 //! partition...so for each element check whether it
@@ -1243,7 +1243,7 @@ class TripletSet {
 
             Enumeration e = tripVec.elements();
             while (e.hasMoreElements()) {
-                int v[] = (int[]) e.nextElement();
+                int[] v = (int[]) e.nextElement();
 
                 //! We want all 3 of its elements to be in the left
                 //! partition...so for each element check whether it
@@ -1356,7 +1356,7 @@ class TripletSet {
                             while (cg.hasMore()) {
                                 mstar = msn;
 
-                                int gc[] = cg.getNext();
+                                int[] gc = cg.getNext();
                                 for (int aGc2 : gc) {
                                     if (((KSet) mstar.elementAt(aGc2)).size() == 1)
                                         continue nextcom;    // can't be split...
@@ -1429,7 +1429,7 @@ class TripletSet {
         //! root will contain a network with as many leaves as maximum SN-sets...
         //! i.e. the size of mstar...
 
-        biDAG leafToNode[] = new biDAG[mstar.size() + 1];
+        biDAG[] leafToNode = new biDAG[mstar.size() + 1];
 
         //! This assumes that 'visited' is clean...
 
@@ -1450,7 +1450,7 @@ class TripletSet {
             KSet subLeaves = (KSet) mstar.elementAt(xl - 1);
             int numSubLeaves = subLeaves.size();
 
-            int backMap[] = new int[numSubLeaves + 1];
+            int[] backMap = new int[numSubLeaves + 1];
 
             biDAG subroot;
 
@@ -1482,7 +1482,7 @@ class TripletSet {
 
                     biDAG tweak = leafToNode[xl];
 
-                    int pick[] = subLeaves.getFirstTwoElements();
+                    int[] pick = subLeaves.getFirstTwoElements();
 
                     biDAG branch = biDAG.cherry12();
 
@@ -1538,12 +1538,12 @@ class TripletSet {
 
         int nprime = maxSN.size();
 
-        KSet fastSN[] = new KSet[nprime + 1];
+        KSet[] fastSN = new KSet[nprime + 1];
 
         //! We'll build a lookup-table here to make the mapping fast
         //! Maps {1,n} -> {1,n'}
 
-        int map[] = new int[this.numLeaves + 1];
+        int[] map = new int[this.numLeaves + 1];
 
         int index = 1;
 
@@ -1566,7 +1566,7 @@ class TripletSet {
 
         Enumeration f = tripVec.elements();
         while (f.hasMoreElements()) {
-            int t[] = (int[]) f.nextElement();
+            int[] t = (int[]) f.nextElement();
 
             int a = map[t[0]];
             int b = map[t[1]];
@@ -1587,9 +1587,9 @@ class TripletSet {
     public TripletSet induceTripletSet(KSet k, int backMap[]) {
         TripletSet ts = new TripletSet();
 
-        boolean in[] = new boolean[numLeaves + 1];
+        boolean[] in = new boolean[numLeaves + 1];
 
-        int leafMap[] = new int[numLeaves + 1];
+        int[] leafMap = new int[numLeaves + 1];
         int mapCount = 1;
         //! This will map {1...numLeaves} -> {1...size(KSet)}
 
@@ -1607,7 +1607,7 @@ class TripletSet {
         Enumeration e = this.tripVec.elements();
 
         while (e.hasMoreElements()) {
-            int t[] = (int[]) e.nextElement();
+            int[] t = (int[]) e.nextElement();
 
             if (in[t[0]] && in[t[1]] && in[t[2]]) {
                 ts.addTriplet(leafMap[t[0]], leafMap[t[1]], leafMap[t[2]]);
@@ -1636,7 +1636,7 @@ class TripletSet {
         Enumeration e = tripVec.elements();
         //tripl
         while (e.hasMoreElements()) {
-            int t[] = (int[]) e.nextElement();
+            int[] t = (int[]) e.nextElement();
             System.out.println(t[0] + "," + t[1] + "|" + t[2]);
 
         }

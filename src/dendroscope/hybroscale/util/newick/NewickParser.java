@@ -146,7 +146,7 @@ public class NewickParser {
 				s = newickString.substring(sqBracketToSqBracket.get(i), i + 1) + s;
 				i = sqBracketToSqBracket.get(i);
 			} else
-				s = String.valueOf(c) + s;
+                s = c + s;
 			i--;
 		}
 		return labelToStartpos;
@@ -156,7 +156,7 @@ public class NewickParser {
 		String[] content = new String[4];
 		if (l.contains("[")) {
 			int index = l.indexOf("[");
-			String a[] = { l.substring(0, index), l.substring(index + 1) };
+            String[] a = {l.substring(0, index), l.substring(index + 1)};
 			content[3] = a.length == 2 ? a[1] : "";
 			if (a.length > 1) {
 				if (a[0].contains(":")) {

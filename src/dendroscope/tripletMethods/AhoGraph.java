@@ -72,7 +72,7 @@ class AhoGraph {
         //! That is: everyone on LEFT has degree equal to RIGHT, and
         //! viceversa
 
-        int visited[] = new int[leaves + 1];
+        int[] visited = new int[leaves + 1];
 
         visited[0] = -1000;
 

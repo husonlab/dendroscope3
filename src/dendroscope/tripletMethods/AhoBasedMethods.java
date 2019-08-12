@@ -45,7 +45,7 @@ public class AhoBasedMethods {
 
         //ToDo: [Celine] Can we avoid to copy the trees?
 
-        PhyloTreeTri trees[] = new PhyloTreeTri[tempTrees.length];
+        PhyloTreeTri[] trees = new PhyloTreeTri[tempTrees.length];
         for (int n = 0; n < tempTrees.length; n++) {
             PhyloTreeTri tempTree = new PhyloTreeTri(tempTrees[n]);
             trees[n] = tempTree;

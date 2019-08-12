@@ -48,7 +48,7 @@ public class MainTriplets {
         String StringTree2 = (newick.read(new File(file2))[0]).toBracketString();
 
 
-        PhyloTreeTri Trees[] = new PhyloTreeTri[2];
+        PhyloTreeTri[] Trees = new PhyloTreeTri[2];
         Trees[0] = new PhyloTreeTri();
         Trees[0].parseBracketNotation(StringTree1, true);
         Trees[1] = new PhyloTreeTri();

@@ -170,7 +170,7 @@ public class NewickParser extends JPanel implements ActionListener, DocumentList
             char c = s.charAt(i);
             if (!(Character.isDigit(c) || Character.isLetter(c) || c == '#' ||
                     c == '(' || c == ')' || c == ',' || c == ';')) {
-                message.setText("Invalid character at position " + Integer.toString(i));
+                message.setText("Invalid character at position " + i);
                 return false;
             }
         }

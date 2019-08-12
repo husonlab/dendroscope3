@@ -45,16 +45,16 @@ class dagExplore {
     public Vector leaves;
     public Vector dummy_nodes;
 
-    public biDAG nodearray[];    //! maps nodeNums -> biDAGs
-    public int leafarray[];        //! maps leafNums -> leafNums
+    public biDAG[] nodearray;    //! maps nodeNums -> biDAGs
+    public int[] leafarray;        //! maps leafNums -> leafNums
 
-    public boolean adjmatrix[][];
+    public boolean[][] adjmatrix;
 
     //! for the algorithm of pawel
-    public int join[][];
-    public int cons[][][];
+    public int[][] join;
+    public int[][][] cons;
 
-    public int desc[][];
+    public int[][] desc;
 
     public final biDAG root;
 
@@ -79,7 +79,7 @@ class dagExplore {
 
 
     public biDAG[] clonebiDAG(int changeLabels[]) {
-        biDAG newNodes[] = new biDAG[num_nodes];
+        biDAG[] newNodes = new biDAG[num_nodes];
 
         if (root.nodeNum != 0) {
             System.out.println("I expected the root to have number 0...");
@@ -187,7 +187,7 @@ class dagExplore {
         }
 
         for (int x = 0; x < edges.size(); x++) {
-            biDAG e[] = (biDAG[]) edges.elementAt(x);
+            biDAG[] e = (biDAG[]) edges.elementAt(x);
 
             //! System.out.println("dagExplore found edge "+e[0]+" -> "+e[1]);
 
@@ -502,7 +502,7 @@ class dagExplore {
         b.visited = true;
 
         if (b.child1 != null) {
-            biDAG myedge[] = new biDAG[2];
+            biDAG[] myedge = new biDAG[2];
             myedge[0] = b;
             myedge[1] = b.child1;
 
@@ -518,7 +518,7 @@ class dagExplore {
         }
 
         if (b.child2 != null) {
-            biDAG myedge[] = new biDAG[2];
+            biDAG[] myedge = new biDAG[2];
             myedge[0] = b;
             myedge[1] = b.child2;
 

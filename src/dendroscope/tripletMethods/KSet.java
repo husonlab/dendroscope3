@@ -149,7 +149,7 @@ class KSet {
     public int[] getFirstTwoElements() {
         if (leafCount < 2) return null;
 
-        int vec[] = new int[2];
+        int[] vec = new int[2];
         int at = 0;
 
         for (int x = 0; x < array.length; x++) {
@@ -165,7 +165,7 @@ class KSet {
 
     public boolean sameAs(KSet second) {
         int smaller, bigger;
-        boolean longer[];
+        boolean[] longer;
 
         if (this.leafCount != second.leafCount) return false;
 

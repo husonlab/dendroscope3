@@ -61,7 +61,7 @@ class biDAG {
 //! These are things we need for the undirected
 //! DFS which we use for testing biconnectivity
 
-    private biDAG adj[];
+    private biDAG[] adj;
     private int degree;
     private biDAG pred;
     private int colour;
@@ -114,7 +114,7 @@ class biDAG {
         //! Nou dit wordt leuk...
         //! remember: we are dealing here with UNDIRECTED graph
 
-        int time[] = new int[1];
+        int[] time = new int[1];
         time[0] = -1;
 
         //! I assume that 'this' is the root
@@ -342,7 +342,7 @@ class biDAG {
     }
 
     public String newickDump(HashMap<Integer, String> ID2taxon) {
-        int counter[] = new int[1];
+        int[] counter = new int[1];
         counter[0] = 1;
 
         numberRecombNodes(counter);

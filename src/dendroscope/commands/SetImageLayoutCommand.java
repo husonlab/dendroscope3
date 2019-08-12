@@ -122,7 +122,7 @@ public class SetImageLayoutCommand extends CommandBaseMultiViewer implements ICo
      */
     @Override
     public void actionPerformed(ActionEvent ev) {
-        String choices[] = new String[]{"east", "west", "north", "south", "radial"};
+        String[] choices = new String[]{"east", "west", "north", "south", "radial"};
 
         String result = (String) JOptionPane.showInputDialog(getViewer().getFrame(), "Enter image layout", "Set image layout",
                 JOptionPane.QUESTION_MESSAGE, ProgramProperties.getProgramIcon(), choices, choices[0]);
