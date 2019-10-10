@@ -98,7 +98,7 @@
           <versionLine x="17" y="10" text="SplitsTree ${compiler:sys.version}" fontSize="12" fontColor="0,0,0" bold="false" />
         </text>
       </splashScreen>
-      <java mainClass="dendroscope/dendroscope.main.Dendroscope" mainMode="2" vmParameters="-Dapple.laf.useScreenMenuBar=true -Xmx400M -Duser.language=en -Duser.region=US --add-modules=dendroscope" arguments="-d" allowVMPassthroughParameters="true" preferredVM="" bundleRuntime="true">
+      <java mainClass="dendroscope/dendroscope.main.Dendroscope" mainMode="2" vmParameters="-server -Dapple.laf.useScreenMenuBar=true -Duser.language=en -Duser.region=US --add-modules=dendroscope" arguments="-d" allowVMPassthroughParameters="true" preferredVM="" bundleRuntime="true">
         <classPath />
         <modulePath>
           <directory location="jars" failOnError="false" />
@@ -172,25 +172,24 @@
                 <object class="com.install4j.runtime.beans.screens.StartupScreen" />
               </java>
             </serializedBean>
-             <styleOverrides>
-          <styleOverride name="Custom watermark" enabled="true">
-            <formComponent name="Watermark" id="1691242607" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false" useExternalParametrization="false" externalParametrizationName="" externalParametrizationMode="all">
-              <serializedBean>
-                <java class="java.beans.XMLDecoder">
-                  <object class="com.install4j.runtime.beans.formcomponents.SeparatorComponent">
-                    <void property="labelText">
-                      <string>Daniel Huson's lab, University of Tübingen</string>
-                    </void>
-                  </object>
-                </java>
-              </serializedBean>
-              <initScript />
-              <visibilityScript />
-              <externalParametrizationPropertyNames />
-            </formComponent>
-          </styleOverride>
-        </styleOverrides>
-
+            <styleOverrides>
+              <styleOverride name="Custom watermark" enabled="true">
+                <formComponent name="Watermark" id="1691242607" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false" useExternalParametrization="false" externalParametrizationName="" externalParametrizationMode="all">
+                  <serializedBean>
+                    <java class="java.beans.XMLDecoder">
+                      <object class="com.install4j.runtime.beans.formcomponents.SeparatorComponent">
+                        <void property="labelText">
+                          <string>Daniel Huson's lab, University of Tübingen</string>
+                        </void>
+                      </object>
+                    </java>
+                  </serializedBean>
+                  <initScript />
+                  <visibilityScript />
+                  <externalParametrizationPropertyNames />
+                </formComponent>
+              </styleOverride>
+            </styleOverrides>
             <condition />
             <validation />
             <preActivation />
@@ -216,24 +215,23 @@
               </java>
             </serializedBean>
             <styleOverrides>
-          <styleOverride name="Custom watermark" enabled="true">
-            <formComponent name="Watermark" id="1691242607" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false" useExternalParametrization="false" externalParametrizationName="" externalParametrizationMode="all">
-              <serializedBean>
-                <java class="java.beans.XMLDecoder">
-                  <object class="com.install4j.runtime.beans.formcomponents.SeparatorComponent">
-                    <void property="labelText">
-                      <string>Daniel Huson's lab, University of Tübingen</string>
-                    </void>
-                  </object>
-                </java>
-              </serializedBean>
-              <initScript />
-              <visibilityScript />
-              <externalParametrizationPropertyNames />
-            </formComponent>
-          </styleOverride>
-        </styleOverrides>
- 
+              <styleOverride name="Custom watermark" enabled="true">
+                <formComponent name="Watermark" id="1691242607" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false" useExternalParametrization="false" externalParametrizationName="" externalParametrizationMode="all">
+                  <serializedBean>
+                    <java class="java.beans.XMLDecoder">
+                      <object class="com.install4j.runtime.beans.formcomponents.SeparatorComponent">
+                        <void property="labelText">
+                          <string>Daniel Huson's lab, University of Tübingen</string>
+                        </void>
+                      </object>
+                    </java>
+                  </serializedBean>
+                  <initScript />
+                  <visibilityScript />
+                  <externalParametrizationPropertyNames />
+                </formComponent>
+              </styleOverride>
+            </styleOverrides>
             <condition />
             <validation />
             <preActivation />
@@ -317,25 +315,24 @@ return console.askOkCancel(message, true);
                 <object class="com.install4j.runtime.beans.screens.LicenseScreen" />
               </java>
             </serializedBean>
-             <styleOverrides>
-          <styleOverride name="Custom watermark" enabled="true">
-            <formComponent name="Watermark" id="1691242607" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false" useExternalParametrization="false" externalParametrizationName="" externalParametrizationMode="all">
-              <serializedBean>
-                <java class="java.beans.XMLDecoder">
-                  <object class="com.install4j.runtime.beans.formcomponents.SeparatorComponent">
-                    <void property="labelText">
-                      <string>Daniel Huson's lab, University of Tübingen</string>
-                    </void>
-                  </object>
-                </java>
-              </serializedBean>
-              <initScript />
-              <visibilityScript />
-              <externalParametrizationPropertyNames />
-            </formComponent>
-          </styleOverride>
-        </styleOverrides>
-
+            <styleOverrides>
+              <styleOverride name="Custom watermark" enabled="true">
+                <formComponent name="Watermark" id="1691242607" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false" useExternalParametrization="false" externalParametrizationName="" externalParametrizationMode="all">
+                  <serializedBean>
+                    <java class="java.beans.XMLDecoder">
+                      <object class="com.install4j.runtime.beans.formcomponents.SeparatorComponent">
+                        <void property="labelText">
+                          <string>Daniel Huson's lab, University of Tübingen</string>
+                        </void>
+                      </object>
+                    </java>
+                  </serializedBean>
+                  <initScript />
+                  <visibilityScript />
+                  <externalParametrizationPropertyNames />
+                </formComponent>
+              </styleOverride>
+            </styleOverrides>
             <condition />
             <validation />
             <preActivation />
@@ -396,24 +393,23 @@ return console.askOkCancel(message, true);
               </java>
             </serializedBean>
             <styleOverrides>
-          <styleOverride name="Custom watermark" enabled="true">
-            <formComponent name="Watermark" id="1691242607" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false" useExternalParametrization="false" externalParametrizationName="" externalParametrizationMode="all">
-              <serializedBean>
-                <java class="java.beans.XMLDecoder">
-                  <object class="com.install4j.runtime.beans.formcomponents.SeparatorComponent">
-                    <void property="labelText">
-                      <string>Daniel Huson's lab, University of Tübingen</string>
-                    </void>
-                  </object>
-                </java>
-              </serializedBean>
-              <initScript />
-              <visibilityScript />
-              <externalParametrizationPropertyNames />
-            </formComponent>
-          </styleOverride>
-       </styleOverrides>
- 
+              <styleOverride name="Custom watermark" enabled="true">
+                <formComponent name="Watermark" id="1691242607" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false" useExternalParametrization="false" externalParametrizationName="" externalParametrizationMode="all">
+                  <serializedBean>
+                    <java class="java.beans.XMLDecoder">
+                      <object class="com.install4j.runtime.beans.formcomponents.SeparatorComponent">
+                        <void property="labelText">
+                          <string>Daniel Huson's lab, University of Tübingen</string>
+                        </void>
+                      </object>
+                    </java>
+                  </serializedBean>
+                  <initScript />
+                  <visibilityScript />
+                  <externalParametrizationPropertyNames />
+                </formComponent>
+              </styleOverride>
+            </styleOverrides>
             <condition>!context.getBooleanVariable("sys.confirmedUpdateInstallation")</condition>
             <validation />
             <preActivation />
@@ -468,25 +464,24 @@ return console.askOkCancel(message, true);
                 <object class="com.install4j.runtime.beans.screens.ComponentsScreen" />
               </java>
             </serializedBean>
-             <styleOverrides>
-          <styleOverride name="Custom watermark" enabled="true">
-            <formComponent name="Watermark" id="1691242607" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false" useExternalParametrization="false" externalParametrizationName="" externalParametrizationMode="all">
-              <serializedBean>
-                <java class="java.beans.XMLDecoder">
-                  <object class="com.install4j.runtime.beans.formcomponents.SeparatorComponent">
-                    <void property="labelText">
-                      <string>Daniel Huson's lab, University of Tübingen</string>
-                    </void>
-                  </object>
-                </java>
-              </serializedBean>
-              <initScript />
-              <visibilityScript />
-              <externalParametrizationPropertyNames />
-            </formComponent>
-          </styleOverride>
-        </styleOverrides>
-
+            <styleOverrides>
+              <styleOverride name="Custom watermark" enabled="true">
+                <formComponent name="Watermark" id="1691242607" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false" useExternalParametrization="false" externalParametrizationName="" externalParametrizationMode="all">
+                  <serializedBean>
+                    <java class="java.beans.XMLDecoder">
+                      <object class="com.install4j.runtime.beans.formcomponents.SeparatorComponent">
+                        <void property="labelText">
+                          <string>Daniel Huson's lab, University of Tübingen</string>
+                        </void>
+                      </object>
+                    </java>
+                  </serializedBean>
+                  <initScript />
+                  <visibilityScript />
+                  <externalParametrizationPropertyNames />
+                </formComponent>
+              </styleOverride>
+            </styleOverrides>
             <condition />
             <validation />
             <preActivation />
@@ -595,25 +590,24 @@ return console.askOkCancel(message, true);
                 <object class="com.install4j.runtime.beans.screens.InstallationScreen" />
               </java>
             </serializedBean>
-             <styleOverrides>
-          <styleOverride name="Custom watermark" enabled="true">
-            <formComponent name="Watermark" id="1691242607" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false" useExternalParametrization="false" externalParametrizationName="" externalParametrizationMode="all">
-              <serializedBean>
-                <java class="java.beans.XMLDecoder">
-                  <object class="com.install4j.runtime.beans.formcomponents.SeparatorComponent">
-                    <void property="labelText">
-                      <string>Daniel Huson's lab, University of Tübingen</string>
-                    </void>
-                  </object>
-                </java>
-              </serializedBean>
-              <initScript />
-              <visibilityScript />
-              <externalParametrizationPropertyNames />
-            </formComponent>
-          </styleOverride>
-        </styleOverrides>
-
+            <styleOverrides>
+              <styleOverride name="Custom watermark" enabled="true">
+                <formComponent name="Watermark" id="1691242607" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false" useExternalParametrization="false" externalParametrizationName="" externalParametrizationMode="all">
+                  <serializedBean>
+                    <java class="java.beans.XMLDecoder">
+                      <object class="com.install4j.runtime.beans.formcomponents.SeparatorComponent">
+                        <void property="labelText">
+                          <string>Daniel Huson's lab, University of Tübingen</string>
+                        </void>
+                      </object>
+                    </java>
+                  </serializedBean>
+                  <initScript />
+                  <visibilityScript />
+                  <externalParametrizationPropertyNames />
+                </formComponent>
+              </styleOverride>
+            </styleOverrides>
             <condition />
             <validation />
             <preActivation />
@@ -694,24 +688,23 @@ return console.askOkCancel(message, true);
               </java>
             </serializedBean>
             <styleOverrides>
-          <styleOverride name="Custom watermark" enabled="true">
-            <formComponent name="Watermark" id="1691242607" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false" useExternalParametrization="false" externalParametrizationName="" externalParametrizationMode="all">
-              <serializedBean>
-                <java class="java.beans.XMLDecoder">
-                  <object class="com.install4j.runtime.beans.formcomponents.SeparatorComponent">
-                    <void property="labelText">
-                      <string>Daniel Huson's lab, University of Tübingen</string>
-                    </void>
-                  </object>
-                </java>
-              </serializedBean>
-              <initScript />
-              <visibilityScript />
-              <externalParametrizationPropertyNames />
-            </formComponent>
-          </styleOverride>
-        </styleOverrides>
- 
+              <styleOverride name="Custom watermark" enabled="true">
+                <formComponent name="Watermark" id="1691242607" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false" useExternalParametrization="false" externalParametrizationName="" externalParametrizationMode="all">
+                  <serializedBean>
+                    <java class="java.beans.XMLDecoder">
+                      <object class="com.install4j.runtime.beans.formcomponents.SeparatorComponent">
+                        <void property="labelText">
+                          <string>Daniel Huson's lab, University of Tübingen</string>
+                        </void>
+                      </object>
+                    </java>
+                  </serializedBean>
+                  <initScript />
+                  <visibilityScript />
+                  <externalParametrizationPropertyNames />
+                </formComponent>
+              </styleOverride>
+            </styleOverrides>
             <condition />
             <validation />
             <preActivation />
@@ -744,24 +737,23 @@ return console.askOkCancel(message, true);
               </java>
             </serializedBean>
             <styleOverrides>
-          <styleOverride name="Custom watermark" enabled="true">
-            <formComponent name="Watermark" id="1691242607" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false" useExternalParametrization="false" externalParametrizationName="" externalParametrizationMode="all">
-              <serializedBean>
-                <java class="java.beans.XMLDecoder">
-                  <object class="com.install4j.runtime.beans.formcomponents.SeparatorComponent">
-                    <void property="labelText">
-                      <string>Daniel Huson's lab, University of Tübingen</string>
-                    </void>
-                  </object>
-                </java>
-              </serializedBean>
-              <initScript />
-              <visibilityScript />
-              <externalParametrizationPropertyNames />
-            </formComponent>
-          </styleOverride>
-        </styleOverrides>
- 
+              <styleOverride name="Custom watermark" enabled="true">
+                <formComponent name="Watermark" id="1691242607" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false" useExternalParametrization="false" externalParametrizationName="" externalParametrizationMode="all">
+                  <serializedBean>
+                    <java class="java.beans.XMLDecoder">
+                      <object class="com.install4j.runtime.beans.formcomponents.SeparatorComponent">
+                        <void property="labelText">
+                          <string>Daniel Huson's lab, University of Tübingen</string>
+                        </void>
+                      </object>
+                    </java>
+                  </serializedBean>
+                  <initScript />
+                  <visibilityScript />
+                  <externalParametrizationPropertyNames />
+                </formComponent>
+              </styleOverride>
+            </styleOverrides>
             <condition>	!context.getMediaName().toLowerCase().contains("windows") || context.getMediaName().toLowerCase().contains("x64") || context.getMediaName().toLowerCase().contains("64bits") </condition>
             <validation />
             <preActivation />
@@ -829,24 +821,23 @@ return console.askOkCancel(message, true);
               </java>
             </serializedBean>
             <styleOverrides>
-          <styleOverride name="Custom watermark" enabled="true">
-            <formComponent name="Watermark" id="1691242607" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false" useExternalParametrization="false" externalParametrizationName="" externalParametrizationMode="all">
-              <serializedBean>
-                <java class="java.beans.XMLDecoder">
-                  <object class="com.install4j.runtime.beans.formcomponents.SeparatorComponent">
-                    <void property="labelText">
-                      <string>Daniel Huson's lab, University of Tübingen</string>
-                    </void>
-                  </object>
-                </java>
-              </serializedBean>
-              <initScript />
-              <visibilityScript />
-              <externalParametrizationPropertyNames />
-            </formComponent>
-          </styleOverride>
-        </styleOverrides>
- 
+              <styleOverride name="Custom watermark" enabled="true">
+                <formComponent name="Watermark" id="1691242607" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false" useExternalParametrization="false" externalParametrizationName="" externalParametrizationMode="all">
+                  <serializedBean>
+                    <java class="java.beans.XMLDecoder">
+                      <object class="com.install4j.runtime.beans.formcomponents.SeparatorComponent">
+                        <void property="labelText">
+                          <string>Daniel Huson's lab, University of Tübingen</string>
+                        </void>
+                      </object>
+                    </java>
+                  </serializedBean>
+                  <initScript />
+                  <visibilityScript />
+                  <externalParametrizationPropertyNames />
+                </formComponent>
+              </styleOverride>
+            </styleOverrides>
             <condition />
             <validation />
             <preActivation />
@@ -905,7 +896,6 @@ return console.askOkCancel(message, true);
             </formComponent>
           </styleOverride>
         </styleOverrides>
- 
         <customScript mode="1" file="">
           <content />
         </customScript>
@@ -919,24 +909,23 @@ return console.askOkCancel(message, true);
               </java>
             </serializedBean>
             <styleOverrides>
-          <styleOverride name="Custom watermark" enabled="true">
-            <formComponent name="Watermark" id="1691242607" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false" useExternalParametrization="false" externalParametrizationName="" externalParametrizationMode="all">
-              <serializedBean>
-                <java class="java.beans.XMLDecoder">
-                  <object class="com.install4j.runtime.beans.formcomponents.SeparatorComponent">
-                    <void property="labelText">
-                      <string>Daniel Huson's lab, University of Tübingen</string>
-                    </void>
-                  </object>
-                </java>
-              </serializedBean>
-              <initScript />
-              <visibilityScript />
-              <externalParametrizationPropertyNames />
-            </formComponent>
-          </styleOverride>
-        </styleOverrides>
- 
+              <styleOverride name="Custom watermark" enabled="true">
+                <formComponent name="Watermark" id="1691242607" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false" useExternalParametrization="false" externalParametrizationName="" externalParametrizationMode="all">
+                  <serializedBean>
+                    <java class="java.beans.XMLDecoder">
+                      <object class="com.install4j.runtime.beans.formcomponents.SeparatorComponent">
+                        <void property="labelText">
+                          <string>Daniel Huson's lab, University of Tübingen</string>
+                        </void>
+                      </object>
+                    </java>
+                  </serializedBean>
+                  <initScript />
+                  <visibilityScript />
+                  <externalParametrizationPropertyNames />
+                </formComponent>
+              </styleOverride>
+            </styleOverrides>
             <condition />
             <validation />
             <preActivation />
@@ -955,24 +944,23 @@ return console.askOkCancel(message, true);
               </java>
             </serializedBean>
             <styleOverrides>
-          <styleOverride name="Custom watermark" enabled="true">
-            <formComponent name="Watermark" id="1691242607" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false" useExternalParametrization="false" externalParametrizationName="" externalParametrizationMode="all">
-              <serializedBean>
-                <java class="java.beans.XMLDecoder">
-                  <object class="com.install4j.runtime.beans.formcomponents.SeparatorComponent">
-                    <void property="labelText">
-                      <string>Daniel Huson's lab, University of Tübingen</string>
-                    </void>
-                  </object>
-                </java>
-              </serializedBean>
-              <initScript />
-              <visibilityScript />
-              <externalParametrizationPropertyNames />
-            </formComponent>
-          </styleOverride>
-        </styleOverrides>
- 
+              <styleOverride name="Custom watermark" enabled="true">
+                <formComponent name="Watermark" id="1691242607" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false" useExternalParametrization="false" externalParametrizationName="" externalParametrizationMode="all">
+                  <serializedBean>
+                    <java class="java.beans.XMLDecoder">
+                      <object class="com.install4j.runtime.beans.formcomponents.SeparatorComponent">
+                        <void property="labelText">
+                          <string>Daniel Huson's lab, University of Tübingen</string>
+                        </void>
+                      </object>
+                    </java>
+                  </serializedBean>
+                  <initScript />
+                  <visibilityScript />
+                  <externalParametrizationPropertyNames />
+                </formComponent>
+              </styleOverride>
+            </styleOverrides>
             <condition />
             <validation />
             <preActivation />
@@ -1022,24 +1010,23 @@ return console.askYesNo(message, true);
               </java>
             </serializedBean>
             <styleOverrides>
-          <styleOverride name="Custom watermark" enabled="true">
-            <formComponent name="Watermark" id="1691242607" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false" useExternalParametrization="false" externalParametrizationName="" externalParametrizationMode="all">
-              <serializedBean>
-                <java class="java.beans.XMLDecoder">
-                  <object class="com.install4j.runtime.beans.formcomponents.SeparatorComponent">
-                    <void property="labelText">
-                      <string>Daniel Huson's lab, University of Tübingen</string>
-                    </void>
-                  </object>
-                </java>
-              </serializedBean>
-              <initScript />
-              <visibilityScript />
-              <externalParametrizationPropertyNames />
-            </formComponent>
-          </styleOverride>
-        </styleOverrides>
- 
+              <styleOverride name="Custom watermark" enabled="true">
+                <formComponent name="Watermark" id="1691242607" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false" useExternalParametrization="false" externalParametrizationName="" externalParametrizationMode="all">
+                  <serializedBean>
+                    <java class="java.beans.XMLDecoder">
+                      <object class="com.install4j.runtime.beans.formcomponents.SeparatorComponent">
+                        <void property="labelText">
+                          <string>Daniel Huson's lab, University of Tübingen</string>
+                        </void>
+                      </object>
+                    </java>
+                  </serializedBean>
+                  <initScript />
+                  <visibilityScript />
+                  <externalParametrizationPropertyNames />
+                </formComponent>
+              </styleOverride>
+            </styleOverrides>
             <condition />
             <validation />
             <preActivation />
@@ -1078,24 +1065,23 @@ return console.askYesNo(message, true);
               </java>
             </serializedBean>
             <styleOverrides>
-          <styleOverride name="Custom watermark" enabled="true">
-            <formComponent name="Watermark" id="1691242607" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false" useExternalParametrization="false" externalParametrizationName="" externalParametrizationMode="all">
-              <serializedBean>
-                <java class="java.beans.XMLDecoder">
-                  <object class="com.install4j.runtime.beans.formcomponents.SeparatorComponent">
-                    <void property="labelText">
-                      <string>Daniel Huson's lab, University of Tübingen</string>
-                    </void>
-                  </object>
-                </java>
-              </serializedBean>
-              <initScript />
-              <visibilityScript />
-              <externalParametrizationPropertyNames />
-            </formComponent>
-          </styleOverride>
-        </styleOverrides>
- 
+              <styleOverride name="Custom watermark" enabled="true">
+                <formComponent name="Watermark" id="1691242607" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false" useExternalParametrization="false" externalParametrizationName="" externalParametrizationMode="all">
+                  <serializedBean>
+                    <java class="java.beans.XMLDecoder">
+                      <object class="com.install4j.runtime.beans.formcomponents.SeparatorComponent">
+                        <void property="labelText">
+                          <string>Daniel Huson's lab, University of Tübingen</string>
+                        </void>
+                      </object>
+                    </java>
+                  </serializedBean>
+                  <initScript />
+                  <visibilityScript />
+                  <externalParametrizationPropertyNames />
+                </formComponent>
+              </styleOverride>
+            </styleOverrides>
             <condition />
             <validation />
             <preActivation />
@@ -1110,24 +1096,23 @@ return console.askYesNo(message, true);
               </java>
             </serializedBean>
             <styleOverrides>
-          <styleOverride name="Custom watermark" enabled="true">
-            <formComponent name="Watermark" id="1691242607" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false" useExternalParametrization="false" externalParametrizationName="" externalParametrizationMode="all">
-              <serializedBean>
-                <java class="java.beans.XMLDecoder">
-                  <object class="com.install4j.runtime.beans.formcomponents.SeparatorComponent">
-                    <void property="labelText">
-                      <string>Daniel Huson's lab, University of Tübingen</string>
-                    </void>
-                  </object>
-                </java>
-              </serializedBean>
-              <initScript />
-              <visibilityScript />
-              <externalParametrizationPropertyNames />
-            </formComponent>
-          </styleOverride>
-        </styleOverrides>
- 
+              <styleOverride name="Custom watermark" enabled="true">
+                <formComponent name="Watermark" id="1691242607" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false" useExternalParametrization="false" externalParametrizationName="" externalParametrizationMode="all">
+                  <serializedBean>
+                    <java class="java.beans.XMLDecoder">
+                      <object class="com.install4j.runtime.beans.formcomponents.SeparatorComponent">
+                        <void property="labelText">
+                          <string>Daniel Huson's lab, University of Tübingen</string>
+                        </void>
+                      </object>
+                    </java>
+                  </serializedBean>
+                  <initScript />
+                  <visibilityScript />
+                  <externalParametrizationPropertyNames />
+                </formComponent>
+              </styleOverride>
+            </styleOverrides>
             <condition />
             <validation />
             <preActivation />
@@ -1623,24 +1608,23 @@ return console.askYesNo(message, true);
                   </java>
                 </serializedBean>
                 <styleOverrides>
-          <styleOverride name="Custom watermark" enabled="true">
-            <formComponent name="Watermark" id="1691242607" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false" useExternalParametrization="false" externalParametrizationName="" externalParametrizationMode="all">
-              <serializedBean>
-                <java class="java.beans.XMLDecoder">
-                  <object class="com.install4j.runtime.beans.formcomponents.SeparatorComponent">
-                    <void property="labelText">
-                      <string>Daniel Huson's lab, University of Tübingen</string>
-                    </void>
-                  </object>
-                </java>
-              </serializedBean>
-              <initScript />
-              <visibilityScript />
-              <externalParametrizationPropertyNames />
-            </formComponent>
-          </styleOverride>
-        </styleOverrides>
- 
+                  <styleOverride name="Custom watermark" enabled="true">
+                    <formComponent name="Watermark" id="1691242607" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false" useExternalParametrization="false" externalParametrizationName="" externalParametrizationMode="all">
+                      <serializedBean>
+                        <java class="java.beans.XMLDecoder">
+                          <object class="com.install4j.runtime.beans.formcomponents.SeparatorComponent">
+                            <void property="labelText">
+                              <string>Daniel Huson's lab, University of Tübingen</string>
+                            </void>
+                          </object>
+                        </java>
+                      </serializedBean>
+                      <initScript />
+                      <visibilityScript />
+                      <externalParametrizationPropertyNames />
+                    </formComponent>
+                  </styleOverride>
+                </styleOverrides>
                 <condition>false // This screen is only shown if the user clicks the "Show comments" hyperlink label in the previous screen.
 </condition>
                 <validation>if (context.isConsole()) {
@@ -1736,24 +1720,23 @@ return true;
                   </java>
                 </serializedBean>
                 <styleOverrides>
-          <styleOverride name="Custom watermark" enabled="true">
-            <formComponent name="Watermark" id="1691242607" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false" useExternalParametrization="false" externalParametrizationName="" externalParametrizationMode="all">
-              <serializedBean>
-                <java class="java.beans.XMLDecoder">
-                  <object class="com.install4j.runtime.beans.formcomponents.SeparatorComponent">
-                    <void property="labelText">
-                      <string>Daniel Huson's lab, University of Tübingen</string>
-                    </void>
-                  </object>
-                </java>
-              </serializedBean>
-              <initScript />
-              <visibilityScript />
-              <externalParametrizationPropertyNames />
-            </formComponent>
-          </styleOverride>
-        </styleOverrides>
- 
+                  <styleOverride name="Custom watermark" enabled="true">
+                    <formComponent name="Watermark" id="1691242607" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false" useExternalParametrization="false" externalParametrizationName="" externalParametrizationMode="all">
+                      <serializedBean>
+                        <java class="java.beans.XMLDecoder">
+                          <object class="com.install4j.runtime.beans.formcomponents.SeparatorComponent">
+                            <void property="labelText">
+                              <string>Daniel Huson's lab, University of Tübingen</string>
+                            </void>
+                          </object>
+                        </java>
+                      </serializedBean>
+                      <initScript />
+                      <visibilityScript />
+                      <externalParametrizationPropertyNames />
+                    </formComponent>
+                  </styleOverride>
+                </styleOverrides>
                 <condition />
                 <validation />
                 <preActivation />
@@ -1847,24 +1830,23 @@ context.goForward(1, true, true);
                   </java>
                 </serializedBean>
                 <styleOverrides>
-          <styleOverride name="Custom watermark" enabled="true">
-            <formComponent name="Watermark" id="1691242607" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false" useExternalParametrization="false" externalParametrizationName="" externalParametrizationMode="all">
-              <serializedBean>
-                <java class="java.beans.XMLDecoder">
-                  <object class="com.install4j.runtime.beans.formcomponents.SeparatorComponent">
-                    <void property="labelText">
-                      <string>Daniel Huson's lab, University of Tübingen</string>
-                    </void>
-                  </object>
-                </java>
-              </serializedBean>
-              <initScript />
-              <visibilityScript />
-              <externalParametrizationPropertyNames />
-            </formComponent>
-          </styleOverride>
-        </styleOverrides>
- 
+                  <styleOverride name="Custom watermark" enabled="true">
+                    <formComponent name="Watermark" id="1691242607" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false" useExternalParametrization="false" externalParametrizationName="" externalParametrizationMode="all">
+                      <serializedBean>
+                        <java class="java.beans.XMLDecoder">
+                          <object class="com.install4j.runtime.beans.formcomponents.SeparatorComponent">
+                            <void property="labelText">
+                              <string>Daniel Huson's lab, University of Tübingen</string>
+                            </void>
+                          </object>
+                        </java>
+                      </serializedBean>
+                      <initScript />
+                      <visibilityScript />
+                      <externalParametrizationPropertyNames />
+                    </formComponent>
+                  </styleOverride>
+                </styleOverrides>
                 <condition />
                 <validation />
                 <preActivation />
