@@ -250,8 +250,7 @@ public class LevelKNetwork {
      */
     public static BitSet[] computeComponents(boolean[][] incompatible) {
         int[] componentNumber = new int[incompatible.length];
-        for (int i = 0; i < componentNumber.length; i++)
-            componentNumber[i] = -1;
+        Arrays.fill(componentNumber, -1);
 
         int number = 0;
         for (int i = 0; i < incompatible.length; i++) {
