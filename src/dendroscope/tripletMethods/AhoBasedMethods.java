@@ -70,7 +70,7 @@ public class AhoBasedMethods {
 
         boolean treeFound = false;
 
-        biDAG bignet = t.buildNetwork(0, 0);// it is a tree, so level-0
+        BiDAG bignet = t.buildNetwork(0, 0);// it is a tree, so level-0
         if (bignet != null) {
             bignet.resetVisited();
             String networkInNewickFormat = bignet.newickDump(ID2taxon);

@@ -160,7 +160,7 @@ public class Simplistic {
                     if (sol != null) {
                         Enumeration e = sol.elements();
                         while (e.hasMoreElements()) {
-                            biDAG b = (biDAG) e.nextElement();
+                            BiDAG b = (BiDAG) e.nextElement();
                             b.resetVisited();    //! does this work if we have ripped nodes out???
                             String networkInNewickFormat = b.newickDump(ID2taxon);
                             TreeData network = new TreeData();
@@ -190,7 +190,7 @@ public class Simplistic {
 
                 for (int level = Simplistic.BEGIN_LEV; level <= Simplistic.MAXLEV && (!stopSearching); level++) {
                     System.out.println("// Trying to build a level " + level + " network.");
-                    biDAG bignet = t.buildNetwork(0, level);
+                    BiDAG bignet = t.buildNetwork(0, level);
                     if (bignet != null) {
                         bignet.resetVisited();
                         String networkInNewickFormat = bignet.newickDump(ID2taxon);

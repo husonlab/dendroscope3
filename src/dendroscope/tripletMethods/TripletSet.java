@@ -539,23 +539,23 @@ class TripletSet {
 
                     //Simplistic.doublereport("Time to try building the tree...");
 
-                    biDAG mytree;
+                    BiDAG mytree;
 
                     if (leavesLeft > 2) {
                         //Simplistic.doublereport("tree leaves > 2");
                         mytree = nextLevel.buildTree();
                     } else if (leavesLeft == 2) {
                         //Simplistic.doublereport("tree leaves = 2");
-                        mytree = biDAG.cherry12();
+                        mytree = BiDAG.cherry12();
                     } else if (leavesLeft == 1) {
                         //Simplistic.doublereport("tree leaves = 1");
                         //! network consisting of one leaf...hmmm
-                        mytree = new biDAG();
+                        mytree = new BiDAG();
                         mytree.data = 1;
                     } else {
                         //! dummy node
                         //Simplistic.doublereport("tree leaves = 0");
-                        mytree = new biDAG();
+                        mytree = new BiDAG();
                         mytree.isDummy = true;    //! it's a dummy leaf!!!
                     }
 
@@ -568,7 +568,7 @@ class TripletSet {
 
                         //! add the fake root
 
-                        biDAG dummyRoot = new biDAG();
+                        BiDAG dummyRoot = new BiDAG();
                         dummyRoot.child1 = mytree;    //! note that child2 stays null
                         mytree.parent = dummyRoot;
 
@@ -631,8 +631,8 @@ class TripletSet {
                     dagExplore netBase = top.netBase;
                     Vector edges = top.list;    //! should be the same as netBase's list!
 
-                    biDAG[] firstEdge = (biDAG[]) edges.elementAt(top.busyWith);
-                    biDAG[] secondEdge = (biDAG[]) edges.elementAt(top.alsoBusyWith);
+                    BiDAG[] firstEdge = (BiDAG[]) edges.elementAt(top.busyWith);
+                    BiDAG[] secondEdge = (BiDAG[]) edges.elementAt(top.alsoBusyWith);
 
                     if ((firstEdge[1].isDummy) && (firstEdge[0].parent != null) && (firstEdge[0].secondParent == null)) {
                         //Simplistic.doublereport("Skipping, no need to subdivide already subdivided dummy edge [first edge]");
@@ -669,46 +669,46 @@ class TripletSet {
 
                     int[] switchback = lookback.bmap;    //! lets us relabel stuff
 
-                    //! Need to clone the biDAG. This is a very annoying
+                    //! Need to clone the BiDAG. This is a very annoying
                     //! thing to do, I must improve this later.
 
                     //! This should simultaneously relabel the leaves too using the backmap...
-                    biDAG[] newNodes = netBase.clonebiDAG(switchback);    //! So we clone the netBase...
+                    BiDAG[] newNodes = netBase.clonebiDAG(switchback);    //! So we clone the netBase...
 
-                    biDAG newDAG = newNodes[0];
+                    BiDAG newDAG = newNodes[0];
 
-                    biDAG edge1tail = newNodes[firstEdge[0].nodeNum];
-                    biDAG edge1head = newNodes[firstEdge[1].nodeNum];
+                    BiDAG edge1tail = newNodes[firstEdge[0].nodeNum];
+                    BiDAG edge1head = newNodes[firstEdge[1].nodeNum];
 
-                    biDAG edge2tail = newNodes[secondEdge[0].nodeNum];
-                    biDAG edge2head = newNodes[secondEdge[1].nodeNum];
+                    BiDAG edge2tail = newNodes[secondEdge[0].nodeNum];
+                    BiDAG edge2head = newNodes[secondEdge[1].nodeNum];
 
                     //! buildTreeFromCTBR returns a dummy leaf if it was an emptyCTBR...
 
                     //! this following line needs to be optimised...is sloow
-                    biDAG treeToHang = findTheTree.buildTreeFromCTBR();    //! labels should be OK
+                    BiDAG treeToHang = findTheTree.buildTreeFromCTBR();    //! labels should be OK
 
                     //! if( treeToHang.isDummy ) System.out.println("Hanging a CTBR.");
 
-                    biDAG leave1;
-                    biDAG leave2;
+                    BiDAG leave1;
+                    BiDAG leave2;
 
                     if ((edge1tail == edge2tail) && (edge1head == edge2head)) {
                         //! System.out.println("Subdividing a single edge.");
 
                         //! Then we are subdividing one edge
-                        leave1 = biDAG.subdivide(edge1tail, edge1head);
+                        leave1 = BiDAG.subdivide(edge1tail, edge1head);
 
-                        leave2 = biDAG.subdivide(edge1tail, leave1);    //! experimental, check it works!
+                        leave2 = BiDAG.subdivide(edge1tail, leave1);    //! experimental, check it works!
                     } else {
                         //! We are subdividing two edges
 
-                        leave1 = biDAG.subdivide(edge1tail, edge1head);
+                        leave1 = BiDAG.subdivide(edge1tail, edge1head);
 
-                        leave2 = biDAG.subdivide(edge2tail, edge2head);
+                        leave2 = BiDAG.subdivide(edge2tail, edge2head);
                     }
 
-                    biDAG recomb = new biDAG();
+                    BiDAG recomb = new BiDAG();
                     leave1.child2 = recomb;
                     leave2.child2 = recomb;
                     recomb.parent = leave1;
@@ -742,22 +742,22 @@ class TripletSet {
                         //! we also abort.
 
                         for (int d = 0; d < dummies.size(); d++) {
-                            biDAG dummyLeaf = (biDAG) dummies.elementAt(d);
+                            BiDAG dummyLeaf = (BiDAG) dummies.elementAt(d);
                             if ((dummyLeaf.child1 != null) || (dummyLeaf.child2 != null) || (dummyLeaf.secondParent != null)) {
                                 System.out.println("Something went wrong with dummy suppression.");
                                 System.exit(0);
                             }
 
-                            biDAG p = dummyLeaf.parent;
+                            BiDAG p = dummyLeaf.parent;
                             if ((p.parent != null) && (p.secondParent != null)) {
                                 ok = false;    //! dummy leaf with a recombination parent, doomed!
                                 //! System.out.println("Suppressed a recombination leaf, forget it.");
                                 break;
                             }
 
-                            biDAG grandp = p.parent;
+                            BiDAG grandp = p.parent;
 
-                            biDAG sibling = null;
+                            BiDAG sibling = null;
 
                             if (p.child1 == dummyLeaf) {
                                 sibling = p.child2;
@@ -768,7 +768,7 @@ class TripletSet {
                                 System.exit(0);
                             }
 
-                            biDAG parentSibling = null;
+                            BiDAG parentSibling = null;
 
                             if (grandp.child1 == p) {
                                 parentSibling = grandp.child2;
@@ -1042,8 +1042,8 @@ class TripletSet {
     }
 
 
-    public biDAG buildTree() {
-        biDAG papa = new biDAG();
+    public BiDAG buildTree() {
+        BiDAG papa = new BiDAG();
 
         //! Build the Aho AhoGraph...
         AhoGraph g = buildAhoGraph();
@@ -1102,15 +1102,15 @@ class TripletSet {
 
         //! -------------------------
 
-        biDAG leftChild;
-        biDAG rightChild;
+        BiDAG leftChild;
+        BiDAG rightChild;
 
         //! Here it gets messy...
 
         if (lCount == 1) {
             //! In this case it's just a simple leaf...
 
-            leftChild = new biDAG();
+            leftChild = new BiDAG();
 
             leftChild.data = leftList[1];
 
@@ -1122,11 +1122,11 @@ class TripletSet {
                */
 
         } else if (lCount == 2) {
-            leftChild = new biDAG();
+            leftChild = new BiDAG();
 
             //! Here it's a cherry...
-            biDAG gchild1 = new biDAG();
-            biDAG gchild2 = new biDAG();
+            BiDAG gchild1 = new BiDAG();
+            BiDAG gchild2 = new BiDAG();
 
             leftChild.child1 = gchild1;
             leftChild.child2 = gchild2;
@@ -1192,7 +1192,7 @@ class TripletSet {
         if (rCount == 1) {
             //! In this case it's just a simple leaf...
 
-            rightChild = new biDAG();
+            rightChild = new BiDAG();
             rightChild.data = rightList[1];
 
             /*
@@ -1203,11 +1203,11 @@ class TripletSet {
                */
 
         } else if (rCount == 2) {
-            rightChild = new biDAG();
+            rightChild = new BiDAG();
 
             //! Here it's a cherry...
-            biDAG gchild1 = new biDAG();
-            biDAG gchild2 = new biDAG();
+            BiDAG gchild1 = new BiDAG();
+            BiDAG gchild2 = new BiDAG();
 
             rightChild.child1 = gchild1;
             rightChild.child2 = gchild2;
@@ -1282,7 +1282,7 @@ class TripletSet {
     }
 
 
-    public biDAG buildNetwork(int depth, int levelToTry) {
+    public BiDAG buildNetwork(int depth, int levelToTry) {
         System.out.println("Entering buildNetwork, recursion level " + depth);
 
         //System.out.println("Constructing the maximum SN-sets...");
@@ -1297,14 +1297,14 @@ class TripletSet {
 
         //! for( int x=0; x<msn.size(); x++ ) ((KSet) msn.elementAt(x)).dump();
 
-        biDAG root = null;
+        BiDAG root = null;
         Vector mstar;
 
         boolean success = false;
 
         if (msn.size() == 2) {
             System.out.println("There were only 2 maximum SN-sets.");
-            root = biDAG.cherry12();
+            root = BiDAG.cherry12();
             mstar = msn;
             success = true;
         } else    //! there are at least 3 maximum SN-sets
@@ -1332,7 +1332,7 @@ class TripletSet {
                 if (result != null) {
                     success = true;
                     System.out.println("// Found a" + " consistent " + "simple level-" + level + " network!");
-                    root = (biDAG) result.elementAt(0);
+                    root = (BiDAG) result.elementAt(0);
                     //break;
                 } else {
                     System.out.println("// Couldn't find a simple level-" + level + " network.");
@@ -1408,7 +1408,7 @@ class TripletSet {
                                 if (splitresult != null) {
                                     success = true;
                                     System.out.println("// Found a simple level-" + level + " network!");
-                                    root = (biDAG) splitresult.elementAt(0);
+                                    root = (BiDAG) splitresult.elementAt(0);
                                     break chains;
                                 }
                             }
@@ -1429,7 +1429,7 @@ class TripletSet {
         //! root will contain a network with as many leaves as maximum SN-sets...
         //! i.e. the size of mstar...
 
-        biDAG[] leafToNode = new biDAG[mstar.size() + 1];
+        BiDAG[] leafToNode = new BiDAG[mstar.size() + 1];
 
         //! This assumes that 'visited' is clean...
 
@@ -1437,7 +1437,7 @@ class TripletSet {
 
         root.getDAGLeafMap(leafToNode);
 
-        //! Now leadToNode[1] points to the biDAG containing element 1, and so on...
+        //! Now leadToNode[1] points to the BiDAG containing element 1, and so on...
         //! ---------------------------------------------------------------------------
         //! Not sure if we need to do this, the only thing that could get hurt is
         //! the printing out of the DAG, but I think it's important to do it anyway...
@@ -1452,7 +1452,7 @@ class TripletSet {
 
             int[] backMap = new int[numSubLeaves + 1];
 
-            biDAG subroot;
+            BiDAG subroot;
 
             System.out.println("Looking inside maxsn set " + xl);
 
@@ -1468,7 +1468,7 @@ class TripletSet {
                 if (numSubLeaves == 1) {
                     System.out.println("Ah, this is a single leaf...");
                     //! Simply fix what's already there.
-                    biDAG tweak = leafToNode[xl];
+                    BiDAG tweak = leafToNode[xl];
                     int leafNum = subLeaves.getFirstElement();
                     System.out.println("Replacing leaf " + tweak.data + " with " + leafNum);
                     tweak.data = leafNum;
@@ -1480,11 +1480,11 @@ class TripletSet {
                     System.out.println("Ah, this has two leaves.");
                     System.out.println("Entering danger zone");
 
-                    biDAG tweak = leafToNode[xl];
+                    BiDAG tweak = leafToNode[xl];
 
                     int[] pick = subLeaves.getFirstTwoElements();
 
-                    biDAG branch = biDAG.cherry12();
+                    BiDAG branch = BiDAG.cherry12();
 
                     branch.child1.data = pick[0];
                     branch.child2.data = pick[1];
@@ -1515,7 +1515,7 @@ class TripletSet {
             //! Is this necessary??? Might it be dangerous even???
             subroot.resetFixLeaves();
 
-            biDAG knoop = leafToNode[xl];
+            BiDAG knoop = leafToNode[xl];
 
             subroot.parent = knoop.parent;
 

@@ -1,5 +1,5 @@
 /**
- * biDAG.java 
+ * BiDAG.java
  * Copyright (C) 2019 Daniel H. Huson
  *
  * (Some files contain contributions from other authors, who are then mentioned separately.)
@@ -37,11 +37,11 @@ import java.util.HashMap;
 //! Is considered a leaf if
 
 
-class biDAG {
-    public biDAG parent;
-    public biDAG child1, child2;
+class BiDAG {
+    public BiDAG parent;
+    public BiDAG child1, child2;
     public int data;
-    public biDAG secondParent;
+    public BiDAG secondParent;
     public final int auxDat;
     public boolean visited;
 
@@ -61,9 +61,9 @@ class biDAG {
 //! These are things we need for the undirected
 //! DFS which we use for testing biconnectivity
 
-    private biDAG[] adj;
+    private BiDAG[] adj;
     private int degree;
-    private biDAG pred;
+    private BiDAG pred;
     private int colour;
     private int discovery;
     private int low;
@@ -71,7 +71,7 @@ class biDAG {
     private final static int WHITE = 0;
     private final static int GREY = 1;
 
-    public biDAG() {
+    public BiDAG() {
         parent = child1 = child2 = null;
         data = 0;
         secondParent = null;
@@ -92,7 +92,7 @@ class biDAG {
 //! This is used for the undirected DFS...
 
     public void buildAdjacency() {
-        adj = new biDAG[3];
+        adj = new BiDAG[3];
 
         int at = 0;
 
@@ -139,7 +139,7 @@ class biDAG {
         int dfsdegree = 0;
 
         for (int x = 0; x < degree; x++) {
-            biDAG next = adj[x];
+            BiDAG next = adj[x];
 
             if (next == pred) {
                 //! System.out.println("Not entering that neighbour: is our DFS parent.");
@@ -214,7 +214,7 @@ class biDAG {
 //! We assume that dagMap has indexing space for 1...l where l
 //! is the number of leaves. ALSO ASSUMES THAT 'VISITED' is UNUSED/RESET
 
-    public void getDAGLeafMap(biDAG[] dagMap) {
+    public void getDAGLeafMap(BiDAG[] dagMap) {
         if (visited == true) return;
 
         if (data != 0) {
@@ -243,13 +243,13 @@ class biDAG {
 
     }
 
-    public static biDAG cherry12() {
+    public static BiDAG cherry12() {
         //! Returns a cherry, using 3 nodes,
         //! with leaf numbers 1,2.
 
-        biDAG p = new biDAG();
-        biDAG c1 = new biDAG();
-        biDAG c2 = new biDAG();
+        BiDAG p = new BiDAG();
+        BiDAG c1 = new BiDAG();
+        BiDAG c2 = new BiDAG();
 
         p.child1 = c1;
         p.child2 = c2;
@@ -265,8 +265,8 @@ class biDAG {
 
 //! this will leave child2 empty for other fun...
 
-    public static biDAG subdivide(biDAG edgetail, biDAG edgehead) {
-        biDAG subd = new biDAG();
+    public static BiDAG subdivide(BiDAG edgetail, BiDAG edgehead) {
+        BiDAG subd = new BiDAG();
 
         subd.parent = edgetail;
         subd.secondParent = null;

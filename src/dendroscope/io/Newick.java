@@ -112,8 +112,7 @@ public class Newick extends IOBase implements IOFormat {
      * @throws java.io.IOException
      */
     public void write(Writer w0, TreeData[] trees) throws IOException {
-        BufferedWriter w = new BufferedWriter(w0);
-        try {
+        try (BufferedWriter w = new BufferedWriter(w0)) {
             for (TreeData tree : trees) {
                 tree.setHideCollapsedSubTreeOnWrite(true);
                 tree.write(w, saveEdgeWeights, true);
@@ -121,8 +120,6 @@ public class Newick extends IOBase implements IOFormat {
                 w.write(";\n");
             }
             System.err.println("written " + trees.length + " trees");
-        } finally {
-            w.close();
         }
     }
 

@@ -45,7 +45,7 @@ class dagExplore {
     public Vector leaves;
     public Vector dummy_nodes;
 
-    public biDAG[] nodearray;    //! maps nodeNums -> biDAGs
+    public BiDAG[] nodearray;    //! maps nodeNums -> biDAGs
     public int[] leafarray;        //! maps leafNums -> leafNums
 
     public boolean[][] adjmatrix;
@@ -56,11 +56,11 @@ class dagExplore {
 
     public int[][] desc;
 
-    public final biDAG root;
+    public final BiDAG root;
 
 //! ------------ methods --------------
 
-    public dagExplore(biDAG network) {
+    public dagExplore(BiDAG network) {
         this.root = network;
 
         //! If this is not necessary then it will return
@@ -74,12 +74,12 @@ class dagExplore {
 //! ---------------------------------------------------------------------------
 
 //! Using the information contained in the dagExplore, this clones the
-//! biDAG that it represents.
+//! BiDAG that it represents.
 //! changeLabels is a backmap that adjusts the labels (to make room for the ctbr that will be inserted)
 
 
-    public biDAG[] clonebiDAG(int changeLabels[]) {
-        biDAG[] newNodes = new biDAG[num_nodes];
+    public BiDAG[] clonebiDAG(int changeLabels[]) {
+        BiDAG[] newNodes = new BiDAG[num_nodes];
 
         if (root.nodeNum != 0) {
             System.out.println("I expected the root to have number 0...");
@@ -87,12 +87,12 @@ class dagExplore {
         }
 
         for (int x = 0; x < num_nodes; x++) {
-            newNodes[x] = new biDAG();
+            newNodes[x] = new BiDAG();
         }
 
         for (int x = 0; x < num_nodes; x++) {
-            biDAG oldGuy = nodearray[x];
-            biDAG newGuy = newNodes[x];
+            BiDAG oldGuy = nodearray[x];
+            BiDAG newGuy = newNodes[x];
 
             //! Only copy over necessar stuff...BE CAREFUL HERE
 
@@ -148,7 +148,7 @@ class dagExplore {
         num_edges = edges.size();
         num_leaves = leaves.size();
 
-        nodearray = new biDAG[num_nodes];
+        nodearray = new BiDAG[num_nodes];
 
         //! leafarray maps leaf numbers to node numbers...
         //! and leaves start at 1, hence the +1
@@ -162,21 +162,21 @@ class dagExplore {
         int id = num_nodes - 1;
 
         for (int x = 0; x < nodes.size(); x++) {
-            biDAG b = (biDAG) nodes.elementAt(x);
+            BiDAG b = (BiDAG) nodes.elementAt(x);
 
             //! reverse postorder numbering: topological sort!
             b.nodeNum = id--;
 
-            //! System.out.println("Assigning number "+b.nodeNum+" to biDAG"+b);
+            //! System.out.println("Assigning number "+b.nodeNum+" to BiDAG"+b);
 
             if ((b.secondParent == null) && (b.parent != null) && (b.child1 != null) && (b.child2 != null)) {
-                biDAG c1 = b.child1;
-                biDAG c2 = b.child2;
+                BiDAG c1 = b.child1;
+                BiDAG c2 = b.child2;
 
                 //! See if this is the root of a cherry...
                 if (c1.isLeafNode() && (!c1.isDummy) && c2.isLeafNode() && (!c2.isDummy)) num_mustHits++;
             } else if (b.isLeafNode() && b.isDummy) {
-                biDAG p = b.parent;
+                BiDAG p = b.parent;
 
                 //! This is a dummy leaf that has a recomb node as parent, it has to be subdivided...
                 if ((p.parent != null) && (p.secondParent != null)) num_mustHits++;
@@ -187,7 +187,7 @@ class dagExplore {
         }
 
         for (int x = 0; x < edges.size(); x++) {
-            biDAG[] e = (biDAG[]) edges.elementAt(x);
+            BiDAG[] e = (BiDAG[]) edges.elementAt(x);
 
             //! System.out.println("dagExplore found edge "+e[0]+" -> "+e[1]);
 
@@ -203,7 +203,7 @@ class dagExplore {
         }
 
         for (int x = 0; x < leaves.size(); x++) {
-            biDAG b = (biDAG) leaves.elementAt(x);
+            BiDAG b = (BiDAG) leaves.elementAt(x);
             leafarray[b.data] = b.nodeNum;
         }
 
@@ -227,9 +227,9 @@ class dagExplore {
         //! So descendancy relation is not yet known for x, y
         //! Let's compute it and store the answer...
 
-        biDAG X = nodearray[x];
+        BiDAG X = nodearray[x];
 
-        biDAG p1 = X.parent;
+        BiDAG p1 = X.parent;
 
         if (p1 == null) {
             //! x is the root, y is not equal to x,
@@ -246,7 +246,7 @@ class dagExplore {
             return true;
         }
 
-        biDAG p2 = X.secondParent;
+        BiDAG p2 = X.secondParent;
 
         if (p2 == null) {
             desc[x][y] = NO;
@@ -288,9 +288,9 @@ class dagExplore {
         //! So x is not a descendant of z. In this case, the only chance of a join is if there
         //! is an explicit ^ shape with t distinct from both x and z
 
-        biDAG Z = nodearray[z];
+        BiDAG Z = nodearray[z];
 
-        biDAG p1 = Z.parent;
+        BiDAG p1 = Z.parent;
 
         if (p1 == null) {
             //! then z is the root. In this case x is not a descendant of z, and there
@@ -307,7 +307,7 @@ class dagExplore {
             return true;
         }
 
-        biDAG p2 = Z.secondParent;
+        BiDAG p2 = Z.secondParent;
 
         if (p2 == null) {
             join[x][z] = NO;
@@ -343,9 +343,9 @@ class dagExplore {
         //! in the topological sort. T'sort begins at 0.
 
         if ((x < z) && (y < z)) {
-            biDAG Z = nodearray[z];
+            BiDAG Z = nodearray[z];
 
-            biDAG p1 = Z.parent;
+            BiDAG p1 = Z.parent;
 
             if (p1 == null) {
                 cons[x][y][z] = NO;
@@ -359,7 +359,7 @@ class dagExplore {
                 return true;
             }
 
-            biDAG p2 = Z.secondParent;
+            BiDAG p2 = Z.secondParent;
 
             if (p2 == null) {
                 cons[x][y][z] = NO;
@@ -384,9 +384,9 @@ class dagExplore {
                 return true;
             }
 
-            biDAG Y = nodearray[y];
+            BiDAG Y = nodearray[y];
 
-            biDAG p1 = Y.parent;
+            BiDAG p1 = Y.parent;
 
             if (p1 == null) {
                 //! Is this correct?
@@ -405,7 +405,7 @@ class dagExplore {
 
             }
 
-            biDAG p2 = Y.secondParent;
+            BiDAG p2 = Y.secondParent;
 
             if (p2 == null) {
                 cons[x][y][z] = NO;
@@ -431,9 +431,9 @@ class dagExplore {
                 return true;
             }
 
-            biDAG X = nodearray[x];
+            BiDAG X = nodearray[x];
 
-            biDAG p1 = X.parent;
+            BiDAG p1 = X.parent;
 
             if (p1 == null) {
                 //! Is this correct?
@@ -452,7 +452,7 @@ class dagExplore {
 
             }
 
-            biDAG p2 = X.secondParent;
+            BiDAG p2 = X.secondParent;
 
             if (p2 == null) {
                 cons[x][y][z] = NO;
@@ -494,7 +494,7 @@ class dagExplore {
         return (con(leafarray[x], leafarray[y], leafarray[z]));
     }
 
-    public static void scan(biDAG b, Vector nodes, Vector edges, Vector leaves, Vector dummy_nodes) {
+    public static void scan(BiDAG b, Vector nodes, Vector edges, Vector leaves, Vector dummy_nodes) {
         if (b.visited == true) return;
 
         //Simplistic.doublereport("Visiting node "+b);
@@ -502,7 +502,7 @@ class dagExplore {
         b.visited = true;
 
         if (b.child1 != null) {
-            biDAG[] myedge = new biDAG[2];
+            BiDAG[] myedge = new BiDAG[2];
             myedge[0] = b;
             myedge[1] = b.child1;
 
@@ -518,7 +518,7 @@ class dagExplore {
         }
 
         if (b.child2 != null) {
-            biDAG[] myedge = new biDAG[2];
+            BiDAG[] myedge = new BiDAG[2];
             myedge[0] = b;
             myedge[1] = b.child2;
 

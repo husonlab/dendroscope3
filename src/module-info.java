@@ -1,7 +1,5 @@
 module dendroscope {
     requires transitive jloda;
-
-    requires transitive java.desktop;
     requires transitive com.install4j.runtime;
 
     requires commons.collections;

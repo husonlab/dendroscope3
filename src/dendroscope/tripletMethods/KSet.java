@@ -265,22 +265,22 @@ class KSet {
     }
 
 
-    public biDAG buildTreeFromCTBR() {
+    public BiDAG buildTreeFromCTBR() {
         //! System.out.println("Building tree from CTBR");
 
         if (leafCount == 0) {
-            //! This is an emptyTBR, return a dummy biDAG
+            //! This is an emptyTBR, return a dummy BiDAG
 
-            //! System.out.println("Returning a dummy biDAG");
+            //! System.out.println("Returning a dummy BiDAG");
 
-            biDAG b = new biDAG();
+            BiDAG b = new BiDAG();
             b.data = 0;
             b.isDummy = true;
 
             return b;
         }
 
-        biDAG node = new biDAG();
+        BiDAG node = new BiDAG();
 
         int kids = children.size();
 
@@ -291,8 +291,8 @@ class KSet {
             KSet ch1 = (KSet) children.elementAt(0);
             KSet ch2 = (KSet) children.elementAt(1);
 
-            biDAG lchild = ch1.buildTreeFromCTBR();
-            biDAG rchild = ch2.buildTreeFromCTBR();
+            BiDAG lchild = ch1.buildTreeFromCTBR();
+            BiDAG rchild = ch2.buildTreeFromCTBR();
 
             node.child1 = lchild;
             node.child2 = rchild;
