@@ -1,10 +1,28 @@
-package dendroscope.hybroscale.view;
+/*
+ *   ButtonPanel.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-import javax.swing.*;
+package dendroscope.hybroscale.view;
 
 import dendroscope.hybroscale.controller.HybroscaleController;
 import dendroscope.hybroscale.model.HybridManager.Computation;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,7 +38,7 @@ public class ButtonPanel extends JPanel implements ActionListener {
 	private JCheckBox upperBound;
 
 	public ButtonPanel(HybroscaleController controller, Computation computation, int cores, Integer maxK) {
-		
+
 		this.controller = controller;
 		this.computation = computation;
 		this.cores = cores;
@@ -28,15 +46,15 @@ public class ButtonPanel extends JPanel implements ActionListener {
 
 		setLayout(new BorderLayout());
 		JPanel config = new JPanel();
-		
+
 		upperBound = new JCheckBox("Upper Bound");
 //		config.add(upperBound);
-		upperBound.addActionListener(this);	
-		
+		upperBound.addActionListener(this);
+
 		addConstraints = new JButton("Add Constraints");
 		config.add(addConstraints);
 		addConstraints.addActionListener(this);
-		
+
 		setCoresButton = new JButton("Set Cores");
 		config.add(setCoresButton);
 		setCoresButton.addActionListener(this);
@@ -73,11 +91,11 @@ public class ButtonPanel extends JPanel implements ActionListener {
 			controller.showConstraintWindow();
 		repaint();
 	}
-	
+
 	public void compFinished(){
 		closeButton.setText("Close");
 	}
-	
+
 	public void enableEditTrees() {
 		editModeButton.setEnabled(true);
 	}

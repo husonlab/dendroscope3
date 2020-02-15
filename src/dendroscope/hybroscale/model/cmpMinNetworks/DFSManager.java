@@ -1,3 +1,22 @@
+/*
+ *   DFSManager.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package dendroscope.hybroscale.model.cmpMinNetworks;
 
 import dendroscope.hybroscale.model.HybridManager.Computation;
@@ -42,7 +61,7 @@ public class DFSManager {
 	private CheckConstraints checker;
 
 	public DFSManager(HybridTree[] trees, int k, Computation compValue, MyNetPriorThreadPool myThreadPool,
-			Vector<String> taxaOrdering, boolean speedUp, CheckConstraints checker, boolean verbose) {
+					  Vector<String> taxaOrdering, boolean speedUp, CheckConstraints checker, boolean verbose) {
 
 		this.trees = trees;
 		this.k = k + 1;
@@ -82,7 +101,7 @@ public class DFSManager {
 				for (int i = 0; i < sparseTrees.length; i++)
 					hybridTrees[i] = new HybridTree(sparseTrees[i].getPhyloTree(), false, taxaOrdering);
 				// HybridTree[] hybridTrees = trees;
-				
+
 				SparseNetwork n = new SparseNetwork(sparseTrees[0].getPhyloTree());
 				DFSUpdateNetworkThread thread = new DFSUpdateNetworkThread(k, n, new Vector<SparseNetEdge>(),
 						new BitSet(), null, sparseTrees, hybridTrees, 1, taxaOrdering, 0, this, compValue,
@@ -398,7 +417,7 @@ public class DFSManager {
 			for (SparseNetNode v : n1.getNodes()) {
 				if (v.getInDegree() > 1) {
 					Vector<String> labels = new Vector<String>();
-                    for (SparseNetEdge e : v.inEdges())
+					for (SparseNetEdge e : v.inEdges())
 						labels.add(e.getIndices().toString());
 					Collections.sort(labels);
 					String s = "";
@@ -413,7 +432,7 @@ public class DFSManager {
 			for (SparseNetNode v : n2.getNodes()) {
 				if (v.getInDegree() > 1) {
 					Vector<String> labels = new Vector<String>();
-                    for (SparseNetEdge e : v.inEdges())
+					for (SparseNetEdge e : v.inEdges())
 						labels.add(e.getIndices().toString());
 					Collections.sort(labels);
 					String s = "";

@@ -1,3 +1,22 @@
+/*
+ *   CheckAddTaxa.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package dendroscope.hybroscale.model.util;
 
 import dendroscope.hybroscale.model.treeObjects.SparseNetEdge;
@@ -43,7 +62,7 @@ public class CheckAddTaxa {
 		edgeToGraphEdges = new HashMap<SparseNetEdge, Vector<MyEdge>>();
 		graphEdgeToEdge = new HashMap<MyEdge, SparseNetEdge>();
 		n = copyNetwork(network);
-	
+
 		assingUniqueLabeling(n);
 		nInput = new SparseNetwork(n);
 
@@ -65,11 +84,11 @@ public class CheckAddTaxa {
 
 		g = initGraph(n, nodeToGraphNode, graphNodeToNode);
 		// refineGraph(graphNodeToNode);
-		
-		 printGraph();
-		 for (SparseNetEdge e : criticalEdges)
-		 System.out.println(e.getSource().getLabel() + "->" +
-		 e.getTarget().getLabel());
+
+		printGraph();
+		for (SparseNetEdge e : criticalEdges)
+			System.out.println(e.getSource().getLabel() + "->" +
+					e.getTarget().getLabel());
 
 		if (g.getNodes().isEmpty())
 			return 0;
@@ -107,7 +126,7 @@ public class CheckAddTaxa {
 	}
 
 	private void checkConsistency(MyNode v, int maxK, Vector<MyNode> visitedNodes, HashSet<MyEdge> visitedEdges,
-			HashSet<MyEdge> countingEdges, HashMap<MyNode, SparseNetNode> graphNodeToNode) {
+								  HashSet<MyEdge> countingEdges, HashMap<MyNode, SparseNetNode> graphNodeToNode) {
 		if (getCommonDegree(v, visitedEdges) == 0)
 			visitedNodes.add(v);
 		// int weight = getNodeWeight(v, graphNodeToNode, countingEdges,
@@ -118,7 +137,7 @@ public class CheckAddTaxa {
 			edgeOrdering = countingEdges;
 			checkSuccesful = true;
 		} else if (maxK >= 0 && !checkSuccesful) {
-            // Iterator<MyEdge> it = v.outEdges().iterator();
+			// Iterator<MyEdge> it = v.outEdges().iterator();
 			// while (it.hasNext()) {
 			// MyEdge e = it.next();
 			// visitedEdges.add(e);
@@ -134,7 +153,7 @@ public class CheckAddTaxa {
 	}
 
 	private int getWeight(MyNode vG, HashSet<MyEdge> countingEdges, HashSet<MyEdge> visitedEdges,
-			Vector<MyNode> visitedNodes, HashMap<MyNode, SparseNetNode> graphNodeToNode) {
+						  Vector<MyNode> visitedNodes, HashMap<MyNode, SparseNetNode> graphNodeToNode) {
 		int counter = 0;
 		// System.out.println(" ********** " + vG.getLabel() + " - SIZE: " +
 		// countingEdges.size() + " InDeg: "
@@ -142,12 +161,12 @@ public class CheckAddTaxa {
 
 		if (getCommonInDegree(vG, visitedEdges) == 0) {
 			// System.out.println("A");
-            Iterator<MyEdge> it = vG.outEdges().iterator();
+			Iterator<MyEdge> it = vG.outEdges().iterator();
 			while (it.hasNext())
 				visitedEdges.add(it.next());
 		} else if (getCurInDegree(vG, visitedEdges) != 0) {
 			// System.out.println("B");
-            Iterator<MyEdge> itIn = vG.inEdges().iterator();
+			Iterator<MyEdge> itIn = vG.inEdges().iterator();
 			while (itIn.hasNext()) {
 				MyEdge eG = itIn.next();
 				if (!horizontalEdges.contains(eG) && !visitedEdges.contains(eG)) {
@@ -165,7 +184,7 @@ public class CheckAddTaxa {
 						}
 					}
 
-                    Iterator<MyEdge> itOut = sG.outEdges().iterator();
+					Iterator<MyEdge> itOut = sG.outEdges().iterator();
 					while (itOut.hasNext()) {
 						MyEdge eSG = itOut.next();
 						if (!horizontalEdges.contains(eSG) && !visitedEdges.contains(eSG))
@@ -180,15 +199,15 @@ public class CheckAddTaxa {
 
 		if (getCurDegree(vG, visitedEdges) == 0 && getCurHorizontalInDegree(vG, visitedEdges) == 1) {
 			// System.out.println("C");
-            Iterator<MyEdge> it = vG.outEdges().iterator();
+			Iterator<MyEdge> it = vG.outEdges().iterator();
 			while (it.hasNext())
 				visitedEdges.add(it.next());
-            it = vG.inEdges().iterator();
+			it = vG.inEdges().iterator();
 			while (it.hasNext())
 				visitedEdges.add(it.next());
 		} else {
 			// System.out.println("D");
-            Iterator<MyEdge> it = vG.outEdges().iterator();
+			Iterator<MyEdge> it = vG.outEdges().iterator();
 			while (it.hasNext()) {
 				MyEdge eG = it.next();
 				if (horizontalEdges.contains(eG) && !visitedEdges.contains(eG)) {
@@ -201,7 +220,7 @@ public class CheckAddTaxa {
 					counter++;
 				}
 			}
-            it = vG.inEdges().iterator();
+			it = vG.inEdges().iterator();
 			while (it.hasNext()) {
 				MyEdge eG = it.next();
 				if (horizontalEdges.contains(eG) && !visitedEdges.contains(eG)) {
@@ -222,7 +241,7 @@ public class CheckAddTaxa {
 
 	private int getCurInDegree(MyNode v, HashSet<MyEdge> visitedEdges) {
 		int curInDegree = 0;
-        Iterator<MyEdge> it = v.inEdges().iterator();
+		Iterator<MyEdge> it = v.inEdges().iterator();
 		while (it.hasNext()) {
 			MyEdge e = it.next();
 			if (!visitedEdges.contains(e) && !horizontalEdges.contains(e))
@@ -233,13 +252,13 @@ public class CheckAddTaxa {
 
 	private int getCurDegree(MyNode v, HashSet<MyEdge> visitedEdges) {
 		int curDegree = 0;
-        Iterator<MyEdge> it = v.inEdges().iterator();
+		Iterator<MyEdge> it = v.inEdges().iterator();
 		while (it.hasNext()) {
 			MyEdge e = it.next();
 			if (!visitedEdges.contains(e) && !horizontalEdges.contains(e))
 				curDegree++;
 		}
-        it = v.outEdges().iterator();
+		it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyEdge e = it.next();
 			if (!visitedEdges.contains(e) && !horizontalEdges.contains(e))
@@ -250,7 +269,7 @@ public class CheckAddTaxa {
 
 	private int getCurHorizontalInDegree(MyNode v, HashSet<MyEdge> visitedEdges) {
 		int curInDegree = 0;
-        Iterator<MyEdge> it = v.inEdges().iterator();
+		Iterator<MyEdge> it = v.inEdges().iterator();
 		while (it.hasNext()) {
 			MyEdge e = it.next();
 			if (horizontalEdges.contains(e) && !visitedEdges.contains(e))
@@ -261,7 +280,7 @@ public class CheckAddTaxa {
 
 	private int getCommonInDegree(MyNode v, HashSet<MyEdge> visitedEdges) {
 		int commomInDegree = 0;
-        Iterator<MyEdge> it = v.inEdges().iterator();
+		Iterator<MyEdge> it = v.inEdges().iterator();
 		while (it.hasNext()) {
 			MyEdge e = it.next();
 			if (!visitedEdges.contains(e))
@@ -272,13 +291,13 @@ public class CheckAddTaxa {
 
 	private int getCommonDegree(MyNode v, HashSet<MyEdge> visitedEdges) {
 		int commonDegree = 0;
-        Iterator<MyEdge> it = v.inEdges().iterator();
+		Iterator<MyEdge> it = v.inEdges().iterator();
 		while (it.hasNext()) {
 			MyEdge e = it.next();
 			if (!visitedEdges.contains(e))
 				commonDegree++;
 		}
-        it = v.outEdges().iterator();
+		it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyEdge e = it.next();
 			if (!visitedEdges.contains(e))
@@ -288,7 +307,7 @@ public class CheckAddTaxa {
 	}
 
 	private Vector<MyNode> getNextNodes(Vector<MyNode> visitedNodes, HashSet<MyEdge> visitedEdges,
-			HashMap<MyNode, SparseNetNode> graphNodeToNode) {
+										HashMap<MyNode, SparseNetNode> graphNodeToNode) {
 		Vector<MyNode> nextNodes = new Vector<MyNode>();
 		for (MyNode v : g.getNodes()) {
 			if (!visitedNodes.contains(v))
@@ -330,7 +349,7 @@ public class CheckAddTaxa {
 		}
 		if (!leaves.isEmpty()) {
 			for (MyNode v : leaves) {
-                MyNode p = v.getFirstInEdge().getSource();
+				MyNode p = v.getFirstInEdge().getSource();
 				p.setLabel(p.getLabel() + " " + v.getLabel());
 				removeNode(g, v);
 			}
@@ -339,8 +358,8 @@ public class CheckAddTaxa {
 		MyNode supNode = null;
 		for (MyNode v : g.getNodes()) {
 			if (v.getInDegree() == 1 && v.getOutDegree() == 1) {
-                MyNode p = v.getFirstInEdge().getSource();
-                MyNode c = v.getFirstOutEdge().getTarget();
+				MyNode p = v.getFirstInEdge().getSource();
+				MyNode c = v.getFirstOutEdge().getTarget();
 				if (!p.equals(c)) {
 					supNode = v;
 					break;
@@ -357,8 +376,8 @@ public class CheckAddTaxa {
 
 	private boolean supressNode(MyGraph g, MyNode v) {
 		if (v.getInDegree() == 1 && v.getOutDegree() == 1) {
-            MyNode p = v.getFirstInEdge().getSource();
-            MyNode c = v.getFirstOutEdge().getTarget();
+			MyNode p = v.getFirstInEdge().getSource();
+			MyNode c = v.getFirstOutEdge().getTarget();
 			g.newEdge(p, c);
 			this.removeNode(g, v);
 			return true;
@@ -368,10 +387,10 @@ public class CheckAddTaxa {
 
 	private void removeNode(MyGraph g, MyNode v) {
 		Vector<MyEdge> toDelete = new Vector<MyEdge>();
-        Iterator<MyEdge> it = v.inEdges().iterator();
+		Iterator<MyEdge> it = v.inEdges().iterator();
 		while (it.hasNext())
 			toDelete.add(it.next());
-        it = v.outEdges().iterator();
+		it = v.outEdges().iterator();
 		while (it.hasNext())
 			toDelete.add(it.next());
 		for (MyEdge e : toDelete) {
@@ -381,7 +400,7 @@ public class CheckAddTaxa {
 	}
 
 	private MyGraph initGraph(SparseNetwork n, HashMap<SparseNetNode, MyNode> nodeToGraphNode,
-			HashMap<MyNode, SparseNetNode> graphNodeToNode) {
+							  HashMap<MyNode, SparseNetNode> graphNodeToNode) {
 		MyGraph g = new MyGraph();
 		initGraphRec(g, n.getRoot(), null, new Vector<MyNode>(), nodeToGraphNode, graphNodeToNode);
 //		 addAllHorizontalEdges(n, nodeToGraphNode, g);
@@ -442,7 +461,7 @@ public class CheckAddTaxa {
 	}
 
 	private boolean existHoriozontalEdge(MyNode vG, MyNode sG) {
-        Iterator<MyEdge> it = vG.outEdges().iterator();
+		Iterator<MyEdge> it = vG.outEdges().iterator();
 		while (it.hasNext()) {
 			MyEdge e = it.next();
 			if (horizontalEdges.contains(e) && e.getTarget().equals(sG))
@@ -452,7 +471,7 @@ public class CheckAddTaxa {
 	}
 
 	private void initGraphRec(MyGraph g, SparseNetNode v, SparseNetNode lastNode, Vector<MyNode> criticalNodes,
-			HashMap<SparseNetNode, MyNode> nodeToGraphNode, HashMap<MyNode, SparseNetNode> graphNodeToNode) {
+							  HashMap<SparseNetNode, MyNode> nodeToGraphNode, HashMap<MyNode, SparseNetNode> graphNodeToNode) {
 
 		boolean isCriticalNode = false;
 		for (SparseNetEdge e : v.getOutEdges()) {
@@ -514,7 +533,7 @@ public class CheckAddTaxa {
 	}
 
 	private MyEdge existsEdge(MyNode sG, MyNode tG) {
-        Iterator<MyEdge> it = sG.outEdges().iterator();
+		Iterator<MyEdge> it = sG.outEdges().iterator();
 		while (it.hasNext()) {
 			MyEdge e = it.next();
 			if (!horizontalEdges.contains(e) && e.getTarget().equals(tG))
@@ -555,7 +574,7 @@ public class CheckAddTaxa {
 	}
 
 	private void assingPreds(SparseNetNode v, HashSet<SparseNetNode> preds,
-			HashMap<SparseNetNode, HashSet<SparseNetNode>> nodeToPreds) {
+							 HashMap<SparseNetNode, HashSet<SparseNetNode>> nodeToPreds) {
 		boolean isCritical = false;
 		for (SparseNetEdge e : v.getOutEdges()) {
 			if (v.getOwner().isSpecial(e)) {
@@ -579,7 +598,7 @@ public class CheckAddTaxa {
 	}
 
 	private void copyNetworkRec(MyPhyloTree t, SparseNetwork nCopy, MyNode v, SparseNetNode vCopy,
-			Hashtable<MyNode, SparseNetNode> visited) {
+								Hashtable<MyNode, SparseNetNode> visited) {
 		visited.put(v, vCopy);
 		Iterator<MyEdge> it = v.getOutEdges();
 		while (it.hasNext()) {
@@ -615,7 +634,7 @@ public class CheckAddTaxa {
 		System.out.println("**********\nPrinting Consistency Graph\n" + nInput.getPhyloTree().toMyBracketString()
 				+ "\n#Nodes: " + g.getNodes().size());
 		for (MyNode v : g.getNodes()) {
-            Iterator<MyEdge> it = v.inEdges().iterator();
+			Iterator<MyEdge> it = v.inEdges().iterator();
 			System.out.println("Node: " + v.getLabel() + " Indeg: " + v.getInDegree());
 			while (it.hasNext()) {
 				MyEdge e = it.next();

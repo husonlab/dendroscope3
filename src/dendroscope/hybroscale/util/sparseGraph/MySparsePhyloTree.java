@@ -1,3 +1,22 @@
+/*
+ *   MySparsePhyloTree.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package dendroscope.hybroscale.util.sparseGraph;
 
 import dendroscope.hybroscale.util.graph.MyEdge;
@@ -41,7 +60,7 @@ public class MySparsePhyloTree extends MySparseGraph {
 	}
 
 	private void copyTreeRec(MyPhyloTree t, MyNode v, MySparseNode vCopy) {
-        Iterator<MyEdge> it = v.outEdges().iterator();
+		Iterator<MyEdge> it = v.outEdges().iterator();
 		while(it.hasNext()){
 			MyNode c = it.next().getTarget();
 			MySparseNode cCopy = newNode(c);
@@ -63,7 +82,7 @@ public class MySparsePhyloTree extends MySparseGraph {
 				getNodesRec(c, nodes);
 		}
 	}
-	
+
 	private void getLeavesRec(MySparseNode v, Vector<MySparseNode> nodes) {
 		if (v.getOutDegree() != 0) {
 			for (MySparseNode c : v.getChildren())
@@ -71,7 +90,7 @@ public class MySparsePhyloTree extends MySparseGraph {
 		}else
 			nodes.add(v);
 	}
-	
+
 	public Vector<MySparseNode> getLeaves() {
 		Vector<MySparseNode> leaves = new Vector<MySparseNode>();
 		getLeavesRec(root, leaves);

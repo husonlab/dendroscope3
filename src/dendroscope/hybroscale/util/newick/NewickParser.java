@@ -1,3 +1,22 @@
+/*
+ *   NewickParser.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package dendroscope.hybroscale.util.newick;
 
 import dendroscope.hybroscale.util.graph.MyEdge;
@@ -59,7 +78,7 @@ public class NewickParser {
 			for (MyNode v : hTagToNodes.get(hTag)) {
 				if (v.getLabel() != null)
 					target.setLabel(v.getLabel());
-                MyEdge inEdge = v.getFirstInEdge();
+				MyEdge inEdge = v.getFirstInEdge();
 				Object info = inEdge.getInfo();
 				MyNode source = inEdge.getSource();
 				t.deleteEdge(inEdge);
@@ -146,7 +165,7 @@ public class NewickParser {
 				s = newickString.substring(sqBracketToSqBracket.get(i), i + 1) + s;
 				i = sqBracketToSqBracket.get(i);
 			} else
-                s = c + s;
+				s = c + s;
 			i--;
 		}
 		return labelToStartpos;
@@ -156,7 +175,7 @@ public class NewickParser {
 		String[] content = new String[4];
 		if (l.contains("[")) {
 			int index = l.indexOf("[");
-            String[] a = {l.substring(0, index), l.substring(index + 1)};
+			String[] a = {l.substring(0, index), l.substring(index + 1)};
 			content[3] = a.length == 2 ? a[1] : "";
 			if (a.length > 1) {
 				if (a[0].contains(":")) {

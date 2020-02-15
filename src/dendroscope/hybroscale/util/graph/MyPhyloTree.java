@@ -1,3 +1,22 @@
+/*
+ *   MyPhyloTree.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package dendroscope.hybroscale.util.graph;
 
 import dendroscope.hybroscale.util.newick.NewickParser;
@@ -7,7 +26,7 @@ import java.util.Iterator;
 import java.util.Vector;
 
 public class MyPhyloTree extends MyGraph {
-	
+
 	private String info;
 	private Integer timeDegree, addTaxaDegree, level;
 	private String name;
@@ -21,11 +40,11 @@ public class MyPhyloTree extends MyGraph {
 		this.root = root;
 		root.setOwner(this);
 	}
-	
+
 	public static MyPhyloTree copy(MyPhyloTree t) {
 		return new MyPhyloTree(t);
 	}
-	
+
 	public MyPhyloTree(MyPhyloTree t) {
 		MyNode v = t.getRoot();
 		root = new MyNode(this, v.getLabel());
@@ -40,7 +59,7 @@ public class MyPhyloTree extends MyGraph {
 
 	private void copyTreeRec(MyPhyloTree t, MyNode v, MyNode vCopy, Hashtable<MyNode, MyNode> visited) {
 		visited.put(v, vCopy);
-        Iterator<MyEdge> it = v.outEdges().iterator();
+		Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyEdge e = it.next();
 			MyNode c = e.getTarget();
@@ -79,7 +98,7 @@ public class MyPhyloTree extends MyGraph {
 	private void getNodesRec(MyNode v, Vector<MyNode> nodes) {
 		if (!nodes.contains(v)) {
 			nodes.add(v);
-            Iterator<MyEdge> it = v.outEdges().iterator();
+			Iterator<MyEdge> it = v.outEdges().iterator();
 			while (it.hasNext())
 				getNodesRec(it.next().getTarget(), nodes);
 		}
@@ -88,16 +107,16 @@ public class MyPhyloTree extends MyGraph {
 	public int getNumberOfNodes() {
 		return getNodes().size();
 	}
-	
+
 	private void getLeavesRec(MyNode v, Vector<MyNode> nodes) {
 		if (v.getOutDegree() != 0) {
-            Iterator<MyEdge> it = v.outEdges().iterator();
+			Iterator<MyEdge> it = v.outEdges().iterator();
 			while(it.hasNext())
 				getLeavesRec(it.next().getTarget(), nodes);
 		}else
 			nodes.add(v);
 	}
-	
+
 	public Vector<MyNode> getLeaves() {
 		Vector<MyNode> leaves = new Vector<MyNode>();
 		getLeavesRec(root, leaves);
@@ -143,7 +162,7 @@ public class MyPhyloTree extends MyGraph {
 	}
 
 	private void getEdgesRec(MyNode v, Vector<MyEdge> edges) {
-        Iterator<MyEdge> it = v.outEdges().iterator();
+		Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyEdge e = it.next();
 			if (!edges.contains(e)) {
@@ -155,14 +174,14 @@ public class MyPhyloTree extends MyGraph {
 
 	public Iterator<MyEdge> getInEdges(MyNode v) {
 		// if (v.getOwner() != this)
-        return v.inEdges().iterator();
+		return v.inEdges().iterator();
 		// else
 		// throw new RuntimeException("Wrong Owner Exception");
 	}
 
 	public Iterator<MyEdge> getOutEdges(MyNode v) {
 		// if (v.getOwner() != this)
-        return v.outEdges().iterator();
+		return v.outEdges().iterator();
 		// else
 		// throw new RuntimeException("Wrong Owner Exception");
 	}
@@ -193,7 +212,7 @@ public class MyPhyloTree extends MyGraph {
 	public String toString() {
 		return root.toNewick("", new Vector<MyNode>(), new Hashtable<MyNode, String>());
 	}
-	
+
 	public void parseBracketNotation(String newickString) {
 		MyPhyloTree t = new NewickParser().run(newickString);
 		root = t.getRoot();
@@ -230,7 +249,7 @@ public class MyPhyloTree extends MyGraph {
 	public Integer getTimeDegree() {
 		return timeDegree;
 	}
-	
+
 	public Integer getLevel() {
 		return level;
 	}
@@ -238,15 +257,15 @@ public class MyPhyloTree extends MyGraph {
 	public void setTimeDegree(Integer timeDegree) {
 		this.timeDegree = timeDegree;
 	}
-	
+
 	public Integer getAddTaxaDegree() {
 		return addTaxaDegree;
 	}
-	
+
 	public void setAddTaxaDegree(int addTaxaDegree) {
 		this.addTaxaDegree = addTaxaDegree;
 	}
-	
+
 	public void setLevel(int level) {
 		this.level = level;
 	}

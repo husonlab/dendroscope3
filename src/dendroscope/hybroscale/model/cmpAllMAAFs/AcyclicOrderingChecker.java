@@ -1,3 +1,22 @@
+/*
+ *   AcyclicOrderingChecker.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package dendroscope.hybroscale.model.cmpAllMAAFs;
 
 import dendroscope.hybroscale.model.cmpMinNetworks.NetworkIsomorphismCheck;
@@ -59,7 +78,7 @@ public class AcyclicOrderingChecker {
 	}
 
 	private void cmpNewOrderings(Vector<SparseTree> MAAF, HybridTree h1, HybridTree h2,
-			Vector<Vector<SparseTree>> newTaxaOrderings) {
+								 Vector<Vector<SparseTree>> newTaxaOrderings) {
 
 //		 System.out.println("\nForest:");
 //		 for (SparseTree c : MAAF)
@@ -88,19 +107,19 @@ public class AcyclicOrderingChecker {
 					for (HybridTree t : trees) {
 
 						MyNode lca1 = t.findLCA(getTreeSet(c1, t.getTaxaOrdering()));
-                        lca1 = lca1.getOutDegree() == 0 ? lca1.getFirstInEdge().getSource() : lca1;
+						lca1 = lca1.getOutDegree() == 0 ? lca1.getFirstInEdge().getSource() : lca1;
 						BitSet b1 = t.getNodeToCluster().get(lca1);
-                        MyNode p1 = lca1.getInDegree() != 0 ? lca1.getFirstInEdge().getSource() : null;
+						MyNode p1 = lca1.getInDegree() != 0 ? lca1.getFirstInEdge().getSource() : null;
 
 						MyNode lca2 = t.findLCA(getTreeSet(c2, t.getTaxaOrdering()));
-                        lca2 = lca2.getOutDegree() == 0 ? lca2.getFirstInEdge().getSource() : lca2;
+						lca2 = lca2.getOutDegree() == 0 ? lca2.getFirstInEdge().getSource() : lca2;
 						BitSet b2 = t.getNodeToCluster().get(lca2);
-                        MyNode p2 = lca2.getInDegree() != 0 ? lca2.getFirstInEdge().getSource() : null;
+						MyNode p2 = lca2.getInDegree() != 0 ? lca2.getFirstInEdge().getSource() : null;
 
 						boolean notTwoSingletons = c1.getNodes().size() > 1 || c2.getNodes().size() > 1;
 						if (b1.equals(b2)
 								|| (notTwoSingletons && ((p1 != null && p1.equals(lca2)) || (p2 != null && p2
-										.equals(lca1))))) {
+								.equals(lca1))))) {
 							// System.out.println("TRUE: "+c1.getPhyloTree()+" "+c2.getPhyloTree());
 							doSwitch[counter] = true;
 						}
@@ -192,8 +211,8 @@ public class AcyclicOrderingChecker {
 	}
 
 	private void generateTaxaAllOrderingsRec(int i, Vector<Integer> insertIndices,
-			HashMap<Integer, Vector<SparseTree>> switchingGroups, Vector<SparseTree> MAAF,
-			Vector<Vector<SparseTree>> newTaxaOrderings, HybridTree h1, HybridTree h2) {
+											 HashMap<Integer, Vector<SparseTree>> switchingGroups, Vector<SparseTree> MAAF,
+											 Vector<Vector<SparseTree>> newTaxaOrderings, HybridTree h1, HybridTree h2) {
 		if (i < insertIndices.size()) {
 			Vector<Vector<Integer>> allOrderings = new Vector<Vector<Integer>>();
 			generateAllOrderingsRec(new Vector<Integer>(), switchingGroups.get(insertIndices.get(i)).size(),
@@ -367,7 +386,7 @@ public class AcyclicOrderingChecker {
 					BitSet b = t.getNodeToCluster().get(v);
 					if (b.intersects(c1Set))
 						return true;
-                    v = v.getFirstInEdge().getSource();
+					v = v.getFirstInEdge().getSource();
 				}
 			}
 

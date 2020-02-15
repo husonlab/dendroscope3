@@ -1,3 +1,22 @@
+/*
+ *   SparseNetNode.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package dendroscope.hybroscale.model.treeObjects;
 
 import java.util.HashSet;
@@ -18,35 +37,35 @@ public class SparseNetNode {
 		if (owner != null) {
 			owner.addLeaf(this);
 		}
-		if (parent != null) 
-			parent.addChild(this);	
+		if (parent != null)
+			parent.addChild(this);
 		if (owner != null && parent != null) {
-			if (owner.getLeaves().contains(parent)) 
-				owner.removeLeaf(parent);	
+			if (owner.getLeaves().contains(parent))
+				owner.removeLeaf(parent);
 		}
 	}
-	
+
 	public SparseNetNode(SparseNetNode parent, SparseNetwork owner, String label, Object info) {
 		this.owner = owner;
 		this.label = label;
 		if (owner != null) {
 			owner.addLeaf(this);
 		}
-		if (parent != null) 
-			parent.addChild(this, info);	
+		if (parent != null)
+			parent.addChild(this, info);
 		if (owner != null && parent != null) {
-			if (owner.getLeaves().contains(parent)) 
-				owner.removeLeaf(parent);	
+			if (owner.getLeaves().contains(parent))
+				owner.removeLeaf(parent);
 		}
 	}
-	
+
 	public void removeOutEdge(SparseNetEdge e) {
 		SparseNetNode child = e.getTarget();
 		outEdges.remove(e);
 		child.removeInEdge(e);
 		owner.removeEdge(e);
 	}
-	
+
 	public void removeAllChildren() {
 		for(SparseNetEdge e : outEdges){
 			SparseNetNode child = e.getTarget();
@@ -55,7 +74,7 @@ public class SparseNetNode {
 		}
 		outEdges.clear();
 	}
-	
+
 	private void removeInEdge(SparseNetEdge e) {
 		inEdges.remove(e);
 	}
@@ -69,7 +88,7 @@ public class SparseNetNode {
 			owner.removeLeaf(this);
 		return e;
 	}
-	
+
 	public SparseNetEdge addChild(SparseNetNode child, Object info) {
 		SparseNetEdge e = new SparseNetEdge(this, child);
 		if(info instanceof HashSet<?>)
@@ -86,11 +105,11 @@ public class SparseNetNode {
 		inEdges.add(e);
 		return e;
 	}
-	
+
 	public SparseNetwork getOwner() {
 		return owner;
 	}
-	
+
 	public int getOutDegree() {
 		return outEdges.size();
 	}
@@ -98,7 +117,7 @@ public class SparseNetNode {
 	public int getInDegree() {
 		return inEdges.size();
 	}
-	
+
 	public Vector<SparseNetEdge> getOutEdges() {
 		return outEdges;
 	}
@@ -107,19 +126,19 @@ public class SparseNetNode {
 		return inEdges;
 	}
 
-    public Iterable<SparseNetEdge> outEdges() {
-        return () -> outEdges.iterator();
-    }
+	public Iterable<SparseNetEdge> outEdges() {
+		return () -> outEdges.iterator();
+	}
 
 
-    public Iterable<SparseNetEdge> inEdges() {
-        return () -> inEdges.iterator();
-    }
+	public Iterable<SparseNetEdge> inEdges() {
+		return () -> inEdges.iterator();
+	}
 
 	public String getLabel() {
 		return label;
 	}
-	
+
 	public void setLabel(String s) {
 		label = s;
 	}

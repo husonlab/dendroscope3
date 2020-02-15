@@ -1,3 +1,22 @@
+/*
+ *   NewickChecker.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package dendroscope.hybroscale.util.newick;
 
 import java.util.Hashtable;
@@ -11,14 +30,14 @@ public class NewickChecker extends Observable {
 	private final char[] metaCharacters = { '(', ')', '[', ']', ':', ',', ';', '#' };
 
 	public boolean checkString(String s, int offset) {
-		
+
 		labelToIndex = new Hashtable<String, Integer>();
 		sqBracketToSqBracket = new Hashtable<Integer, Integer>();
 		bracketToBracket = new Hashtable<Integer, Integer>();
-		
+
 		parseParseSquaredBrackets(s);
 		String err = parseBrackets(s);
-		
+
 		if(err.isEmpty())
 			err = parseLabels();
 
@@ -59,8 +78,7 @@ public class NewickChecker extends Observable {
 				return -1 + "|" + -1 + "|Only one newick-string per line!";
 			else if (s.charAt(index) == ' ') {
 				return index + "|" + (index + 1) + "|No white-spaces permitted!";
-			}
-			else if (s.charAt(index) == '(') {
+			} else if (s.charAt(index) == '(') {
 				openPos.add(index);
 				labelToIndex.put(label, startIndex);
 				label = "";

@@ -1,3 +1,22 @@
+/*
+ *   TreeToForestAdaptor.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package dendroscope.hybroscale.model.cmpAllMAAFs;
 
 import dendroscope.hybroscale.model.treeObjects.HybridTree;
@@ -31,9 +50,9 @@ public class TreeToForestAdaptor {
 //		for (EasyTree c : acyclicOrder)
 //			orderedForest.add(new SparseTree(c.getPhyloTree()));
 
-		 orderedForest = new Vector<SparseTree>();
-		 for (SparseTree c : forest)
-		 orderedForest.add(new SparseTree(c.getPhyloTree()));
+		orderedForest = new Vector<SparseTree>();
+		for (SparseTree c : forest)
+			orderedForest.add(new SparseTree(c.getPhyloTree()));
 
 		HybridTree tF = new HybridTree(orderedForest.lastElement().getPhyloTree(), false, taxaOrdering);
 		tF.update();
@@ -61,7 +80,7 @@ public class TreeToForestAdaptor {
 			BitSet sibCluster = (BitSet) t.getNodeToCluster().get(v).clone();
 			sibCluster.and(insertedSet);
 			while (sibCluster.isEmpty()) {
-                v = v.getFirstInEdge().getSource();
+				v = v.getFirstInEdge().getSource();
 				sibCluster = (BitSet) t.getNodeToCluster().get(v).clone();
 				sibCluster.and(insertedSet);
 			}
@@ -128,8 +147,8 @@ public class TreeToForestAdaptor {
 				copyTreeRec(tFCopy, tF.getRoot(), tFCopy.getRoot(), nodePairs, null);
 				MyNode vSibCopy = nodePairs.get(0)[1];
 
-                MyNode v1 = vSibCopy.getFirstInEdge().getSource();
-                tFCopy.deleteEdge(vSibCopy.getFirstInEdge());
+				MyNode v1 = vSibCopy.getFirstInEdge().getSource();
+				tFCopy.deleteEdge(vSibCopy.getFirstInEdge());
 				MyNode v2 = tFCopy.newNode();
 				MyNode v3 = tFCopy.newNode();
 				tFCopy.newEdge(v1, v2);
@@ -158,7 +177,7 @@ public class TreeToForestAdaptor {
 				compRoots.add(v3);
 				tF.update();
 
-                Iterator<MyEdge> it = v.outEdges().iterator();
+				Iterator<MyEdge> it = v.outEdges().iterator();
 				Vector<BitSet> sibClusters = new Vector<BitSet>();
 				while (it.hasNext()) {
 					BitSet cluster = (BitSet) t.getNodeToCluster().get(it.next().getTarget()).clone();
@@ -188,12 +207,12 @@ public class TreeToForestAdaptor {
 	}
 
 	private void addToChildren(HybridTree tF, MyNode p, MyNode v, Vector<BitSet> sibClusters, BitSet insertedSet,
-			HashSet<MyNode> compRoots, HashMap<HybridTree, HashSet<MyNode>> treeToRoots) {
-        Iterator<MyEdge> it = p.outEdges().iterator();
+							   HashSet<MyNode> compRoots, HashMap<HybridTree, HashSet<MyNode>> treeToRoots) {
+		Iterator<MyEdge> it = p.outEdges().iterator();
 		while (it.hasNext()) {
 			MyNode c = it.next().getTarget();
 			if (c != v) {
-                Iterator<MyEdge> itC = c.outEdges().iterator();
+				Iterator<MyEdge> itC = c.outEdges().iterator();
 				boolean isSourceNode = true;
 				while (itC.hasNext()) {
 					MyNode cC = itC.next().getTarget();
@@ -217,7 +236,7 @@ public class TreeToForestAdaptor {
 						nodePairs.add(rootPair);
 					}
 					Vector<MyEdge[]> edgePairs = new Vector<MyEdge[]>();
-                    MyEdge[] edgePair = {v.getFirstInEdge(), null};
+					MyEdge[] edgePair = {v.getFirstInEdge(), null};
 					edgePairs.add(edgePair);
 
 					HybridTree tFCopy = new HybridTree(new MyPhyloTree(), false, taxaOrdering);
@@ -248,13 +267,13 @@ public class TreeToForestAdaptor {
 	}
 
 	private void copyTreeRec(HybridTree tCopy, MyNode v, MyNode vCopy, Vector<MyNode[]> nodePairs,
-			Vector<MyEdge[]> edgePairs) {
+							 Vector<MyEdge[]> edgePairs) {
 		// System.out.println(tCopy+";");
 		for (MyNode[] nodePair : nodePairs) {
 			if (nodePair[0].equals(v))
 				nodePair[1] = vCopy;
 		}
-        Iterator<MyEdge> it = v.outEdges().iterator();
+		Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyEdge e = it.next();
 			MyNode c = e.getTarget();
@@ -304,7 +323,7 @@ public class TreeToForestAdaptor {
 			BitSet sibCluster = (BitSet) t.getNodeToCluster().get(v).clone();
 			sibCluster.and(insertedSet);
 			while (sibCluster.isEmpty()) {
-                v = v.getFirstInEdge().getSource();
+				v = v.getFirstInEdge().getSource();
 
 				if (!t.getNodeToCluster().containsKey(v)) {
 					System.out.println("Error!");
@@ -320,8 +339,8 @@ public class TreeToForestAdaptor {
 			b.and(cCluster);
 			if (!b.equals(cCluster) || compRoots.contains(vSib)) {
 				// System.out.println("A");
-                MyNode v1 = vSib.getFirstInEdge().getSource();
-                tF.deleteEdge(vSib.getFirstInEdge());
+				MyNode v1 = vSib.getFirstInEdge().getSource();
+				tF.deleteEdge(vSib.getFirstInEdge());
 				MyNode v2 = tF.newNode();
 				MyNode v3 = tF.newNode();
 				tF.newEdge(v1, v2);
@@ -352,7 +371,7 @@ public class TreeToForestAdaptor {
 
 	private void addSubtree(MyNode v, MyNode vCopy, HybridTree t) {
 		vCopy.setLabel(v.getLabel());
-        Iterator<MyEdge> it = v.outEdges().iterator();
+		Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyNode c = it.next().getTarget();
 			MyNode cCopy = t.newNode();

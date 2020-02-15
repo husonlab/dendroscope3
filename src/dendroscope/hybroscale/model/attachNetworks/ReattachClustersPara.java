@@ -1,8 +1,23 @@
-package dendroscope.hybroscale.model.attachNetworks;
+/*
+ *   ReattachClustersPara.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-import java.util.Vector;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicInteger;
+package dendroscope.hybroscale.model.attachNetworks;
 
 import dendroscope.hybroscale.model.HybridManager;
 import dendroscope.hybroscale.model.parallelization.MyNetPriorThreadPool;
@@ -13,10 +28,14 @@ import dendroscope.hybroscale.model.util.CheckConstraints;
 import dendroscope.hybroscale.util.graph.MyPhyloTree;
 import dendroscope.hybroscale.view.HybridView;
 
+import java.util.Vector;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * This method replaces distinct leaves of a resolved network by other resolved
  * networks producing a set of new resolved networks.
- * 
+ *
  * @author Benjamin Albrecht, 6.2010
  */
 
@@ -41,8 +60,8 @@ public class ReattachClustersPara {
 	private MyPhyloTree[] trees;
 
 	public ReattachClustersPara(HybridNetwork n, ReplacementInfo rI, int numOfNets, int numOfShiftNets,
-			int numOfInputTrees, Vector<HybridView> views, int cores, MyNetPriorThreadPool myThreadPool,
-			Vector<String> taxaOrdering, String constraints, HybridManager hM, boolean verbose, MyPhyloTree[] trees) {
+								int numOfInputTrees, Vector<HybridView> views, int cores, MyNetPriorThreadPool myThreadPool,
+								Vector<String> taxaOrdering, String constraints, HybridManager hM, boolean verbose, MyPhyloTree[] trees) {
 		this.n = n;
 		this.numOfNets = numOfNets;
 		this.numOfShiftNets = numOfShiftNets;
@@ -91,12 +110,12 @@ public class ReattachClustersPara {
 			networks.clear();
 			networks.addAll(filteredNetworks);
 		}
-		
+
 		if(verbose)
 			System.out.println("Result: "+networks.size()+" networks computed");
-	
+
 		return networks;
-		
+
 	}
 
 	public void reportStarting(Thread t) {

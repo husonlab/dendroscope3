@@ -1,13 +1,32 @@
+/*
+ *   ComputeEdgeSets.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package dendroscope.hybroscale.model.cmpMinNetworks;
+
+import dendroscope.hybroscale.model.treeObjects.SparseNetEdge;
+import dendroscope.hybroscale.model.treeObjects.SparseNetNode;
+import dendroscope.hybroscale.model.treeObjects.SparseNetwork;
 
 import java.util.BitSet;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Vector;
-
-import dendroscope.hybroscale.model.treeObjects.SparseNetEdge;
-import dendroscope.hybroscale.model.treeObjects.SparseNetNode;
-import dendroscope.hybroscale.model.treeObjects.SparseNetwork;
 
 public class ComputeEdgeSets {
 
@@ -19,7 +38,7 @@ public class ComputeEdgeSets {
 	private Integer singleIndex;
 
 	public ComputeEdgeSets(SparseNetwork n, Vector<SparseNetEdge> reticulateEdges, boolean heuristicMode,
-			int treeInsertIndex, Integer singleIndex) {
+						   int treeInsertIndex, Integer singleIndex) {
 		this.n = n;
 		this.reticulateEdges = reticulateEdges;
 		this.heuristicMode = heuristicMode;
@@ -64,10 +83,10 @@ public class ComputeEdgeSets {
 				uniqueEdgeSets.addAll(limitedNEdgeSets);
 			}
 		}
-		
+
 		if(singleIndex != null)
 			filterSingleSets(uniqueEdgeSets);
-		
+
 		return uniqueEdgeSets;
 	}
 
@@ -77,7 +96,7 @@ public class ComputeEdgeSets {
 			if(e.getIndices().contains(singleIndex) && e.getIndices().size() == 1)
 				singleSet.set(reticulateEdges.indexOf(e));
 		}
-		
+
 		Vector<BitSet> toRemove = new Vector<BitSet>();
 		for(BitSet b : uniqueEdgeSets){
 			BitSet bCheck = (BitSet) singleSet.clone();
@@ -85,7 +104,7 @@ public class ComputeEdgeSets {
 			if(bCheck.isEmpty())
 				toRemove.add(b);
 		}
-		
+
 		for(BitSet b : toRemove)
 			uniqueEdgeSets.remove(b);
 	}

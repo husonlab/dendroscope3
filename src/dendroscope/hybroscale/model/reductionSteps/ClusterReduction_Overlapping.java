@@ -1,3 +1,22 @@
+/*
+ *   ClusterReduction_Overlapping.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package dendroscope.hybroscale.model.reductionSteps;
 
 import dendroscope.hybroscale.model.treeObjects.HybridTree;
@@ -10,7 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * This function replaces a minimum common cluster of two rooted, bifurcating
  * phylogenetic trees by a unique taxon labeling.
- * 
+ *
  * @author Benjamin Albrecht, 6.2010
  */
 
@@ -25,9 +44,9 @@ public class ClusterReduction_Overlapping {
 	private HashMap<Integer, BitSet> indexToTaxa = new HashMap<Integer, BitSet>();
 
 	public HybridTree[] run(HybridTree[] trees, ReplacementInfo rI, Vector<String> taxaOrdering) throws Exception {
-		
+
 //		System.out.println("---");
-		
+
 		this.taxaOrdering = taxaOrdering;
 		for (int i = 0; i < trees.length; i++) {
 			BitSet taxaSet = new BitSet(taxaOrdering.size());
@@ -65,12 +84,12 @@ public class ClusterReduction_Overlapping {
 	// finding minimal cluster by a simple post order walk
 	private BitSet minimumCommonCluster(HybridTree[] trees) {
 		Vector<MyNode> levelNodes = getNodesByLevel(trees[0]);
-		
+
 		Vector<BitSet> commonClusters = new Vector<BitSet>();
 		for(MyNode v : levelNodes){
-			
+
 			if (v.getOutDegree() != 0) {
-				
+
 				BitSet cluster = trees[0].getNodeToCluster().get(v);
 
 				BitSet lcaCluster = (BitSet) cluster.clone();
@@ -95,7 +114,7 @@ public class ClusterReduction_Overlapping {
 					commonClusters.add(lcaCluster);
 			}
 		}
-		
+
 		if(!commonClusters.isEmpty()){
 			BitSet minCluster = null;
 			for(BitSet cluster : commonClusters){
@@ -104,7 +123,7 @@ public class ClusterReduction_Overlapping {
 			}
 			return minCluster;
 		}
-		
+
 		return null;
 	}
 
@@ -141,7 +160,7 @@ public class ClusterReduction_Overlapping {
 
 	private void insertNodesRec(MyNode v, int level, HashMap<MyNode, Integer> nodeToLevel) {
 		nodeToLevel.put(v, level);
-        Iterator<MyEdge> it = v.outEdges().iterator();
+		Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			int newLevel = level + 1;
 			insertNodesRec(it.next().getTarget(), newLevel, nodeToLevel);
@@ -149,7 +168,7 @@ public class ClusterReduction_Overlapping {
 	}
 
 	private HybridTree replaceNode(HybridTree t, BitSet cluster, ReplacementInfo rI) throws Exception {
-		
+
 		// modify input tree
 		t.setTaxaOrdering(taxaOrdering);
 		MyNode v = t.getClusterToNode().get(cluster);
@@ -166,7 +185,7 @@ public class ClusterReduction_Overlapping {
 		HybridTree newTree = new HybridTree(subtree, true, taxaOrdering);
 		newTree.setReplacementCharacter(label);
 		newTree.update();
-		
+
 		removeOneNodes(t);
 		removeOneNodes(newTree);
 
@@ -177,10 +196,10 @@ public class ClusterReduction_Overlapping {
 	private void removeOneNodes(HybridTree t) {
 		for(MyNode v : t.getNodes()){
 			if(v.getInDegree() == 1 && v.getOutDegree() == 1){
-                MyNode p = v.getFirstInEdge().getSource();
-                MyNode c = v.getFirstOutEdge().getTarget();
-                t.deleteEdge(v.getFirstInEdge());
-                t.deleteEdge(v.getFirstOutEdge());
+				MyNode p = v.getFirstInEdge().getSource();
+				MyNode c = v.getFirstOutEdge().getTarget();
+				t.deleteEdge(v.getFirstInEdge());
+				t.deleteEdge(v.getFirstOutEdge());
 				t.deleteNode(v);
 				t.newEdge(p, c);
 				removeOneNodes(t);

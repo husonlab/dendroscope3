@@ -1,3 +1,22 @@
+/*
+ *   HybridNetwork.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package dendroscope.hybroscale.model.treeObjects;
 
 import dendroscope.hybroscale.model.reductionSteps.ReplacementInfo;
@@ -9,7 +28,7 @@ import java.util.*;
 
 /**
  * This class represents a resolved network.
- * 
+ *
  * @author Benjamin Albrecht, 6.2010
  */
 
@@ -140,7 +159,7 @@ public class HybridNetwork extends MyPhyloTree {
 	}
 
 	private Vector<String> initClustersRec(MyNode v, Vector<MyNode> visited,
-			Hashtable<MyNode, Vector<String>> nodeToLabel) {
+										   Hashtable<MyNode, Vector<String>> nodeToLabel) {
 
 		Vector<String> vTaxa = new Vector<String>();
 		BitSet cluster = new BitSet(taxaOrdering.size());
@@ -268,7 +287,7 @@ public class HybridNetwork extends MyPhyloTree {
 	}
 
 	public Iterator<MyNode> getSuccessors(MyNode v) {
-        Iterator<MyEdge> it = v.outEdges().iterator();
+		Iterator<MyEdge> it = v.outEdges().iterator();
 		Vector<MyNode> successors = new Vector<MyNode>();
 		while (it.hasNext()) {
 			successors.add(it.next().getTarget());
@@ -283,11 +302,11 @@ public class HybridNetwork extends MyPhyloTree {
 		while (it.hasNext()) {
 			MyNode v = it.next();
 			if (getLabel(v).equals("rho")) {
-                MyEdge e = (MyEdge) v.getFirstInEdge();
+				MyEdge e = (MyEdge) v.getFirstInEdge();
 				MyNode p = e.getSource();
 				deleteEdge(e);
 				deleteNode(v);
-                e = (MyEdge) p.getFirstOutEdge();
+				e = (MyEdge) p.getFirstOutEdge();
 				MyNode c = e.getTarget();
 				deleteEdge(e);
 				deleteNode(p);
@@ -356,7 +375,7 @@ public class HybridNetwork extends MyPhyloTree {
 
 	// replaces a subtree under node v by a new node newV
 	public void deleteSubtree(MyNode v, MyNode newV, boolean doUpdate) {
-        MyNode p = ((MyEdge) v.getFirstInEdge()).getSource();
+		MyNode p = ((MyEdge) v.getFirstInEdge()).getSource();
 		deleteSubtreeRec(v);
 		if (newV != null) {
 			newEdge(p, newV);
@@ -375,7 +394,7 @@ public class HybridNetwork extends MyPhyloTree {
 				deleteSubtreeRec(child);
 			}
 		}
-        deleteEdge((MyEdge) v.getFirstInEdge());
+		deleteEdge((MyEdge) v.getFirstInEdge());
 		deleteNode(v);
 	}
 

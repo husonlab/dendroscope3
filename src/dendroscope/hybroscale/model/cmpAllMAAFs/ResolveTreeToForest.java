@@ -1,3 +1,22 @@
+/*
+ *   ResolveTreeToForest.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package dendroscope.hybroscale.model.cmpAllMAAFs;
 
 import dendroscope.hybroscale.model.cmpMinNetworks.NetworkIsomorphismCheck;
@@ -24,7 +43,7 @@ public class ResolveTreeToForest {
 	private HybridTree h;
 
 	public Vector<HybridTree> run(Vector<SparseTree> forest, HybridTree h, HybridTree t, boolean debug,
-			Vector<String> taxaOrdering) {
+								  Vector<String> taxaOrdering) {
 
 		this.taxaOrdering = taxaOrdering;
 		this.tInit = t;
@@ -92,7 +111,7 @@ public class ResolveTreeToForest {
 			boolean alreadyResolved = v.getInfo() != null;
 
 			if (v.getOutDegree() > 2 && !alreadyResolved) {
-                Iterator<MyEdge> it = v.outEdges().iterator();
+				Iterator<MyEdge> it = v.outEdges().iterator();
 				int counter = 0;
 				while (it.hasNext()) {
 					MyNode c = it.next().getTarget();
@@ -125,7 +144,7 @@ public class ResolveTreeToForest {
 		Vector<MyEdge> compEdges = new Vector<MyEdge>();
 		Vector<MyEdge> toDelete = new Vector<MyEdge>();
 
-        Iterator<MyEdge> it = v.outEdges().iterator();
+		Iterator<MyEdge> it = v.outEdges().iterator();
 		Vector<MyEdge> outEdges = new Vector<MyEdge>();
 		while (it.hasNext())
 			outEdges.add(it.next());
@@ -150,7 +169,7 @@ public class ResolveTreeToForest {
 		for (MyEdge e : toDelete)
 			t.deleteEdge(e);
 		Vector<MyNode> nodes = new Vector<MyNode>();
-        it = v.outEdges().iterator();
+		it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyEdge e = it.next();
 			MyNode w = e.getTarget();
@@ -194,16 +213,16 @@ public class ResolveTreeToForest {
 
 	private void removeOneNode(MyNode v, HybridTree t) {
 		if (v.getInDegree() == 1 && v.getOutDegree() == 1) {
-            MyNode p = v.getFirstInEdge().getSource();
-            MyNode c = v.getFirstOutEdge().getTarget();
-            t.deleteEdge(v.getFirstInEdge());
-            t.deleteEdge(v.getFirstOutEdge());
+			MyNode p = v.getFirstInEdge().getSource();
+			MyNode c = v.getFirstOutEdge().getTarget();
+			t.deleteEdge(v.getFirstInEdge());
+			t.deleteEdge(v.getFirstOutEdge());
 			t.newEdge(p, c);
 		}
 	}
 
 	private void addSubtreesRec(HybridTree t, Vector<MyNode> nodes, Vector<HybridTree> subtrees, int index,
-			Vector<HybridTree> resolvedTrees) {
+								Vector<HybridTree> resolvedTrees) {
 		if (index < subtrees.size()) {
 			for (MyNode sib : nodes) {
 
@@ -221,8 +240,8 @@ public class ResolveTreeToForest {
 
 				Vector<MyNode> nodesCopy = new Vector<MyNode>();
 				MyNode sibCopy = nodePairs.get(0)[1];
-                MyNode pCopy = sibCopy.getFirstInEdge().getSource();
-                tCopy.deleteEdge(sibCopy.getFirstInEdge());
+				MyNode pCopy = sibCopy.getFirstInEdge().getSource();
+				tCopy.deleteEdge(sibCopy.getFirstInEdge());
 				MyNode xCopy = tCopy.newNode();
 				MyNode rootCopy = tCopy.newNode();
 				tCopy.newEdge(pCopy, xCopy);
@@ -249,8 +268,8 @@ public class ResolveTreeToForest {
 
 					// MyNode lca1 = lcaQuery.cmpLCA(leafSet1);
 					// lca1 = lca1.getOutDegree() == 0 ?
-                    // lca1.getFirstInEdge().getSource() : lca1;
-                    // MyNode p1 = lca1.getFirstInEdge().getSource();
+					// lca1.getFirstInEdge().getSource() : lca1;
+					// MyNode p1 = lca1.getFirstInEdge().getSource();
 
 					MyNode lca1 = lcaQuery.cmpLCA(leafSet1);
 					BitSet c1 = getTreeCluster(new SparseTree(subtrees.get(index)));
@@ -259,13 +278,13 @@ public class ResolveTreeToForest {
 					BitSet b = (BitSet) h.getNodeToCluster().get(lca1).clone();
 					b.and(inserted);
 					while (b.equals(c1)) {
-                        lca1 = lca1.getFirstInEdge().getSource();
+						lca1 = lca1.getFirstInEdge().getSource();
 						b = (BitSet) h.getNodeToCluster().get(lca1).clone();
 						b.and(inserted);
 					}
 
 					MyNode lca2 = lcaQuery.cmpLCA(leafSet2);
-                    lca2 = lca2.getOutDegree() == 0 ? lca2.getFirstInEdge().getSource() : lca2;
+					lca2 = lca2.getOutDegree() == 0 ? lca2.getFirstInEdge().getSource() : lca2;
 
 					if (lca1.equals(lca2)) {
 
@@ -301,7 +320,7 @@ public class ResolveTreeToForest {
 		if (v.getOutDegree() == 0)
 			leafSet.add(setToLeaf.get(this.getLeafSet(v)));
 		else {
-            Iterator<MyEdge> it = v.outEdges().iterator();
+			Iterator<MyEdge> it = v.outEdges().iterator();
 			while (it.hasNext())
 				getTreeChildren(it.next().getTarget(), leafSet);
 		}
@@ -309,7 +328,7 @@ public class ResolveTreeToForest {
 
 	private void addSubtree(MyNode v, MyNode vCopy, HybridTree tCopy) {
 		vCopy.setLabel(v.getLabel());
-        Iterator<MyEdge> it = v.outEdges().iterator();
+		Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyNode c = it.next().getTarget();
 			MyNode cCopy = tCopy.newNode();
@@ -321,7 +340,7 @@ public class ResolveTreeToForest {
 	private void getTreeCluster(MyNode v, BitSet b) {
 		if (v.getOutDegree() == 0)
 			b.set(taxaOrdering.indexOf(v.getLabel()));
-        Iterator<MyEdge> it = v.outEdges().iterator();
+		Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext())
 			getTreeCluster(it.next().getTarget(), b);
 	}
@@ -348,7 +367,7 @@ public class ResolveTreeToForest {
 			if (nodePair[0].equals(v))
 				nodePair[1] = vCopy;
 		}
-        Iterator<MyEdge> it = v.outEdges().iterator();
+		Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyEdge e = it.next();
 			MyNode c = e.getTarget();
@@ -359,5 +378,5 @@ public class ResolveTreeToForest {
 			eCopy.setLabel(e.getLabel());
 		}
 	}
-	
+
 }

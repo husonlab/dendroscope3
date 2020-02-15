@@ -1,3 +1,22 @@
+/*
+ *   GetNetworkCluster.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package dendroscope.hybroscale.model.util;
 
 import dendroscope.hybroscale.util.graph.MyEdge;
@@ -45,8 +64,8 @@ public class GetNetworkCluster {
 	}
 
 	private void cmpNetClusterRec(MyNode v, MyNode vCopy, HashMap<MyNode, MyNode> vistedNodes,
-			HashSet<MyNode> rootOfClusters) {
-        Iterator<MyEdge> it = v.outEdges().iterator();
+								  HashSet<MyNode> rootOfClusters) {
+		Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyNode c = it.next().getTarget();
 			if (vistedNodes.containsKey(c)) {
@@ -68,7 +87,7 @@ public class GetNetworkCluster {
 			boolean bV = isRootOfCluster(v);
 			if (!bC && bV)
 				rootOfClusters.add(v);
-            Iterator<MyEdge> it = v.inEdges().iterator();
+			Iterator<MyEdge> it = v.inEdges().iterator();
 			while (it.hasNext()) {
 				MyNode p = it.next().getSource();
 				cmpRootOfClustersRec(p, bV, rootOfClusters, visited);
@@ -88,7 +107,7 @@ public class GetNetworkCluster {
 		else
 			nodeToRetPreds.get(v).addAll(retPreds);
 
-        Iterator<MyEdge> it = v.inEdges().iterator();
+		Iterator<MyEdge> it = v.inEdges().iterator();
 		while (it.hasNext()) {
 			MyNode p = it.next().getSource();
 			HashSet<MyNode> predsClone = (HashSet<MyNode>) preds.clone();
@@ -105,7 +124,7 @@ public class GetNetworkCluster {
 		HashSet<MyNode> preds = nodeToPreds.get(v);
 		HashSet<MyNode> retPreds = nodeToRetPreds.get(v);
 		for (MyNode r : retPreds) {
-            Iterator<MyEdge> it = r.inEdges().iterator();
+			Iterator<MyEdge> it = r.inEdges().iterator();
 			while (it.hasNext()) {
 				MyNode p = it.next().getSource();
 				if (!preds.contains(p))

@@ -1,6 +1,23 @@
-package dendroscope.hybroscale.model.cmpAllMAAFs;
+/*
+ *   RefinedFastGetAgreementForest.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-import java.util.*;
+package dendroscope.hybroscale.model.cmpAllMAAFs;
 
 import dendroscope.hybroscale.model.HybridManager.Computation;
 import dendroscope.hybroscale.model.cmpMinNetworks.DFSManager;
@@ -9,6 +26,8 @@ import dendroscope.hybroscale.model.treeObjects.SparseTree;
 import dendroscope.hybroscale.model.treeObjects.SparseTreeNode;
 import dendroscope.hybroscale.model.util.IsomorphismCheck;
 import dendroscope.hybroscale.util.graph.MyNode;
+
+import java.util.*;
 
 public class RefinedFastGetAgreementForest {
 
@@ -29,8 +48,9 @@ public class RefinedFastGetAgreementForest {
 	private Vector<String> taxaOrdering;
 	private Vector<String> t1Taxa, t2Taxa;
 	private Vector<SparseTree> t2Components, t1Components;
+
 	public Vector<Vector<SparseTree>> run(HybridTree t1, HybridTree t2, int forestSize, Computation compValue,
-			Vector<String> taxaOrdering, DFSManager manager) {
+										  Vector<String> taxaOrdering, DFSManager manager) {
 
 //		 System.out.println(" *************************************  " +
 //		 forestSize);
@@ -110,14 +130,14 @@ public class RefinedFastGetAgreementForest {
 			forest.add(new EasyTree(t2));
 			addMAAF(forest, tree1, tree2);
 		}
-		
+
 		if(manager != null)
 			manager.increaseAGCounter(recCalls);
-		
+
 		forestSets = null;
 		easySibMem.freeMemory();
 		easySibMem = null;
-		
+
 		return MAAFs;
 
 	}
@@ -130,7 +150,7 @@ public class RefinedFastGetAgreementForest {
 			forestSets.put(b, new Vector<HybridTree[]>());
 			HybridTree[] hPair = { t1, t2 };
 			forestSets.get(b).add(hPair);
-			
+
 			Vector<SparseTree> convForest = convertForest(copyForest(forest));
 			for (SparseTree c : t1Components)
 				convForest.add(0, new SparseTree(c.getPhyloTree(), "1"));
@@ -152,7 +172,7 @@ public class RefinedFastGetAgreementForest {
 					break;
 				}
 			}
-			
+
 			if (uniqueHPair) {
 				HybridTree[] hPair = { t1, t2 };
 				Vector<SparseTree> convForest = convertForest(copyForest(forest));
@@ -333,7 +353,7 @@ public class RefinedFastGetAgreementForest {
 	}
 
 	private Vector<Vector<EasyTree>> refiningForest(Vector<EasyTree> forest) {
-		
+
 		Vector<SparseTree> sparseForest = new Vector<SparseTree>();
 		for (EasyTree c : forest)
 			sparseForest.add(new SparseTree(c.getPhyloTree()));
@@ -342,10 +362,10 @@ public class RefinedFastGetAgreementForest {
 		HybridTree aT2 = new TreeToForestAdaptor().run(sparseForest, tree2, false, taxaOrdering);
 		aT2.update();
 		CycleRefinement cR = new CycleRefinement(new EasyTree(aT1), new EasyTree(aT2), taxaOrdering, tree1, tree2);
-		
+
 //		CycleRefinement cR = new CycleRefinement(new EasyTree(tree1), new EasyTree(tree2), taxaOrdering);
 		return cR.run(forest, k, false);
-		
+
 	}
 
 	private boolean removeSingletons(EasyTree h1, Vector<EasyTree> t2Forest, EasySiblings sibs, boolean debug) {
@@ -395,7 +415,7 @@ public class RefinedFastGetAgreementForest {
 	}
 
 	private void cutEdges(EasyTree h12, EasySiblings sibs, Vector<String> t1Sib, Vector<EasyTree> t2Forest,
-			boolean debug) {
+						  boolean debug) {
 
 		String taxa1 = t1Sib.get(0);
 		String taxa2 = t1Sib.get(1);
@@ -479,7 +499,7 @@ public class RefinedFastGetAgreementForest {
 	}
 
 	private void cutForest(EasyNode v, Vector<EasyTree> forest, EasyTree t1, EasySiblings sibs, Vector<String> t1Sib,
-			boolean debug, boolean sameOwner) {
+						   boolean debug, boolean sameOwner) {
 
 		// sibs.updateTaxa(t1);
 		EasyTree t = (EasyTree) v.getOwner();
@@ -517,7 +537,7 @@ public class RefinedFastGetAgreementForest {
 	}
 
 	private void cutPendants(Vector<Vector<EasyNode>> pendantSet, Vector<EasyTree> forest, EasyTree t1,
-			EasySiblings sibs, Vector<String> t1Sib, boolean debug) {
+							 EasySiblings sibs, Vector<String> t1Sib, boolean debug) {
 
 		EasyNode sib1 = sibs.getForestLeaf(t1Sib.get(0));
 		EasyNode sib2 = sibs.getForestLeaf(t1Sib.get(1));
@@ -628,7 +648,7 @@ public class RefinedFastGetAgreementForest {
 	}
 
 	private Vector<Vector<EasyNode>> getPendantNodes(String taxa1, String taxa2, EasySiblings sibs,
-			Vector<EasyTree> forestCopy) {
+													 Vector<EasyTree> forestCopy) {
 
 		sibs.updateTaxa(forestCopy);
 		Vector<Vector<EasyNode>> pendantSet = new Vector<Vector<EasyNode>>();

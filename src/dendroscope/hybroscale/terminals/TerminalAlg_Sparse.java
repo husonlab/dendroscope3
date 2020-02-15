@@ -1,17 +1,32 @@
-package dendroscope.hybroscale.terminals;
+/*
+ *   TerminalAlg_Sparse.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-import java.util.BitSet;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Vector;
-import java.util.concurrent.ConcurrentHashMap;
+package dendroscope.hybroscale.terminals;
 
 import dendroscope.hybroscale.util.graph.MyPhyloTree;
 import dendroscope.hybroscale.util.lcaQueries.LCA_Query_LogN_Sparse;
 import dendroscope.hybroscale.util.sparseGraph.MySparseGraph;
 import dendroscope.hybroscale.util.sparseGraph.MySparseNode;
 import dendroscope.hybroscale.util.sparseGraph.MySparsePhyloTree;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class TerminalAlg_Sparse {
 
@@ -44,7 +59,7 @@ public class TerminalAlg_Sparse {
 		MySparsePhyloTree t2 = new MySparsePhyloTree(tTwo);
 
 		runRec(t1, t2, r, new BitSet(taxaOrdering.size()));
-		
+
 		// System.out.println("Result: " + r + " " +
 		// success+" "+failedCutSets.size());
 
@@ -160,7 +175,7 @@ public class TerminalAlg_Sparse {
 	}
 
 	private Vector<BitSet> assessPrimeSet(int i, MySparsePhyloTree t1, MySparsePhyloTree t2, MySparseNode[] t1Leaves,
-			MySparseNode[] t2Leaves) {
+										  MySparseNode[] t2Leaves) {
 
 		Vector<BitSet> terminalSet = new Vector<BitSet>();
 		for (MySparseNode v : t1.getLeaves()) {
@@ -186,7 +201,7 @@ public class TerminalAlg_Sparse {
 
 			Vector<Vector<MySparseNode>> t1Cherries = getCherries(t1);
 			Vector<Vector<MySparseNode>> t2Cherries = getCherries(t2);
-			
+
 			BitSet cherrySet = new BitSet(taxaOrdering.size());
 			for (Vector<MySparseNode> cherry : t2Cherries) {
 				for (MySparseNode c : cherry)
@@ -217,7 +232,7 @@ public class TerminalAlg_Sparse {
 					primeSet.add(nodePair[1].getCluster());
 				}
 			}
-			
+
 			for (Vector<MySparseNode> cherry : t2Cherries) {
 				MySparseNode[] nodePair = new MySparseNode[2];
 				for (MySparseNode v : cherry) {
@@ -248,7 +263,7 @@ public class TerminalAlg_Sparse {
 	}
 
 	private Vector<BitSet> searchConflict2Cluster(Vector<BitSet> terminalSet, MySparseNode[] t1Leaves,
-			MySparseNode[] t2Leaves) {
+												  MySparseNode[] t2Leaves) {
 
 		Vector<BitSet> primeSet = new Vector<BitSet>();
 		for (BitSet termCluster : terminalSet) {
@@ -358,7 +373,7 @@ public class TerminalAlg_Sparse {
 			if (p.getOutDegree() == 0) {
 				if(!contractedNodes.contains(p))
 					contractedNodes.add(p);
-					endNodes.remove(p);
+				endNodes.remove(p);
 				if (p.getInDegree() > 0)
 					contractNodesRec(p.getParent(), contractedNodes, endNodes);
 			} else
@@ -398,10 +413,10 @@ public class TerminalAlg_Sparse {
 	}
 
 	private Vector<BitSet> cmpSTNodes(MySparsePhyloTree t1, MySparsePhyloTree t2, MySparseNode[] t2Leaves) {
-		
+
 		LCA_Query_LogN_Sparse rmqQuery = null;
 //		LCA_Query_LogN_Sparse rmqQuery = new LCA_Query_LogN_Sparse(t2);
-		
+
 		Vector<Vector<MySparseNode>> stNodeSet = new Vector<Vector<MySparseNode>>();
 		Vector<MySparseNode> stMulNodes = new Vector<MySparseNode>();
 
@@ -420,7 +435,7 @@ public class TerminalAlg_Sparse {
 	}
 
 	private Vector<MySparseNode> cmpSTNodesRec(MySparseNode v, Vector<Vector<MySparseNode>> stNodeSet,
-			Vector<MySparseNode> stMulNodes, MySparseNode[] t2Leaves, LCA_Query_LogN_Sparse rmqQuery) {
+											   Vector<MySparseNode> stMulNodes, MySparseNode[] t2Leaves, LCA_Query_LogN_Sparse rmqQuery) {
 
 		if (v.getOutDegree() == 0) {
 			Vector<MySparseNode> nodes = new Vector<MySparseNode>();
@@ -485,7 +500,7 @@ public class TerminalAlg_Sparse {
 	}
 
 	private RefinedCluster_Sparse getRefClusters(MySparseNode v, Vector<MySparseNode> stChildren, int size,
-			BitSet refSet) {
+												 BitSet refSet) {
 
 		Vector<MySparseNode> children = new Vector<MySparseNode>();
 		for (MySparseNode c : stChildren) {
@@ -502,7 +517,7 @@ public class TerminalAlg_Sparse {
 	}
 
 	private void getRefClustersRec(Vector<MySparseNode> children, int maxSize, int size, int j, BitSet refCluster,
-			Vector<MySparseNode> hashSet, RefinedCluster_Sparse refinedCluster) {
+								   Vector<MySparseNode> hashSet, RefinedCluster_Sparse refinedCluster) {
 		if (size < maxSize && children.size() - j >= maxSize - size) {
 			for (int k = j; k < children.size(); k++) {
 				MySparseNode c = children.get(k);
@@ -543,7 +558,7 @@ public class TerminalAlg_Sparse {
 		}
 		return v;
 	}
-	
+
 	private boolean isCompatibleLCA(BitSet cluster, MySparseNode[] t2Leaves, LCA_Query_LogN_Sparse rmqQuery) {
 		int i = cluster.nextSetBit(0);
 		Vector<MySparseNode> t2Nodes = new Vector<MySparseNode>();
@@ -566,7 +581,7 @@ public class TerminalAlg_Sparse {
 	}
 
 	private void cmpClusters(MySparsePhyloTree t1, MySparsePhyloTree t2, MySparseNode[] t1Leaves,
-			MySparseNode[] t2Leaves) {
+							 MySparseNode[] t2Leaves) {
 		cmpClustersRec(t1.getRoot(), t1Leaves);
 		cmpClustersRec(t2.getRoot(), t2Leaves);
 	}

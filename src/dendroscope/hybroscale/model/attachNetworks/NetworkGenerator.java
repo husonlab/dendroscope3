@@ -1,3 +1,22 @@
+/*
+ *   NetworkGenerator.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package dendroscope.hybroscale.model.attachNetworks;
 
 import dendroscope.hybroscale.model.HybridManager;
@@ -29,8 +48,8 @@ public class NetworkGenerator extends Thread {
 	private Vector<HashMap<BitSet, MyNode>> setToLeaves = new Vector<HashMap<BitSet, MyNode>>();
 
 	public NetworkGenerator(MyPhyloTree n, Vector<String> taxaOrdering, ReplacementInfo rI, int numOfInputTrees,
-			CheckConstraints checker, ReattachClustersPara manager, HybridManager hM,
-			MyNetPriorThreadPool myThreadPool, MyPhyloTree[] trees) {
+							CheckConstraints checker, ReattachClustersPara manager, HybridManager hM,
+							MyNetPriorThreadPool myThreadPool, MyPhyloTree[] trees) {
 		this.n = n;
 		this.taxaOrdering = taxaOrdering;
 		this.rI = rI;
@@ -149,11 +168,11 @@ public class NetworkGenerator extends Thread {
 	public void removeOutgroup(MyPhyloTree n) {
 		for (MyNode v : n.getLeaves()) {
 			if (v.getLabel().equals("rho")) {
-                MyEdge e = (MyEdge) v.getFirstInEdge();
+				MyEdge e = (MyEdge) v.getFirstInEdge();
 				MyNode p = e.getSource();
 				n.deleteEdge(e);
 				n.deleteNode(v);
-                e = (MyEdge) p.getFirstOutEdge();
+				e = (MyEdge) p.getFirstOutEdge();
 				MyNode c = e.getTarget();
 				n.deleteEdge(e);
 				n.deleteNode(p);
@@ -171,7 +190,7 @@ public class NetworkGenerator extends Thread {
 
 				boolean isAllRedundant = true;
 				for (MyEdge eRet : retEdges) {
-                    MyNode p = v.getFirstInEdge().getSource();
+					MyNode p = v.getFirstInEdge().getSource();
 
 					boolean isRedundant = false;
 					if (p != null && p.getInDegree() < 2 && isRedundant(eRet, p, true))
@@ -223,7 +242,7 @@ public class NetworkGenerator extends Thread {
 
 	private Vector<MyEdge> getRetEdges(MyNode v) {
 		Vector<MyEdge> retEdges = new Vector<MyEdge>();
-        Iterator<MyEdge> it = v.outEdges().iterator();
+		Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyEdge e = it.next();
 			if (e.getTarget().getInDegree() > 1)
@@ -234,7 +253,7 @@ public class NetworkGenerator extends Thread {
 
 	private Vector<MyEdge> getTreeEdges(MyNode v) {
 		Vector<MyEdge> treeEdges = new Vector<MyEdge>();
-        Iterator<MyEdge> it = v.outEdges().iterator();
+		Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyEdge e = it.next();
 			if (e.getTarget().getInDegree() == 1)
@@ -268,7 +287,7 @@ public class NetworkGenerator extends Thread {
 		if (v.getOutDegree() == 0)
 			leafSet.add(setToLeaves.get(eIndex).get(getLeafSet(v)));
 		else {
-            Iterator<MyEdge> it = v.outEdges().iterator();
+			Iterator<MyEdge> it = v.outEdges().iterator();
 			while (it.hasNext()) {
 				MyEdge e = it.next();
 				if (e.getTarget().getInDegree() == 1)

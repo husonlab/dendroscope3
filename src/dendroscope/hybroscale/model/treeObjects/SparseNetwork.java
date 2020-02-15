@@ -1,3 +1,22 @@
+/*
+ *   SparseNetwork.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package dendroscope.hybroscale.model.treeObjects;
 
 import dendroscope.hybroscale.util.graph.MyEdge;
@@ -38,9 +57,9 @@ public class SparseNetwork {
 	}
 
 	private void copyTreeRec(SparseNetwork t, SparseNetNode v,
-			SparseNetNode vCopy, Hashtable<SparseNetNode, SparseNetNode> visited) {
+							 SparseNetNode vCopy, Hashtable<SparseNetNode, SparseNetNode> visited) {
 		visited.put(v, vCopy);
-        for (SparseNetEdge e : v.outEdges()) {
+		for (SparseNetEdge e : v.outEdges()) {
 			SparseNetNode c = e.getTarget();
 			if (visited.containsKey(c)) {
 				SparseNetNode cCopy = visited.get(c);
@@ -50,7 +69,7 @@ public class SparseNetwork {
 			} else {
 				SparseNetNode cCopy = new SparseNetNode(vCopy, this,
 						c.getLabel());
-                SparseNetEdge eCopy = cCopy.inEdges().iterator().next();
+				SparseNetEdge eCopy = cCopy.inEdges().iterator().next();
 				eCopy.addIndices((HashSet<Integer>) e.getIndices().clone());
 				eCopy.addEdgeIndices((HashSet<Integer>) e.getEdgeIndex().clone());
 				if (c.getOutDegree() != 0)
@@ -68,9 +87,9 @@ public class SparseNetwork {
 	}
 
 	private void copyTreeRec(MyPhyloTree t, MyNode v, SparseNetNode vCopy,
-			Hashtable<MyNode, SparseNetNode> visited) {
+							 Hashtable<MyNode, SparseNetNode> visited) {
 		visited.put(v, vCopy);
-        Iterator<MyEdge> it = v.outEdges().iterator();
+		Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyEdge e = it.next();
 			MyNode c = e.getTarget();
@@ -113,9 +132,9 @@ public class SparseNetwork {
 		return t;
 	}
 
-    private void getPhyloTreeRec(MyPhyloTree t, SparseNetNode v, MyNode vCopy, Hashtable<SparseNetNode, MyNode> visited) {
+	private void getPhyloTreeRec(MyPhyloTree t, SparseNetNode v, MyNode vCopy, Hashtable<SparseNetNode, MyNode> visited) {
 		visited.put(v, vCopy);
-        for (SparseNetEdge eOut : v.outEdges()) {
+		for (SparseNetEdge eOut : v.outEdges()) {
 			SparseNetNode c = eOut.getTarget();
 			MyEdge newEdge = null;
 			if (visited.containsKey(c)) {
@@ -123,7 +142,7 @@ public class SparseNetwork {
 				if (c.getLabel() != null)
 					t.setLabel(cCopy, c.getLabel());
 				newEdge = t.newEdge(vCopy, cCopy);
-                Iterator<MyEdge> it = cCopy.inEdges().iterator();
+				Iterator<MyEdge> it = cCopy.inEdges().iterator();
 				while (it.hasNext()) {
 					MyEdge e = it.next();
 					t.setSpecial(e, true);

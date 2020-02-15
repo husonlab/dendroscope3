@@ -1,3 +1,22 @@
+/*
+ *   CheckAddTaxaEdge.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package dendroscope.hybroscale.model.util;
 
 import dendroscope.hybroscale.util.graph.MyEdge;
@@ -34,7 +53,7 @@ public class CheckAddTaxaEdge {
 			Vector<MyEdge> retEdges = new Vector<MyEdge>();
 			for (MyNode v : n.getNodes()) {
 				if (v.getInDegree() > 1) {
-                    Iterator<MyEdge> it = v.inEdges().iterator();
+					Iterator<MyEdge> it = v.inEdges().iterator();
 					while (it.hasNext()) {
 						MyEdge e = it.next();
 						if (!trivialEdges.contains(e))
@@ -72,10 +91,10 @@ public class CheckAddTaxaEdge {
 			}
 
 		}
-		
+
 		if(result != -1)
 			net.setAddTaxaDegree(result);
-		
+
 		return result;
 
 	}
@@ -117,7 +136,7 @@ public class CheckAddTaxaEdge {
 	}
 
 	private void getAllSubsets(int index, Vector<MyEdge> retEdges, int border, Vector<MyEdge> subset,
-			HashSet<Vector<MyEdge>> allSubsets) {
+							   HashSet<Vector<MyEdge>> allSubsets) {
 		if (subset.size() < border) {
 			for (int i = index; i < retEdges.size(); i++) {
 				MyEdge e = retEdges.get(i);
@@ -144,7 +163,7 @@ public class CheckAddTaxaEdge {
 		for (MyNode v : retNodes) {
 			Vector<MyNode> parentNodes = new Vector<MyNode>();
 			Vector<MyEdge> parentEdges = new Vector<MyEdge>();
-            Iterator<MyEdge> it = v.inEdges().iterator();
+			Iterator<MyEdge> it = v.inEdges().iterator();
 			while (it.hasNext()) {
 				MyEdge e = it.next();
 				parentNodes.add(e.getSource());
@@ -172,7 +191,7 @@ public class CheckAddTaxaEdge {
 
 	private void cmpImplicitAncestorsRec(boolean b, MyNode v, Vector<MyNode> implicitAncestors) {
 		if (v.getInDegree() > 1 || b) {
-            Iterator<MyEdge> it = v.inEdges().iterator();
+			Iterator<MyEdge> it = v.inEdges().iterator();
 			while (it.hasNext()) {
 				MyEdge e = it.next();
 				MyNode a = e.getSource();
@@ -184,7 +203,7 @@ public class CheckAddTaxaEdge {
 
 	private void assingPreds(MyNode v, HashSet<MyNode> preds, HashMap<MyNode, HashSet<MyNode>> nodeToPreds) {
 		boolean isCritical = false;
-        Iterator<MyEdge> it = v.outEdges().iterator();
+		Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyEdge e = it.next();
 			if (v.getOwner().isSpecial(e)) {
@@ -198,7 +217,7 @@ public class CheckAddTaxaEdge {
 		}
 		if (isCritical)
 			preds.add(v);
-        it = v.outEdges().iterator();
+		it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyEdge e = it.next();
 			assingPreds(e.getTarget(), (HashSet<MyNode>) preds.clone(), nodeToPreds);

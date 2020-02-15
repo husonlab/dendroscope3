@@ -1,9 +1,23 @@
-package dendroscope.hybroscale.model;
+/*
+ *   ForestThread.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Vector;
-import java.util.concurrent.ConcurrentHashMap;
+package dendroscope.hybroscale.model;
 
 import dendroscope.hybroscale.model.HybridManager.Computation;
 import dendroscope.hybroscale.model.cmpMinNetworks.DFSManager;
@@ -12,6 +26,11 @@ import dendroscope.hybroscale.model.treeObjects.HybridTree;
 import dendroscope.hybroscale.model.treeObjects.SparseNetwork;
 import dendroscope.hybroscale.model.util.CheckConstraints;
 import dendroscope.hybroscale.util.graph.MyNode;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ForestThread extends Thread implements Runnable {
 
@@ -31,7 +50,7 @@ public class ForestThread extends Thread implements Runnable {
 	private CheckConstraints checker;
 
 	public ForestThread(ExhaustiveSearch exSearch, HybridTree[] trees, int edgeChoice, Computation compValue,
-			MyNetPriorThreadPool netExec, Vector<String> taxaOrdering, boolean speedUp, CheckConstraints checker, boolean verbose) {
+						MyNetPriorThreadPool netExec, Vector<String> taxaOrdering, boolean speedUp, CheckConstraints checker, boolean verbose) {
 		this.exSearch = exSearch;
 		this.trees = trees;
 		this.edgeChoice = edgeChoice;
@@ -46,13 +65,13 @@ public class ForestThread extends Thread implements Runnable {
 	public void run() {
 		if (!stop) {
 			try {
-				
+
 //				System.out.println("++++ Forest "+edgeChoice+" "+this);
 				dfsManager = new DFSManager(trees, edgeChoice, compValue, netExec, taxaOrdering, speedUp, checker, verbose);
 				edgesToMAAFs = (ConcurrentHashMap<Integer, Vector<SparseNetwork>>) dfsManager.run();
 				calls = dfsManager.getCalls();
 
-				exSearch.reportReticulationResult(edgesToMAAFs, edgeChoice, this, calls);			
+				exSearch.reportReticulationResult(edgesToMAAFs, edgeChoice, this, calls);
 				exSearch.reportFinishing(this);
 
 			} catch (Exception e) {
@@ -60,9 +79,9 @@ public class ForestThread extends Thread implements Runnable {
 				e.printStackTrace();
 			}
 		}
-			
+
 	}
-	
+
 	public int getResult(){
 		if(edgesToMAAFs == null)
 			return -1;
@@ -91,7 +110,7 @@ public class ForestThread extends Thread implements Runnable {
 		edgesToMAAFs = dfsManager.getNumberToNetworks();
 		calls = dfsManager.getCalls();
 		if (edgesToMAAFs != null)
-				exSearch.reportReticulationResult(edgesToMAAFs, edgeChoice, this, calls);
+			exSearch.reportReticulationResult(edgesToMAAFs, edgeChoice, this, calls);
 	}
 
 	private void printMAAFs(ConcurrentHashMap<Integer, HashSet<Vector<HybridTree>>> numberToForests) {
@@ -119,7 +138,7 @@ public class ForestThread extends Thread implements Runnable {
 	public Integer getCurrentNumberOfNetworks() {
 		return dfsManager != null ? this.dfsManager.getCurrentNumberOfNetworks() : null;
 	}
-	
+
 	public void freeMemory(){
 		dfsManager.freeMemory();
 		dfsManager = null;

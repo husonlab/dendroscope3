@@ -1,3 +1,22 @@
+/*
+ *   FastAcyclicCheck.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package dendroscope.hybroscale.model.cmpAllMAAFs;
 
 import dendroscope.hybroscale.util.graph.MyEdge;
@@ -19,7 +38,7 @@ public class FastAcyclicCheck {
 	private Vector<EasyTree> acyclicOrder = new Vector<EasyTree>();
 
 	public Vector<EasyTree> run(Vector<EasyTree> forest, EasyTree t1, EasyTree t2, Vector<String> taxaOrdering,
-			EasyTree comp, boolean debug, boolean checkCycle) {
+								EasyTree comp, boolean debug, boolean checkCycle) {
 
 		this.taxaOrdering = taxaOrdering;
 
@@ -79,7 +98,7 @@ public class FastAcyclicCheck {
 	private boolean hasCycle;
 
 	public boolean checkCycle(Vector<EasyTree> forest, EasyTree t1, EasyTree t2, Vector<String> taxaOrdering,
-			EasyTree comp, boolean debug) {
+							  EasyTree comp, boolean debug) {
 
 		hasCycle = false;
 		this.taxaOrdering = taxaOrdering;
@@ -111,7 +130,7 @@ public class FastAcyclicCheck {
 	}
 
 	public void checkCycleRec(MyGraph g, MyNode v, MyNode start, Vector<MyEdge> visited) {
-        Iterator<MyEdge> it = v.outEdges().iterator();
+		Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyEdge e = it.next();
 			MyNode w = e.getTarget();
@@ -134,7 +153,7 @@ public class FastAcyclicCheck {
 		// search for scc
 		for (int i = g.getNumberOfNodes() - 1; i >= 0; i--) {
 			MyNode v = levelToNode.get(i);
-            Iterator<MyEdge> it = v.inEdges().iterator();
+			Iterator<MyEdge> it = v.inEdges().iterator();
 			while (it.hasNext()) {
 				MyNode w = it.next().getSource();
 				if (nodeToLevel.get(w) < i)
@@ -146,7 +165,7 @@ public class FastAcyclicCheck {
 
 	private int initLevels(MyNode v, int level, Vector<MyNode> visited) {
 		visited.add(v);
-        Iterator<MyEdge> it = v.outEdges().iterator();
+		Iterator<MyEdge> it = v.outEdges().iterator();
 		int value = level;
 		while (it.hasNext()) {
 			MyNode w = it.next().getTarget();
@@ -161,7 +180,7 @@ public class FastAcyclicCheck {
 	private void computeOrder(Vector<MyNode> border) {
 		Vector<MyNode> newBorder = new Vector<MyNode>();
 		for (MyNode v : border) {
-            Iterator<MyEdge> it = v.outEdges().iterator();
+			Iterator<MyEdge> it = v.outEdges().iterator();
 			while (it.hasNext()) {
 				MyNode w = it.next().getTarget();
 				if (!acyclicOrder.contains(nodeToComp.get(w))) {
@@ -213,7 +232,7 @@ public class FastAcyclicCheck {
 	}
 
 	private void addEdges(EasyTree t, MyGraph g, Hashtable<EasyNode, BitSet> tNodeToCluster, Vector<EasyTree> forest2,
-			boolean debug) {
+						  boolean debug) {
 
 		Hashtable<EasyTree, BitSet> compToCluster = new Hashtable<EasyTree, BitSet>();
 		Vector<EasyTree> forest = new Vector<EasyTree>();
@@ -260,7 +279,7 @@ public class FastAcyclicCheck {
 	}
 
 	private void addEdge(MyNode v1, MyNode v2, MyGraph g) {
-        Iterator<MyEdge> it = v1.outEdges().iterator();
+		Iterator<MyEdge> it = v1.outEdges().iterator();
 		boolean add = true;
 		while (it.hasNext()) {
 			MyNode v = it.next().getTarget();

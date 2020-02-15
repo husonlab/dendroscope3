@@ -1,3 +1,22 @@
+/*
+ *   NetworkToTreeAdaptor.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package dendroscope.hybroscale.model.cmpMinNetworks;
 
 import dendroscope.hybroscale.model.treeObjects.HybridTree;
@@ -23,25 +42,25 @@ public class NetworkToTreeAdaptor {
 		this.treeEdges = treeEdges;
 		this.taxaOrdering = taxaOrdering;
 		nodeToCluster = new HashMap<SparseNetNode, BitSet>();
-		
+
 		for(SparseNetNode v : nCopy.getNodes())
 			nodeToCluster.put(v, new BitSet(taxaOrdering.size()));
 		initClusters(nCopy.getRoot());
-		
+
 		resolveNetwork(nCopy, nCopy.getRoot(), t);
 
 	}
 
 	private void resolveNetwork(SparseNetwork nCopy, SparseNetNode vNet, HybridTree t) {
-		
+
 		if (vNet.getOutDegree() > 2 && !nodeToCluster.get(vNet).isEmpty()) {
-			
+
 			HashMap<BitSet, Vector<SparseNetNode>> childBuckets = new HashMap<BitSet, Vector<SparseNetNode>>();
 			MyNode vTree = t.getClusterToNode().get(nodeToCluster.get(vNet));
 
 			if (vTree != null) {
 
-                Iterator<MyEdge> it = vTree.outEdges().iterator();
+				Iterator<MyEdge> it = vTree.outEdges().iterator();
 				while (it.hasNext()) {
 					BitSet cTreeCluster = t.getNodeToCluster().get(it.next().getTarget());
 					childBuckets.put(cTreeCluster, new Vector<SparseNetNode>());
@@ -143,7 +162,7 @@ public class NetworkToTreeAdaptor {
 				}
 
 				resolveNetwork(nCopy, vNetParent, t);
-				
+
 			} else {
 				Vector<SparseNetEdge> newEdges = new Vector<SparseNetEdge>();
 				for (SparseNetEdge e : vNet.getOutEdges())

@@ -1,3 +1,22 @@
+/*
+ *   CheckReEmbedding.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package dendroscope.hybroscale.model.cmpMinNetworks;
 
 import dendroscope.hybroscale.model.HybridManager.Computation;
@@ -12,7 +31,7 @@ public class CheckReEmbedding {
 	private Vector<Integer> treeMapping;
 
 	public Vector<Object[]> run(SparseNetwork n, int curIndex, SparseTree[] trees, Vector<Integer> treeMap,
-			Vector<String> taxaOrdering, int k, Computation compValue) {
+								Vector<String> taxaOrdering, int k, Computation compValue) {
 
 		Vector<Object[]> results = new Vector<Object[]>();
 		this.treeMapping = (Vector<Integer>) treeMap.clone();
@@ -125,14 +144,14 @@ public class CheckReEmbedding {
 	// for (SparseNetEdge e : n.getEdges()) {
 	// if (e.getTarget().getInDegree() > 1 && e.getIndices().contains(curIndex)
 	// && e.getIndices().size() == 1) {
-    // for (SparseNetEdge eIn : e.getTarget().inEdges().iterator()) {
+	// for (SparseNetEdge eIn : e.getTarget().inEdges().iterator()) {
 	// if (eIn != e) {
-    // SparseNetNode p = eIn.getSource().inEdges().iterator().get(0).getSource();
-    // for (SparseNetEdge e2 : p.outEdges().iterator()) {
+	// SparseNetNode p = eIn.getSource().inEdges().iterator().get(0).getSource();
+	// for (SparseNetEdge e2 : p.outEdges().iterator()) {
 	// if (e2.getTarget() != eIn.getSource() && e2.getTarget().getInDegree() ==
 	// 1
 	// && e2.getTarget().getOutDegree() == 1) {
-    // SparseNetEdge e1 = e2.getTarget().outEdges().iterator().get(0);
+	// SparseNetEdge e1 = e2.getTarget().outEdges().iterator().get(0);
 	// for (int e1Index : e1.getIndices()) {
 	// if (eIn.getIndices().contains(e1Index)
 	// && treeMapping.get(e1Index) < treeMapping.get(curIndex))
@@ -171,7 +190,7 @@ public class CheckReEmbedding {
 
 			SparseNetNode retNode = e.getTarget();
 			SparseNetNode x = e.getSource();
-            SparseNetEdge eX = x.inEdges().iterator().next();
+			SparseNetEdge eX = x.inEdges().iterator().next();
 			SparseNetNode p = eX.getSource();
 
 			x.removeOutEdge(e);
@@ -181,9 +200,9 @@ public class CheckReEmbedding {
 			potIsolatedNodes.add(p);
 			if (retNode.getInDegree() == 1) {
 				potIsolatedNodes.add(retNode);
-                for (SparseNetEdge eIn : retNode.inEdges()) {
+				for (SparseNetEdge eIn : retNode.inEdges()) {
 					potIsolatedNodes.add(eIn.getSource());
-                    potIsolatedNodes.add(eIn.getSource().inEdges().iterator().next().getSource());
+					potIsolatedNodes.add(eIn.getSource().inEdges().iterator().next().getSource());
 				}
 			}
 
@@ -197,12 +216,12 @@ public class CheckReEmbedding {
 
 	private void removeIsolatedNode(SparseNetNode v, SparseNetwork n) {
 		if (v.getInDegree() == 1 && v.getOutDegree() == 1) {
-            SparseNetNode p = v.inEdges().iterator().next().getSource();
-            if (p.getInDegree() == 1 || (!n.isSpecial(v.inEdges().iterator().next()) && !n.isSpecial(v.outEdges().iterator().next()))) {
-                HashSet<Integer> indices = (HashSet<Integer>) v.outEdges().iterator().next().getIndices().clone();
-                SparseNetNode c = v.outEdges().iterator().next().getTarget();
-                p.removeOutEdge(v.inEdges().iterator().next());
-                v.removeOutEdge(v.outEdges().iterator().next());
+			SparseNetNode p = v.inEdges().iterator().next().getSource();
+			if (p.getInDegree() == 1 || (!n.isSpecial(v.inEdges().iterator().next()) && !n.isSpecial(v.outEdges().iterator().next()))) {
+				HashSet<Integer> indices = (HashSet<Integer>) v.outEdges().iterator().next().getIndices().clone();
+				SparseNetNode c = v.outEdges().iterator().next().getTarget();
+				p.removeOutEdge(v.inEdges().iterator().next());
+				v.removeOutEdge(v.outEdges().iterator().next());
 				SparseNetEdge e = p.addChild(c);
 				e.addIndices(indices);
 			}

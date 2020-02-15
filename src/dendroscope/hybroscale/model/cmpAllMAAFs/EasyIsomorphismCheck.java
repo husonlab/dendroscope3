@@ -1,15 +1,30 @@
+/*
+ *   EasyIsomorphismCheck.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package dendroscope.hybroscale.model.cmpAllMAAFs;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Vector;
+import java.util.*;
 
 /**
  * Given two rooted, bifurcating phylogenetic trees T1 and T2, this function
  * checks whether T1 and T2 are isomorphic.
- * 
+ *
  * @author Benjamin Albrecht, 6.2010
  */
 
@@ -24,7 +39,7 @@ public class EasyIsomorphismCheck {
 			return false;
 
 		while (n1Copy.getNodes().size() > 2) {
-			
+
 			HashSet<String> t1Cherrys = new HashSet<String>();
 			Hashtable<String, EasyNode> t1Taxa2parent = new Hashtable<String, EasyNode>();
 
@@ -72,7 +87,7 @@ public class EasyIsomorphismCheck {
 			for (EasyNode c : children) {
 				c.delete();
 			}
-			
+
 			int size = v.getChildren().size();
 			for (int i = 0; i < size; i++)
 				t.deleteNode(v.getChildren().get(0));

@@ -1,3 +1,22 @@
+/*
+ *   RerootByHNumber.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package dendroscope.hybroscale.rerooting;
 
 import dendroscope.hybroscale.model.HybridManager;
@@ -29,7 +48,7 @@ public class RerootByHNumber extends Thread {
 	private int cores;
 	private Integer upperBound;
 	private RerootingView view;
-	
+
 	private boolean isInterrupted = false;
 
 	public RerootByHNumber(RerootingView view, String[] treeStrings, int cores, Integer upperBound) {
@@ -99,7 +118,7 @@ public class RerootByHNumber extends Thread {
 
 			countDownLatch.await();
 			executor.shutdown();
-			
+
 			if(!isInterrupted)
 				processBestTrees();
 
@@ -111,7 +130,7 @@ public class RerootByHNumber extends Thread {
 			view.reportResult();
 
 	}
-	
+
 	private void processBestTrees(){
 		for (MyPhyloTree[] treeSet : bestTreeSets) {
 			for (int i = 0; i < treeSet.length; i++) {
@@ -182,7 +201,7 @@ public class RerootByHNumber extends Thread {
 		for (MyPhyloTree t : trees) {
 			MyNode r = t.getRoot();
 			if (r.getOutDegree() == 2)
-                invalidEdges.add(r.getFirstOutEdge());
+				invalidEdges.add(r.getFirstOutEdge());
 		}
 		return invalidEdges;
 	}
@@ -223,10 +242,10 @@ public class RerootByHNumber extends Thread {
 		MyNode p = v;
 		while (p.getInDegree() != 0) {
 			modNodes.add(p);
-            p = p.getFirstInEdge().getSource();
+			p = p.getFirstInEdge().getSource();
 		}
 		for (MyNode y : modNodes) {
-            MyEdge e = y.getFirstInEdge();
+			MyEdge e = y.getFirstInEdge();
 			MyNode x = e.getSource();
 			t.deleteEdge(e);
 			t.newEdge(y, x);
@@ -235,9 +254,9 @@ public class RerootByHNumber extends Thread {
 
 	private void supressNode(MyNode v, MyPhyloTree t) {
 		if (v.getInDegree() == 1 && v.getOutDegree() == 1) {
-            MyEdge e1 = v.getFirstInEdge();
+			MyEdge e1 = v.getFirstInEdge();
 			MyNode p = e1.getSource();
-            MyEdge e2 = v.getFirstOutEdge();
+			MyEdge e2 = v.getFirstOutEdge();
 			MyNode c = e2.getTarget();
 			t.deleteEdge(e1);
 			t.deleteEdge(e2);
@@ -267,7 +286,7 @@ public class RerootByHNumber extends Thread {
 	}
 
 	private void cmpAllEdgeCombisRec(Vector<MyEdge> edgeCombi, Vector<Vector<MyEdge>> treeEdges, int curTreeIndex,
-			Vector<Vector<MyEdge>> allEdgeCombis, Vector<MyEdge> invalidEdges) {
+									 Vector<Vector<MyEdge>> allEdgeCombis, Vector<MyEdge> invalidEdges) {
 		if (curTreeIndex < trees.length) {
 			for (MyEdge e : treeEdges.get(curTreeIndex)) {
 				if (!invalidEdges.contains(e)) {
@@ -292,7 +311,7 @@ public class RerootByHNumber extends Thread {
 	public void stopComp() {
 		isInterrupted = true;
 		if (hThreads != null) {
-			for (HNumberThread thread : hThreads) 
+			for (HNumberThread thread : hThreads)
 				thread.stopComp();
 			processBestTrees();
 		}

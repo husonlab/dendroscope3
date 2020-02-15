@@ -1,10 +1,23 @@
-package dendroscope.hybroscale.model;
+/*
+ *   HybridManager.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Vector;
-import java.util.concurrent.CountDownLatch;
+package dendroscope.hybroscale.model;
 
 import dendroscope.hybroscale.controller.HybridLauncher;
 import dendroscope.hybroscale.model.attachNetworks.ReattachNetworks;
@@ -22,6 +35,9 @@ import dendroscope.hybroscale.model.util.ComputeNodeWeightsSparse;
 import dendroscope.hybroscale.util.graph.MyNode;
 import dendroscope.hybroscale.util.graph.MyPhyloTree;
 import dendroscope.hybroscale.view.HybridView;
+
+import java.util.Collections;
+import java.util.Vector;
 
 public class HybridManager extends Thread {
 
@@ -56,7 +72,7 @@ public class HybridManager extends Thread {
 	}
 
 	public HybridManager(MyPhyloTree[] phyloTrees, Computation computation, int cores, Integer maxK, boolean speedUp,
-			String constraints, boolean doClusterReduction, boolean verbose) {
+						 String constraints, boolean doClusterReduction, boolean verbose) {
 		this.compValue = computation;
 		this.phyloTrees = new MyPhyloTree[phyloTrees.length];
 		for (int i = 0; i < phyloTrees.length; i++)
@@ -96,7 +112,7 @@ public class HybridManager extends Thread {
 						v.setLabel("");
 				}
 			}
-			
+
 			rI.removeUniqueTaxa(uniquePhyloTrees);
 			rI.replaceLabelsByNumber(uniquePhyloTrees);
 
@@ -269,10 +285,10 @@ public class HybridManager extends Thread {
 
 				for (ClusterThread t : clusterThreads)
 					t.interrupt();
-				
+
 				for (MyPhyloTree n : networks)
 					rI.addLeafLabels(n, taxaOrdering);
-				
+
 				// reattach unique taxa to each network
 				ReattachUniqueTaxa reattachUniqueTaxa = new ReattachUniqueTaxa(phyloTrees, rI, taxaOrdering);
 				if (!rI.containsClusterNetwork()) {

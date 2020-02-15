@@ -1,3 +1,22 @@
+/*
+ *   DFSNetworkReporter.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package dendroscope.hybroscale.model.cmpMinNetworks;
 
 import dendroscope.hybroscale.model.HybridManager.Computation;
@@ -28,10 +47,10 @@ public class DFSNetworkReporter {
 	private boolean stop = false, debug = false, heuristicMode = false;
 
 	public DFSNetworkReporter(SparseNetwork lastNetwork, int k, int treeIndex, Computation compValue,
-			DFSManager manager, SparseTree[] trees, CheckConstraints checker, Vector<String> taxaOrdering,
-			Vector<Integer> treeMapping, MyNetPriorThreadPool myThreadPool, HybridTree[] hybridTrees, boolean speedUp,
-			boolean stop, boolean debug, boolean heuristicMode, NetworkMemory netMem) {
-		
+							  DFSManager manager, SparseTree[] trees, CheckConstraints checker, Vector<String> taxaOrdering,
+							  Vector<Integer> treeMapping, MyNetPriorThreadPool myThreadPool, HybridTree[] hybridTrees, boolean speedUp,
+							  boolean stop, boolean debug, boolean heuristicMode, NetworkMemory netMem) {
+
 		this.k = k;
 		this.treeIndex = treeIndex;
 		this.compValue = compValue;
@@ -47,19 +66,19 @@ public class DFSNetworkReporter {
 		this.debug = debug;
 		this.heuristicMode = heuristicMode;
 		this.netMem = netMem;
-		
+
 	}
 
 	public void reportNewNetworkThreads(SparseNetwork newNetwork, HybridTree[] treePair, HybridTree[] repHybridTrees, String log) {
 
 		int newNumber = new CountRetNumber().getNumber(newNetwork, compValue);
 		newNetwork.setNumber(newNumber);
-		
+
 //		System.out.println(newNetwork.getPhyloTree()+";");
 
 		if(!processNetwork(newNetwork))
 			return;
-			
+
 		if (newNumber < k && !stop) {
 
 			SparseNetwork newNetworkCopy = copyNetwork(newNetwork, null, null, null);
@@ -101,9 +120,9 @@ public class DFSNetworkReporter {
 
 			if (treeIndex < trees.length - 1
 					&& (checker == null || nothingToCheck || (checker.forNegConstraints(newNetworkWithoutOneNodes)
-							&& (manager.doCheckTime() && timeDegree <= manager.getBestTimeConsistentValue())
-							|| (manager.doCheckAddTaxa() && addTaxaDegree <= manager.getBestAddTaxaValue()) || (manager
-							.doCheckLevel() && levelDegree <= manager.getBestLevelValue())))) {
+					&& (manager.doCheckTime() && timeDegree <= manager.getBestTimeConsistentValue())
+					|| (manager.doCheckAddTaxa() && addTaxaDegree <= manager.getBestAddTaxaValue()) || (manager
+					.doCheckLevel() && levelDegree <= manager.getBestLevelValue())))) {
 
 				HashSet<BitSet> newEdgeSets = new ComputeEdgeSets(newNetworkCopy, newReticulateEdges, heuristicMode,
 						treeIndex, null).run();
@@ -118,7 +137,7 @@ public class DFSNetworkReporter {
 					int newPriority = (newNumber + (2 * newTreeIndex)) * 10;
 
 					prevTreeContainmentCheck(newNetworkCopy, "0-treeIndex: " + treeIndex, treeIndex);
-						
+
 
 					DFSUpdateNetworkThread newThread = new DFSUpdateNetworkThread(k, newNetworkCopy,
 							newReticulateEdges, newEdgeSetClone, null, trees, repHybridTrees, newTreeIndex,
@@ -134,9 +153,9 @@ public class DFSNetworkReporter {
 
 			} else if (newNumber < k
 					&& (checker == null || nothingToCheck || (checker.forNegConstraints(newNetworkWithoutOneNodes)
-							&& (manager.doCheckTime() && timeDegree <= manager.getBestTimeConsistentValue())
-							|| (manager.doCheckAddTaxa() && addTaxaDegree <= manager.getBestAddTaxaValue()) || (manager
-							.doCheckLevel() && levelDegree <= manager.getBestLevelValue())))) {
+					&& (manager.doCheckTime() && timeDegree <= manager.getBestTimeConsistentValue())
+					|| (manager.doCheckAddTaxa() && addTaxaDegree <= manager.getBestAddTaxaValue()) || (manager
+					.doCheckLevel() && levelDegree <= manager.getBestLevelValue())))) {
 
 				manager.setBestTimeConsistentValue(timeDegree);
 				manager.setBestAddTaxaValue(addTaxaDegree);
@@ -175,22 +194,22 @@ public class DFSNetworkReporter {
 	}
 
 	private boolean processNetwork(SparseNetwork recNet) {
-		
+
 		SparseNetwork n = new SparseNetwork(recNet);
 		removeOneNodes(n);
 		updateEdgeIndices(n);
 		mapIndices(n);
-		
+
 		Vector<Integer> upcomingIndices = new Vector<Integer>();
 		for (int i = treeIndex + 1; i < trees.length; i++)
 			upcomingIndices.add(treeMapping.get(i));
-		
+
 		BitSet netSet = netMem.getNetworkSet(n);
 		n.setInfo(netSet);
 		if (netMem.containsNetwork(n, upcomingIndices))
 			return false;
 		netMem.addNetwork(n, upcomingIndices);
-		
+
 		return true;
 	}
 
@@ -206,7 +225,7 @@ public class DFSNetworkReporter {
 	}
 
 	private SparseNetwork copyNetwork(SparseNetwork n, Vector<SparseNetEdge> nonTreeEdges,
-			Vector<SparseNetEdge> solidTreeEdges, ConcurrentHashMap<SparseNetEdge, SparseNetEdge> edgeToEdgeCopy) {
+									  Vector<SparseNetEdge> solidTreeEdges, ConcurrentHashMap<SparseNetEdge, SparseNetEdge> edgeToEdgeCopy) {
 		SparseNetwork nCopy = new SparseNetwork(new SparseNetNode(null, null, n.getRoot().getLabel()));
 		nCopy.getRoot().setOwner(nCopy);
 		copyNetworkRec(nCopy.getRoot(), n.getRoot(), nCopy, n, new Vector<SparseNetNode>(),
@@ -215,10 +234,10 @@ public class DFSNetworkReporter {
 	}
 
 	private void copyNetworkRec(SparseNetNode vCopy, SparseNetNode v, SparseNetwork nCopy, SparseNetwork n,
-			Vector<SparseNetNode> visited, ConcurrentHashMap<SparseNetNode, SparseNetNode> nodeToCopy,
-			Vector<SparseNetEdge> nonTreeEdges, Vector<SparseNetEdge> solidTreeEdges,
-			ConcurrentHashMap<SparseNetEdge, SparseNetEdge> edgeToEdgeCopy) {
-        Iterator<SparseNetEdge> it = v.outEdges().iterator();
+								Vector<SparseNetNode> visited, ConcurrentHashMap<SparseNetNode, SparseNetNode> nodeToCopy,
+								Vector<SparseNetEdge> nonTreeEdges, Vector<SparseNetEdge> solidTreeEdges,
+								ConcurrentHashMap<SparseNetEdge, SparseNetEdge> edgeToEdgeCopy) {
+		Iterator<SparseNetEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			SparseNetEdge e = it.next();
 			SparseNetNode c = e.getTarget();
@@ -344,8 +363,8 @@ public class DFSNetworkReporter {
 
 	private boolean prevTreeContainmentCheck(SparseNetwork n, String s, int treeIndex) {
 
-		for (int i = 0; i < treeIndex; i++) {		
-			
+		for (int i = 0; i < treeIndex; i++) {
+
 			if (hybridTrees[i] != null) {
 
 				Hashtable<Integer, Vector<String>> prevTreeToTaxa = new Hashtable<Integer, Vector<String>>();
@@ -383,11 +402,11 @@ public class DFSNetworkReporter {
 	}
 
 	private void getClusterByPrevTree(SparseNetNode v, SparseNetwork n, BitSet b, int index,
-			Hashtable<Integer, Vector<String>> prevTreeToTaxa, boolean debug) {
+									  Hashtable<Integer, Vector<String>> prevTreeToTaxa, boolean debug) {
 		if (v.getOutDegree() == 0 && prevTreeToTaxa.get(index).contains(v.getLabel())) {
 			b.set(taxaOrdering.indexOf(v.getLabel()));
 		} else {
-            Iterator<SparseNetEdge> it = v.outEdges().iterator();
+			Iterator<SparseNetEdge> it = v.outEdges().iterator();
 			while (it.hasNext()) {
 				SparseNetEdge e = it.next();
 				if (e.getIndices().contains(index) || e.getTarget().getInDegree() <= 1)

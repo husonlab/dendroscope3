@@ -1,8 +1,23 @@
-package dendroscope.hybroscale.model;
+/*
+ *   ClusterThread.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Vector;
+package dendroscope.hybroscale.model;
 
 import dendroscope.hybroscale.model.HybridManager.Computation;
 import dendroscope.hybroscale.model.parallelization.MyNetPriorThreadPool;
@@ -18,6 +33,10 @@ import dendroscope.hybroscale.util.graph.MyEdge;
 import dendroscope.hybroscale.util.graph.MyNode;
 import dendroscope.hybroscale.util.graph.MyPhyloTree;
 import dendroscope.hybroscale.view.HybridView;
+
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Vector;
 
 /**
  * @author Benjamin Albrecht, 6.2012
@@ -53,7 +72,7 @@ public class ClusterThread extends Thread {
 	private Vector<HybridView> views;
 
 	public ClusterThread(HybridTree[] clusterTrees, ReplacementInfo rI, MyThreadPool myPool, Boolean isSubCluster, Computation compValue, MyNetPriorThreadPool netExec, Integer maxK,
-			Vector<HybridView> views, Vector<String> taxaOrdering, boolean speedUp, CheckConstraints checker, boolean verbose) {
+						 Vector<HybridView> views, Vector<String> taxaOrdering, boolean speedUp, CheckConstraints checker, boolean verbose) {
 
 		trees = new HybridTree[clusterTrees.length];
 		for (int i = 0; i < clusterTrees.length; i++) {
@@ -86,12 +105,12 @@ public class ClusterThread extends Thread {
 				for (HybridTree t : trees)
 					printTree(t);
 			}
-			
+
 			eS = new ExhaustiveSearch(trees, threadPool, this, compValue, lowerBound, netExec, maxK, views,
 					taxaOrdering, speedUp, checker, verbose);
-			eS.run();		
+			eS.run();
 			eS.join();
-			
+
 			eS.stopThread();
 			eS.interrupt();
 
@@ -101,7 +120,7 @@ public class ClusterThread extends Thread {
 							"No result computed - please check constraints:\n" + checker.getNegBadConstraints());
 				hasNoResult = true;
 			}
-			
+
 			if(verbose){
 				if(compValue == Computation.EDGE_NETWORK)
 					System.out.println("Result: "+maxForests.size()+ " network(s) with hybridization number "+hybridNumber+" computed");
@@ -159,11 +178,11 @@ public class ClusterThread extends Thread {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-		}		
-		
+		}
+
 //		maxForests = null;
 		eS = null;
-		
+
 	}
 
 	private void performEdgeMapping(SparseNetwork n) {
@@ -298,7 +317,7 @@ public class ClusterThread extends Thread {
 	public CheckConstraints getChecker() {
 		return checker;
 	}
-	
+
 	private void printTree(HybridTree t) {
 		MyPhyloTree tPrint = new MyPhyloTree(t);
 		for(MyNode v : tPrint.getNodes()){

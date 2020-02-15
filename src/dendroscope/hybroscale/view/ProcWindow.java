@@ -1,9 +1,27 @@
-package dendroscope.hybroscale.view;
+/*
+ *   ProcWindow.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-import javax.swing.*;
+package dendroscope.hybroscale.view;
 
 import dendroscope.hybroscale.controller.HybroscaleController;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,7 +46,7 @@ public class ProcWindow extends JFrame implements ActionListener {
 		number.setColumns(10);
 		number.selectAll();
 		panel.add(number);
-		
+
 		JButton ok = new JButton("OK");
 		ok.addActionListener(this);
 		panel.add(ok);
@@ -37,9 +55,9 @@ public class ProcWindow extends JFrame implements ActionListener {
 		setMinimumSize(new Dimension(100, 0));
 		setAlwaysOnTop(true);
 		pack();
-		
+
 		setLocationRelativeTo(hView);
-		
+
 	}
 
 	public void actionPerformed(ActionEvent arg0) {

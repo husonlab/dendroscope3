@@ -1,9 +1,28 @@
-package dendroscope.hybroscale.model.util;
+/*
+ *   CheckConstraints.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-import java.util.Vector;
+package dendroscope.hybroscale.model.util;
 
 import dendroscope.hybroscale.model.reductionSteps.ReplacementInfo;
 import dendroscope.hybroscale.model.treeObjects.SparseNetwork;
+
+import java.util.Vector;
 
 public class CheckConstraints {
 
@@ -45,13 +64,13 @@ public class CheckConstraints {
 			return new CheckTimeConsistency().run(n.getPhyloTree(), bestTimeDegree, heuristicMode, false, maxNodes);
 		return Integer.MAX_VALUE;
 	}
-	
+
 	public int estimateAddTaxaDegree(SparseNetwork n, int bestAddTaxaValue, boolean heuristicMode, int maxNodes) {
 		if (checkAddTaxa)
 			return new CheckAddTaxaEdge().run(n.getPhyloTree(), bestAddTaxaValue, false, true);
 		return Integer.MAX_VALUE;
 	}
-	
+
 	public int estimateLevelDegree(SparseNetwork n, int bestLevel) {
 		if (checkLevel)
 			return new CheckLevel().run(n.getPhyloTree(), bestLevel);
@@ -70,11 +89,11 @@ public class CheckConstraints {
 	public boolean doCheckTime() {
 		return checkTime;
 	}
-	
+
 	public boolean doCheckAddTaxa() {
 		return checkAddTaxa;
 	}
-	
+
 	public boolean doCheckLevel() {
 		return checkLevel;
 	}

@@ -1,18 +1,32 @@
-package dendroscope.hybroscale.terminals;
+/*
+ *   TerminalManager.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-import java.util.BitSet;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Vector;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
+package dendroscope.hybroscale.terminals;
 
 import dendroscope.hybroscale.model.parallelization.MyNetPriorThreadPool;
 import dendroscope.hybroscale.util.graph.MyNode;
 import dendroscope.hybroscale.util.graph.MyPhyloTree;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Future;
 
 public class TerminalManager extends Thread {
 
@@ -39,7 +53,7 @@ public class TerminalManager extends Thread {
 	}
 
 	public TerminalManager(MyPhyloTree tOne, MyPhyloTree tTwo, Vector<String> taxaOrdering, int lowerBound,
-			int upperBound) {
+						   int upperBound) {
 		this.tOne = tOne;
 		this.tTwo = tTwo;
 		this.taxaOrdering = (Vector<String>) taxaOrdering.clone();
@@ -48,7 +62,7 @@ public class TerminalManager extends Thread {
 	}
 
 	public TerminalManager(MyPhyloTree tOne, MyPhyloTree tTwo, Vector<String> taxaOrdering,
-			MyNetPriorThreadPool myThreadPool, int lowerBound, Integer upperBound) {
+						   MyNetPriorThreadPool myThreadPool, int lowerBound, Integer upperBound) {
 		this.tOne = tOne;
 		this.tTwo = tTwo;
 		this.taxaOrdering = (Vector<String>) taxaOrdering.clone();
@@ -58,7 +72,7 @@ public class TerminalManager extends Thread {
 	}
 
 	public TerminalManager(MyPhyloTree tOne, MyPhyloTree tTwo, Vector<String> taxaOrdering,
-			MyNetPriorThreadPool myThreadPool, int lowerBound) {
+						   MyNetPriorThreadPool myThreadPool, int lowerBound) {
 		this.tOne = tOne;
 		this.tTwo = tTwo;
 		this.taxaOrdering = (Vector<String>) taxaOrdering.clone();
@@ -236,7 +250,7 @@ public class TerminalManager extends Thread {
 			}
 
 			startNextThread(res);
-			
+
 			tA.freeMemory();
 			tA = null;
 

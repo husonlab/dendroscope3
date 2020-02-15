@@ -1,3 +1,22 @@
+/*
+ *   ComputeNodeWeightsSparse.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package dendroscope.hybroscale.model.util;
 
 import dendroscope.hybroscale.util.graph.MyEdge;
@@ -23,7 +42,7 @@ public class ComputeNodeWeightsSparse {
 	}
 
 	public void computeOcurrences() {
-		
+
 		int networksFactor = 0;
 		for (MyPhyloTree n : networks) {
 			Vector<BitSet> hybridClusters = new Vector<BitSet>();
@@ -66,12 +85,12 @@ public class ComputeNodeWeightsSparse {
 			}
 			networkToOcc.put(n, sumOcc);
 		}
-		
+
 //		Collections.sort(networks, new NetworkSorter());
 	}
 
 	private boolean isClusterNode(MyNode v) {
-        MyEdge outEdge = v.getFirstOutEdge();
+		MyEdge outEdge = v.getFirstOutEdge();
 		if (((HashSet<Integer>) outEdge.getInfo()).contains(-1))
 			return true;
 		return false;

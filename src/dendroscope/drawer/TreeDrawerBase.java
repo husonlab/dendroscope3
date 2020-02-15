@@ -1,22 +1,21 @@
-/**
- * TreeDrawerBase.java 
- * Copyright (C) 2019 Daniel H. Huson
+/*
+ *   TreeDrawerBase.java Copyright (C) 2020 Daniel H. Huson
  *
- * (Some files contain contributions from other authors, who are then mentioned separately.)
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package dendroscope.drawer;
 
 import dendroscope.consensus.TransferVisualization;
@@ -1005,7 +1004,7 @@ public class TreeDrawerBase {
             below.add(w);
             if (levels.getValue(w) == -1)
                 computeLevelsRec(w, levels, add, path);
-            level = Math.max(level, levels.getValue(w) + (isTransferEdge(f) ? 0 : add));
+            level = Math.max(level, levels.getValue(w) + (tree.isTransferEdge(f) ? 0 : add));
         }
         Collection<Node> lsaChildren = tree.getNode2GuideTreeChildren().get(v);
         if (lsaChildren != null) {
@@ -1161,16 +1160,6 @@ public class TreeDrawerBase {
      */
     public static void setMinLeavesForProxy(int min) {
         TreeDrawerBase.MIN_LEAVES_FOR_PROXY = min;
-    }
-
-    /**
-     * any tree edge and any reticulate edge with  length -1 will be drawn as a transfer edge
-     *
-     * @param e
-     * @return
-     */
-    protected boolean isTransferEdge(Edge e) {
-        return tree.isSpecial(e) && tree.getWeight(e) == -1;
     }
 
     /**

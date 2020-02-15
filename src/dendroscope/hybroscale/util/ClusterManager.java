@@ -1,3 +1,22 @@
+/*
+ *   ClusterManager.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package dendroscope.hybroscale.util;
 
 import dendroscope.hybroscale.util.graph.MyEdge;
@@ -42,7 +61,7 @@ public class ClusterManager {
 				clusterNet.setRoot(v);
 		}
 
-		Collections.sort(clusterSet, new ClusterComparator());			
+		Collections.sort(clusterSet, new ClusterComparator());
 		for (BitSet cluster : clusterSet) {
 			if (!cluster.equals(rootCluster)) {
 				Vector<MyNode> markedNodes = new Vector<MyNode>();
@@ -52,7 +71,7 @@ public class ClusterManager {
 				while (!stack.isEmpty()) {
 					MyNode v = clusterToNode.get(stack.pop());
 					boolean isBelow = false;
-                    Iterator<MyEdge> it = v.outEdges().iterator();
+					Iterator<MyEdge> it = v.outEdges().iterator();
 					while (it.hasNext()) {
 						MyNode w = it.next().getTarget();
 						BitSet wCluster = nodeToCluster.get(w);
@@ -66,12 +85,12 @@ public class ClusterManager {
 							}
 						}
 					}
-					if (!isBelow) 
-						clusterNet.newEdge(v, clusterToNode.get(cluster));	
+					if (!isBelow)
+						clusterNet.newEdge(v, clusterToNode.get(cluster));
 				}
 			}
 		}
-		
+
 		Vector<MyNode> retNodes = new Vector<MyNode>();
 		for(MyNode v : clusterNet.getNodes()){
 			if(v.getInDegree() > 1)
@@ -80,7 +99,7 @@ public class ClusterManager {
 		for(MyNode v : retNodes){
 			MyNode vPrime = clusterNet.newNode();
 			Vector<MyEdge> inEdges = new Vector<MyEdge>();
-            Iterator<MyEdge> it = v.inEdges().iterator();
+			Iterator<MyEdge> it = v.inEdges().iterator();
 			while(it.hasNext())
 				inEdges.add(it.next());
 			for(MyEdge e : inEdges){
@@ -120,7 +139,7 @@ public class ClusterManager {
 			return b;
 		} else {
 			BitSet b = new BitSet(taxaOrdering.size());
-            Iterator<MyEdge> it = v.outEdges().iterator();
+			Iterator<MyEdge> it = v.outEdges().iterator();
 			while (it.hasNext()) {
 				MyNode child = it.next().getTarget();
 				b.or(cmpClustersRec(child, clusterSet));

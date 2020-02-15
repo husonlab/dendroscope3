@@ -1,11 +1,33 @@
-package dendroscope.hybroscale.model.cmpAllMAAFs;
+/*
+ *   RefinedFastApproxHNumber.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-import java.util.*;
+package dendroscope.hybroscale.model.cmpAllMAAFs;
 
 import dendroscope.hybroscale.model.treeObjects.HybridTree;
 import dendroscope.hybroscale.model.treeObjects.SparseTree;
 import dendroscope.hybroscale.model.treeObjects.SparseTreeNode;
 import dendroscope.hybroscale.util.graph.MyNode;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Vector;
 
 public class RefinedFastApproxHNumber {
 
@@ -26,9 +48,9 @@ public class RefinedFastApproxHNumber {
 
 		// System.out.println(" *************************************  " +
 		// forestSize);
-		
+
 		this.k = k;
-		
+
 		t1Taxa = new Vector<String>();
 		for (MyNode leaf : t1.getLeaves())
 			t1Taxa.add(leaf.getLabel());
@@ -93,10 +115,10 @@ public class RefinedFastApproxHNumber {
 			forest.add(new EasyTree(t2));
 			MAAFs.add(forest);
 		}
-		
+
 		if(!MAAFs.isEmpty())
 			return MAAFs.iterator().next().size() - 1;
-		
+
 		return Integer.MAX_VALUE;
 
 	}
@@ -145,7 +167,7 @@ public class RefinedFastApproxHNumber {
 		boolean debug = false;
 
 		if (forest.size() <= k) {
-			
+
 			if (h.getLeaves().size() > 2 && !stop) {
 
 				EasySiblings sibs = new EasySiblings();
@@ -348,7 +370,7 @@ public class RefinedFastApproxHNumber {
 	}
 
 	private void cutEdges(EasyTree h12, EasySiblings sibs, Vector<String> t1Sib, Vector<EasyTree> t2Forest,
-			boolean debug) {
+						  boolean debug) {
 
 		EasyNode v1 = sibs.getForestLeaf(t1Sib.get(0));
 		EasyNode v2 = sibs.getForestLeaf(t1Sib.get(1));
@@ -410,7 +432,7 @@ public class RefinedFastApproxHNumber {
 	}
 
 	private void cutForest(EasyNode v, Vector<EasyTree> forest, EasyTree t1, EasySiblings sibs, Vector<String> t1Sib,
-			boolean debug, boolean sameOwner) {
+						   boolean debug, boolean sameOwner) {
 
 		// sibs.updateTaxa(t1);
 		EasyTree t = (EasyTree) v.getOwner();
@@ -440,7 +462,7 @@ public class RefinedFastApproxHNumber {
 	}
 
 	private void cutPendants(Vector<Vector<EasyNode>> pendantSet, Vector<EasyTree> forest, EasyTree t1,
-			EasySiblings sibs, Vector<String> t1Sib, boolean debug) {
+							 EasySiblings sibs, Vector<String> t1Sib, boolean debug) {
 
 		for (Vector<EasyNode> pendants : pendantSet) {
 			Vector<EasyTree> subtrees = new Vector<EasyTree>();

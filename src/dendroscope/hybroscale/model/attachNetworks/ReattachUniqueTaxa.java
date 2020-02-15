@@ -1,3 +1,22 @@
+/*
+ *   ReattachUniqueTaxa.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package dendroscope.hybroscale.model.attachNetworks;
 
 import dendroscope.hybroscale.model.reductionSteps.ReplacementInfo;
@@ -64,8 +83,8 @@ public class ReattachUniqueTaxa {
 					MyNode v = clusterToNode.get(vCluster);
 					BitSet sibCluster = new BitSet(taxaOrdering.size());
 					while (sibCluster.isEmpty()) {
-                        MyNode p = v.getFirstInEdge().getSource();
-                        Iterator<MyEdge> it = p.outEdges().iterator();
+						MyNode p = v.getFirstInEdge().getSource();
+						Iterator<MyEdge> it = p.outEdges().iterator();
 						while (it.hasNext()) {
 							MyNode sib = it.next().getTarget();
 							if (!sib.equals(v))
@@ -84,12 +103,12 @@ public class ReattachUniqueTaxa {
 	}
 
 	private BitSet updateTreeClusters(MyNode v, HashMap<MyNode, BitSet> nodeToCluster,
-			HashMap<BitSet, MyNode> clusterToNode, Vector<MyNode> postOrderNodes) {
+									  HashMap<BitSet, MyNode> clusterToNode, Vector<MyNode> postOrderNodes) {
 		BitSet b = new BitSet(taxaOrdering.size());
 		if (v.getOutDegree() == 0){
 			b.set(taxaOrdering.indexOf(v.getLabel()));
 		}else {
-            Iterator<MyEdge> it = v.outEdges().iterator();
+			Iterator<MyEdge> it = v.outEdges().iterator();
 			while (it.hasNext())
 				b.or(updateTreeClusters(it.next().getTarget(), nodeToCluster, clusterToNode, postOrderNodes));
 		}
@@ -138,7 +157,7 @@ public class ReattachUniqueTaxa {
 	}
 
 	private void insertUnqiueTaxon(MyNode v, MyNode s, BitSet sibCluster, HybridNetwork n, int index,
-			HashMap<BitSet, MyNode> clusterToNode) {
+								   HashMap<BitSet, MyNode> clusterToNode) {
 		BitSet topCluster = new BitSet(taxaOrdering.size());
 		topCluster.set(taxaOrdering.indexOf(v.getLabel()));
 		topCluster.or(sibCluster);
@@ -151,7 +170,7 @@ public class ReattachUniqueTaxa {
 		} else {
 			if (s.getInDegree() == 1) {
 				// System.out.println("Case-B");
-                MyEdge eDel = s.getFirstInEdge();
+				MyEdge eDel = s.getFirstInEdge();
 				MyNode p = eDel.getSource();
 				HashSet<Integer> eIndices = (HashSet<Integer>) getEdgeIndices(eDel).clone();
 				n.deleteEdge(eDel);
@@ -214,7 +233,7 @@ public class ReattachUniqueTaxa {
 				for (String taxon : uniqueTaxa) {
 
 					BitSet sibCluster = indexToAttachingCluster.get(index).get(taxon);
-					
+
 					MyNode s = clusterToNode.get(sibCluster);
 
 					MyNode v = n.newNode();
@@ -231,7 +250,7 @@ public class ReattachUniqueTaxa {
 	}
 
 	private void insertUnqiueTaxon(MyNode v, MyNode s, BitSet sibCluster, MyPhyloTree n, int index,
-			HashMap<BitSet, MyNode> clusterToNode) {
+								   HashMap<BitSet, MyNode> clusterToNode) {
 		BitSet topCluster = new BitSet(taxaOrdering.size());
 		topCluster.set(taxaOrdering.indexOf(v.getLabel()));
 		topCluster.or(sibCluster);
@@ -244,7 +263,7 @@ public class ReattachUniqueTaxa {
 		} else {
 			if (s.getInDegree() == 1) {
 				// System.out.println("Case-B");
-                MyEdge eDel = s.getFirstInEdge();
+				MyEdge eDel = s.getFirstInEdge();
 				MyNode p = eDel.getSource();
 				HashSet<Integer> eIndices = (HashSet<Integer>) getEdgeIndices(eDel).clone();
 				n.deleteEdge(eDel);
@@ -287,7 +306,7 @@ public class ReattachUniqueTaxa {
 //			System.out.println("Leaf: " + v.getLabel());
 			b.set(taxaOrdering.indexOf(v.getLabel()));
 		} else {
-            Iterator<MyEdge> it = v.outEdges().iterator();
+			Iterator<MyEdge> it = v.outEdges().iterator();
 			while (it.hasNext()) {
 				MyEdge e = it.next();
 				if (getEdgeIndices(e).contains(index)) // || e.getTarget().getInDegree() == 1)

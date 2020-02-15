@@ -1,3 +1,22 @@
+/*
+ *   CheckTimeConsistency.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package dendroscope.hybroscale.model.util;
 
 import dendroscope.hybroscale.model.treeObjects.SparseNetEdge;
@@ -104,7 +123,7 @@ public class CheckTimeConsistency {
 	}
 
 	private void checkConsistency(MyGraph g, MyNode v, int maxK, Vector<MyNode> visitedNodes,
-			HashSet<MyEdge> visitedEdges, boolean heuristicMode, HashMap<MyNode, Vector<SparseNetNode>> graphNodeToNode) {
+								  HashSet<MyEdge> visitedEdges, boolean heuristicMode, HashMap<MyNode, Vector<SparseNetNode>> graphNodeToNode) {
 		visitedNodes.add(v);
 		int weight = getCurInDegree(v, visitedEdges);
 		maxK = maxK - weight;
@@ -112,7 +131,7 @@ public class CheckTimeConsistency {
 			nodeOrdering = (Vector<MyNode>) visitedNodes.clone();
 			checkSuccesful = true;
 		} else if (maxK >= 0 && !checkSuccesful) {
-            Iterator<MyEdge> it = v.outEdges().iterator();
+			Iterator<MyEdge> it = v.outEdges().iterator();
 			while (it.hasNext()) {
 				MyEdge e = it.next();
 				visitedEdges.add(e);
@@ -127,7 +146,7 @@ public class CheckTimeConsistency {
 	}
 
 	private Vector<MyNode> getNextNodes(MyGraph g, Vector<MyNode> visitedNodes, HashSet<MyEdge> visitedEdges,
-			HashMap<MyNode, Vector<SparseNetNode>> graphNodeToNode, boolean heuristicMode) {
+										HashMap<MyNode, Vector<SparseNetNode>> graphNodeToNode, boolean heuristicMode) {
 		Vector<MyNode> nextNodes = new Vector<MyNode>();
 		for (MyNode v : g.getNodes()) {
 			if (!visitedNodes.contains(v))
@@ -172,7 +191,7 @@ public class CheckTimeConsistency {
 
 	private int getCurDegree(MyNode v, HashSet<MyEdge> visitedEdges) {
 		int curInDegree = 0;
-        Iterator<MyEdge> it = v.inEdges().iterator();
+		Iterator<MyEdge> it = v.inEdges().iterator();
 		while (it.hasNext()) {
 			if (!visitedEdges.contains(it.next()))
 				curInDegree++;
@@ -192,7 +211,7 @@ public class CheckTimeConsistency {
 
 	private int getCurInDegree(MyNode v, HashSet<MyEdge> visitedEdges) {
 		int curInDegree = 0;
-        Iterator<MyEdge> it = v.inEdges().iterator();
+		Iterator<MyEdge> it = v.inEdges().iterator();
 		while (it.hasNext()) {
 			if (!visitedEdges.contains(it.next()))
 				curInDegree++;
@@ -209,7 +228,7 @@ public class CheckTimeConsistency {
 		}
 		if (!leaves.isEmpty()) {
 			for (MyNode v : leaves) {
-                MyNode p = v.getFirstInEdge().getSource();
+				MyNode p = v.getFirstInEdge().getSource();
 				p.setLabel(p.getLabel() + " " + v.getLabel());
 				removeNode(g, v);
 			}
@@ -218,8 +237,8 @@ public class CheckTimeConsistency {
 		MyNode supNode = null;
 		for (MyNode v : g.getNodes()) {
 			if (v.getInDegree() == 1 && v.getOutDegree() == 1) {
-                MyNode p = v.getFirstInEdge().getSource();
-                MyNode c = v.getFirstOutEdge().getTarget();
+				MyNode p = v.getFirstInEdge().getSource();
+				MyNode c = v.getFirstOutEdge().getTarget();
 				if (!p.equals(c)) {
 					supNode = v;
 					break;
@@ -235,7 +254,7 @@ public class CheckTimeConsistency {
 	}
 
 	private MyGraph initGraph(SparseNetwork n, HashMap<SparseNetNode, MyNode> nodeToGraphNode,
-			HashMap<MyNode, Vector<SparseNetNode>> graphNodeToNode) {
+							  HashMap<MyNode, Vector<SparseNetNode>> graphNodeToNode) {
 		MyGraph g = new MyGraph();
 		MyNode rootG = g.newNode();
 		rootG.setLabel(n.getRoot().getLabel());
@@ -247,7 +266,7 @@ public class CheckTimeConsistency {
 	}
 
 	private void initGraphRec(MyGraph g, SparseNetNode v, HashMap<SparseNetNode, MyNode> nodeToGraphNode,
-			HashMap<MyNode, Vector<SparseNetNode>> graphNodeToNode) {
+							  HashMap<MyNode, Vector<SparseNetNode>> graphNodeToNode) {
 
 		for (SparseNetEdge eOut : v.getOutEdges()) {
 			SparseNetNode c = eOut.getTarget();
@@ -300,10 +319,10 @@ public class CheckTimeConsistency {
 
 	private void removeNode(MyGraph g, MyNode v) {
 		Vector<MyEdge> toDelete = new Vector<MyEdge>();
-        Iterator<MyEdge> it = v.inEdges().iterator();
+		Iterator<MyEdge> it = v.inEdges().iterator();
 		while (it.hasNext())
 			toDelete.add(it.next());
-        it = v.outEdges().iterator();
+		it = v.outEdges().iterator();
 		while (it.hasNext())
 			toDelete.add(it.next());
 		for (MyEdge e : toDelete) {
@@ -313,7 +332,7 @@ public class CheckTimeConsistency {
 	}
 
 	private void transferEdges(MyGraph g, MyNode v1, MyNode v2) {
-        Iterator<MyEdge> it = v1.inEdges().iterator();
+		Iterator<MyEdge> it = v1.inEdges().iterator();
 		Vector<MyNode> sourceNodes = new Vector<MyNode>();
 		while (it.hasNext()) {
 			MyNode s = it.next().getSource();
@@ -323,7 +342,7 @@ public class CheckTimeConsistency {
 			if (!s.equals(v2))
 				g.newEdge(s, v2);
 		}
-        it = v1.outEdges().iterator();
+		it = v1.outEdges().iterator();
 		Vector<MyNode> targetNodes = new Vector<MyNode>();
 		while (it.hasNext()) {
 			MyNode t = it.next().getTarget();
@@ -337,8 +356,8 @@ public class CheckTimeConsistency {
 
 	private boolean supressNode(MyGraph g, MyNode v) {
 		if (v.getInDegree() == 1 && v.getOutDegree() == 1) {
-            MyNode p = v.getFirstInEdge().getSource();
-            MyNode c = v.getFirstOutEdge().getTarget();
+			MyNode p = v.getFirstInEdge().getSource();
+			MyNode c = v.getFirstOutEdge().getTarget();
 			g.newEdge(p, c);
 			this.removeNode(g, v);
 			return true;
@@ -355,11 +374,11 @@ public class CheckTimeConsistency {
 	}
 
 	private void copyNetworkRec(MyPhyloTree t, SparseNetwork nCopy, MyNode v, SparseNetNode vCopy,
-			Hashtable<MyNode, SparseNetNode> visited) {
+								Hashtable<MyNode, SparseNetNode> visited) {
 
 		sparseNodeToNode.put(vCopy, v);
 		visited.put(v, vCopy);
-        Iterator<MyEdge> it = v.outEdges().iterator();
+		Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyNode c = it.next().getTarget();
 			if (visited.containsKey(c)) {
@@ -389,7 +408,7 @@ public class CheckTimeConsistency {
 		System.out.println("**********\nPrinting Consistency Graph\n" + nInput.getPhyloTree().toMyBracketString()
 				+ "\n#Nodes: " + g.getNodes().size());
 		for (MyNode v : g.getNodes()) {
-            Iterator<MyEdge> it = v.inEdges().iterator();
+			Iterator<MyEdge> it = v.inEdges().iterator();
 			while (it.hasNext()) {
 				MyEdge e = it.next();
 				System.out.println(e.getSource().getLabel() + " -> " + e.getTarget().getLabel());
@@ -403,7 +422,7 @@ public class CheckTimeConsistency {
 		buf.append("**********\nPrinting Consistency Graph\n" + nInput.getPhyloTree().toMyBracketString()
 				+ "\n#Nodes: " + g.getNodes().size() + "\n");
 		for (MyNode v : g.getNodes()) {
-            Iterator<MyEdge> it = v.inEdges().iterator();
+			Iterator<MyEdge> it = v.inEdges().iterator();
 			while (it.hasNext()) {
 				MyEdge e = it.next();
 				buf.append(e.getSource().getLabel() + " -> " + e.getTarget().getLabel() + "\n");

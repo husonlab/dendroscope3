@@ -1,3 +1,22 @@
+/*
+ *   CycleRefinement.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package dendroscope.hybroscale.model.cmpAllMAAFs;
 
 import dendroscope.hybroscale.model.treeObjects.HybridTree;
@@ -134,7 +153,7 @@ public class CycleRefinement {
 	}
 
 	private void isPartOfCycle(MyNode v, MyNode start, MyGraph g, Vector<MyEdge> visited) {
-        Iterator<MyEdge> it = v.outEdges().iterator();
+		Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyEdge e = it.next();
 			MyNode w = e.getTarget();
@@ -186,7 +205,7 @@ public class CycleRefinement {
 				Vector<MyNode> vNodes = t1NodeToGraphNode.get(p);
 				for (MyNode v : vNodes) {
 					if (graphRootToT1Node.containsKey(v)) {
-                        Iterator<MyEdge> it = v.outEdges().iterator();
+						Iterator<MyEdge> it = v.outEdges().iterator();
 						while (it.hasNext()) {
 							MyEdge eOut = it.next();
 							if (!eOut.isSpecial()) {
@@ -217,7 +236,7 @@ public class CycleRefinement {
 				Vector<MyNode> vNodes = t2NodeToGraphNode.get(p);
 				for (MyNode v : vNodes) {
 					if (graphRootToT2Node.containsKey(v)) {
-                        Iterator<MyEdge> it = v.outEdges().iterator();
+						Iterator<MyEdge> it = v.outEdges().iterator();
 						while (it.hasNext()) {
 							MyEdge eOut = it.next();
 							if (!eOut.isSpecial()) {
@@ -249,7 +268,7 @@ public class CycleRefinement {
 	}
 
 	private Vector<Vector<EasyTree>> cutForest(Vector<Vector<EasyTree>> cutForests, MyGraph g, MyNode startNode,
-			Vector<MyNode> rootNodes, HashMap<MyNode, String> graphNodeToLabel2) {
+											   Vector<MyNode> rootNodes, HashMap<MyNode, String> graphNodeToLabel2) {
 		boolean hasCycle = hasCycle(g, startNode);
 
 		if (!hasCycle) {
@@ -260,7 +279,7 @@ public class CycleRefinement {
 				vE.setInfo(vE.getInfo());
 				EasyTree eT = new EasyTree(vE);
 				vE.setOwner(eT);
-                if (v.getOutDegree() == 0 || (v.getFirstOutEdge()).isSpecial())
+				if (v.getOutDegree() == 0 || (v.getFirstOutEdge()).isSpecial())
 					vE.setLabel(graphNodeToLabel2.get(v));
 				parseComponent(g, v, vE, eT, graphNodeToLabel2, rootNodes);
 				forest.add(eT);
@@ -301,7 +320,7 @@ public class CycleRefinement {
 					vE.setInfo(v.getInfo());
 					EasyTree eT = new EasyTree(vE);
 					vE.setOwner(eT);
-                    if (v.getOutDegree() == 0 || (v.getFirstOutEdge()).isSpecial())
+					if (v.getOutDegree() == 0 || (v.getFirstOutEdge()).isSpecial())
 						vE.setLabel(nodeToLabelCopy.get(v));
 					parseComponent(gCopy, v, vE, eT, nodeToLabelCopy, rootNodesCopy);
 					cutForest.add(eT);
@@ -321,8 +340,8 @@ public class CycleRefinement {
 	}
 
 	private MyGraph copyGraph(MyGraph g, MyNode startNode, MyNode exitNode, Vector<MyNode> rootNodes,
-			HashMap<MyNode, String> graphNodeToLabel2, Vector<MyNode> copyNodes, Vector<MyNode> rootNodesCopy,
-			HashMap<MyNode, String> nodeToLabelCopy) {
+							  HashMap<MyNode, String> graphNodeToLabel2, Vector<MyNode> copyNodes, Vector<MyNode> rootNodesCopy,
+							  HashMap<MyNode, String> nodeToLabelCopy) {
 
 		MyGraph gCopy = new MyGraph();
 
@@ -335,7 +354,7 @@ public class CycleRefinement {
 				nodeToLabelCopy.put(singleNode, graphNodeToLabel2.get(rootNode));
 			}
 		}
-		
+
 		// copying connected subgraph
 		MyNode startCopy = gCopy.newNode();
 		startCopy.setInfo(startNode.getInfo());
@@ -350,9 +369,9 @@ public class CycleRefinement {
 	}
 
 	private void copyGraphRec(MyNode v, MyNode vCopy, HashMap<MyNode, MyNode> visitedToNode, MyGraph g, MyGraph gCopy,
-			MyNode exitNode, Vector<MyNode> rootNodes, HashMap<MyNode, String> graphNodeToLabel2,
-			Vector<MyNode> copyNodes, Vector<MyNode> rootNodesCopy, HashMap<MyNode, String> nodeToLabelCopy) {
-        Iterator<MyEdge> it = v.outEdges().iterator();
+							  MyNode exitNode, Vector<MyNode> rootNodes, HashMap<MyNode, String> graphNodeToLabel2,
+							  Vector<MyNode> copyNodes, Vector<MyNode> rootNodesCopy, HashMap<MyNode, String> nodeToLabelCopy) {
+		Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyEdge e = it.next();
 			MyNode w = e.getTarget();
@@ -381,9 +400,9 @@ public class CycleRefinement {
 	}
 
 	private void fixExitNode(MyGraph g, MyNode exitNode, Vector<MyNode> rootNodes, MyNode startNode,
-			HashMap<MyNode, String> graphNodeToLabel2) {
+							 HashMap<MyNode, String> graphNodeToLabel2) {
 
-        MyEdge e = exitNode.getFirstInEdge();
+		MyEdge e = exitNode.getFirstInEdge();
 		MyNode p = e.getSource();
 		Vector<MyNode> newRootNodes = new Vector<MyNode>();
 
@@ -392,21 +411,21 @@ public class CycleRefinement {
 			MyNode v = e.getTarget();
 			g.deleteEdge(e);
 			newRootNodes.add(v);
-            e = p.getFirstInEdge();
+			e = p.getFirstInEdge();
 		}
 
 		newRootNodes.add(p);
 		rootNodes.remove(p);
 
 		Vector<MyNode> sourceNodes = new Vector<MyNode>();
-        Iterator<MyEdge> it = p.inEdges().iterator();
+		Iterator<MyEdge> it = p.inEdges().iterator();
 		while (it.hasNext())
 			sourceNodes.add(it.next().getSource());
 
 		for (MyNode newRootNode : newRootNodes) {
 
 			Vector<MyEdge> specialEdges = new Vector<MyEdge>();
-            Iterator<MyEdge> itOut = newRootNode.outEdges().iterator();
+			Iterator<MyEdge> itOut = newRootNode.outEdges().iterator();
 			while (itOut.hasNext()) {
 				MyEdge outEdge = itOut.next();
 				if (outEdge.isSpecial())
@@ -417,7 +436,7 @@ public class CycleRefinement {
 				g.deleteEdge(eSpec);
 
 			if (newRootNode.getOutDegree() == 1) {
-                MyEdge outEdge = newRootNode.getFirstOutEdge();
+				MyEdge outEdge = newRootNode.getFirstOutEdge();
 				MyNode w = outEdge.getTarget();
 				g.deleteEdge(outEdge);
 				g.deleteNode(newRootNode);
@@ -444,7 +463,7 @@ public class CycleRefinement {
 		// search for scc
 		for (int i = visited.size() - 1; i >= 0; i--) {
 			MyNode v = levelToNode.get(i);
-            Iterator<MyEdge> it = v.inEdges().iterator();
+			Iterator<MyEdge> it = v.inEdges().iterator();
 			while (it.hasNext()) {
 				MyNode w = it.next().getSource();
 				if (nodeToLevel.get(w) < i) {
@@ -458,7 +477,7 @@ public class CycleRefinement {
 	}
 
 	private void computeExitNodes(MyGraph g, MyNode v, MyNode start, HashSet<MyNode> exitNodes, HashSet<MyEdge> visited) {
-        Iterator<MyEdge> it = v.outEdges().iterator();
+		Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyEdge e = it.next();
 			if (!visited.contains(e)) {
@@ -472,8 +491,8 @@ public class CycleRefinement {
 					HashSet<MyNode> exitNodesCopy = (HashSet<MyNode>) exitNodes.clone();
 					// System.out.println(e.getSource().getInfo()+" -> "+e.getTarget().getInfo()+" "+e.isSpecial()+" "+(graphNodeToInfo.get(e.getTarget())+" "+e.getInfo()));
 					if (e.isSpecial()) { // &&
-											// graphNodeToInfo.get(e.getTarget())
-											// instanceof Integer) {
+						// graphNodeToInfo.get(e.getTarget())
+						// instanceof Integer) {
 						// Integer headInfo = (Integer)
 						// graphNodeToInfo.get(e.getTarget());
 						// Integer edgeInfo = (Integer) e.getInfo();
@@ -490,7 +509,7 @@ public class CycleRefinement {
 	private int initLevels(MyNode v, int level, Vector<MyNode> visited) {
 
 		visited.add(v);
-        Iterator<MyEdge> it = v.outEdges().iterator();
+		Iterator<MyEdge> it = v.outEdges().iterator();
 		int value = level;
 		while (it.hasNext()) {
 			MyNode w = it.next().getTarget();
@@ -542,7 +561,7 @@ public class CycleRefinement {
 	}
 
 	private void addNodesToGraph(MyGraph g, EasyNode v, MyNode vG, HashMap<EasyNode, BitSet> compNodeToLeafSet,
-			Vector<MyNode> leaves, Vector<EasyNode> specialNodes) {
+								 Vector<MyNode> leaves, Vector<EasyNode> specialNodes) {
 		for (EasyNode c : v.getChildren()) {
 			MyNode cG = g.newNode();
 			cG.setInfo(compNodeToLeafSet.get(c));
@@ -560,8 +579,8 @@ public class CycleRefinement {
 	}
 
 	private void assignTreeNodesToGraphNodes(HashMap<EasyNode, Vector<MyNode>> treeNodeToGraphNode,
-			HashMap<EasyNode, BitSet> treeNodeToLeafSet, HashMap<MyNode, EasyNode> graphRootToTreeNode,
-			EasyNode treeNode, MyNode v, BitSet vSet, BitSet compSet, MyNode gRoot, HashSet<MyNode> visited) {
+											 HashMap<EasyNode, BitSet> treeNodeToLeafSet, HashMap<MyNode, EasyNode> graphRootToTreeNode,
+											 EasyNode treeNode, MyNode v, BitSet vSet, BitSet compSet, MyNode gRoot, HashSet<MyNode> visited) {
 		if (!visited.contains(v)) {
 			BitSet b = treeNodeToLeafSet.get(treeNode);
 			BitSet b1 = (BitSet) b.clone();
@@ -575,8 +594,8 @@ public class CycleRefinement {
 				else
 					assignTreeNodesToGraphNodes(treeNodeToGraphNode, treeNodeToLeafSet, graphRootToTreeNode,
 							treeNode.getParent(), v, vSet, compSet, gRoot, visited);
-            } else if (v.inEdges().iterator().hasNext()) {
-                MyNode p = v.getFirstInEdge().getSource();
+			} else if (v.inEdges().iterator().hasNext()) {
+				MyNode p = v.getFirstInEdge().getSource();
 				assignTreeNodesToGraphNodes(treeNodeToGraphNode, treeNodeToLeafSet, graphRootToTreeNode, treeNode, p,
 						(BitSet) p.getInfo(), compSet, gRoot, visited);
 			}
@@ -584,7 +603,7 @@ public class CycleRefinement {
 	}
 
 	private BitSet initTreeLeafLists(EasyNode v, HashMap<EasyNode, BitSet> treeNodeToLeafSet,
-			HashMap<BitSet, EasyNode> leafSetToTreeNode) {
+									 HashMap<BitSet, EasyNode> leafSetToTreeNode) {
 		BitSet b = new BitSet(taxaOrdering.size());
 		if (v.getOutDegree() == 0)
 			b.set(taxaOrdering.indexOf(v.getLabel()));
@@ -598,8 +617,8 @@ public class CycleRefinement {
 	}
 
 	private void parseComponent(MyGraph g, MyNode v, EasyNode vE, EasyTree eT,
-			HashMap<MyNode, String> graphNodeToLabel2, Vector<MyNode> rootNodes) {
-        Iterator<MyEdge> it = v.outEdges().iterator();
+								HashMap<MyNode, String> graphNodeToLabel2, Vector<MyNode> rootNodes) {
+		Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyEdge e = it.next();
 			if (!e.isSpecial()) {
@@ -626,7 +645,7 @@ public class CycleRefinement {
 		if (!visited.contains(v)) {
 			visited.add(v);
 			if (v.getOutDegree() != 0) {
-                Iterator<MyEdge> it = v.outEdges().iterator();
+				Iterator<MyEdge> it = v.outEdges().iterator();
 				while (it.hasNext()) {
 					MyEdge e = it.next();
 					MyNode c = e.getTarget();

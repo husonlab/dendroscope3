@@ -1,11 +1,29 @@
-package dendroscope.hybroscale.view;
+/*
+ *   HybridView.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-import javax.swing.*;
+package dendroscope.hybroscale.view;
 
 import dendroscope.hybroscale.controller.HybroscaleController;
 import dendroscope.hybroscale.model.ClusterThread;
 import dendroscope.hybroscale.model.HybridManager.Computation;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -23,7 +41,7 @@ public class HybridView extends JFrame implements Runnable {
 	private StatusBar statusBar = new StatusBar();
 
 	public HybridView(JFrame mainFrame, final HybroscaleController controller, Computation computation, int cores, Integer maxK) {
-		
+
 		cT = new ClusterTable(statusBar, width, this);
 		setLayout(new BorderLayout());
 
@@ -39,7 +57,7 @@ public class HybridView extends JFrame implements Runnable {
 				controller.stop(true);
 			}
 		});
-		
+
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 

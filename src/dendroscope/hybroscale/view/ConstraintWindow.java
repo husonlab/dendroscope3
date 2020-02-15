@@ -1,11 +1,26 @@
+/*
+ *   ConstraintWindow.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package dendroscope.hybroscale.view;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -14,18 +29,6 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Vector;
-
-import javax.swing.AbstractButton;
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextPane;
 
 public class ConstraintWindow extends JFrame implements ActionListener {
 
@@ -97,14 +100,14 @@ public class ConstraintWindow extends JFrame implements ActionListener {
 		isTimeConsistent.addActionListener(this);
 		buttonGroup.add(isTimeConsistent);
 		radioPanel.add(isTimeConsistent);
-		
+
 		addTaxa = new JRadioButton("Network has best add-taxa value.");
 		addTaxa.setActionCommand("Network has best add-taxa value.");
 		addTaxa.setSelected(true);
 		addTaxa.addActionListener(this);
 		buttonGroup.add(addTaxa);
 		radioPanel.add(addTaxa);
-		
+
 		level = new JRadioButton("Network is best level-k network.");
 		level.setActionCommand("Network is best level-k network.");
 		level.setSelected(true);
@@ -168,11 +171,11 @@ public class ConstraintWindow extends JFrame implements ActionListener {
 				isTimeConsistent.setSelected(false);
 			}
 		});
-		
+
 		setVisible(false);
 		pack();
 		setLocationRelativeTo(hView);
-		
+
 	}
 
 	@Override

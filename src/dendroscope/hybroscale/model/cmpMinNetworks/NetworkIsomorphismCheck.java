@@ -1,29 +1,44 @@
-package dendroscope.hybroscale.model.cmpMinNetworks;
+/*
+ *   NetworkIsomorphismCheck.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Vector;
+package dendroscope.hybroscale.model.cmpMinNetworks;
 
 import dendroscope.hybroscale.model.treeObjects.SparseNetEdge;
 import dendroscope.hybroscale.model.treeObjects.SparseNetNode;
 import dendroscope.hybroscale.model.treeObjects.SparseNetwork;
 
+import java.util.*;
+
 /**
  * Given two rooted, bifurcating phylogenetic networks N1 and N2, this function
  * checks whether N1 and N2 are isomorphic.
- * 
+ *
  * @author Benjamin Albrecht, 6.2010
  */
 
 public class NetworkIsomorphismCheck {
 
 	public boolean run(SparseNetwork n1, SparseNetwork n2) {
-		
+
 		SparseNetwork n1Copy = new SparseNetwork(n1);
 		SparseNetwork n2Copy = new SparseNetwork(n2);
-		
+
 
 		if (n1Copy.getNodes().size() != n2Copy.getNodes().size())
 			return false;
@@ -41,10 +56,10 @@ public class NetworkIsomorphismCheck {
 		}
 
 		while (n1Copy.getNodes().size() > 2) {
-			
+
 //			System.out.println("--\n"+n1Copy.getPhyloTree()+";");
 //			System.out.println(n2Copy.getPhyloTree()+";\n");
-			
+
 			HashSet<String> n1Cherrys = new HashSet<String>();
 			Hashtable<String, Vector<SparseNetNode>> n1Taxa2parent = new Hashtable<String, Vector<SparseNetNode>>();
 			Hashtable<SparseNetNode, String> n1parent2edgeLabel = new Hashtable<SparseNetNode, String>();
@@ -135,7 +150,7 @@ public class NetworkIsomorphismCheck {
 	}
 
 	private void getCherrys(SparseNetwork n, HashSet<String> cherrys,
-			Hashtable<String, Vector<SparseNetNode>> n1Taxa2parent, Hashtable<SparseNetNode, String> parent2edgeLabels) {
+							Hashtable<String, Vector<SparseNetNode>> n1Taxa2parent, Hashtable<SparseNetNode, String> parent2edgeLabels) {
 		HashSet<SparseNetNode> leaves = new HashSet<SparseNetNode>();
 		for (SparseNetNode v : n.getNodes()) {
 			if (v.getOutDegree() == 0 && v.getInDegree() > 0)
@@ -174,7 +189,7 @@ public class NetworkIsomorphismCheck {
 					String taxaString = "";
 					for (String s : taxa)
 						taxaString = taxaString.concat(s + " ");
-					
+
 					cherrys.add(taxaString);
 
 					// generate edge-string
@@ -190,7 +205,7 @@ public class NetworkIsomorphismCheck {
 					newParents.add(p);
 					n1Taxa2parent.put(taxaString, newParents);
 					parent2edgeLabels.put(p, edgeString);
-					
+
 				}
 			}
 		}

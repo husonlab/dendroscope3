@@ -1,3 +1,22 @@
+/*
+ *   SparseTree.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package dendroscope.hybroscale.model.treeObjects;
 
 import dendroscope.hybroscale.util.graph.MyEdge;
@@ -10,12 +29,12 @@ import java.util.Vector;
 public class SparseTree {
 
 	private boolean treeChanged = true;
-	
+
 	private String info = "";
 	private SparseTreeNode root;
 	private Vector<SparseTreeNode> postOrderNodes = new Vector<SparseTreeNode>();
 	private Vector<SparseTreeNode> leaves = new Vector<SparseTreeNode>();
-    private boolean isCommonCherry = false;
+	private boolean isCommonCherry = false;
 
 	public SparseTree() {
 		root = new SparseTreeNode(null, this, null);
@@ -34,7 +53,7 @@ public class SparseTree {
 	public SparseTree(MyPhyloTree t) {
 		copy(t);
 	}
-	
+
 	public SparseTree(MyPhyloTree t, String info) {
 		copy(t);
 		this.info = info;
@@ -53,21 +72,21 @@ public class SparseTree {
 				copyTreeRec(t, c, cCopy);
 		}
 	}
-	
+
 	public SparseTree(SparseNetwork n) {
-		
+
 		for (SparseNetNode v : n.getNodes()) {
-			if (v.getInDegree() > 1) 
+			if (v.getInDegree() > 1)
 				System.err.println("WARNING: this is no network " + n.getPhyloTree() + ";");
 		}
-		
+
 		SparseNetNode v = n.getRoot();
 		root = new SparseTreeNode(null, this, v.getLabel());
 		copyNetworkRec(n, v, root);
 	}
 
 	private void copyNetworkRec(SparseNetwork n, SparseNetNode v, SparseTreeNode vCopy) {
-        for (SparseNetEdge e : v.outEdges()) {
+		for (SparseNetEdge e : v.outEdges()) {
 			SparseNetNode c = e.getTarget();
 			SparseTreeNode cCopy = new SparseTreeNode(vCopy, this, c.getLabel());
 			if(e.isSolid())
@@ -95,7 +114,7 @@ public class SparseTree {
 	}
 
 	private void copyTreeRec(MyPhyloTree t, MyNode v, SparseTreeNode vCopy) {
-        Iterator<MyEdge> it = v.outEdges().iterator();
+		Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyNode c = it.next().getTarget();
 			SparseTreeNode cCopy = new SparseTreeNode(vCopy, this, t.getLabel(c));
@@ -182,7 +201,7 @@ public class SparseTree {
 			p.addChild(t.getRoot());
 			t.getRoot().setParent(p);
 		}else
-			setRoot(t.getRoot());	
+			setRoot(t.getRoot());
 		leaves.remove(leaf);
 		for (SparseTreeNode v : t.getLeaves())
 			addLeaf(v);
@@ -260,8 +279,8 @@ public class SparseTree {
 
 	/* copy the tree t rec without copying the reticulate nodes */
 	private void copyTreeRecNoRet(MyPhyloTree t, MyNode v, SparseTreeNode vCopy,
-			boolean check) {
-        Iterator<MyEdge> it = v.outEdges().iterator();
+								  boolean check) {
+		Iterator<MyEdge> it = v.outEdges().iterator();
 		if (!check || v.getInDegree() == 1) {
 			while (it.hasNext()) {
 				MyNode c = it.next().getTarget();
@@ -290,7 +309,7 @@ public class SparseTree {
 	public int hashCode() {
 		return super.hashCode();
 	}
-	
+
 	public boolean isCommonCherry() {
 		return isCommonCherry;
 	}
@@ -298,9 +317,9 @@ public class SparseTree {
 	public void setCommonCherry(boolean isCommonCherry) {
 		this.isCommonCherry = isCommonCherry;
 	}
-	
+
 	public String getInfo(){
 		return info;
 	}
-	
+
 }

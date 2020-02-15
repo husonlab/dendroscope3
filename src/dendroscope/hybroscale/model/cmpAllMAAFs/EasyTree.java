@@ -1,3 +1,22 @@
+/*
+ *   EasyTree.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package dendroscope.hybroscale.model.cmpAllMAAFs;
 
 import dendroscope.hybroscale.util.graph.MyEdge;
@@ -10,7 +29,7 @@ import java.util.Vector;
 public class EasyTree {
 
 	private boolean treeChanged = true;
-	
+
 	private String info = "";
 	private EasyNode root;
 	private Vector<EasyNode> postOrderNodes = new Vector<EasyNode>();
@@ -33,7 +52,7 @@ public class EasyTree {
 	public EasyTree(MyPhyloTree t) {
 		copy(t);
 	}
-	
+
 	public EasyTree(MyPhyloTree t, String info) {
 		copy(t);
 		this.info = info;
@@ -80,7 +99,7 @@ public class EasyTree {
 	}
 
 	private void copyTreeRec(MyPhyloTree t, MyNode v, EasyNode vCopy) {
-        Iterator<MyEdge> it = v.outEdges().iterator();
+		Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyNode c = it.next().getTarget();
 			EasyNode cCopy = new EasyNode(vCopy, this, t.getLabel(c));
@@ -240,7 +259,7 @@ public class EasyTree {
 	/* copy the tree t rec without copying the reticulate nodes */
 
 	private void copyTreeRecNoRet(MyPhyloTree t, MyNode v, EasyNode vCopy, boolean check) {
-        Iterator<MyEdge> it = v.outEdges().iterator();
+		Iterator<MyEdge> it = v.outEdges().iterator();
 		if (!check || v.getInDegree() == 1) {
 			while (it.hasNext()) {
 				MyNode c = it.next().getTarget();
@@ -253,7 +272,7 @@ public class EasyTree {
 		}
 
 	}
-	
+
 	public String getInfo() {
 		return info;
 	}

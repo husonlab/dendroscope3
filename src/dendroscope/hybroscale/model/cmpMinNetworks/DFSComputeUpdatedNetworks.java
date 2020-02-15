@@ -1,3 +1,22 @@
+/*
+ *   DFSComputeUpdatedNetworks.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package dendroscope.hybroscale.model.cmpMinNetworks;
 
 import dendroscope.hybroscale.model.HybridManager.Computation;
@@ -52,9 +71,9 @@ public class DFSComputeUpdatedNetworks extends Thread {
 	private String log = "";
 
 	public DFSComputeUpdatedNetworks(Vector<SparseTree> forest, SparseNetwork n, HybridTree[] hTreePair,
-			Vector<SparseNetEdge> treeEdges, int treeInsertIndex, Vector<String> taxaOrdering, Computation compValue,
-			SparseTree[] inputTrees, HybridTree[] hybridTrees, boolean heuristicMode, boolean speedUp, boolean debug,
-			DFSNetworkReporter reporter, int myPriority) {
+									 Vector<SparseNetEdge> treeEdges, int treeInsertIndex, Vector<String> taxaOrdering, Computation compValue,
+									 SparseTree[] inputTrees, HybridTree[] hybridTrees, boolean heuristicMode, boolean speedUp, boolean debug,
+									 DFSNetworkReporter reporter, int myPriority) {
 
 		this.n = n;
 		this.treeEdges = treeEdges;
@@ -269,7 +288,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 
 				for (SparseNetEdge e : modNet.getEdges()) {
 					if (modNet.isSpecial(e) && e.getEdgeIndex().contains(1)) {
-                        if (e.getTarget().outEdges().iterator().next().getEdgeIndex().contains(1))
+						if (e.getTarget().outEdges().iterator().next().getEdgeIndex().contains(1))
 							e.addIndex(insertIndex);
 					}
 				}
@@ -286,8 +305,8 @@ public class DFSComputeUpdatedNetworks extends Thread {
 				for (SparseNetNode v : modNet.getNodes()) {
 					if (v.getInDegree() > 1) {
 						Vector<SparseNetNode> parents = new Vector<SparseNetNode>();
-                        for (SparseNetEdge e : v.inEdges()) {
-                            SparseNetNode p = e.getSource().inEdges().iterator().next().getSource();
+						for (SparseNetEdge e : v.inEdges()) {
+							SparseNetNode p = e.getSource().inEdges().iterator().next().getSource();
 							if (parents.contains(p))
 								makesSense = false;
 							else
@@ -401,10 +420,10 @@ public class DFSComputeUpdatedNetworks extends Thread {
 		if (v.getInDegree() != 0) {
 			SparseNetEdge e = null;
 			if (v.getInDegree() == 1) {
-                e = v.inEdges().iterator().next();
+				e = v.inEdges().iterator().next();
 				e.addIndex(index);
 			} else if (v.getInDegree() > 1) {
-                for (SparseNetEdge eIn : v.inEdges()) {
+				for (SparseNetEdge eIn : v.inEdges()) {
 					if (eIn.getIndices().contains(index)) {
 						e = eIn;
 						break;
@@ -417,7 +436,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 	}
 
 	private void modT2Edges(SparseNetwork n, Vector<SparseNetwork> modNetworks, Vector<String> visitedNodes,
-			Vector<String> sequence, Vector<String> shiftedNodes) {
+							Vector<String> sequence, Vector<String> shiftedNodes) {
 
 		modT2EdgesRecDown(n, 1);
 		modT2EdgesRecDown(n, 0);
@@ -435,7 +454,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 			if (multiNode.getOutDegree() > 2) {
 				Vector<SparseNetEdge> t1Edges = new Vector<SparseNetEdge>();
 				Vector<SparseNetNode> sourceNodes = new Vector<SparseNetNode>();
-                for (SparseNetEdge e : multiNode.outEdges()) {
+				for (SparseNetEdge e : multiNode.outEdges()) {
 
 					BitSet b0 = new BitSet(taxaOrdering.size());
 					getClusterByIndex(e.getTarget(), n, b0, 0);
@@ -447,7 +466,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 					else if (((!b1.isEmpty() && !b0.isEmpty()) || (!b0.isEmpty() && shiftedNodes.contains(multiNode
 							.getLabel()))) && e.getTarget().getOutDegree() > 1) {
 						SparseNetNode s = e.getTarget();
-                        for (SparseNetEdge e2 : s.outEdges()) {
+						for (SparseNetEdge e2 : s.outEdges()) {
 							BitSet b = new BitSet(taxaOrdering.size());
 							getClusterByIndex(e2.getTarget(), n, b, 1);
 							if (b.isEmpty()) {
@@ -464,7 +483,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 					for (SparseNetNode sourceNode : sourceNodes) {
 
 						int counter0 = 0;
-                        for (SparseNetEdge e2 : sourceNode.outEdges()) {
+						for (SparseNetEdge e2 : sourceNode.outEdges()) {
 							if (e2.getEdgeIndex().contains(0)) {
 								counter0++;
 							}
@@ -488,7 +507,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 							getClusterByIndex(eCopy.getTarget(), nCopy, b, 1);
 							Vector<BitSet> childNetSets = new Vector<BitSet>();
 							childNetSets.add((BitSet) b.clone());
-                            for (SparseNetEdge e : sCopy.outEdges()) {
+							for (SparseNetEdge e : sCopy.outEdges()) {
 								if (e.getEdgeIndex().contains(1)) {
 									BitSet bC = new BitSet(taxaOrdering.size());
 									getClusterByIndex(e.getTarget(), nCopy, bC, 1);
@@ -501,7 +520,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 							boolean treeCheck = true;
 							if (childNetSets.size() > 1) {
 								MyNode lca = trees[1].findLCA(b);
-                                Iterator<MyEdge> it = lca.outEdges().iterator();
+								Iterator<MyEdge> it = lca.outEdges().iterator();
 								Vector<BitSet> childTreeSets = new Vector<BitSet>();
 								while (it.hasNext()) {
 									MyNode c = it.next().getTarget();
@@ -540,7 +559,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 									eCopy.getSource().removeOutEdge(eCopy);
 									SparseNetEdge newEdge = sCopy.addChild(tCopy);
 									newEdge.addEdgeIndex(1);
-                                    sCopy.inEdges().iterator().next().addEdgeIndex(1);
+									sCopy.inEdges().iterator().next().addEdgeIndex(1);
 
 									Vector<SparseNetNode> draggingNodes = new Vector<SparseNetNode>();
 									collectDraggingNodes1(newEdge, draggingNodes);
@@ -551,21 +570,21 @@ public class DFSComputeUpdatedNetworks extends Thread {
 
 								} else {
 
-                                    for (SparseNetEdge e : sCopy.outEdges()) {
+									for (SparseNetEdge e : sCopy.outEdges()) {
 										BitSet bOne = new BitSet(taxaOrdering.size());
 										getClusterByIndex(e.getTarget(), nCopy, bOne, 1);
 										if (bOne.isEmpty())
 											shiftEdges.add(e);
 									}
 
-                                    SparseNetEdge eXCopy = sCopy.inEdges().iterator().next();
+									SparseNetEdge eXCopy = sCopy.inEdges().iterator().next();
 									HashSet<Integer> eIndices = (HashSet<Integer>) eXCopy.getEdgeIndex().clone();
 									SparseNetNode vCopy = eXCopy.getSource();
 									vCopy.removeOutEdge(eXCopy);
 									SparseNetNode xCopy = new SparseNetNode(vCopy, nCopy, sCopy.getLabel());
 									xCopy.addChild(sCopy);
-                                    xCopy.inEdges().iterator().next().setEdgeIndex(eIndices);
-                                    xCopy.outEdges().iterator().next().setEdgeIndex(eIndices);
+									xCopy.inEdges().iterator().next().setEdgeIndex(eIndices);
+									xCopy.outEdges().iterator().next().setEdgeIndex(eIndices);
 									for (SparseNetEdge e : shiftEdges) {
 										SparseNetNode t = e.getTarget();
 										e.getSource().removeOutEdge(e);
@@ -694,7 +713,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 	}
 
 	private void modT2EdgesRecDown(SparseNetwork n, int treeIndex) {
-        Vector<SparseNetNode> nodes = new Vector<>(n.getNodes());
+		Vector<SparseNetNode> nodes = new Vector<>(n.getNodes());
 
 		for (SparseNetNode v : nodes) {
 			if (dragOneEdgeDown(v, n, treeIndex)) {
@@ -706,7 +725,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 	}
 
 	private void modT2EdgesRecUp(SparseNetwork n, int treeIndex) {
-        Vector<SparseNetNode> nodes = new Vector<>(n.getNodes());
+		Vector<SparseNetNode> nodes = new Vector<>(n.getNodes());
 		for (SparseNetNode v : nodes) {
 			if (dragOneEdgeUp(v, n, treeIndex)) {
 				updateNetwork(n, null, null);
@@ -723,10 +742,10 @@ public class DFSComputeUpdatedNetworks extends Thread {
 		for (SparseNetNode v : nodes) {
 			if (v.getInDegree() == 1 && v.getOutDegree() == 2 && isDraggedDownNode(v, 1) && isDraggedDownNode(v, 0)) {
 				updateNetwork(n, null, null);
-                SparseNetNode vP = v.inEdges().iterator().next().getSource();
+				SparseNetNode vP = v.inEdges().iterator().next().getSource();
 				if (isContractNodeCurrTrees(vP, v, insertIndex, false, false, null, false)) {
 					Vector<SparseNetEdge> dragEdges = new Vector<SparseNetEdge>();
-                    for (SparseNetEdge eOut : v.outEdges())
+					for (SparseNetEdge eOut : v.outEdges())
 						dragEdges.add(eOut);
 
 					// System.out.println(">01:" + v.getLabel());
@@ -739,7 +758,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 						SparseNetEdge newEdge = vP.addChild(t);
 						newEdge.setEdgeIndex(eDragIndices);
 					}
-                    vP.removeOutEdge(v.inEdges().iterator().next());
+					vP.removeOutEdge(v.inEdges().iterator().next());
 
 					// System.out.println(n.getPhyloTree() + ";");
 					// for (int i = 0; i < this.insertIndex; i++)
@@ -760,7 +779,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 		SparseNetEdge eContract = null;
 		for (SparseNetNode v : nodes) {
 			if (v.getInDegree() == 1 && v.getOutDegree() > 1) {
-                for (SparseNetEdge e : v.outEdges()) {
+				for (SparseNetEdge e : v.outEdges()) {
 					if (e.getTarget().getOutDegree() > 1
 							&& isContractNodeCurrTrees(v, e.getTarget(), insertIndex + 1, false, false, null, false)) {
 						eContract = e;
@@ -776,7 +795,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 			SparseNetNode s = eContract.getSource();
 			HashMap<SparseNetNode, HashSet<Integer>> nodeToIndices = new HashMap<SparseNetNode, HashSet<Integer>>();
 			Vector<SparseNetEdge> toDelete = new Vector<SparseNetEdge>();
-            for (SparseNetEdge e : eContract.getTarget().outEdges()) {
+			for (SparseNetEdge e : eContract.getTarget().outEdges()) {
 				nodeToIndices.put(e.getTarget(), (HashSet<Integer>) e.getIndices().clone());
 				toDelete.add(e);
 			}
@@ -797,13 +816,13 @@ public class DFSComputeUpdatedNetworks extends Thread {
 	private void cmpTopDownNodes(SparseNetNode v, Vector<SparseNetNode> nodes) {
 		if (!nodes.contains(v)) {
 			nodes.add(v);
-            for (SparseNetEdge e : v.outEdges())
+			for (SparseNetEdge e : v.outEdges())
 				cmpTopDownNodes(e.getTarget(), nodes);
 		}
 	}
 
 	private boolean isContractNodeCurrTrees(SparseNetNode p, SparseNetNode v, int lastIndex, boolean shiftMode,
-			boolean speedUp, Integer checkIndex, boolean debug) {
+											boolean speedUp, Integer checkIndex, boolean debug) {
 
 		// String log = "";
 		// log = log.concat("---- p: " + p.getLabel() + " v: " + v.getLabel() +
@@ -823,7 +842,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 			Vector<BitSet> netClusters = new Vector<BitSet>();
 			BitSet cluster = new BitSet(taxaOrdering.size());
 			int counterA = 0;
-            for (SparseNetEdge eOut : p.outEdges()) {
+			for (SparseNetEdge eOut : p.outEdges()) {
 				if ((!n.isSpecial(eOut) || eOut.getIndices().contains(index)) && !eOut.getTarget().equals(v)) {
 					BitSet b = new BitSet(taxaOrdering.size());
 					getClusterByPrevTree(eOut.getTarget(), v.getOwner(), b, index, false);
@@ -847,7 +866,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 			}
 			getClusterByPrevTree(v, p.getOwner(), cluster, index, false);
 			int counterB = 0;
-            for (SparseNetEdge eOut : v.outEdges()) {
+			for (SparseNetEdge eOut : v.outEdges()) {
 				if (!n.isSpecial(eOut) || eOut.getIndices().contains(index)) {
 					BitSet b = new BitSet(taxaOrdering.size());
 					getClusterByPrevTree(eOut.getTarget(), v.getOwner(), b, index, false);
@@ -861,7 +880,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 			// if (netCluster.size() >= 1 && counterB >= 1 && counterA > 0) {
 			if (netClusters.size() > 0 && (counterA > 0) && (counterB > 1 || shiftMode)) {
 				MyNode lca = hybridTrees[index].findLCA(cluster);
-                Iterator<MyEdge> it = lca.outEdges().iterator();
+				Iterator<MyEdge> it = lca.outEdges().iterator();
 				// log = log.concat("LCA " + lca.getLabel());
 				Vector<BitSet> treeClusters = new Vector<BitSet>();
 				while (it.hasNext())
@@ -908,7 +927,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 	private boolean dragOneEdgeDown(SparseNetNode v, SparseNetwork n, int treeIndex) {
 		if (v.getOutDegree() == 2) {
 			SparseNetEdge e = null, e1 = null;
-            for (SparseNetEdge eOut : v.outEdges()) {
+			for (SparseNetEdge eOut : v.outEdges()) {
 				BitSet b0 = new BitSet(taxaOrdering.size());
 				getClusterByIndex(eOut.getTarget(), n, b0, 0);
 				BitSet b1 = new BitSet(taxaOrdering.size());
@@ -933,7 +952,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 					getClusterByIndex(e1.getTarget(), n, cluster, treeIndex);
 					netCluster.add((BitSet) cluster.clone());
 					getClusterByIndex(t, n, cluster, treeIndex);
-                    for (SparseNetEdge eOut : t.outEdges()) {
+					for (SparseNetEdge eOut : t.outEdges()) {
 						BitSet b = new BitSet(taxaOrdering.size());
 						getClusterByIndex(eOut.getTarget(), n, b, treeIndex);
 						if (!b.isEmpty())
@@ -941,7 +960,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 					}
 					boolean check = true;
 					MyNode lca = trees[treeIndex].findLCA(cluster);
-                    Iterator<MyEdge> it = lca.outEdges().iterator();
+					Iterator<MyEdge> it = lca.outEdges().iterator();
 					while (it.hasNext()) {
 						BitSet b = trees[treeIndex].getNodeToCluster().get(it.next().getTarget());
 						if (!netCluster.contains(b))
@@ -974,7 +993,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 	private boolean dragOneEdgeUp(SparseNetNode v, SparseNetwork n, int treeIndex) {
 		if (v.getOutDegree() == 2 && v.getInDegree() == 1) {
 			SparseNetEdge e1 = null;
-            for (SparseNetEdge eOut : v.outEdges()) {
+			for (SparseNetEdge eOut : v.outEdges()) {
 				BitSet b0 = new BitSet(taxaOrdering.size());
 				getClusterByIndex(eOut.getTarget(), n, b0, 0);
 				BitSet b1 = new BitSet(taxaOrdering.size());
@@ -983,7 +1002,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 						|| (treeIndex == 0 && b1.isEmpty() && !b0.isEmpty()))
 					e1 = eOut;
 			}
-            SparseNetNode p = v.inEdges().iterator().next().getSource();
+			SparseNetNode p = v.inEdges().iterator().next().getSource();
 			if (e1 != null && p.getInDegree() == 1
 					&& isContractNodeCurrTrees(p, v, insertIndex, false, false, null, false)) {
 
@@ -994,7 +1013,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 				mask.set(0, taxaOrdering.size());
 				mask.xor(cluster);
 				netCluster.add((BitSet) cluster.clone());
-                for (SparseNetEdge eOut : p.outEdges()) {
+				for (SparseNetEdge eOut : p.outEdges()) {
 					BitSet b = new BitSet(taxaOrdering.size());
 					getClusterByIndex(eOut.getTarget(), n, b, treeIndex);
 					b.and(mask);
@@ -1005,7 +1024,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 				getClusterByIndex(p, n, cluster, treeIndex);
 				MyNode lca = trees[treeIndex].findLCA(cluster);
 
-                Iterator<MyEdge> it = lca.outEdges().iterator();
+				Iterator<MyEdge> it = lca.outEdges().iterator();
 				Vector<BitSet> treeCluster = new Vector<BitSet>();
 				while (it.hasNext()) {
 					BitSet b = trees[treeIndex].getNodeToCluster().get(it.next().getTarget());
@@ -1022,7 +1041,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 					dragEdges.add(e1);
 					boolean draggedUpNode = treeIndex == 1 ? isDraggedUpNode1(p) : isDraggedUpNode0(p);
 					if (draggedUpNode) {
-                        for (SparseNetEdge eOut : v.outEdges()) {
+						for (SparseNetEdge eOut : v.outEdges()) {
 							BitSet b0 = new BitSet(taxaOrdering.size());
 							getClusterByIndex(eOut.getTarget(), n, b0, 0);
 							BitSet b1 = new BitSet(taxaOrdering.size());
@@ -1047,8 +1066,8 @@ public class DFSComputeUpdatedNetworks extends Thread {
 					}
 					removeOneNode(v, n);
 					if (v.getOutDegree() == 0 && v.getInDegree() != 0) {
-                        SparseNetNode vP = v.inEdges().iterator().next().getSource();
-                        vP.removeOutEdge(v.inEdges().iterator().next());
+						SparseNetNode vP = v.inEdges().iterator().next().getSource();
+						vP.removeOutEdge(v.inEdges().iterator().next());
 					}
 
 					// System.out.println(n.getPhyloTree() + ";");
@@ -1067,7 +1086,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 		if (e.getEdgeIndex().contains(1) && !e.getEdgeIndex().contains(0)) {
 			if (e.getTarget().getOutDegree() > 1) {
 				draggingNodes.add(e.getTarget());
-                for (SparseNetEdge eOut : e.getTarget().outEdges())
+				for (SparseNetEdge eOut : e.getTarget().outEdges())
 					collectDraggingNodes1(eOut, draggingNodes);
 			}
 		}
@@ -1076,7 +1095,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 	private boolean isDraggedUpNode1(SparseNetNode v) {
 		Vector<BitSet> childNetSets = new Vector<BitSet>();
 		BitSet cluster = new BitSet(taxaOrdering.size());
-        for (SparseNetEdge e : v.outEdges()) {
+		for (SparseNetEdge e : v.outEdges()) {
 			if (e.getEdgeIndex().contains(1)) {
 				BitSet b = new BitSet(taxaOrdering.size());
 				getClusterByIndex(e.getTarget(), v.getOwner(), b, 1);
@@ -1087,7 +1106,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 		}
 		if (childNetSets.size() > 1) {
 			MyNode lca = trees[1].findLCA(cluster);
-            Iterator<MyEdge> it = lca.outEdges().iterator();
+			Iterator<MyEdge> it = lca.outEdges().iterator();
 			while (it.hasNext()) {
 				BitSet childSet = (BitSet) trees[1].getNodeToCluster().get(it.next().getTarget()).clone();
 				childSet.and(indexToInsertedSet.get(1));
@@ -1102,7 +1121,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 	private boolean isDraggedUpNode0(SparseNetNode v) {
 		Vector<BitSet> childNetSets = new Vector<BitSet>();
 		BitSet cluster = new BitSet(taxaOrdering.size());
-        for (SparseNetEdge e : v.outEdges()) {
+		for (SparseNetEdge e : v.outEdges()) {
 			if (e.getEdgeIndex().contains(0)) {
 				BitSet b = new BitSet(taxaOrdering.size());
 				getClusterByIndex(e.getTarget(), v.getOwner(), b, 0);
@@ -1112,7 +1131,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 		}
 		if (childNetSets.size() > 1) {
 			MyNode lca = trees[0].findLCA(cluster);
-            Iterator<MyEdge> it = lca.outEdges().iterator();
+			Iterator<MyEdge> it = lca.outEdges().iterator();
 			Vector<BitSet> childTreeSets = new Vector<BitSet>();
 			while (it.hasNext()) {
 				BitSet childSet = (BitSet) trees[0].getNodeToCluster().get(it.next().getTarget()).clone();
@@ -1144,7 +1163,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 			}
 			getClusterByPrevTree(v2, v1.getOwner(), cluster, prevIndex, false);
 			int counter = 0;
-            for (SparseNetEdge eOut : v2.outEdges()) {
+			for (SparseNetEdge eOut : v2.outEdges()) {
 				BitSet b = new BitSet(taxaOrdering.size());
 				getClusterByPrevTree(eOut.getTarget(), v1.getOwner(), b, prevIndex, false);
 				if (!b.isEmpty()) {
@@ -1155,7 +1174,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 			}
 			if ((netClusters.size() > 1 && counter > 1) || !dragMode) {
 				// MyNode lca = hybridTrees[prevIndex].findLCA(cluster);
-                // Iterator<MyEdge> it = lca.outEdges().iterator();
+				// Iterator<MyEdge> it = lca.outEdges().iterator();
 				// while (it.hasNext()) {
 				// BitSet b =
 				// hybridTrees[prevIndex].getNodeToCluster().get(it.next().getTarget());
@@ -1166,7 +1185,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 				// }
 				// }
 				MyNode lca = hybridTrees[prevIndex].findLCA(cluster);
-                Iterator<MyEdge> it = lca.outEdges().iterator();
+				Iterator<MyEdge> it = lca.outEdges().iterator();
 				// log = log.concat("LCA " + lca.getLabel());
 				Vector<BitSet> treeClusters = new Vector<BitSet>();
 				while (it.hasNext())
@@ -1194,7 +1213,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 
 	private boolean isDraggedDownNode(SparseNetNode v, int treeIndex) {
 		BitSet netCluster = new BitSet(taxaOrdering.size());
-        for (SparseNetEdge e : v.outEdges()) {
+		for (SparseNetEdge e : v.outEdges()) {
 			if (e.getEdgeIndex().contains(treeIndex)) {
 				BitSet b = new BitSet(taxaOrdering.size());
 				getClusterByIndex(e.getTarget(), v.getOwner(), b, treeIndex);
@@ -1212,9 +1231,9 @@ public class DFSComputeUpdatedNetworks extends Thread {
 	}
 
 	private Vector<SparseNetwork> addComponent(SparseNetwork n, Vector<Integer> indices, int t1Index, SparseTree f,
-			SparseNetNode vRet, BitSet sibCluster, BitSet justInserted, Vector<Integer> justIndices,
-			Vector<SparseNetNode> vXCandidates, ConcurrentHashMap<SparseNetwork, SparseNetNode> netToRetNode,
-			SparseNetNode[] nodePair) {
+											   SparseNetNode vRet, BitSet sibCluster, BitSet justInserted, Vector<Integer> justIndices,
+											   Vector<SparseNetNode> vXCandidates, ConcurrentHashMap<SparseNetwork, SparseNetNode> netToRetNode,
+											   SparseNetNode[] nodePair) {
 
 		// doubleEdge(n, "1");
 
@@ -1273,7 +1292,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 			int i = 1;
 			SparseNetEdge e0 = null, e1 = null;
 			while (e1 == null) {
-                for (SparseNetEdge e : vT.inEdges()) {
+				for (SparseNetEdge e : vT.inEdges()) {
 
 					// BitSet bE0 = new BitSet(taxaOrdering.size());
 					// getClusterByIndex(e.getTarget(), n, bE0, 0);
@@ -1283,14 +1302,14 @@ public class DFSComputeUpdatedNetworks extends Thread {
 
 					// if(!bE1.isEmpty()){
 					if (e.getEdgeIndex().contains(1)) {
-                        for (SparseNetEdge eOut : vT.outEdges()) {
+						for (SparseNetEdge eOut : vT.outEdges()) {
 							if (eOut.getEdgeIndex().contains(1))
 								e1 = e;
 						}
 						if (vT.getOutDegree() == 0)
 							e1 = e;
 					} else if (f.getNodes().size() == 1) {
-                        for (SparseNetEdge eOut : vT.outEdges()) {
+						for (SparseNetEdge eOut : vT.outEdges()) {
 							BitSet bE0 = new BitSet(taxaOrdering.size());
 							getClusterByIndex(eOut.getTarget(), n, bE0, 0);
 							if (!checkConstraints(bE0, 1))
@@ -1390,7 +1409,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 		Vector<Vector<Integer>> toRemove = new Vector<Vector<Integer>>();
 		for (Vector<Integer> pair : pairs) {
 			// SparseNetNode vR = (vRet == null) ?
-            // clusterToNode.get(t1Index).get(v1Set).get(pair.next()) : vRet;
+			// clusterToNode.get(t1Index).get(v1Set).get(pair.next()) : vRet;
 			SparseNetNode vR = (vRet == null) ? intToTargetNode.get(pair.get(0)) : vRet;
 			for (int i = 0; i < indices.size(); i++) {
 
@@ -1430,7 +1449,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 
 				Vector<SparseNetNode[]> nodePairs = new Vector<SparseNetNode[]>();
 				// SparseNetNode vR = (vRet == null) ?
-                // clusterToNode.get(t1Index).get(v1Set).get(pair.next()) :
+				// clusterToNode.get(t1Index).get(v1Set).get(pair.next()) :
 				// vRet;
 				SparseNetNode vR = (vRet == null) ? intToTargetNode.get(pair.get(0)) : vRet;
 				SparseNetNode[] vRPair = { vR, null };
@@ -1452,7 +1471,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 					netToRetNode.put(nCopy, nodePairs.get(1)[1]);
 
 				// computing help node
-                Iterator<SparseNetEdge> it = nCopy.getRoot().outEdges().iterator();
+				Iterator<SparseNetEdge> it = nCopy.getRoot().outEdges().iterator();
 				SparseNetNode v = it.next().getTarget();
 				if (v.getLabel().equals("rho"))
 					v = it.next().getTarget();
@@ -1465,7 +1484,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 					// computing target node v1
 					if (v1.getLabel().equals("rho") || v1.equals(nCopy.getRoot()))
 						v1 = v;
-                    if (v1.getInDegree() == 1 && v1.inEdges().iterator().next().getEdgeIndex().isEmpty()) {
+					if (v1.getInDegree() == 1 && v1.inEdges().iterator().next().getEdgeIndex().isEmpty()) {
 						retNode = v1;
 					} else {
 						retNode = insertTargetNode(nCopy, v1, indices);
@@ -1504,7 +1523,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 
 					// remove empty in-edges
 					Vector<SparseNetEdge> emptyEdges = new Vector<SparseNetEdge>();
-                    for (SparseNetEdge e : retNode.inEdges()) {
+					for (SparseNetEdge e : retNode.inEdges()) {
 						if (e.getEdgeIndex().isEmpty())
 							emptyEdges.add(e);
 					}
@@ -1514,7 +1533,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 					}
 					if (!emptyEdges.isEmpty()) {
 						if (retNode.getInDegree() == 1)
-                            removeOneNode(retNode.inEdges().iterator().next().getSource(), nCopy);
+							removeOneNode(retNode.inEdges().iterator().next().getSource(), nCopy);
 					}
 
 					// prevTreeContainmentCheckVerbose(nCopy,
@@ -1531,7 +1550,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 					Vector<SparseNetwork> switchedNetworks = new Vector<SparseNetwork>();
 					if (justInserted.isEmpty()) {
 						// assessing ordering for incoming edges
-                        for (SparseNetEdge e : retNode.inEdges()) {
+						for (SparseNetEdge e : retNode.inEdges()) {
 							if (e.getEdgeIndex().contains(firstIndex))
 								e.getSource().setOrder(retNode.getInDegree() - 1);
 							else
@@ -1551,7 +1570,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 						// assessing ordering for incoming edges
 						for (SparseNetwork nDrag : draggedNetworks.keySet()) {
 							SparseNetNode retDragNode = draggedNetworks.get(nDrag);
-                            for (SparseNetEdge e : retDragNode.inEdges()) {
+							for (SparseNetEdge e : retDragNode.inEdges()) {
 								if (e.getEdgeIndex().contains(firstIndex))
 									e.getSource().setOrder(retDragNode.getInDegree() - 1);
 								else
@@ -1643,22 +1662,22 @@ public class DFSComputeUpdatedNetworks extends Thread {
 	}
 
 	private void dragEdgeUp1(HashMap<SparseNetwork, SparseNetNode> outputNetworks, SparseNetwork n,
-			SparseNetNode retNode, SparseTree f, SparseNetNode switchNode,
-			ConcurrentHashMap<SparseNetwork, SparseNetNode> netToRetNode) {
+							 SparseNetNode retNode, SparseTree f, SparseNetNode switchNode,
+							 ConcurrentHashMap<SparseNetwork, SparseNetNode> netToRetNode) {
 		SparseNetEdge eRet = null;
-        for (SparseNetEdge e : retNode.inEdges()) {
+		for (SparseNetEdge e : retNode.inEdges()) {
 			if (e.getEdgeIndex().contains(1)) {
 				eRet = e;
 				break;
 			}
 		}
 		if (eRet.getSource().getOutDegree() == 1 && eRet.getSource().getInDegree() == 1)
-            eRet = eRet.getSource().inEdges().iterator().next();
+			eRet = eRet.getSource().inEdges().iterator().next();
 		SparseNetNode pTmp = eRet.getSource();
 
 		if (pTmp.getOutDegree() == 2) {
 
-            SparseNetEdge eTree = pTmp.outEdges().iterator().next();
+			SparseNetEdge eTree = pTmp.outEdges().iterator().next();
 			eTree = eTree.equals(eRet) ? pTmp.getOutEdges().get(1) : eTree;
 
 			if (!isDraggedDownNode(eTree.getTarget(), 0) && !isDraggedUpNode1(eTree.getTarget())) {
@@ -1694,7 +1713,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 
 			Vector<SparseNetEdge> shiftEdges = new Vector<SparseNetEdge>();
 			boolean uniqueOneEdge = false;
-            for (SparseNetEdge e : pCopy.outEdges()) {
+			for (SparseNetEdge e : pCopy.outEdges()) {
 				// BitSet b0 = new BitSet(taxaOrdering.size());
 				// getClusterByIndex(e.getTarget(), nCopy, b0, 0);
 				// BitSet b1 = new BitSet(taxaOrdering.size());
@@ -1707,7 +1726,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 					// boolean uniqueTaxa = true;
 					// int index = b0.nextSetBit(0);
 					// while (index != -1 && uniqueTaxa) {
-                    // if (indexToTaxa.next().contains(taxaOrdering.get(index)))
+					// if (indexToTaxa.next().contains(taxaOrdering.get(index)))
 					// uniqueTaxa = false;
 					// index = b0.nextSetBit(index + 1);
 					// }
@@ -1726,8 +1745,8 @@ public class DFSComputeUpdatedNetworks extends Thread {
 				// uniqueOneEdge = true;
 			}
 
-            SparseNetNode pPCopy = pCopy.inEdges().iterator().next().getSource();
-            pPCopy.removeOutEdge(pCopy.inEdges().iterator().next());
+			SparseNetNode pPCopy = pCopy.inEdges().iterator().next().getSource();
+			pPCopy.removeOutEdge(pCopy.inEdges().iterator().next());
 			SparseNetNode xCopy = new SparseNetNode(pPCopy, nCopy, pCopy.getLabel());
 			xCopy.addChild(pCopy);
 
@@ -1768,10 +1787,10 @@ public class DFSComputeUpdatedNetworks extends Thread {
 	}
 
 	private void dragEdgeDown(HashMap<SparseNetwork, SparseNetNode> outputNetworks, SparseNetwork n,
-			SparseNetNode retNode, SparseTree f, SparseNetNode switchNode,
-			ConcurrentHashMap<SparseNetwork, SparseNetNode> draggedSwitchedNetworks, boolean recCall, boolean debug) {
+							  SparseNetNode retNode, SparseTree f, SparseNetNode switchNode,
+							  ConcurrentHashMap<SparseNetwork, SparseNetNode> draggedSwitchedNetworks, boolean recCall, boolean debug) {
 		SparseNetEdge eRet = null;
-        for (SparseNetEdge e : retNode.inEdges()) {
+		for (SparseNetEdge e : retNode.inEdges()) {
 			if (e.getEdgeIndex().contains(1)) {
 				eRet = e;
 				break;
@@ -1779,7 +1798,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 		}
 
 		if (retNode.getInDegree() > 1)
-            eRet = eRet.getSource().inEdges().iterator().next();
+			eRet = eRet.getSource().inEdges().iterator().next();
 
 		// if(debug)
 		// System.out.println("-----------DraggingDown " + retNode.getLabel() +
@@ -1789,7 +1808,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 
 			Vector<SparseNetNode> draggingNodes = new Vector<SparseNetNode>();
 
-            SparseNetNode v = eRet.getSource().inEdges().iterator().next().getSource();
+			SparseNetNode v = eRet.getSource().inEdges().iterator().next().getSource();
 			if (retNode.getInDegree() == 1 && f.getInfo().isEmpty())
 				v = eRet.getSource();
 
@@ -1812,7 +1831,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 				if ((!b1.isEmpty() || retNode.getInDegree() == 1) && (!isDraggedUpNode0(v) || b0.isEmpty() || recCall)) {
 
 					int i = 0;
-                    for (SparseNetEdge e : s.outEdges()) {
+					for (SparseNetEdge e : s.outEdges()) {
 						BitSet bCheck = new BitSet(taxaOrdering.size());
 						getClusterByIndex(e.getTarget(), n, bCheck, 0);
 						if (e.getEdgeIndex().contains(0) || !bCheck.isEmpty())
@@ -1835,13 +1854,13 @@ public class DFSComputeUpdatedNetworks extends Thread {
 						SparseNetEdge eRetCopy = edgePairs.get(0)[1];
 						SparseNetNode tCopy = eRetCopy.getTarget();
 						SparseNetNode sCopy = eRetCopy.getSource();
-                        SparseNetNode vCopy = eRetCopy.getSource().inEdges().iterator().next().getSource();
-                        HashSet<Integer> eIndices = (HashSet<Integer>) sCopy.inEdges().iterator().next().getEdgeIndex().clone();
-                        vCopy.removeOutEdge(sCopy.inEdges().iterator().next());
+						SparseNetNode vCopy = eRetCopy.getSource().inEdges().iterator().next().getSource();
+						HashSet<Integer> eIndices = (HashSet<Integer>) sCopy.inEdges().iterator().next().getEdgeIndex().clone();
+						vCopy.removeOutEdge(sCopy.inEdges().iterator().next());
 						SparseNetNode xCopy = new SparseNetNode(vCopy, nCopy, sCopy.getLabel());
 						xCopy.addChild(sCopy);
-                        xCopy.inEdges().iterator().next().setEdgeIndex(eIndices);
-                        xCopy.outEdges().iterator().next().setEdgeIndex(eIndices);
+						xCopy.inEdges().iterator().next().setEdgeIndex(eIndices);
+						xCopy.outEdges().iterator().next().setEdgeIndex(eIndices);
 						sCopy.removeOutEdge(eRetCopy);
 						xCopy.addChild(tCopy);
 						switchT1EdgesRec(nCopy, vCopy, xCopy, null, xCopy.getOutEdges().get(0).getTarget(),
@@ -1860,15 +1879,15 @@ public class DFSComputeUpdatedNetworks extends Thread {
 	private void collectDraggingNodes0(SparseNetEdge e, Vector<SparseNetNode> draggingNodes) {
 		if (e.getTarget().getOutDegree() > 1) {
 			draggingNodes.add(e.getTarget());
-            for (SparseNetEdge eOut : e.getTarget().outEdges())
+			for (SparseNetEdge eOut : e.getTarget().outEdges())
 				collectDraggingNodes0(eOut, draggingNodes);
 		}
 	}
 
 	private void switchT1EdgesRec(SparseNetwork n, SparseNetNode v, SparseNetNode s, Vector<SparseNetNode> sourceNodes,
-			SparseNetNode retNode, HashMap<SparseNetwork, SparseNetNode> outputNetworks, SparseTree f, String info,
-			int startIndex, SparseNetNode switchNode, ConcurrentHashMap<SparseNetwork, SparseNetNode> netToRetNode,
-			String log) {
+								  SparseNetNode retNode, HashMap<SparseNetwork, SparseNetNode> outputNetworks, SparseTree f, String info,
+								  int startIndex, SparseNetNode switchNode, ConcurrentHashMap<SparseNetwork, SparseNetNode> netToRetNode,
+								  String log) {
 		Vector<SparseNetEdge> switchingEdges = new Vector<SparseNetEdge>();
 
 		if (v.getOutDegree() > 2 || (v.getOutDegree() == 2 && sourceNodes != null)) {
@@ -2009,8 +2028,8 @@ public class DFSComputeUpdatedNetworks extends Thread {
 	}
 
 	private void dragEdgeUp2(HashMap<SparseNetwork, SparseNetNode> outputNetworks, SparseNetwork n,
-			SparseNetNode retNode, SparseTree f, SparseNetNode switchNode,
-			ConcurrentHashMap<SparseNetwork, SparseNetNode> draggedSwitchedNetworks) {
+							 SparseNetNode retNode, SparseTree f, SparseNetNode switchNode,
+							 ConcurrentHashMap<SparseNetwork, SparseNetNode> draggedSwitchedNetworks) {
 		SparseNetNode c = retNode.getOutDegree() != 0 ? retNode.getOutEdges().get(0).getTarget() : retNode;
 		if (retNode.getInDegree() == 2 && c.getOutDegree() > 1) {
 			SparseNetEdge eT1 = null;
@@ -2043,8 +2062,8 @@ public class DFSComputeUpdatedNetworks extends Thread {
 				x1.removeOutEdge(x3.getInEdges().get(0));
 				SparseNetNode x2 = new SparseNetNode(x1, nCopy, x1.getLabel());
 				x2.addChild(x3);
-                x2.inEdges().iterator().next().addEdgeIndex(0);
-                x2.outEdges().iterator().next().addEdgeIndex(0);
+				x2.inEdges().iterator().next().addEdgeIndex(0);
+				x2.outEdges().iterator().next().addEdgeIndex(0);
 
 				SparseNetNode cCopy = nodePairs.get(0)[1];
 				SparseNetNode retNodeCopy = nodePairs.get(1)[1];
@@ -2057,7 +2076,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 	}
 
 	private void switchT2Edges(Vector<SparseNetwork> outputNetworks, SparseNetwork n, SparseNetNode retNode,
-			int edgeIndex, BitSet justInserted, Vector<Integer> justIndices) {
+							   int edgeIndex, BitSet justInserted, Vector<Integer> justIndices) {
 
 		updateNetwork(n, justIndices, justInserted);
 		SparseNetNode vR = retNode;
@@ -2115,7 +2134,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 
 								if (vSib != vR
 										&& isContractNodeCurrTrees(vR, eSib2.getTarget(), insertIndex, true, false,
-												null, false)) {
+										null, false)) {
 
 									// if (vSib != vR && doContractPrevTree(vR,
 									// eSib2.getTarget(), false)) {
@@ -2316,10 +2335,10 @@ public class DFSComputeUpdatedNetworks extends Thread {
 
 											SparseNetNode vRet = vSibCopy;
 											if (vSibCopy.getOutDegree() == 1)
-                                                vRet = vSibCopy.outEdges().iterator().next().getTarget();
+												vRet = vSibCopy.outEdges().iterator().next().getTarget();
 
 											if (vSibCopy.getInDegree() == 1 && vSibCopy.getOutDegree() == 1) {
-                                                removeOneNode(vSibCopy.inEdges().iterator().next().getSource(), nCopy);
+												removeOneNode(vSibCopy.inEdges().iterator().next().getSource(), nCopy);
 												removeOneNode(vSibCopy, nCopy);
 											}
 
@@ -2514,7 +2533,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 	}
 
 	private BitSet findChildNode(Vector<MyNode> nodes, HybridNetwork t, int treeIndex, BitSet forestSet,
-			BitSet insertedSet) {
+								 BitSet insertedSet) {
 
 		BitSet childSet = new BitSet(taxaOrdering.size());
 		for (MyNode v : nodes) {
@@ -2619,7 +2638,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 	}
 
 	private SparseNetNode insertSourceNode(SparseNetwork n, SparseNetNode retNode, SparseNetNode vX,
-			Vector<Integer> txIndices, SparseTree f) {
+										   Vector<Integer> txIndices, SparseTree f) {
 
 		// log = log.concat("1" + f.getPhyloTree() + ";vX: " + vX.getLabel() +
 		// " retNode:" + retNode.getLabel() + "\n"
@@ -2649,7 +2668,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 			getClusterByIndex(e.getSource(), n, b1, 1);
 			while (b1.isEmpty()) {
 				SparseNetEdge e1 = null;
-                for (SparseNetEdge eIn : e.getSource().inEdges()) {
+				for (SparseNetEdge eIn : e.getSource().inEdges()) {
 					if (eIn.getEdgeIndex().contains(1))
 						e1 = eIn;
 				}
@@ -2791,7 +2810,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 	}
 
 	private SparseNetwork copyNetwork(SparseNetwork n, Vector<SparseNetNode[]> nodePairs,
-			Vector<SparseNetEdge[]> edgePairs) {
+									  Vector<SparseNetEdge[]> edgePairs) {
 		SparseNetwork nCopy = new SparseNetwork(new SparseNetNode(null, null, n.getRoot().getLabel()));
 		nCopy.getRoot().setOwner(nCopy);
 		copyNetworkRec(nCopy.getRoot(), n.getRoot(), nCopy, n, new Vector<SparseNetNode>(),
@@ -2800,8 +2819,8 @@ public class DFSComputeUpdatedNetworks extends Thread {
 	}
 
 	private void copyNetworkRec(SparseNetNode vCopy, SparseNetNode v, SparseNetwork nCopy, SparseNetwork n,
-			Vector<SparseNetNode> visited, ConcurrentHashMap<SparseNetNode, SparseNetNode> nodeToCopy,
-			Vector<SparseNetNode[]> nodePairs, Vector<SparseNetEdge[]> edgePairs) {
+								Vector<SparseNetNode> visited, ConcurrentHashMap<SparseNetNode, SparseNetNode> nodeToCopy,
+								Vector<SparseNetNode[]> nodePairs, Vector<SparseNetEdge[]> edgePairs) {
 		Iterator<SparseNetEdge> it = v.getOutEdges().iterator();
 		while (it.hasNext()) {
 			SparseNetEdge e = it.next();
@@ -2887,7 +2906,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 	}
 
 	private HashSet<String> updateClusters(SparseNetNode v, int treeIndex, int t1Index, SparseNetwork n,
-			BitSet insertedSet) {
+										   BitSet insertedSet) {
 		HashSet<String> vTaxa = new HashSet<String>();
 		BitSet cluster = new BitSet(taxaOrdering.size());
 		if (v.getOutDegree() != 0) {
@@ -2895,7 +2914,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 				if (e.getEdgeIndex().contains(treeIndex)) {
 					SparseNetNode child = e.getTarget();
 					HashSet<String> cTaxa = updateClusters(child, treeIndex, t1Index, n, insertedSet);
-                    vTaxa.addAll(cTaxa);
+					vTaxa.addAll(cTaxa);
 				}
 			}
 			for (String l : vTaxa) {
@@ -2930,7 +2949,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 
 			clusterToNode.get(treeIndex).get(cluster).add(v);
 			nodeToCluster.get(treeIndex).put(v, cluster);
-				clusters.get(treeIndex).add(cluster);
+			clusters.get(treeIndex).add(cluster);
 
 			Vector<SparseNetNode> hangNodes = new Vector<SparseNetNode>();
 			getHangingNode(v, treeIndex, t1Index, n, insertedSet, hangNodes, cluster);
@@ -2944,7 +2963,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 	}
 
 	private void getHangingNode(SparseNetNode v, int treeIndex, int t1Index, SparseNetwork n, BitSet insertedSet,
-			Vector<SparseNetNode> hangingNodes, BitSet cluster) {
+								Vector<SparseNetNode> hangingNodes, BitSet cluster) {
 
 		boolean globalConstraintCheck = false;
 		if (v.getOutDegree() > 2) {
@@ -2983,7 +3002,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 
 						if (constraintCheck) {
 							boolean isHangingNode = true;
-                            for (SparseNetEdge e2 : h.outEdges()) {
+							for (SparseNetEdge e2 : h.outEdges()) {
 								if (e2.getEdgeIndex().contains(treeIndex)) {
 									isHangingNode = false;
 									break;
@@ -3016,7 +3035,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 	}
 
 	private void uniqueNodeLabels(SparseNetwork n) {
-        Vector<String> nodeLabels = new Vector<>(taxaOrdering);
+		Vector<String> nodeLabels = new Vector<>(taxaOrdering);
 		int k = 0;
 		for (SparseNetNode v : n.getNodes()) {
 			if (v.getOutDegree() != 0) {
@@ -3084,7 +3103,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 		if (v.getOutDegree() == 0)
 			b.set(taxaOrdering.indexOf(v.getLabel()));
 		else {
-            Iterator<MyEdge> it = v.outEdges().iterator();
+			Iterator<MyEdge> it = v.outEdges().iterator();
 			while (it.hasNext())
 				getTreeClusterRec(it.next().getTarget(), b);
 		}
@@ -3099,7 +3118,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 	}
 
 	private void getSubnodes(SparseNetwork n, SparseNetNode v, Vector<SparseNetNode> subNodes) {
-        Iterator<SparseNetEdge> it = v.outEdges().iterator();
+		Iterator<SparseNetEdge> it = v.outEdges().iterator();
 		subNodes.add(v);
 		while (it.hasNext()) {
 			getSubnodes(n, it.next().getTarget(), subNodes);
@@ -3156,7 +3175,7 @@ public class DFSComputeUpdatedNetworks extends Thread {
 	}
 
 	private boolean containmentCheck(int txIndex, HashSet<BitSet> netClusters, BitSet justInserted,
-			Vector<Integer> indices) {
+									 Vector<Integer> indices) {
 
 		if (doContainmentCheck == false)
 			return true;

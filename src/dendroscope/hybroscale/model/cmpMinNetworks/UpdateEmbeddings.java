@@ -1,3 +1,22 @@
+/*
+ *   UpdateEmbeddings.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package dendroscope.hybroscale.model.cmpMinNetworks;
 
 import dendroscope.hybroscale.model.treeObjects.HybridTree;
@@ -16,7 +35,7 @@ public class UpdateEmbeddings {
 	private HybridTree[] addedTrees;
 
 	public Vector<SparseNetwork> run(HybridTree[] addedTrees, int treeIndex, SparseNetwork n,
-			Vector<String> taxaOrdering) {
+									 Vector<String> taxaOrdering) {
 
 		this.taxaOrdering = taxaOrdering;
 		this.treeToTaxa = new HashMap<Integer, Vector<String>>();
@@ -152,7 +171,7 @@ public class UpdateEmbeddings {
 	}
 
 	private void addIndicesRec(SparseNetwork n, Vector<SparseNetEdge> retEdges, int i, Vector<Integer> treeIndices,
-			HashMap<Integer, HashSet<BitSet>> indexToEdgeSets, Vector<SparseNetwork> updatedNetworks) {
+							   HashMap<Integer, HashSet<BitSet>> indexToEdgeSets, Vector<SparseNetwork> updatedNetworks) {
 		if (i < treeIndices.size()) {
 			int treeIndex = treeIndices.get(i);
 			for (BitSet b : indexToEdgeSets.get(treeIndex)) {
@@ -219,14 +238,14 @@ public class UpdateEmbeddings {
 	}
 
 	private BitSet cmpClustersRec(int index, SparseNetNode v, Vector<SparseNetEdge> reticulateEdges,
-			HashSet<BitSet> clusters) {
+								  HashSet<BitSet> clusters) {
 		if (v.getOutDegree() == 0 && treeToTaxa.get(index).contains(v.getLabel())) {
 			BitSet b = new BitSet(taxaOrdering.size());
 			b.set(taxaOrdering.indexOf(v.getLabel()));
 			clusters.add((BitSet) b.clone());
 			return b;
 		} else {
-            Iterator<SparseNetEdge> it = v.outEdges().iterator();
+			Iterator<SparseNetEdge> it = v.outEdges().iterator();
 			BitSet b = new BitSet(taxaOrdering.size());
 			while (it.hasNext()) {
 				SparseNetEdge e = it.next();
@@ -248,8 +267,8 @@ public class UpdateEmbeddings {
 	}
 
 	private void copyNetworkRec(SparseNetNode vCopy, SparseNetNode v, SparseNetwork nCopy, SparseNetwork n,
-			Vector<SparseNetNode> visited, ConcurrentHashMap<SparseNetNode, SparseNetNode> nodeToCopy,
-			Vector<SparseNetEdge[]> edgePairs) {
+								Vector<SparseNetNode> visited, ConcurrentHashMap<SparseNetNode, SparseNetNode> nodeToCopy,
+								Vector<SparseNetEdge[]> edgePairs) {
 		Iterator<SparseNetEdge> it = v.getOutEdges().iterator();
 		while (it.hasNext()) {
 			SparseNetEdge e = it.next();

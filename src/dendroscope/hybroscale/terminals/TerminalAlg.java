@@ -1,3 +1,22 @@
+/*
+ *   TerminalAlg.java Copyright (C) 2020 Daniel H. Huson
+ *
+ *   (Some files contain contributions from other authors, who are then mentioned separately.)
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package dendroscope.hybroscale.terminals;
 
 import dendroscope.hybroscale.util.graph.MyEdge;
@@ -64,23 +83,23 @@ public class TerminalAlg {
 
 		if (!success && lowerBound < i && !isStopped) {
 
-			recCounter++;			
+			recCounter++;
 
 			HashMap<MyNode, BitSet> nodeToCluster = new HashMap<MyNode, BitSet>();
 			HashMap<BitSet, MyNode> t1ClusterToNode = new HashMap<BitSet, MyNode>();
 			HashMap<BitSet, MyNode> t2ClusterToNode = new HashMap<BitSet, MyNode>();
 			HashSet<BitSet> clusterSet = new HashSet<BitSet>();
 
-			 System.out.println("\n");
-			 System.out.println(t1 + ";");
-			 System.out.println(t2 + ";");
-				
-			cmpClusters(t1, t2, nodeToCluster, t1ClusterToNode, t2ClusterToNode);			
+			System.out.println("\n");
+			System.out.println(t1 + ";");
+			System.out.println(t2 + ";");
+
+			cmpClusters(t1, t2, nodeToCluster, t1ClusterToNode, t2ClusterToNode);
 
 			collapseST(t1, t2, nodeToCluster, t1ClusterToNode, t2ClusterToNode, clusterSet);
 
-			 System.out.println(t1 + ";");
-			 System.out.println(t2 + ";");
+			System.out.println(t1 + ";");
+			System.out.println(t2 + ";");
 
 			cmpClusters(t1, t2, nodeToCluster, t1ClusterToNode, t2ClusterToNode);
 
@@ -157,7 +176,7 @@ public class TerminalAlg {
 	}
 
 	private void deleteLeafNode(MyNode v) {
-        MyEdge e = v.getFirstInEdge();
+		MyEdge e = v.getFirstInEdge();
 		MyNode p = e.getSource();
 		p.getOwner().deleteEdge(e);
 		p.removeOutEdge(e);
@@ -167,16 +186,16 @@ public class TerminalAlg {
 	private void contractNode(MyNode v) {
 		if (v.getOutDegree() == 1 && v.getInDegree() == 1) {
 			MyGraph t = v.getOwner();
-            MyEdge eUp = v.getFirstInEdge();
+			MyEdge eUp = v.getFirstInEdge();
 			MyNode p = eUp.getSource();
-            MyEdge eDown = v.getFirstOutEdge();
+			MyEdge eDown = v.getFirstOutEdge();
 			MyNode c = eDown.getTarget();
 			t.deleteEdge(eUp);
 			t.deleteEdge(eDown);
 			t.newEdge(p, c);
 		} else if (v.getOutDegree() == 1 && v.getInDegree() == 0) {
 			MyPhyloTree t = (MyPhyloTree) v.getOwner();
-            MyEdge eDown = v.getFirstOutEdge();
+			MyEdge eDown = v.getFirstOutEdge();
 			MyNode c = eDown.getTarget();
 			t.deleteEdge(eDown);
 			t.setRoot(c);
@@ -184,8 +203,8 @@ public class TerminalAlg {
 	}
 
 	private HashSet<BitSet> assessPrimeSet(int i, MyPhyloTree t1, MyPhyloTree t2,
-			HashMap<MyNode, BitSet> nodeToCluster, HashMap<BitSet, MyNode> t1ClusterToNode,
-			HashMap<BitSet, MyNode> t2ClusterToNode) {
+										   HashMap<MyNode, BitSet> nodeToCluster, HashMap<BitSet, MyNode> t1ClusterToNode,
+										   HashMap<BitSet, MyNode> t2ClusterToNode) {
 
 		HashSet<BitSet> terminalSet = new HashSet<BitSet>();
 		for (MyNode v : t1.getLeaves()) {
@@ -204,7 +223,7 @@ public class TerminalAlg {
 			caseTwo++;
 			return primeSet;
 		}
-		
+
 		if (terminalSet.size() > 2 * i) {
 			caseThree++;
 			Iterator<BitSet> it = terminalSet.iterator();
@@ -275,16 +294,16 @@ public class TerminalAlg {
 	}
 
 	private HashSet<BitSet> searchConflict2Cluster(HashSet<BitSet> terminalSet, HashMap<MyNode, BitSet> nodeToCluster,
-			HashMap<BitSet, MyNode> t1ClusterToNode, HashMap<BitSet, MyNode> t2ClusterToNode) {
+												   HashMap<BitSet, MyNode> t1ClusterToNode, HashMap<BitSet, MyNode> t2ClusterToNode) {
 
 		HashSet<BitSet> primeSet = new HashSet<BitSet>();
 		for (BitSet termCluster : terminalSet) {
 
 			MyNode v1 = t1ClusterToNode.get(termCluster);
-            MyNode p1 = v1.getFirstInEdge().getSource();
+			MyNode p1 = v1.getFirstInEdge().getSource();
 			BitSet p1Cluster = nodeToCluster.get(p1);
 			MyNode v2 = t2ClusterToNode.get(termCluster);
-            MyNode p2 = v2.getFirstInEdge().getSource();
+			MyNode p2 = v2.getFirstInEdge().getSource();
 			BitSet p2Cluster = nodeToCluster.get(p2);
 			if (p1Cluster.cardinality() == 2 && p2Cluster.cardinality() == 2) {
 				BitSet pCluster = (BitSet) p1Cluster.clone();
@@ -307,12 +326,12 @@ public class TerminalAlg {
 		HashSet<HashSet<MyNode>> cherries = new HashSet<HashSet<MyNode>>();
 		HashSet<MyNode> visited = new HashSet<MyNode>();
 		for (MyNode v : t.getLeaves()) {
-            MyNode p = v.getFirstInEdge().getSource();
+			MyNode p = v.getFirstInEdge().getSource();
 			if (!visited.contains(p)) {
 				visited.add(p);
 				if (isCherry(p)) {
 					HashSet<MyNode> cherry = new HashSet<MyNode>();
-                    Iterator<MyEdge> it = p.outEdges().iterator();
+					Iterator<MyEdge> it = p.outEdges().iterator();
 					while (it.hasNext())
 						cherry.add(it.next().getTarget());
 					cherries.add(cherry);
@@ -323,7 +342,7 @@ public class TerminalAlg {
 	}
 
 	private boolean isCherry(MyNode v) {
-        Iterator<MyEdge> it = v.outEdges().iterator();
+		Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			if (it.next().getTarget().getOutDegree() != 0)
 				return false;
@@ -332,11 +351,11 @@ public class TerminalAlg {
 	}
 
 	private boolean isTerminalNode(MyNode v1, HashMap<MyNode, BitSet> nodeToCluster,
-			HashMap<BitSet, MyNode> t2ClusterToNode) {
+								   HashMap<BitSet, MyNode> t2ClusterToNode) {
 		BitSet b = nodeToCluster.get(v1);
 		MyNode v2 = t2ClusterToNode.get(b);
-        MyNode p1 = v1.getFirstInEdge().getSource();
-        MyNode p2 = v2.getFirstInEdge().getSource();
+		MyNode p1 = v1.getFirstInEdge().getSource();
+		MyNode p2 = v2.getFirstInEdge().getSource();
 		BitSet b1 = (BitSet) nodeToCluster.get(p1).clone();
 		BitSet b2 = (BitSet) nodeToCluster.get(p2).clone();
 		b1.xor(b);
@@ -345,7 +364,7 @@ public class TerminalAlg {
 	}
 
 	private void collapseST(MyPhyloTree t1, MyPhyloTree t2, HashMap<MyNode, BitSet> nodeToCluster,
-			HashMap<BitSet, MyNode> t1ClusterToNode, HashMap<BitSet, MyNode> t2ClusterToNode, HashSet<BitSet> clusterSet) {
+							HashMap<BitSet, MyNode> t1ClusterToNode, HashMap<BitSet, MyNode> t2ClusterToNode, HashSet<BitSet> clusterSet) {
 
 		HashSet<BitSet> stSets = cmpSTNodes(t1, t2, nodeToCluster, clusterSet, t2ClusterToNode);
 
@@ -381,7 +400,7 @@ public class TerminalAlg {
 	private void contractLeafNode(MyNode v, HashSet<MyNode> contractedNodes, HashSet<MyNode> endNodes) {
 		if (v.getInDegree() != 0) {
 			BitSet vSet = (BitSet) v.getInfo();
-            MyEdge e = v.getFirstInEdge();
+			MyEdge e = v.getFirstInEdge();
 			MyNode p = e.getSource();
 			p.getOwner().deleteEdge(e);
 			p.removeOutEdge(e);
@@ -392,14 +411,14 @@ public class TerminalAlg {
 				if (endNodes.contains(p))
 					endNodes.remove(p);
 				if (p.getInDegree() > 0)
-                    contractNodesRec(p.getFirstInEdge().getSource(), contractedNodes, endNodes);
+					contractNodesRec(p.getFirstInEdge().getSource(), contractedNodes, endNodes);
 			} else
 				contractNodesRec(p, contractedNodes, endNodes);
 		}
 	}
 
 	private void contractNodesRec(MyNode v, HashSet<MyNode> contractedNodes, HashSet<MyNode> endNodes) {
-        Iterator<MyEdge> it = v.outEdges().iterator();
+		Iterator<MyEdge> it = v.outEdges().iterator();
 		Vector<MyNode> conChildren = new Vector<MyNode>();
 		while (it.hasNext()) {
 			MyNode c = it.next().getTarget();
@@ -416,7 +435,7 @@ public class TerminalAlg {
 	}
 
 	private String createUniqueLabel(String s1, String s2) {
-	
+
 		if (s1.isEmpty())
 			return s2;
 		if (s2.isEmpty())
@@ -432,7 +451,7 @@ public class TerminalAlg {
 	}
 
 	private HashSet<BitSet> cmpSTNodes(MyPhyloTree t1, MyPhyloTree t2, HashMap<MyNode, BitSet> nodeToCluster,
-			HashSet<BitSet> clusterSet, HashMap<BitSet, MyNode> t2ClusterToNode) {
+									   HashSet<BitSet> clusterSet, HashMap<BitSet, MyNode> t2ClusterToNode) {
 
 		LCA_Query_LogN rmqQuery_logN = new LCA_Query_LogN(t2);
 		HashSet<HashSet<MyNode>> stNodeSet = new HashSet<HashSet<MyNode>>();
@@ -453,8 +472,8 @@ public class TerminalAlg {
 	}
 
 	private HashSet<MyNode> cmpSTNodesRec(MyNode v, HashMap<MyNode, BitSet> nodeToCluster,
-			HashSet<HashSet<MyNode>> stNodeSet, HashSet<MyNode> stMulNodes, HashMap<BitSet, MyNode> t2ClusterToNode,
-			LCA_Query_LogN rmqQuery_logN) {
+										  HashSet<HashSet<MyNode>> stNodeSet, HashSet<MyNode> stMulNodes, HashMap<BitSet, MyNode> t2ClusterToNode,
+										  LCA_Query_LogN rmqQuery_logN) {
 
 		if (v.getOutDegree() == 0) {
 			HashSet<MyNode> nodes = new HashSet<MyNode>();
@@ -464,7 +483,7 @@ public class TerminalAlg {
 
 			HashSet<HashSet<MyNode>> subNodeSet = new HashSet<HashSet<MyNode>>();
 			Vector<MyNode> stChildren = new Vector<MyNode>();
-            Iterator<MyEdge> it = v.outEdges().iterator();
+			Iterator<MyEdge> it = v.outEdges().iterator();
 			while (it.hasNext()) {
 				MyNode c = it.next().getTarget();
 				HashSet<MyNode> nodes = cmpSTNodesRec(c, nodeToCluster, stNodeSet, stMulNodes, t2ClusterToNode,
@@ -522,8 +541,8 @@ public class TerminalAlg {
 	}
 
 	private RefinedCluster getRefClusters(MyNode v, Vector<MyNode> stChildren, HashMap<MyNode, BitSet> nodeToCluster,
-			int size, BitSet refSet) {
-		
+										  int size, BitSet refSet) {
+
 		Vector<MyNode> children = new Vector<MyNode>();
 		for (MyNode c : stChildren) {
 			BitSet b = nodeToCluster.get(c);
@@ -534,12 +553,12 @@ public class TerminalAlg {
 		RefinedCluster refinedCluster = new RefinedCluster(size);
 		getRefClustersRec(children, nodeToCluster, size, 0, 0, new BitSet(taxaOrdering.size()), new HashSet<MyNode>(),
 				refinedCluster);
-		
+
 		return refinedCluster;
 	}
 
 	private void getRefClustersRec(Vector<MyNode> children, HashMap<MyNode, BitSet> nodeToCluster, int maxSize,
-			int size, int j, BitSet refCluster, HashSet<MyNode> refNodes, RefinedCluster refinedCluster) {
+								   int size, int j, BitSet refCluster, HashSet<MyNode> refNodes, RefinedCluster refinedCluster) {
 		if (size < maxSize && children.size() - j >= maxSize - size) {
 			for (int k = j; k < children.size(); k++) {
 				MyNode c = children.get(k);
@@ -557,7 +576,7 @@ public class TerminalAlg {
 	}
 
 	private boolean isCompatibleLCA(BitSet cluster, HashMap<BitSet, MyNode> t2ClusterToNode,
-			LCA_Query_LogN rmqQuery_logN, HashMap<MyNode, BitSet> nodeToCluster) {
+									LCA_Query_LogN rmqQuery_logN, HashMap<MyNode, BitSet> nodeToCluster) {
 		int i = cluster.nextSetBit(0);
 		HashSet<MyNode> t2Nodes = new HashSet<MyNode>();
 		while (i != -1) {
@@ -568,7 +587,7 @@ public class TerminalAlg {
 		}
 		MyNode lca = rmqQuery_logN.cmpLCA(t2Nodes);
 
-        Iterator<MyEdge> it = lca.outEdges().iterator();
+		Iterator<MyEdge> it = lca.outEdges().iterator();
 		while (it.hasNext()) {
 			BitSet childCluster = nodeToCluster.get(it.next().getTarget());
 			BitSet b = (BitSet) childCluster.clone();
@@ -580,7 +599,7 @@ public class TerminalAlg {
 	}
 
 	private void cmpClusters(MyPhyloTree t1, MyPhyloTree t2, HashMap<MyNode, BitSet> nodeToCluster,
-			HashMap<BitSet, MyNode> t1ClusterToNode, HashMap<BitSet, MyNode> t2ClusterToNode) {
+							 HashMap<BitSet, MyNode> t1ClusterToNode, HashMap<BitSet, MyNode> t2ClusterToNode) {
 		cmpClustersRec(t1.getRoot(), nodeToCluster, t1ClusterToNode);
 		cmpClustersRec(t2.getRoot(), nodeToCluster, t2ClusterToNode);
 	}
@@ -592,7 +611,7 @@ public class TerminalAlg {
 			b.set(index);
 			// b.set(taxaOrdering.indexOf(v.getLabel()));
 		} else {
-            Iterator<MyEdge> it = v.outEdges().iterator();
+			Iterator<MyEdge> it = v.outEdges().iterator();
 			while (it.hasNext())
 				b.or(cmpClustersRec(it.next().getTarget(), nodeToCluster, clusterToNode));
 		}
@@ -609,7 +628,7 @@ public class TerminalAlg {
 	}
 
 	private void copyTreeRec(MyNode v, MyNode vCopy, MyNode[] nodePair) {
-        Iterator<MyEdge> it = v.outEdges().iterator();
+		Iterator<MyEdge> it = v.outEdges().iterator();
 		while (it.hasNext()) {
 			MyGraph tCopy = vCopy.getOwner();
 			MyNode c = it.next().getTarget();
