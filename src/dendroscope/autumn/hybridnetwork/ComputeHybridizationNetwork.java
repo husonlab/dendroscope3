@@ -188,8 +188,8 @@ public class ComputeHybridizationNetwork {
 
         System.gc();
 
-        List<TreeData> list = PostProcess.apply(result.toArray(new Root[result.size()]), allTaxa, false);
-        return list.toArray(new TreeData[list.size()]);
+        List<TreeData> list = PostProcess.apply(result.toArray(new Root[0]), allTaxa, false);
+        return list.toArray(new TreeData[0]);
     }
 
     /**

@@ -69,7 +69,7 @@ public class Edge3dPlus extends Edge3d {
      */
     public Point3dObject3d extreme() {
         Point3dObject3d res = null;
-        double maxd = Double.MIN_VALUE;
+        double maxd = Double.NEGATIVE_INFINITY;
         for (int i = 0; i < pts.size(); i++) {
             double d = h.normal.dot((Point3d) pts.elementAt(i));
             if (d > maxd) {

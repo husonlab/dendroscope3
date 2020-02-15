@@ -30,7 +30,7 @@ import java.util.Iterator;
 
 /**
  * set the retangular phylogram drawer
- * Daniel Huson, 2005
+ * Daniel Huson, 2007
  */
 public class DrawRectangularPhylogramCommand extends DrawCommand implements ICheckBoxCommand {
     /**

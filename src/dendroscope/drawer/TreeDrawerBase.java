@@ -881,7 +881,7 @@ public class TreeDrawerBase {
      * @return bounding box
      */
     public Rectangle2D getBBox() {
-        double[] bounds = new double[]{Double.MAX_VALUE, Double.MAX_VALUE, Double.MIN_VALUE, Double.MIN_VALUE};
+        double[] bounds = new double[]{Double.MAX_VALUE, Double.MAX_VALUE, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY};
         if (tree.getRoot() != null) {
             computeBBoxRec(tree.getRoot(), bounds);
         }
@@ -1067,17 +1067,17 @@ public class TreeDrawerBase {
      */
     private void computeYCoordinateOfInternalRec(Node v, NodeDoubleArray yCoord) {
         if (v.getOutDegree() > 0) {
-            double first = Double.MIN_VALUE;
-            double last = Double.MIN_VALUE;
+            double first = Double.NEGATIVE_INFINITY;
+            double last = Double.NEGATIVE_INFINITY;
 
             for (Node w : getLSAChildren(v)) {
-                double y = yCoord.getValue(w);
-                if (y == 0) {
+                Double y = yCoord.getValue(w);
+                if (y == null) {
                     computeYCoordinateOfInternalRec(w, yCoord);
                     y = yCoord.getValue(w);
                 }
                 last = y;
-                if (first == Double.MIN_VALUE)
+                if (first == Double.NEGATIVE_INFINITY)
                     first = last;
             }
             yCoord.set(v, 0.5 * (last + first));

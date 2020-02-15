@@ -119,7 +119,7 @@ public class TreeDrawerAngled extends TreeDrawerBase implements IOptimizedGraphD
             nv.setLocation(new Point2D.Double(0, y));
         } else {
             double min = Double.MAX_VALUE;
-            double max = Double.MIN_VALUE;
+            double max = Double.NEGATIVE_INFINITY;
 
             /*
             for(Iterator it=getLSAChildren(v).iterator();it.hasNext();) {
@@ -316,8 +316,8 @@ public class TreeDrawerAngled extends TreeDrawerBase implements IOptimizedGraphD
      * @return
      */
     public CollapsedShape computeCollapsedShape(Node v) {
-        double[] xMinMax = new double[]{Double.MAX_VALUE, Double.MIN_VALUE};
-        double[] yMinMax = new double[]{Double.MAX_VALUE, Double.MIN_VALUE};
+        double[] xMinMax = new double[]{Double.MAX_VALUE, Double.NEGATIVE_INFINITY};
+        double[] yMinMax = new double[]{Double.MAX_VALUE, Double.NEGATIVE_INFINITY};
         computeMinMaxRec(v, xMinMax, yMinMax);
 
         Point2D[] points = new Point2D[]{viewer.getLocation(v), new Point2D.Double(xMinMax[0], yMinMax[0]),

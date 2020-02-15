@@ -33,7 +33,6 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.LinkedList;
-import java.util.Random;
 import java.util.Stack;
 
 /**
@@ -42,10 +41,6 @@ import java.util.Stack;
  */
 public class TreeDrawerParallel extends TreeDrawerBase implements IOptimizedGraphDrawer {
     final static public String DESCRIPTION = "Draw tree using parallel lines";
-
-    Random random = new Random();
-    boolean optionShake = false;
-    double shakeFactor = 0.4;
 
     /**
      * constructor
@@ -151,7 +146,6 @@ public class TreeDrawerParallel extends TreeDrawerBase implements IOptimizedGrap
         }
     }
 
-
     /**
      * recursively compute node coordinates from edge angles:
      *
@@ -245,7 +239,7 @@ public class TreeDrawerParallel extends TreeDrawerBase implements IOptimizedGrap
                 }
             } else if (w.getInDegree() > 1) // all in edges are 'blue' edges
             {
-                double x = Double.MIN_VALUE;
+                double x = Double.NEGATIVE_INFINITY;
                 for (Edge f = w.getFirstInEdge(); f != null; f = w.getNextInEdge(f)) {
                     Node u = f.getSource();
                     Point2D location = viewer.getLocation(u);
@@ -255,7 +249,7 @@ public class TreeDrawerParallel extends TreeDrawerBase implements IOptimizedGrap
                         x = Math.max(x, location.getX());
                     }
                 }
-                if (ok && x > Double.MIN_VALUE) {
+                if (ok && x > Double.NEGATIVE_INFINITY) {
                     x += smallDistance;
                     viewer.setLocation(w, x, yCoord.getValue(w));
                     assigned.add(w);
@@ -303,7 +297,7 @@ public class TreeDrawerParallel extends TreeDrawerBase implements IOptimizedGrap
             leaves = 1;
         } else {
             leaves = 0;
-            double minX = Double.MAX_VALUE;
+            double minX = Integer.MAX_VALUE;
             Point2D first = null;
             Point2D last;
 
@@ -437,8 +431,8 @@ public class TreeDrawerParallel extends TreeDrawerBase implements IOptimizedGrap
      * @return
      */
     public CollapsedShape computeCollapsedShape(Node v) {
-        double[] xMinMax = new double[]{Double.MAX_VALUE, Double.MIN_VALUE};
-        double[] yMinMax = new double[]{Double.MAX_VALUE, Double.MIN_VALUE};
+        double[] xMinMax = new double[]{Integer.MAX_VALUE, Integer.MIN_VALUE};
+        double[] yMinMax = new double[]{Integer.MAX_VALUE, Integer.MIN_VALUE};
         computeMinMaxRec(v, xMinMax, yMinMax);
 
         Point2D[] points = new Point2D[]{new Point2D.Double(viewer.getLocation(v).getX(), yMinMax[0]),
