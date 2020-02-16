@@ -1226,5 +1226,4 @@ context.goForward(1, true, true);
   <buildIds buildAll="false">
     <mediaSet refId="1691242149" />
   </buildIds>
-  <buildOptions disableJreBundling="true" disableNotarization="true" />
 </install4j>

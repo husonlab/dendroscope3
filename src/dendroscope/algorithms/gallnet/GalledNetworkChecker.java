@@ -226,7 +226,7 @@ public class GalledNetworkChecker {
         if (e == null || tree.isSpecial(e))        // either root or reticulate node, start a new component
             node2component.set(v, maxComponentNumber.increment());
         else            // in same component, keep number
-            node2component.set(v, node2component.get(e.getSource()));
+            node2component.set(v, node2component.getValue(e.getSource()));
 
         for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f))  // visit all children
         {

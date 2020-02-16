@@ -28,8 +28,6 @@ import jloda.swing.graphview.GraphView;
 import jloda.swing.graphview.NodeView;
 import jloda.swing.util.Geometry;
 import jloda.swing.util.PolygonDouble;
-import jloda.util.Basic;
-import jloda.util.ProgramProperties;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -413,78 +411,9 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
     }
 
     /**
-     * add internal points to edges. Used by circle drawers
-     */
-    protected void addInternalPointsOld() {
-        final int pointsPerCircle = ProgramProperties.get("PointsPerCircle", 200);
-        if (pointsPerCircle != 200)
-            System.err.println("PointsPerCircle=" + pointsPerCircle);
-
-        final Stack<Node> stack = new Stack<>();
-        stack.push(tree.getRoot());
-
-        Point2D originPt = new Point2D.Double(0, 0);
-
-        while (stack.size() > 0) {
-            final Node v = stack.pop();
-            final Point2D vPt = viewer.getLocation(v);
-            final double height = originPt.distance(vPt);
-            // add internal points to edges
-            //final double vAngle = Geometry.moduloTwoPI(Geometry.computeAngle(vPt));
-            final double vAngle = node2AngleOfInEdge.getValue(v);
-            for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
-                Node w = f.getTarget();
-                final Point2D wPt = viewer.getLocation(w);
-                //final double wAngle = Geometry.moduloTwoPI(Geometry.computeAngle(wPt));
-                final double wAngle = node2AngleOfInEdge.getValue(w);
-
-                double minAngle = vAngle;
-                double maxAngle = wAngle;
-                boolean flip = false;
-                if (minAngle > maxAngle) {
-                    double tmp = minAngle;
-                    minAngle = maxAngle;
-                    maxAngle = tmp;
-                    flip = !flip;
-                }
-                if (maxAngle - minAngle > Math.PI) {
-                    double tmp = minAngle + 2 * Math.PI;
-                    minAngle = maxAngle;
-                    maxAngle = tmp;
-                    flip = !flip;
-                }
-                java.util.List<Point2D> list = new LinkedList<>();
-                double dAngle = (2 * Math.PI) / pointsPerCircle;
-                if (flip) {
-                    Point2D apt = new Point2D.Double(height, 0);
-                    apt = Geometry.rotate(apt, minAngle);
-                    list.add(apt);
-                }
-                if (!tree.isSpecial(f) || tree.getWeight(f) == 1) {
-                    for (double angle = minAngle + dAngle; angle < maxAngle; angle += dAngle) {
-                        Point2D apt = new Point2D.Double(height, 0);
-                        apt = Geometry.rotate(apt, angle);
-                        list.add(apt);
-                    }
-                }
-                if (!flip) {
-                    Point2D apt = new Point2D.Double(height, 0);
-                    apt = Geometry.rotate(apt, maxAngle);
-                    list.add(apt);
-                }
-                viewer.setInternalPoints(f, flip ? Basic.reverseList(list) : list);
-
-                if (PhyloTreeUtils.okToDescendDownThisEdge(tree, f, v)) {
-                    stack.push(f.getTarget());
-                }
-            }
-        }
-    }
-
-    /**
      * set of sub tree points used to build proxy shape
      */
-    class SubTreePoints extends java.util.LinkedList<Point2D> {
+    static class SubTreePoints extends java.util.LinkedList<Point2D> {
         Point2D enter;
         Point2D left;
         Point2D right;
@@ -565,7 +494,7 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
         if (visibleRect != null && bbD.intersects(visibleRect) == false)
             return false; // not visible on screen
 
-        Integer numLeaves = node2NumberLeaves.get(v);
+        Integer numLeaves = node2NumberLeaves.getValue(v);
         return !(numLeaves != null && numLeaves > 10 * (Math.min(bbD.height, bbD.width)));
     }
 
