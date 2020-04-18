@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="8.0.4" transformSequenceNumber="8">
-  <directoryPresets config="../antbuild/jloda.jar" />
+  <directoryPresets config="../../javafx-jmods" />
   <application name="Dendroscope" applicationId="3637-0812-9190-9529" mediaDir="../../../builds" shortName="Dendroscope" publisher="Center for Bioinformatics Tübingen" publisherWeb="www.zbit.informatik.uni-tuebingen.de" version="3.0" allPathsRelative="true" backupOnSave="true" macVolumeId="f94969a45be0d53a" javaMinVersion="11">
     <codeSigning macEnabled="true" macPkcs12File="../../../../etc/application.p12" />
-    <jreBundles jdkProviderId="AdoptOpenJDK" release="openjdk12/jdk-12.0.2+10" />
+    <jreBundles jdkProviderId="Liberica" release="OpenJDK 13.0.2+9">
+      <modules />
+    </jreBundles>
   </application>
   <files>
     <mountPoints>
       <mountPoint id="1691242151" location="jars" />
-      <mountPoint id="1691242766" location="openjfx" />
-      <mountPoint id="1691242935" location="openjfx/macos" />
-      <mountPoint id="1691242945" location="openjfx/unix" />
-      <mountPoint id="1691243102" location="openjfx/windows-x64" />
       <mountPoint id="1691242756" location="Examples" />
       <mountPoint id="1691242160" />
     </mountPoints>
@@ -28,9 +26,6 @@
       </dirEntry>
       <fileEntry mountPoint="1691242151" file="../antbuild/dendroscope3.jar" />
       <fileEntry mountPoint="1691242151" file="../antbuild/jloda.jar" />
-      <dirEntry mountPoint="1691242935" file="../../javafx/macos/javafx" />
-      <dirEntry mountPoint="1691242945" file="../../javafx/unix/javafx" />
-      <dirEntry mountPoint="1691243102" file="../../javafx/windows/javafx" />
       <dirEntry mountPoint="1691242756" file="../examples" subDirectory="examples">
         <exclude>
           <entry location=".DS_Store" />
@@ -1194,9 +1189,9 @@ context.goForward(1, true, true);
         <entry location="openjfx/macos" />
         <entry location="openjfx/windows-x64" />
       </exclude>
-      <jreBundle>
+      <jreBundle jreBundleSource="generated">
         <modules>
-          <defaultModules set="jre" />
+          <jmodDirectory location="../../javafx-jmods/unix" />
         </modules>
       </jreBundle>
     </unixInstaller>
@@ -1207,7 +1202,7 @@ context.goForward(1, true, true);
       </exclude>
       <jreBundle jreBundleSource="generated" includedJre="macosx-amd64-12.0.1">
         <modules>
-          <defaultModules set="jre" />
+          <jmodDirectory location="../../javafx-jmods/macos" />
         </modules>
       </jreBundle>
     </macosFolder>
@@ -1218,12 +1213,13 @@ context.goForward(1, true, true);
       </exclude>
       <jreBundle jreBundleSource="generated" includedJre="windows-amd64-12.0.1">
         <modules>
-          <defaultModules set="jre" />
+          <jmodDirectory location="../../javafx-jmods/windows" />
         </modules>
       </jreBundle>
     </windows>
   </mediaSets>
-  <buildIds buildAll="false">
+  <buildIds>
     <mediaSet refId="1691242149" />
   </buildIds>
+  <buildOptions disableSigning="true" disableNotarization="true" />
 </install4j>
