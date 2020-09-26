@@ -3,7 +3,7 @@
   <directoryPresets config="../../javafx-jmods" />
   <application name="Dendroscope" applicationId="3637-0812-9190-9529" mediaDir="../../../builds" shortName="Dendroscope" publisher="Center for Bioinformatics Tübingen" publisherWeb="www.zbit.informatik.uni-tuebingen.de" version="3.0" allPathsRelative="true" backupOnSave="true" macVolumeId="f94969a45be0d53a" javaMinVersion="11">
     <codeSigning macEnabled="true" macPkcs12File="../../../../etc/application.p12" />
-    <jreBundles jdkProviderId="Liberica" release="OpenJDK 13.0.2+9">
+    <jreBundles jdkProviderId="AdoptOpenJDK" release="openjdk14/jdk-14.0.1+7">
       <modules />
     </jreBundles>
   </application>
