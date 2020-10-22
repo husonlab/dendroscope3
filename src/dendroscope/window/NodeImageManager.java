@@ -127,26 +127,26 @@ public class NodeImageManager {
         int n = name2.length() + 1;
         int[][] M = new int[m][n];
 
-            for (int i = 0; i < m; i++)
-                M[i][0] = 0;
+        for (int i = 0; i < m; i++)
+            M[i][0] = 0;
 
-            for (int j = 0; j < n; j++)
-                M[0][j] = 0;
+        for (int j = 0; j < n; j++)
+            M[0][j] = 0;
 
-            int best = 0;
-            for (int i = 1; i < m; i++)
-                for (int j = 1; j < n; j++) {
-                    M[i][j] = Math.max(0, Math.max(
-                                    M[i - 1][j] - 1,
-                                    Math.max(
-                                            M[i][j - 1] - 1,
-                                            M[i - 1][j - 1] + (name1.charAt(i - 1) == name2.charAt(j - 1) ? 2 : -1)))
+        int best = 0;
+        for (int i = 1; i < m; i++)
+            for (int j = 1; j < n; j++) {
+                M[i][j] = Math.max(0, Math.max(
+                        M[i - 1][j] - 1,
+                        Math.max(
+                                M[i][j - 1] - 1,
+                                M[i - 1][j - 1] + (name1.charAt(i - 1) == name2.charAt(j - 1) ? 2 : -1)))
 
-                    );
-                    if (M[i][j] > best)
-                        best = M[i][j];
-                }
-            return best;
+                );
+                if (M[i][j] > best)
+                    best = M[i][j];
+            }
+        return best;
     }
 
 

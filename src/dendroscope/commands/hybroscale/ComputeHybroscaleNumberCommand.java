@@ -34,7 +34,7 @@ import java.util.Vector;
 
 public class ComputeHybroscaleNumberCommand extends ComputeHybroscaleCommand {
     public void apply(NexusStreamParser np) throws Exception {
-    	
+
         np.matchIgnoreCase("compute hybridization-number method=Albrecht2015");
         boolean showDialog = false;
         if (np.peekMatchIgnoreCase("showdialog=")) {
@@ -53,31 +53,31 @@ public class ComputeHybroscaleNumberCommand extends ComputeHybroscaleCommand {
             return;
         }
 
-		Iterator<TreeViewer> it0 = multiViewer.getTreeGrid().getSelectedOrAllIterator();
-		Vector<PhyloTree> selectedTrees = new Vector<PhyloTree>();
-		while (it0.hasNext()) {
-			TreeViewer tV = it0.next();
-			PhyloTree t = tV.getPhyloTree();
-             if (!PhyloTreeUtils.areSingleLabeledTrees(t)) {
-				new Alert(getViewer().getFrame(), "The selected tree '" + t.getName() + "' is NOT single-labeled!");
-				return;
-			} else
-            selectedTrees.add(t);
-		}
+        Iterator<TreeViewer> it0 = multiViewer.getTreeGrid().getSelectedOrAllIterator();
+        Vector<PhyloTree> selectedTrees = new Vector<PhyloTree>();
+        while (it0.hasNext()) {
+            TreeViewer tV = it0.next();
+            PhyloTree t = tV.getPhyloTree();
+            if (!PhyloTreeUtils.areSingleLabeledTrees(t)) {
+                new Alert(getViewer().getFrame(), "The selected tree '" + t.getName() + "' is NOT single-labeled!");
+                return;
+            } else
+                selectedTrees.add(t);
+        }
 
-		String[] treeStrings = new String[selectedTrees.size()];
-		for (int i = 0; i < selectedTrees.size(); i++)
-			treeStrings[i] = selectedTrees.get(i).toBracketString();
+        String[] treeStrings = new String[selectedTrees.size()];
+        for (int i = 0; i < selectedTrees.size(); i++)
+            treeStrings[i] = selectedTrees.get(i).toBracketString();
 
-		HybroscaleController controller = new HybroscaleController(treeStrings, this, getViewer().getFrame(),
-				Computation.EDGE_NUMBER, availableCores, showDialog);
+        HybroscaleController controller = new HybroscaleController(treeStrings, this, getViewer().getFrame(),
+                Computation.EDGE_NUMBER, availableCores, showDialog);
 
-		if (!showDialog)
-			controller.run(Computation.EDGE_NETWORK, availableCores, null, false);
+        if (!showDialog)
+            controller.run(Computation.EDGE_NETWORK, availableCores, null, false);
 
-		synchronized (this) {
-			this.wait();
-		}
+        synchronized (this) {
+            this.wait();
+        }
 
     }
 

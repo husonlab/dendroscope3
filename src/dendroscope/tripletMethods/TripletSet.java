@@ -1471,9 +1471,7 @@ class TripletSet {
                     int leafNum = subLeaves.getFirstElement();
                     System.out.println("Replacing leaf " + tweak.data + " with " + leafNum);
                     tweak.data = leafNum;
-                } else
-
-                {
+                } else {
                     //! numSubLeaves == 2
 
                     System.out.println("Ah, this has two leaves.");

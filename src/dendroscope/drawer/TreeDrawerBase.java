@@ -492,7 +492,7 @@ public class TreeDrawerBase {
                 &&
                 nv.getLabelShape(trans) != null &&
                 nv.getLabelShape(trans).contains(x, y)
-                ) {
+        ) {
             hitNodeLabels.add(v);
         }
         if (mustVisitSubTreeBelowNode(v) && hitsBBox(v, 100, 100, x, y)) {
@@ -723,10 +723,10 @@ public class TreeDrawerBase {
     public EdgeSet getHitEdgeLabels(Rectangle rect) {
         hitEdgeLabels.clear();
         /*
-       * If a list of moved labels is available, we must traverse it here.
-       *
-       *
-       * */
+         * If a list of moved labels is available, we must traverse it here.
+         *
+         *
+         * */
         Node v = tree.getRoot();
         if (v != null)
             getHitEdgeLabelsRectangleRec(v, rect);

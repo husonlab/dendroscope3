@@ -29,187 +29,188 @@ import java.util.Hashtable;
 
 public class ClusterTable extends JTable {
 
-	private String detailsButtonName = "Details";
-	private String abortButtonName = "Abort";
+    private String detailsButtonName = "Details";
+    private String abortButtonName = "Abort";
 
-	private static final long serialVersionUID = 1L;
-	private Hashtable<ClusterThread, Integer> threadToRow = new Hashtable<ClusterThread, Integer>();
-	private Hashtable<Integer, ClusterThread> rowToThread = new Hashtable<Integer, ClusterThread>();
-	private Hashtable<ClusterThread, JButton> threadToDetailsButton = new Hashtable<ClusterThread, JButton>();
-	private Hashtable<JButton, InfoFrame> detailButtonToFrame = new Hashtable<JButton, InfoFrame>();
-	private Hashtable<ClusterThread, JButton> threadToAbortButton = new Hashtable<ClusterThread, JButton>();
+    private static final long serialVersionUID = 1L;
+    private Hashtable<ClusterThread, Integer> threadToRow = new Hashtable<ClusterThread, Integer>();
+    private Hashtable<Integer, ClusterThread> rowToThread = new Hashtable<Integer, ClusterThread>();
+    private Hashtable<ClusterThread, JButton> threadToDetailsButton = new Hashtable<ClusterThread, JButton>();
+    private Hashtable<JButton, InfoFrame> detailButtonToFrame = new Hashtable<JButton, InfoFrame>();
+    private Hashtable<ClusterThread, JButton> threadToAbortButton = new Hashtable<ClusterThread, JButton>();
 
-	private Object[] columnNames = { "Cluster ID", "Progress", "Status", "", "" };
-	private Object[][] data;
+    private Object[] columnNames = {"Cluster ID", "Progress", "Status", "", ""};
+    private Object[][] data;
 
-	private DefaultTableModel tModel;
-	private int row = 0;
-	private int id = 1;
+    private DefaultTableModel tModel;
+    private int row = 0;
+    private int id = 1;
 
-	// private int width = (int) (Toolkit.getDefaultToolkit().getScreenSize()
-	// .getWidth() / 3);
-	// private int height = (int) (Toolkit.getDefaultToolkit().getScreenSize()
-	// .getHeight() / 6);
+    // private int width = (int) (Toolkit.getDefaultToolkit().getScreenSize()
+    // .getWidth() / 3);
+    // private int height = (int) (Toolkit.getDefaultToolkit().getScreenSize()
+    // .getHeight() / 6);
 
-	private int width;
+    private int width;
 
-	@SuppressWarnings("serial")
-	public ClusterTable(StatusBar statusBar, int width, HybridView hView) {
+    @SuppressWarnings("serial")
+    public ClusterTable(StatusBar statusBar, int width, HybridView hView) {
 
-		tModel = new DefaultTableModel(data, columnNames);
-		this.width = width;
+        tModel = new DefaultTableModel(data, columnNames);
+        this.width = width;
 
-		DefaultTableCellRenderer buttonRenderer = new DefaultTableCellRenderer() {
+        DefaultTableCellRenderer buttonRenderer = new DefaultTableCellRenderer() {
 
-			public JButton getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-														 boolean hasFocus, int row, int column) {
+            public JButton getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                                                         boolean hasFocus, int row, int column) {
 
-				return (JButton) value;
+                return (JButton) value;
 
-			}
+            }
 
-		};
+        };
 
-		DefaultTableCellRenderer barRenderer = new DefaultTableCellRenderer() {
-			private static final long serialVersionUID = 1L;
-			JProgressBar progressBar;
+        DefaultTableCellRenderer barRenderer = new DefaultTableCellRenderer() {
+            private static final long serialVersionUID = 1L;
+            JProgressBar progressBar;
 
-			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-														   boolean hasFocus, int row, int column) {
-				int intValue = ((Integer) value).intValue();
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                                                           boolean hasFocus, int row, int column) {
+                int intValue = ((Integer) value).intValue();
 
-				if (progressBar == null)
-					progressBar = new JProgressBar();
+                if (progressBar == null)
+                    progressBar = new JProgressBar();
 
-				progressBar.setValue(intValue);
-				progressBar.setBackground(table.getBackground());
-				progressBar.setStringPainted(true);
+                progressBar.setValue(intValue);
+                progressBar.setBackground(table.getBackground());
+                progressBar.setStringPainted(true);
 
-				return progressBar;
-			}
-		};
+                return progressBar;
+            }
+        };
 
-		DefaultTableCellRenderer iconRenderer = new DefaultTableCellRenderer() {
-			private static final long serialVersionUID = 1L;
+        DefaultTableCellRenderer iconRenderer = new DefaultTableCellRenderer() {
+            private static final long serialVersionUID = 1L;
 
-			public void setValue(Object value) {
-				if (value instanceof Icon) {
-					setIcon((Icon) value);
-					setText("");
-				} else {
-					setIcon(null);
-					super.setValue(value);
-				}
-			}
-		};
+            public void setValue(Object value) {
+                if (value instanceof Icon) {
+                    setIcon((Icon) value);
+                    setText("");
+                } else {
+                    setIcon(null);
+                    super.setValue(value);
+                }
+            }
+        };
 
-		setDefaultRenderer(JButton.class, buttonRenderer);
-		setDefaultRenderer(Integer.class, barRenderer);
-		setDefaultRenderer(String.class, iconRenderer);
-		setDefaultRenderer(Icon.class, iconRenderer);
+        setDefaultRenderer(JButton.class, buttonRenderer);
+        setDefaultRenderer(Integer.class, barRenderer);
+        setDefaultRenderer(String.class, iconRenderer);
+        setDefaultRenderer(Icon.class, iconRenderer);
 
-		iconRenderer.setHorizontalAlignment(SwingUtilities.CENTER);
-		addMouseListener(new JTableButtonMouseListener(this, statusBar));
+        iconRenderer.setHorizontalAlignment(SwingUtilities.CENTER);
+        addMouseListener(new JTableButtonMouseListener(this, statusBar));
 
-		setModel(tModel);
+        setModel(tModel);
 
-		getColumnModel().getColumn(0).setPreferredWidth(width / 6);
-		getColumnModel().getColumn(1).setPreferredWidth(width / 6);
-		getColumnModel().getColumn(2).setPreferredWidth(width / 3);
-		getColumnModel().getColumn(3).setPreferredWidth(width / 6);
-		getColumnModel().getColumn(4).setPreferredWidth(width / 6);
+        getColumnModel().getColumn(0).setPreferredWidth(width / 6);
+        getColumnModel().getColumn(1).setPreferredWidth(width / 6);
+        getColumnModel().getColumn(2).setPreferredWidth(width / 3);
+        getColumnModel().getColumn(3).setPreferredWidth(width / 6);
+        getColumnModel().getColumn(4).setPreferredWidth(width / 6);
 
-		setRowHeight(30);
-		setEnabled(false);
+        setRowHeight(30);
+        setEnabled(false);
 
-	}
+    }
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Class getColumnClass(int columnIndex) {
-		if (columnIndex == 3 || columnIndex == 4) {
-			return JButton.class;
-		} else if (columnIndex == 1)
-			return Integer.class;
-		return String.class;
-	}
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public Class getColumnClass(int columnIndex) {
+        if (columnIndex == 3 || columnIndex == 4) {
+            return JButton.class;
+        } else if (columnIndex == 1)
+            return Integer.class;
+        return String.class;
+    }
 
-	public void addClusterThread(ClusterThread cT) {
+    public void addClusterThread(ClusterThread cT) {
 
-		String name = "Cluster " + id;
-		String status = "Cluster in progress.";
-		JButton details = new JButton(detailsButtonName);
-		JButton abort = new JButton(abortButtonName);
+        String name = "Cluster " + id;
+        String status = "Cluster in progress.";
+        JButton details = new JButton(detailsButtonName);
+        JButton abort = new JButton(abortButtonName);
 
-		threadToRow.put(cT, row);
-		rowToThread.put(row, cT);
-		threadToAbortButton.put(cT, abort);
-		threadToDetailsButton.put(cT, details);
+        threadToRow.put(cT, row);
+        rowToThread.put(row, cT);
+        threadToAbortButton.put(cT, abort);
+        threadToDetailsButton.put(cT, details);
 
-		InfoFrame info = new InfoFrame("Details", "No details.");
-		info.setLocationRelativeTo(this);;
-		info.setTitle("Details");
-		detailButtonToFrame.put(details, info);
+        InfoFrame info = new InfoFrame("Details", "No details.");
+        info.setLocationRelativeTo(this);
+        ;
+        info.setTitle("Details");
+        detailButtonToFrame.put(details, info);
 
-		Object[] dataRow = { name, 0, status, details, abort };
-		tModel.insertRow(row, dataRow);
-		tModel.fireTableRowsInserted(0, row);
+        Object[] dataRow = {name, 0, status, details, abort};
+        tModel.insertRow(row, dataRow);
+        tModel.fireTableRowsInserted(0, row);
 
-		getColumnModel().getColumn(0).setPreferredWidth(width / 6);
-		getColumnModel().getColumn(1).setPreferredWidth(width / 6);
-		getColumnModel().getColumn(2).setPreferredWidth(width / 3);
-		getColumnModel().getColumn(3).setPreferredWidth(width / 6);
-		getColumnModel().getColumn(4).setPreferredWidth(width / 6);
+        getColumnModel().getColumn(0).setPreferredWidth(width / 6);
+        getColumnModel().getColumn(1).setPreferredWidth(width / 6);
+        getColumnModel().getColumn(2).setPreferredWidth(width / 3);
+        getColumnModel().getColumn(3).setPreferredWidth(width / 6);
+        getColumnModel().getColumn(4).setPreferredWidth(width / 6);
 
-		id++;
-		row++;
-	}
+        id++;
+        row++;
+    }
 
-	public void stopCluster(ClusterThread cT) {
-		tModel.setValueAt("Canceled.", threadToRow.get(cT), 2);
-		tModel.fireTableCellUpdated(threadToRow.get(cT), 2);
-	}
+    public void stopCluster(ClusterThread cT) {
+        tModel.setValueAt("Canceled.", threadToRow.get(cT), 2);
+        tModel.fireTableCellUpdated(threadToRow.get(cT), 2);
+    }
 
-	public void stopAllCluster() {
-		for(ClusterThread cT : threadToRow.keySet())
-			tModel.fireTableCellUpdated(threadToRow.get(cT), 2);
-	}
+    public void stopAllCluster() {
+        for (ClusterThread cT : threadToRow.keySet())
+            tModel.fireTableCellUpdated(threadToRow.get(cT), 2);
+    }
 
-	public void finishCluster(ClusterThread cT) {
-		tModel.setValueAt("Done.", threadToRow.get(cT), 2);
-		tModel.fireTableCellUpdated(threadToRow.get(cT), 2);
-		threadToAbortButton.get(cT).setEnabled(false);
-		repaint();
-	}
+    public void finishCluster(ClusterThread cT) {
+        tModel.setValueAt("Done.", threadToRow.get(cT), 2);
+        tModel.fireTableCellUpdated(threadToRow.get(cT), 2);
+        threadToAbortButton.get(cT).setEnabled(false);
+        repaint();
+    }
 
-	public void setStatus(ClusterThread cT, String info) {
-		tModel.setValueAt(info, threadToRow.get(cT), 2);
-		tModel.fireTableCellUpdated(threadToRow.get(cT), 2);
-	}
+    public void setStatus(ClusterThread cT, String info) {
+        tModel.setValueAt(info, threadToRow.get(cT), 2);
+        tModel.fireTableCellUpdated(threadToRow.get(cT), 2);
+    }
 
-	public void setProgress(ClusterThread cT, int i) {
-		tModel.setValueAt(i, threadToRow.get(cT), 1);
-		tModel.fireTableCellUpdated(threadToRow.get(cT), 1);
-	}
+    public void setProgress(ClusterThread cT, int i) {
+        tModel.setValueAt(i, threadToRow.get(cT), 1);
+        tModel.fireTableCellUpdated(threadToRow.get(cT), 1);
+    }
 
-	public synchronized void setDetails(ClusterThread thread, String details) {
-		detailButtonToFrame.get(threadToDetailsButton.get(thread)).setInfo(details);
-		detailButtonToFrame.get(threadToDetailsButton.get(thread)).repaint();
-	}
+    public synchronized void setDetails(ClusterThread thread, String details) {
+        detailButtonToFrame.get(threadToDetailsButton.get(thread)).setInfo(details);
+        detailButtonToFrame.get(threadToDetailsButton.get(thread)).repaint();
+    }
 
-	public ClusterThread getClusterThread(int row) {
-		return rowToThread.get(row);
-	}
+    public ClusterThread getClusterThread(int row) {
+        return rowToThread.get(row);
+    }
 
-	public JDialog getInfoFrame(JButton b) {
-		return detailButtonToFrame.get(b);
-	}
+    public JDialog getInfoFrame(JButton b) {
+        return detailButtonToFrame.get(b);
+    }
 
-	public String getDetailsButtonName() {
-		return detailsButtonName;
-	}
+    public String getDetailsButtonName() {
+        return detailsButtonName;
+    }
 
-	public String getAbortButtonName() {
-		return abortButtonName;
-	}
+    public String getAbortButtonName() {
+        return abortButtonName;
+    }
 
 }

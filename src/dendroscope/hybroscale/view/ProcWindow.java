@@ -28,46 +28,46 @@ import java.awt.event.ActionListener;
 
 public class ProcWindow extends JFrame implements ActionListener {
 
-	private static final long serialVersionUID = 1L;
-	private JPanel panel = new JPanel();
-	private HybroscaleController controller;
+    private static final long serialVersionUID = 1L;
+    private JPanel panel = new JPanel();
+    private HybroscaleController controller;
 
-	JTextField number, memory;
+    JTextField number, memory;
 
-	public ProcWindow(HybridView hView, HybroscaleController controller) {
-		this.controller = controller;
-		panel.setLayout(new FlowLayout());
+    public ProcWindow(HybridView hView, HybroscaleController controller) {
+        this.controller = controller;
+        panel.setLayout(new FlowLayout());
 
-		JLabel textProc = new JLabel("Available Cores: ");
-		panel.add(textProc);
+        JLabel textProc = new JLabel("Available Cores: ");
+        panel.add(textProc);
 
-		number = new JTextField();
-		number.setText("" + (Runtime.getRuntime().availableProcessors() - 1));
-		number.setColumns(10);
-		number.selectAll();
-		panel.add(number);
+        number = new JTextField();
+        number.setText("" + (Runtime.getRuntime().availableProcessors() - 1));
+        number.setColumns(10);
+        number.selectAll();
+        panel.add(number);
 
-		JButton ok = new JButton("OK");
-		ok.addActionListener(this);
-		panel.add(ok);
-		add(panel);
+        JButton ok = new JButton("OK");
+        ok.addActionListener(this);
+        panel.add(ok);
+        add(panel);
 
-		setMinimumSize(new Dimension(100, 0));
-		setAlwaysOnTop(true);
-		pack();
+        setMinimumSize(new Dimension(100, 0));
+        setAlwaysOnTop(true);
+        pack();
 
-		setLocationRelativeTo(hView);
+        setLocationRelativeTo(hView);
 
-	}
+    }
 
-	public void actionPerformed(ActionEvent arg0) {
-		try {
-			Integer num = Integer.parseInt(number.getText());
-			controller.setCores(num);
-			setVisible(false);
-		} catch (Exception e) {
-			number.setText("invalid number");
-		}
-	}
+    public void actionPerformed(ActionEvent arg0) {
+        try {
+            Integer num = Integer.parseInt(number.getText());
+            controller.setCores(num);
+            setVisible(false);
+        } catch (Exception e) {
+            number.setText("invalid number");
+        }
+    }
 
 }

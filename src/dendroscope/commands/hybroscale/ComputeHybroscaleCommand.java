@@ -44,150 +44,150 @@ import java.util.Vector;
 
 public class ComputeHybroscaleCommand extends CommandBaseMultiViewer implements ICommand {
 
-	public void apply(NexusStreamParser np) throws Exception {
+    public void apply(NexusStreamParser np) throws Exception {
 
-		np.matchIgnoreCase("compute hybridization-network method=Albrecht2015");
-		boolean showDialog = false;
-		if (np.peekMatchIgnoreCase("showdialog=")) {
-			np.matchIgnoreCase("showdialog=");
-			showDialog = np.getBoolean();
-		}
-		int availableCores = 1;
-		if (np.peekMatchIgnoreCase("numberOfThreads=")) {
-			np.matchIgnoreCase("numberOfThreads=");
-			availableCores = np.getInt(1, 1000);
-		}
-		np.matchIgnoreCase(";");
+        np.matchIgnoreCase("compute hybridization-network method=Albrecht2015");
+        boolean showDialog = false;
+        if (np.peekMatchIgnoreCase("showdialog=")) {
+            np.matchIgnoreCase("showdialog=");
+            showDialog = np.getBoolean();
+        }
+        int availableCores = 1;
+        if (np.peekMatchIgnoreCase("numberOfThreads=")) {
+            np.matchIgnoreCase("numberOfThreads=");
+            availableCores = np.getInt(1, 1000);
+        }
+        np.matchIgnoreCase(";");
 
-		if (multiViewer.getTreeGrid().getNumberSelectedOrAllViewers() < 2) {
-			new Alert(getViewer().getFrame(), "Please select at least two trees!");
-			return;
-		}
+        if (multiViewer.getTreeGrid().getNumberSelectedOrAllViewers() < 2) {
+            new Alert(getViewer().getFrame(), "Please select at least two trees!");
+            return;
+        }
 
-		Iterator<TreeViewer> it0 = multiViewer.getTreeGrid().getSelectedOrAllIterator();
-		Vector<PhyloTree> selectedTrees = new Vector<PhyloTree>();
-		while (it0.hasNext()) {
-			TreeViewer tV = it0.next();
-			PhyloTree t = tV.getPhyloTree();
+        Iterator<TreeViewer> it0 = multiViewer.getTreeGrid().getSelectedOrAllIterator();
+        Vector<PhyloTree> selectedTrees = new Vector<PhyloTree>();
+        while (it0.hasNext()) {
+            TreeViewer tV = it0.next();
+            PhyloTree t = tV.getPhyloTree();
             if (!PhyloTreeUtils.areSingleLabeledTrees(t)) {
-				new Alert(getViewer().getFrame(), "The selected tree '" + t.getName() + "' is NOT single-labeled!");
-				return;
-			} 
-				selectedTrees.add(t);
-		}
+                new Alert(getViewer().getFrame(), "The selected tree '" + t.getName() + "' is NOT single-labeled!");
+                return;
+            }
+            selectedTrees.add(t);
+        }
 
-		String[] treeStrings = new String[selectedTrees.size()];
-		for (int i = 0; i < selectedTrees.size(); i++)
-			treeStrings[i] = selectedTrees.get(i).toBracketString();
+        String[] treeStrings = new String[selectedTrees.size()];
+        for (int i = 0; i < selectedTrees.size(); i++)
+            treeStrings[i] = selectedTrees.get(i).toBracketString();
 
-		HybroscaleController controller = new HybroscaleController(treeStrings, this, getViewer().getFrame(),
-				Computation.EDGE_NETWORK, availableCores, showDialog);
-		if (!showDialog)
-			controller.run(Computation.EDGE_NETWORK, availableCores, null, false);
+        HybroscaleController controller = new HybroscaleController(treeStrings, this, getViewer().getFrame(),
+                Computation.EDGE_NETWORK, availableCores, showDialog);
+        if (!showDialog)
+            controller.run(Computation.EDGE_NETWORK, availableCores, null, false);
 
-		synchronized (this) {
-			this.wait();
-		}
+        synchronized (this) {
+            this.wait();
+        }
 
-		MyPhyloTree[] hybridNetworks = controller.getNetworks();
+        MyPhyloTree[] hybridNetworks = controller.getNetworks();
 
-		if (hybridNetworks != null) {
+        if (hybridNetworks != null) {
 
-			TreeData[] networkData = new TreeData[hybridNetworks.length];
-			for (int i = 0; i < hybridNetworks.length; i++) {
-				MyPhyloTree hNet = hybridNetworks[i];
-				PhyloTree n = new PhyloTree();
-				n.parseBracketNotation(hNet.toMyBracketString(), true);
-				n.setName("HybridNetwork " + i);
+            TreeData[] networkData = new TreeData[hybridNetworks.length];
+            for (int i = 0; i < hybridNetworks.length; i++) {
+                MyPhyloTree hNet = hybridNetworks[i];
+                PhyloTree n = new PhyloTree();
+                n.parseBracketNotation(hNet.toMyBracketString(), true);
+                n.setName("HybridNetwork " + i);
 
-				// copying edge-label to edge-info
+                // copying edge-label to edge-info
                 for (Edge e : n.getEdgesAsSet()) {
-					e.setInfo(n.getLabel(e));
-					if (e.getTarget().getInDegree() < 2)
-						n.setLabel(e, "");
-				}
+                    e.setInfo(n.getLabel(e));
+                    if (e.getTarget().getInDegree() < 2)
+                        n.setLabel(e, "");
+                }
 
-				networkData[i] = new TreeData(n);
-			}
+                networkData[i] = new TreeData(n);
+            }
 
-			if (networkData != null && networkData.length > 0 && networkData[0].getNumberOfNodes() > 0) {
+            if (networkData != null && networkData.length > 0 && networkData[0].getNumberOfNodes() > 0) {
 
-				Director theDir;
-				MultiViewer theMultiViewer;
-				Document theDoc;
+                Director theDir;
+                MultiViewer theMultiViewer;
+                Document theDoc;
 
-				if (ProgramProperties.isUseGUI()) {
-					theDir = Director.newProject(1, 1);
-					theMultiViewer = (MultiViewer) theDir.getViewerByClass(MultiViewer.class);
-					theDoc = theDir.getDocument();
-				} else // in commandline mode we recycle the existing document:
-				{
-					theDir = getDir();
-					theMultiViewer = (MultiViewer) getViewer();
-					theDoc = theDir.getDocument();
-					theDoc.setTrees(new TreeData[0]);
-				}
+                if (ProgramProperties.isUseGUI()) {
+                    theDir = Director.newProject(1, 1);
+                    theMultiViewer = (MultiViewer) theDir.getViewerByClass(MultiViewer.class);
+                    theDoc = theDir.getDocument();
+                } else // in commandline mode we recycle the existing document:
+                {
+                    theDir = getDir();
+                    theMultiViewer = (MultiViewer) getViewer();
+                    theDoc = theDir.getDocument();
+                    theDoc.setTrees(new TreeData[0]);
+                }
 
-				// TODO
-				// if (showDialog)
-				// controller.setMultiViewer(theMultiViewer);
+                // TODO
+                // if (showDialog)
+                // controller.setMultiViewer(theMultiViewer);
 
-				theDoc.appendTrees(networkData);
-				theDoc.setTitle(Basic.replaceFileSuffix(multiViewer.getDir().getDocument().getTitle(), "-hybrid"));
-				theMultiViewer.chooseGridSize();
-				theMultiViewer.loadTrees(null);
-				for (Iterator<TreeViewer> it = theMultiViewer.getTreeGrid().getSelectedOrAllIterator(); it.hasNext();) {
-					TreeViewer viewer = it.next();
-					viewer.setDirty(true);
-				}
+                theDoc.appendTrees(networkData);
+                theDoc.setTitle(Basic.replaceFileSuffix(multiViewer.getDir().getDocument().getTitle(), "-hybrid"));
+                theMultiViewer.chooseGridSize();
+                theMultiViewer.loadTrees(null);
+                for (Iterator<TreeViewer> it = theMultiViewer.getTreeGrid().getSelectedOrAllIterator(); it.hasNext(); ) {
+                    TreeViewer viewer = it.next();
+                    viewer.setDirty(true);
+                }
 
-				theMultiViewer.setMustRecomputeEmbedding(true);
-				theDir.setDirty(true);
-				theDir.getDocument().setDocumentIsDirty(true);
-				theMultiViewer.updateView(IDirector.ALL);
-				theMultiViewer.getFrame().toFront();
+                theMultiViewer.setMustRecomputeEmbedding(true);
+                theDir.setDirty(true);
+                theDir.getDocument().setDocumentIsDirty(true);
+                theMultiViewer.updateView(IDirector.ALL);
+                theMultiViewer.getFrame().toFront();
 
-			}
-		}
-	}
+            }
+        }
+    }
 
-	public String getSyntax() {
-		return "compute hybridization-network method=Albrecht2015 [showdialog={false|true}] [numberOfThreads=number];";
-	}
+    public String getSyntax() {
+        return "compute hybridization-network method=Albrecht2015 [showdialog={false|true}] [numberOfThreads=number];";
+    }
 
-	public void actionPerformed(ActionEvent ev) {
-		execute("compute hybridization-network method=Albrecht2015 showdialog=true;");
-	}
+    public void actionPerformed(ActionEvent ev) {
+        execute("compute hybridization-network method=Albrecht2015 showdialog=true;");
+    }
 
-	public KeyStroke getAcceleratorKey() {
-		return null;
-	}
+    public KeyStroke getAcceleratorKey() {
+        return null;
+    }
 
-	public String getDescription() {
-		return "Compute all minimum hybridization networks for a set of non-binary trees using (Albrecht, 2015)";
-	}
+    public String getDescription() {
+        return "Compute all minimum hybridization networks for a set of non-binary trees using (Albrecht, 2015)";
+    }
 
-	public ImageIcon getIcon() {
-		return null;
-	}
+    public ImageIcon getIcon() {
+        return null;
+    }
 
-	public String getName() {
-		return "Hybridization Networks (Hybroscale)...";
-	}
+    public String getName() {
+        return "Hybridization Networks (Hybroscale)...";
+    }
 
-	public String getUndo() {
-		return null;
-	}
+    public String getUndo() {
+        return null;
+    }
 
-	public boolean isApplicable() {
-		// too expensive to check for equal label sets here...
-		Iterator<TreeViewer> it = multiViewer.getTreeGrid().getSelectedOrAllIterator();
-		return it.hasNext() && it.next().getPhyloTree().getSpecialEdges().size() == 0 && it.hasNext()
-				&& it.next().getPhyloTree().getSpecialEdges().size() == 0
-				&& ((MultiViewer) getViewer()).getDir().getDocument().getNumberOfTrees() > 0;
-	}
+    public boolean isApplicable() {
+        // too expensive to check for equal label sets here...
+        Iterator<TreeViewer> it = multiViewer.getTreeGrid().getSelectedOrAllIterator();
+        return it.hasNext() && it.next().getPhyloTree().getSpecialEdges().size() == 0 && it.hasNext()
+                && it.next().getPhyloTree().getSpecialEdges().size() == 0
+                && ((MultiViewer) getViewer()).getDir().getDocument().getNumberOfTrees() > 0;
+    }
 
-	public boolean isCritical() {
-		return true;
-	}
+    public boolean isCritical() {
+        return true;
+    }
 }

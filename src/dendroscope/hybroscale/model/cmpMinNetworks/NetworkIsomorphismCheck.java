@@ -34,188 +34,188 @@ import java.util.*;
 
 public class NetworkIsomorphismCheck {
 
-	public boolean run(SparseNetwork n1, SparseNetwork n2) {
+    public boolean run(SparseNetwork n1, SparseNetwork n2) {
 
-		SparseNetwork n1Copy = new SparseNetwork(n1);
-		SparseNetwork n2Copy = new SparseNetwork(n2);
+        SparseNetwork n1Copy = new SparseNetwork(n1);
+        SparseNetwork n2Copy = new SparseNetwork(n2);
 
 
-		if (n1Copy.getNodes().size() != n2Copy.getNodes().size())
-			return false;
+        if (n1Copy.getNodes().size() != n2Copy.getNodes().size())
+            return false;
 
-		if (n1Copy.getNodes().size() < 3) {
-			Vector<String> leafLabels = new Vector<String>();
-			for (SparseNetNode v : n1Copy.getLeaves())
-				leafLabels.add(v.getLabel());
+        if (n1Copy.getNodes().size() < 3) {
+            Vector<String> leafLabels = new Vector<String>();
+            for (SparseNetNode v : n1Copy.getLeaves())
+                leafLabels.add(v.getLabel());
 
-			for (SparseNetNode v : n2Copy.getLeaves()) {
-				if (!leafLabels.contains(v.getLabel()))
-					return false;
-			}
-			return true;
-		}
+            for (SparseNetNode v : n2Copy.getLeaves()) {
+                if (!leafLabels.contains(v.getLabel()))
+                    return false;
+            }
+            return true;
+        }
 
-		while (n1Copy.getNodes().size() > 2) {
+        while (n1Copy.getNodes().size() > 2) {
 
 //			System.out.println("--\n"+n1Copy.getPhyloTree()+";");
 //			System.out.println(n2Copy.getPhyloTree()+";\n");
 
-			HashSet<String> n1Cherrys = new HashSet<String>();
-			Hashtable<String, Vector<SparseNetNode>> n1Taxa2parent = new Hashtable<String, Vector<SparseNetNode>>();
-			Hashtable<SparseNetNode, String> n1parent2edgeLabel = new Hashtable<SparseNetNode, String>();
+            HashSet<String> n1Cherrys = new HashSet<String>();
+            Hashtable<String, Vector<SparseNetNode>> n1Taxa2parent = new Hashtable<String, Vector<SparseNetNode>>();
+            Hashtable<SparseNetNode, String> n1parent2edgeLabel = new Hashtable<SparseNetNode, String>();
 
-			// collect all cherries in t1
-			// -> a cherry is a sorted string assembled by its taxa
-			getCherrys(n1Copy, n1Cherrys, n1Taxa2parent, n1parent2edgeLabel);
+            // collect all cherries in t1
+            // -> a cherry is a sorted string assembled by its taxa
+            getCherrys(n1Copy, n1Cherrys, n1Taxa2parent, n1parent2edgeLabel);
 
-			HashSet<String> n2Cherrys = new HashSet<String>();
-			Hashtable<String, Vector<SparseNetNode>> n2Taxa2parent = new Hashtable<String, Vector<SparseNetNode>>();
-			Hashtable<SparseNetNode, String> n2parent2edgeLabel = new Hashtable<SparseNetNode, String>();
+            HashSet<String> n2Cherrys = new HashSet<String>();
+            Hashtable<String, Vector<SparseNetNode>> n2Taxa2parent = new Hashtable<String, Vector<SparseNetNode>>();
+            Hashtable<SparseNetNode, String> n2parent2edgeLabel = new Hashtable<SparseNetNode, String>();
 
-			// collect all cherries in t2
-			getCherrys(n2Copy, n2Cherrys, n2Taxa2parent, n2parent2edgeLabel);
+            // collect all cherries in t2
+            getCherrys(n2Copy, n2Cherrys, n2Taxa2parent, n2parent2edgeLabel);
 
-			// compare the two cherry sets..
-			if (n1Cherrys.size() != n2Cherrys.size()){
+            // compare the two cherry sets..
+            if (n1Cherrys.size() != n2Cherrys.size()) {
 //				System.out.println("Case-1");
 //				System.out.println(n1Cherrys);
 //				System.out.println(n2Cherrys);
-				return false;
-			}
+                return false;
+            }
 
-			Iterator<String> it = n2Cherrys.iterator();
-			while (it.hasNext()) {
-				String taxaString = it.next();
-				if (!n1Cherrys.contains(taxaString)){
+            Iterator<String> it = n2Cherrys.iterator();
+            while (it.hasNext()) {
+                String taxaString = it.next();
+                if (!n1Cherrys.contains(taxaString)) {
 //					System.out.println("Case-2");
 //					System.out.println(n1Cherrys);
 //					System.out.println(n2Cherrys);
-					return false;
-				}else {
-					Vector<SparseNetNode> parents1 = n1Taxa2parent.get(taxaString);
-					Vector<SparseNetNode> parents2 = n2Taxa2parent.get(taxaString);
+                    return false;
+                } else {
+                    Vector<SparseNetNode> parents1 = n1Taxa2parent.get(taxaString);
+                    Vector<SparseNetNode> parents2 = n2Taxa2parent.get(taxaString);
 
-					Vector<String> edgeStrings1 = new Vector<String>();
-					for (SparseNetNode p1 : parents1)
-						edgeStrings1.add(n1parent2edgeLabel.get(p1));
+                    Vector<String> edgeStrings1 = new Vector<String>();
+                    for (SparseNetNode p1 : parents1)
+                        edgeStrings1.add(n1parent2edgeLabel.get(p1));
 
-					Vector<String> edgeStrings2 = new Vector<String>();
-					for (SparseNetNode p2 : parents2)
-						edgeStrings2.add(n2parent2edgeLabel.get(p2));
+                    Vector<String> edgeStrings2 = new Vector<String>();
+                    for (SparseNetNode p2 : parents2)
+                        edgeStrings2.add(n2parent2edgeLabel.get(p2));
 
-					for (String edgeString1 : edgeStrings1) {
-						if (!edgeStrings2.contains(edgeString1)){
+                    for (String edgeString1 : edgeStrings1) {
+                        if (!edgeStrings2.contains(edgeString1)) {
 //							System.out.println("Case-3");
 //							for(String s : edgeStrings2)
 //								System.out.println("|"+edgeString1+"|vs|"+s+"|");
-							return false;
-						}
-					}
-				}
-			}
+                            return false;
+                        }
+                    }
+                }
+            }
 
-			// generate new cherries in both trees
-			if (n1Copy.getNodes().size() > 2) {
-				replaceCherrys(n1Copy, n1Taxa2parent);
-				replaceCherrys(n2Copy, n2Taxa2parent);
-			} else {
-				Vector<String> leafLabels = new Vector<String>();
-				for (SparseNetNode v : n1Copy.getLeaves())
-					leafLabels.add(v.getLabel());
-				for (SparseNetNode v : n2Copy.getLeaves()) {
-					if (!leafLabels.contains(v.getLabel())){
+            // generate new cherries in both trees
+            if (n1Copy.getNodes().size() > 2) {
+                replaceCherrys(n1Copy, n1Taxa2parent);
+                replaceCherrys(n2Copy, n2Taxa2parent);
+            } else {
+                Vector<String> leafLabels = new Vector<String>();
+                for (SparseNetNode v : n1Copy.getLeaves())
+                    leafLabels.add(v.getLabel());
+                for (SparseNetNode v : n2Copy.getLeaves()) {
+                    if (!leafLabels.contains(v.getLabel())) {
 //						System.out.println("Case-4");
-						return false;
-					}
-				}
-				return true;
-			}
+                        return false;
+                    }
+                }
+                return true;
+            }
 
-		}
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	private void replaceCherrys(SparseNetwork n, Hashtable<String, Vector<SparseNetNode>> n1Taxa2parent) {
+    private void replaceCherrys(SparseNetwork n, Hashtable<String, Vector<SparseNetNode>> n1Taxa2parent) {
 
-		Iterator<String> it = n1Taxa2parent.keySet().iterator();
-		while (it.hasNext()) {
-			String taxon = it.next();
-			for (SparseNetNode v : n1Taxa2parent.get(taxon)) {
-				v.setLabel(taxon);
-				v.removeAllChildren();
-			}
-		}
+        Iterator<String> it = n1Taxa2parent.keySet().iterator();
+        while (it.hasNext()) {
+            String taxon = it.next();
+            for (SparseNetNode v : n1Taxa2parent.get(taxon)) {
+                v.setLabel(taxon);
+                v.removeAllChildren();
+            }
+        }
 
-	}
+    }
 
-	private void getCherrys(SparseNetwork n, HashSet<String> cherrys,
-							Hashtable<String, Vector<SparseNetNode>> n1Taxa2parent, Hashtable<SparseNetNode, String> parent2edgeLabels) {
-		HashSet<SparseNetNode> leaves = new HashSet<SparseNetNode>();
-		for (SparseNetNode v : n.getNodes()) {
-			if (v.getOutDegree() == 0 && v.getInDegree() > 0)
-				leaves.add(v);
-		}
-		Iterator<SparseNetNode> it = leaves.iterator();
-		Vector<SparseNetNode> parents = new Vector<SparseNetNode>();
-		while (it.hasNext()) {
-			SparseNetNode v = it.next();
-			for (SparseNetEdge eIn : v.getInEdges()) {
-				SparseNetNode p = eIn.getSource();
-				if (!parents.contains(p) && isCherry(p)) {
+    private void getCherrys(SparseNetwork n, HashSet<String> cherrys,
+                            Hashtable<String, Vector<SparseNetNode>> n1Taxa2parent, Hashtable<SparseNetNode, String> parent2edgeLabels) {
+        HashSet<SparseNetNode> leaves = new HashSet<SparseNetNode>();
+        for (SparseNetNode v : n.getNodes()) {
+            if (v.getOutDegree() == 0 && v.getInDegree() > 0)
+                leaves.add(v);
+        }
+        Iterator<SparseNetNode> it = leaves.iterator();
+        Vector<SparseNetNode> parents = new Vector<SparseNetNode>();
+        while (it.hasNext()) {
+            SparseNetNode v = it.next();
+            for (SparseNetEdge eIn : v.getInEdges()) {
+                SparseNetNode p = eIn.getSource();
+                if (!parents.contains(p) && isCherry(p)) {
 
-					// collect&sort taxa
-					Vector<String> taxa = new Vector<String>();
-					for (SparseNetEdge e : p.getOutEdges()) {
-						String taxon = e.getTarget().getLabel().replaceAll(" +", "");
-						taxa.add(taxon);
-					}
-					Collections.sort(taxa);
+                    // collect&sort taxa
+                    Vector<String> taxa = new Vector<String>();
+                    for (SparseNetEdge e : p.getOutEdges()) {
+                        String taxon = e.getTarget().getLabel().replaceAll(" +", "");
+                        taxa.add(taxon);
+                    }
+                    Collections.sort(taxa);
 
-					// collect&sort edge indices
-					Vector<String> allIndices = new Vector<String>();
-					for (SparseNetEdge e : p.getOutEdges()) {
-						Vector<Integer> indices = new Vector<Integer>();
-						indices.addAll(e.getIndices());
-						Collections.sort(indices);
-						String indexString = "";
-						for (int index : indices)
-							indexString = indexString.concat(String.valueOf(index));
-						allIndices.add(indexString);
-					}
-					Collections.sort(allIndices);
+                    // collect&sort edge indices
+                    Vector<String> allIndices = new Vector<String>();
+                    for (SparseNetEdge e : p.getOutEdges()) {
+                        Vector<Integer> indices = new Vector<Integer>();
+                        indices.addAll(e.getIndices());
+                        Collections.sort(indices);
+                        String indexString = "";
+                        for (int index : indices)
+                            indexString = indexString.concat(String.valueOf(index));
+                        allIndices.add(indexString);
+                    }
+                    Collections.sort(allIndices);
 
-					// generate cherry-string
-					String taxaString = "";
-					for (String s : taxa)
-						taxaString = taxaString.concat(s + " ");
+                    // generate cherry-string
+                    String taxaString = "";
+                    for (String s : taxa)
+                        taxaString = taxaString.concat(s + " ");
 
-					cherrys.add(taxaString);
+                    cherrys.add(taxaString);
 
-					// generate edge-string
-					String edgeString = "";
-					for (String s : allIndices)
-						edgeString = edgeString.concat(s + " ");
+                    // generate edge-string
+                    String edgeString = "";
+                    for (String s : allIndices)
+                        edgeString = edgeString.concat(s + " ");
 
-					parents.add(p);
-					if (!n1Taxa2parent.containsKey(taxaString))
-						n1Taxa2parent.put(taxaString, new Vector<SparseNetNode>());
-					// n1Taxa2parent.get(taxaString).add(p);
-					Vector<SparseNetNode> newParents = (Vector<SparseNetNode>) n1Taxa2parent.get(taxaString).clone();
-					newParents.add(p);
-					n1Taxa2parent.put(taxaString, newParents);
-					parent2edgeLabels.put(p, edgeString);
+                    parents.add(p);
+                    if (!n1Taxa2parent.containsKey(taxaString))
+                        n1Taxa2parent.put(taxaString, new Vector<SparseNetNode>());
+                    // n1Taxa2parent.get(taxaString).add(p);
+                    Vector<SparseNetNode> newParents = (Vector<SparseNetNode>) n1Taxa2parent.get(taxaString).clone();
+                    newParents.add(p);
+                    n1Taxa2parent.put(taxaString, newParents);
+                    parent2edgeLabels.put(p, edgeString);
 
-				}
-			}
-		}
-	}
+                }
+            }
+        }
+    }
 
-	private boolean isCherry(SparseNetNode p) {
-		for (SparseNetEdge e : p.getOutEdges()) {
-			if (e.getTarget().getOutDegree() != 0)
-				return false;
-		}
-		return true;
-	}
+    private boolean isCherry(SparseNetNode p) {
+        for (SparseNetEdge e : p.getOutEdges()) {
+            if (e.getTarget().getOutDegree() != 0)
+                return false;
+        }
+        return true;
+    }
 }

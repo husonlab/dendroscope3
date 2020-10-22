@@ -94,8 +94,8 @@ public class PhyloTreeTri extends PhyloTree {
 
 
     /*get the label associated to a node from the HashMap
-    * @return   node id
-    * */
+     * @return   node id
+     * */
 
 
     public int getNodeId(Node node) {
@@ -111,8 +111,8 @@ public class PhyloTreeTri extends PhyloTree {
 
 
     /*get the clade associated to a node from the HashMap
-    * @return   the clade above the node
-    * */
+     * @return   the clade above the node
+     * */
 
 
     public Vector<Node> getCladeNodeAbove(Node node) {
@@ -128,8 +128,8 @@ public class PhyloTreeTri extends PhyloTree {
 
 
     /*get the clade associated to a node from the HashMap
-    * @return   the clade below the node
-    * */
+     * @return   the clade below the node
+     * */
 
 
     public Vector<Node> getCladeNode(Node node) {

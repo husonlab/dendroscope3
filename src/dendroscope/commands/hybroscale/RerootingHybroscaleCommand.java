@@ -43,142 +43,142 @@ import java.util.Vector;
 
 public class RerootingHybroscaleCommand extends CommandBaseMultiViewer implements ICommand {
 
-	public void apply(NexusStreamParser np) throws Exception {
+    public void apply(NexusStreamParser np) throws Exception {
 
-		np.matchIgnoreCase("compute rerooted-trees method=Albrecht2015");
-		boolean showDialog = false;
-		if (np.peekMatchIgnoreCase("showdialog=")) {
-			np.matchIgnoreCase("showdialog=");
-			showDialog = np.getBoolean();
-		}
-		int availableCores = 1;
-		if (np.peekMatchIgnoreCase("numberOfThreads=")) {
-			np.matchIgnoreCase("numberOfThreads=");
-			availableCores = np.getInt(1, 1000);
-		}
-		np.matchIgnoreCase(";");
+        np.matchIgnoreCase("compute rerooted-trees method=Albrecht2015");
+        boolean showDialog = false;
+        if (np.peekMatchIgnoreCase("showdialog=")) {
+            np.matchIgnoreCase("showdialog=");
+            showDialog = np.getBoolean();
+        }
+        int availableCores = 1;
+        if (np.peekMatchIgnoreCase("numberOfThreads=")) {
+            np.matchIgnoreCase("numberOfThreads=");
+            availableCores = np.getInt(1, 1000);
+        }
+        np.matchIgnoreCase(";");
 
-		if (multiViewer.getTreeGrid().getNumberSelectedOrAllViewers() < 2) {
-			new Alert(getViewer().getFrame(), "Please select at least two trees!");
-			return;
-		}
+        if (multiViewer.getTreeGrid().getNumberSelectedOrAllViewers() < 2) {
+            new Alert(getViewer().getFrame(), "Please select at least two trees!");
+            return;
+        }
 
-		Iterator<TreeViewer> it0 = multiViewer.getTreeGrid().getSelectedOrAllIterator();
-		Vector<PhyloTree> selectedTrees = new Vector<PhyloTree>();
-		while (it0.hasNext()) {
-			TreeViewer tV = it0.next();
-			PhyloTree t = tV.getPhyloTree();
+        Iterator<TreeViewer> it0 = multiViewer.getTreeGrid().getSelectedOrAllIterator();
+        Vector<PhyloTree> selectedTrees = new Vector<PhyloTree>();
+        while (it0.hasNext()) {
+            TreeViewer tV = it0.next();
+            PhyloTree t = tV.getPhyloTree();
             if (!PhyloTreeUtils.areSingleLabeledTrees(t)) {
-				new Alert(getViewer().getFrame(), "The selected tree '" + t.getName() + "' is NOT single-labeled!");
-				return;
-			} else
-				selectedTrees.add(t);
-		}
+                new Alert(getViewer().getFrame(), "The selected tree '" + t.getName() + "' is NOT single-labeled!");
+                return;
+            } else
+                selectedTrees.add(t);
+        }
 
-		String[] treeStrings = new String[selectedTrees.size()];
-		for (int i = 0; i < selectedTrees.size(); i++)
-			treeStrings[i] = selectedTrees.get(i).toBracketString();
+        String[] treeStrings = new String[selectedTrees.size()];
+        for (int i = 0; i < selectedTrees.size(); i++)
+            treeStrings[i] = selectedTrees.get(i).toBracketString();
 
-		RerootingView view = null;
-		RerootByHNumber rerootManager = null;
-		if (showDialog)
-			view = new RerootingView(getViewer().getFrame(), this, treeStrings, availableCores);
-		else
-			rerootManager = new RerootByHNumber(null, treeStrings, availableCores, null);
+        RerootingView view = null;
+        RerootByHNumber rerootManager = null;
+        if (showDialog)
+            view = new RerootingView(getViewer().getFrame(), this, treeStrings, availableCores);
+        else
+            rerootManager = new RerootByHNumber(null, treeStrings, availableCores, null);
 
-		synchronized (this) {
-			this.wait();
-		}
+        synchronized (this) {
+            this.wait();
+        }
 
-		Vector<MyPhyloTree[]> bestRerootedTrees = showDialog ? view.getBestTreeSets() : rerootManager.getBestTreeSets();
+        Vector<MyPhyloTree[]> bestRerootedTrees = showDialog ? view.getBestTreeSets() : rerootManager.getBestTreeSets();
 
-		if (bestRerootedTrees != null) {
-			TreeData[] treeData = new TreeData[bestRerootedTrees.size() * selectedTrees.size()];
-			int counter = 0;
-			for (int i = 0; i < bestRerootedTrees.size(); i++) {
-				for (int j = 0; j < selectedTrees.size(); j++) {
-					MyPhyloTree bestTree = bestRerootedTrees.get(i)[j];
-					PhyloTree t = new PhyloTree();
-					t.parseBracketNotation(bestTree.toBracketString(), true);
-					t.setName("Rerooted_Tree " + i + "." + j);
-					treeData[counter++] = new TreeData(t);
-				}
-			}
+        if (bestRerootedTrees != null) {
+            TreeData[] treeData = new TreeData[bestRerootedTrees.size() * selectedTrees.size()];
+            int counter = 0;
+            for (int i = 0; i < bestRerootedTrees.size(); i++) {
+                for (int j = 0; j < selectedTrees.size(); j++) {
+                    MyPhyloTree bestTree = bestRerootedTrees.get(i)[j];
+                    PhyloTree t = new PhyloTree();
+                    t.parseBracketNotation(bestTree.toBracketString(), true);
+                    t.setName("Rerooted_Tree " + i + "." + j);
+                    treeData[counter++] = new TreeData(t);
+                }
+            }
 
-			if (treeData != null && treeData.length > 0 && treeData[0].getNumberOfNodes() > 0) {
+            if (treeData != null && treeData.length > 0 && treeData[0].getNumberOfNodes() > 0) {
 
-				Director theDir;
-				MultiViewer theMultiViewer;
-				Document theDoc;
+                Director theDir;
+                MultiViewer theMultiViewer;
+                Document theDoc;
 
-				if (ProgramProperties.isUseGUI()) {
-					theDir = Director.newProject(1, 1);
-					theMultiViewer = (MultiViewer) theDir.getViewerByClass(MultiViewer.class);
-					theDoc = theDir.getDocument();
-				} else // in commandline mode we recycle the existing document:
-				{
-					theDir = getDir();
-					theMultiViewer = (MultiViewer) getViewer();
-					theDoc = theDir.getDocument();
-					theDoc.setTrees(new TreeData[0]);
-				}
+                if (ProgramProperties.isUseGUI()) {
+                    theDir = Director.newProject(1, 1);
+                    theMultiViewer = (MultiViewer) theDir.getViewerByClass(MultiViewer.class);
+                    theDoc = theDir.getDocument();
+                } else // in commandline mode we recycle the existing document:
+                {
+                    theDir = getDir();
+                    theMultiViewer = (MultiViewer) getViewer();
+                    theDoc = theDir.getDocument();
+                    theDoc.setTrees(new TreeData[0]);
+                }
 
-				theDoc.appendTrees(treeData);
-				theDoc.setTitle(Basic.replaceFileSuffix(multiViewer.getDir().getDocument().getTitle(), "-hybrid"));
-				theMultiViewer.chooseGridSize();
-				theMultiViewer.loadTrees(null);
-				for (Iterator<TreeViewer> it = theMultiViewer.getTreeGrid().getSelectedOrAllIterator(); it.hasNext();) {
-					TreeViewer viewer = it.next();
-					viewer.setDirty(true);
-				}
+                theDoc.appendTrees(treeData);
+                theDoc.setTitle(Basic.replaceFileSuffix(multiViewer.getDir().getDocument().getTitle(), "-hybrid"));
+                theMultiViewer.chooseGridSize();
+                theMultiViewer.loadTrees(null);
+                for (Iterator<TreeViewer> it = theMultiViewer.getTreeGrid().getSelectedOrAllIterator(); it.hasNext(); ) {
+                    TreeViewer viewer = it.next();
+                    viewer.setDirty(true);
+                }
 
-				theMultiViewer.setMustRecomputeEmbedding(true);
-				theDir.setDirty(true);
-				theDir.getDocument().setDocumentIsDirty(true);
-				theMultiViewer.updateView(IDirector.ALL);
-				theMultiViewer.getFrame().toFront();
+                theMultiViewer.setMustRecomputeEmbedding(true);
+                theDir.setDirty(true);
+                theDir.getDocument().setDocumentIsDirty(true);
+                theMultiViewer.updateView(IDirector.ALL);
+                theMultiViewer.getFrame().toFront();
 
-			}
-		}
-	}
+            }
+        }
+    }
 
-	public String getSyntax() {
-		return "compute rerooted-trees method=Albrecht2015 [showdialog={false|true}] [numberOfThreads=number];";
-	}
+    public String getSyntax() {
+        return "compute rerooted-trees method=Albrecht2015 [showdialog={false|true}] [numberOfThreads=number];";
+    }
 
-	public void actionPerformed(ActionEvent ev) {
-		execute("compute rerooted-trees method=Albrecht2015 showdialog=true;");
-	}
+    public void actionPerformed(ActionEvent ev) {
+        execute("compute rerooted-trees method=Albrecht2015 showdialog=true;");
+    }
 
-	public KeyStroke getAcceleratorKey() {
-		return null;
-	}
+    public KeyStroke getAcceleratorKey() {
+        return null;
+    }
 
-	public String getDescription() {
-		return "Reroot a set of non-binary trees so as to minimize their hybridization number (Albrecht, 2015)";
-	}
+    public String getDescription() {
+        return "Reroot a set of non-binary trees so as to minimize their hybridization number (Albrecht, 2015)";
+    }
 
-	public ImageIcon getIcon() {
-		return null;
-	}
+    public ImageIcon getIcon() {
+        return null;
+    }
 
-	public String getName() {
-		return "Reroot by Hybridization Number (Hybroscale)...";
-	}
+    public String getName() {
+        return "Reroot by Hybridization Number (Hybroscale)...";
+    }
 
-	public String getUndo() {
-		return null;
-	}
+    public String getUndo() {
+        return null;
+    }
 
-	public boolean isApplicable() {
-		// too expensive to check for equal label sets here...
-		Iterator<TreeViewer> it = multiViewer.getTreeGrid().getSelectedOrAllIterator();
-		return it.hasNext() && it.next().getPhyloTree().getSpecialEdges().size() == 0 && it.hasNext()
-				&& it.next().getPhyloTree().getSpecialEdges().size() == 0
-				&& ((MultiViewer) getViewer()).getDir().getDocument().getNumberOfTrees() > 0;
-	}
+    public boolean isApplicable() {
+        // too expensive to check for equal label sets here...
+        Iterator<TreeViewer> it = multiViewer.getTreeGrid().getSelectedOrAllIterator();
+        return it.hasNext() && it.next().getPhyloTree().getSpecialEdges().size() == 0 && it.hasNext()
+                && it.next().getPhyloTree().getSpecialEdges().size() == 0
+                && ((MultiViewer) getViewer()).getDir().getDocument().getNumberOfTrees() > 0;
+    }
 
-	public boolean isCritical() {
-		return true;
-	}
+    public boolean isCritical() {
+        return true;
+    }
 }

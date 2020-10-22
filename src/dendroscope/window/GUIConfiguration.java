@@ -60,12 +60,12 @@ public class GUIConfiguration {
         menuConfig.defineMenu("Network Layout", "Layout Optimizer 2010;Layout Optimizer 2009;Layout Optimizer 2008;|;Layout Optimizer None;");
 
         menuConfig.defineMenu("Algorithms", "@Advanced Algorithms;@Multi-Labeled Tree To Network;|;Strict Consensus...;Loose Consensus...;" +
-                        "Majority Consensus...;|;LSA Consensus...;Primordial Consensus...;|;Cluster Network Consensus...;Level-k Network Consensus...;"
-                        + "Galled Network Consensus...;|;Hybridization Networks...;Hybridization Networks (Binary Trees)...;" + ProgramProperties.getIfEnabled("allow-hybroscale", "Hybridization Networks (Hybroscale)...;") + "Reroot by Hybridization Number...;"
-                        + ProgramProperties.getIfEnabled("allow-hybroscale", "Reroot by Hybridization Number(Hybroscale)...;")
-                        + "|;Tanglegram...;"
-                        + (ProgramProperties.get("enable_experimental", false) ? "|;Merge Isomorphic Induced...;|;" +
-                        "Refine...;Subtree Reduction...;Cluster Reduction...;|;Test for Duplicates;" : "")
+                "Majority Consensus...;|;LSA Consensus...;Primordial Consensus...;|;Cluster Network Consensus...;Level-k Network Consensus...;"
+                + "Galled Network Consensus...;|;Hybridization Networks...;Hybridization Networks (Binary Trees)...;" + ProgramProperties.getIfEnabled("allow-hybroscale", "Hybridization Networks (Hybroscale)...;") + "Reroot by Hybridization Number...;"
+                + ProgramProperties.getIfEnabled("allow-hybroscale", "Reroot by Hybridization Number(Hybroscale)...;")
+                + "|;Tanglegram...;"
+                + (ProgramProperties.get("enable_experimental", false) ? "|;Merge Isomorphic Induced...;|;" +
+                "Refine...;Subtree Reduction...;Cluster Reduction...;|;Test for Duplicates;" : "")
         );
 
         menuConfig.defineMenu("Advanced Algorithms", "Hybridization Number...;Hybridization Number (Binary Trees)...;" +

@@ -204,27 +204,27 @@ public class LevelKNetwork {
         for (PhyloTree network : networks) {
             ClusterNetwork.convertHasseToClusterNetwork(network, new NodeDoubleArray(network, 1.0), new NodeDoubleArray(network, 1.0));
             // convert taxon ids back to taxon labels:
-                List<Node> toDelete = new LinkedList<>();
-                for (Node v = network.getFirstNode(); v != null; v = network.getNextNode(v)) {
-                    network.setLabel(v, null);
-                    if (v.getOutDegree() == 0) {
-                        BitSet set = (BitSet) v.getInfo();
-                        if (set != null && set.cardinality() > 0) {
-                            String label = "";
-                            for (int t = set.nextSetBit(0); t != -1; t = set.nextSetBit(t + 1)) {
-                                network.addTaxon(v, t);
-                                if (label.length() > 0)
-                                    label += ",";
-                                label += taxa.getLabel(t);
-                            }
-                            network.setLabel(v, label);
-                        } else
-                            toDelete.add(v);
-                    }
+            List<Node> toDelete = new LinkedList<>();
+            for (Node v = network.getFirstNode(); v != null; v = network.getNextNode(v)) {
+                network.setLabel(v, null);
+                if (v.getOutDegree() == 0) {
+                    BitSet set = (BitSet) v.getInfo();
+                    if (set != null && set.cardinality() > 0) {
+                        String label = "";
+                        for (int t = set.nextSetBit(0); t != -1; t = set.nextSetBit(t + 1)) {
+                            network.addTaxon(v, t);
+                            if (label.length() > 0)
+                                label += ",";
+                            label += taxa.getLabel(t);
+                        }
+                        network.setLabel(v, label);
+                    } else
+                        toDelete.add(v);
                 }
-                for (Node v : toDelete) {
-                    network.deleteNode(v);
-                }
+            }
+            for (Node v : toDelete) {
+                network.deleteNode(v);
+            }
 
             for (Edge e = network.getFirstEdge(); e != null; e = e.getNext()) {
                 if (e.getTarget().getInDegree() > 1) {

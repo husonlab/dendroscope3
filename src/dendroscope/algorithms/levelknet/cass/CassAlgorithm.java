@@ -53,13 +53,13 @@ public class CassAlgorithm {
      */
     public int apply(Cluster[] clusters, List<PhyloTree> networks, boolean computeOnlyOne, boolean checkTrees, ProgressListener progressListener) throws Exception {
 
-            System.err.println("Clusters:");
-            for (Cluster cluster : clusters) {
-                for (int t = cluster.nextSetBit(0); t != -1; t = cluster.nextSetBit(t + 1))
-                    System.err.print(" " + t);
-                System.err.println();
-            }
-            System.err.println(".");
+        System.err.println("Clusters:");
+        for (Cluster cluster : clusters) {
+            for (int t = cluster.nextSetBit(0); t != -1; t = cluster.nextSetBit(t + 1))
+                System.err.print(" " + t);
+            System.err.println();
+        }
+        System.err.println(".");
 
         ClusterSet clusterSet = new ClusterSet();
         // convert clusters to Leo-clusters and add to cluster set.

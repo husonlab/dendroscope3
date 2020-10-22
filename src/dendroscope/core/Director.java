@@ -318,15 +318,15 @@ public class Director implements IDirectableViewer, IDirector {
                         progressDialog.setCloseOnCancel(false);
                         doc.setProgressListener(progressDialog);
 
-                            try {
-                                if (commandManager != null)
-                                    commandManager.execute(command);
-                            } catch (CanceledException ex) {
-                                System.err.println("USER CANCELED EXECUTE");
-                            } catch (Exception ex) {
-                                // Basic.caught(ex);
-                                new Alert(getParent(), "Execute failed: " + ex.getMessage());
-                            }
+                        try {
+                            if (commandManager != null)
+                                commandManager.execute(command);
+                        } catch (CanceledException ex) {
+                            System.err.println("USER CANCELED EXECUTE");
+                        } catch (Exception ex) {
+                            // Basic.caught(ex);
+                            new Alert(getParent(), "Execute failed: " + ex.getMessage());
+                        }
 
                         notifyUpdateViewer(Director.ALL);
                         WaitUntilAllViewersAreUptoDate();

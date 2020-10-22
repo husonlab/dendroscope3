@@ -31,7 +31,7 @@ import java.util.StringTokenizer;
  * manages dendroscope properties, in cooperation with jloda.util.Properties
  *
  * @author huson
- *         Date: 11-Nov-2004
+ * Date: 11-Nov-2004
  */
 public class DendroscopeProperties {
     public static final boolean ALLOW_IMAGES = true;
@@ -168,7 +168,7 @@ public class DendroscopeProperties {
      * @return version
      */
     public static String getVersion() {
-            return Version.SHORT_DESCRIPTION;
+        return Version.SHORT_DESCRIPTION;
     }
 
 }

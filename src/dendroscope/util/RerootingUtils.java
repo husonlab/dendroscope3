@@ -46,21 +46,21 @@ public class RerootingUtils {
      */
     public static boolean rerootByEdge(TreeViewer viewer, Edge e) {
         PhyloTree tree = viewer.getPhyloTree();
-            if ((e.getSource() == tree.getRoot() || e.getTarget() == tree.getRoot()) && tree.getRoot().getDegree() == 2)
-                return false; // no need to reroot
+        if ((e.getSource() == tree.getRoot() || e.getTarget() == tree.getRoot()) && tree.getRoot().getDegree() == 2)
+            return false; // no need to reroot
 
-            if (tree.getNumberSpecialEdges() > 0) {
-                if (tree.isSpecial(e))
-                    return false; // can't root in special edge
-                // todo: bugs need fixing
-                if (JOptionPane.showConfirmDialog(MultiViewer.getLastActiveFrame(), "Rerooting networks has major bugs, try anyway?", "Warning", JOptionPane.YES_NO_CANCEL_OPTION)
-                        != JOptionPane.YES_OPTION)
-                    return false;
-                if (belowSpecialEdge(tree, e.getSource())) {
-                    System.err.println("WARNING: Can't reroot below a reticulation");
-                    return false;
-                }
+        if (tree.getNumberSpecialEdges() > 0) {
+            if (tree.isSpecial(e))
+                return false; // can't root in special edge
+            // todo: bugs need fixing
+            if (JOptionPane.showConfirmDialog(MultiViewer.getLastActiveFrame(), "Rerooting networks has major bugs, try anyway?", "Warning", JOptionPane.YES_NO_CANCEL_OPTION)
+                    != JOptionPane.YES_OPTION)
+                return false;
+            if (belowSpecialEdge(tree, e.getSource())) {
+                System.err.println("WARNING: Can't reroot below a reticulation");
+                return false;
             }
+        }
 
         final EdgeArray<String> edgeLabels;
         if (viewer.getDoc().isInternalNodeLabelsAreEdgeLabels())
@@ -68,7 +68,7 @@ public class RerootingUtils {
         else
             edgeLabels = null;
 
-            // not under a special node, reroot in simple way
+        // not under a special node, reroot in simple way
         tree.setRoot(e, edgeLabels);
 
         tree.redirectEdgesAwayFromRoot();
@@ -76,33 +76,33 @@ public class RerootingUtils {
         if (viewer.getDoc().isInternalNodeLabelsAreEdgeLabels())
             SupportValueUtils.setInternalNodeLabelsFromEdgeLabels(tree, edgeLabels);
 
-            Node root = tree.getRoot();
+        Node root = tree.getRoot();
 
-            if (root.getDegree() == 2 && tree.getLabel(root) == null) {
-                final Edge ea = root.getFirstAdjacentEdge();
-                final Edge eb = root.getLastAdjacentEdge();
-                final double weight = tree.getWeight(ea) + tree.getWeight(eb);
-                final double a = PhyloTreeUtils.computeAverageDistanceToALeaf(tree, ea.getOpposite(root));
-                final double b = PhyloTreeUtils.computeAverageDistanceToALeaf(tree, eb.getOpposite(root));
-                double na = 0.5 * (b - a + weight);
-                if (na >= weight)
-                    na = 0.95 * weight;
-                else if (na <= 0)
-                    na = 0.05 * weight;
-                final double nb = weight - na;
-                tree.setWeight(ea, na);
-                tree.setWeight(eb, nb);
-            }
+        if (root.getDegree() == 2 && tree.getLabel(root) == null) {
+            final Edge ea = root.getFirstAdjacentEdge();
+            final Edge eb = root.getLastAdjacentEdge();
+            final double weight = tree.getWeight(ea) + tree.getWeight(eb);
+            final double a = PhyloTreeUtils.computeAverageDistanceToALeaf(tree, ea.getOpposite(root));
+            final double b = PhyloTreeUtils.computeAverageDistanceToALeaf(tree, eb.getOpposite(root));
+            double na = 0.5 * (b - a + weight);
+            if (na >= weight)
+                na = 0.95 * weight;
+            else if (na <= 0)
+                na = 0.05 * weight;
+            final double nb = weight - na;
+            tree.setWeight(ea, na);
+            tree.setWeight(eb, nb);
+        }
 
-            if (viewer.getShowEdgeWeights() && tree.getRoot() != null) {
-                final Edge f = tree.getRoot().getFirstAdjacentEdge();
-                viewer.setLabel(f, "" + tree.getWeight(f));
-                viewer.setLabelVisible(f, true);
-                final Edge g = tree.getRoot().getLastAdjacentEdge();
-                viewer.setLabel(g, "" + tree.getWeight(g));
-                viewer.setLabelVisible(g, true);
-            }
-            return true;
+        if (viewer.getShowEdgeWeights() && tree.getRoot() != null) {
+            final Edge f = tree.getRoot().getFirstAdjacentEdge();
+            viewer.setLabel(f, "" + tree.getWeight(f));
+            viewer.setLabelVisible(f, true);
+            final Edge g = tree.getRoot().getLastAdjacentEdge();
+            viewer.setLabel(g, "" + tree.getWeight(g));
+            viewer.setLabelVisible(g, true);
+        }
+        return true;
     }
 
     /**

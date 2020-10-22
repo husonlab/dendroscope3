@@ -30,7 +30,8 @@ import jloda.phylo.PhyloTree;
  */
 public class SupportValueUtils {
     /**
-     *does this tree have internal node labels
+     * does this tree have internal node labels
+     *
      * @param tree
      * @return true, if some internal nodes have labels
      */
@@ -47,6 +48,7 @@ public class SupportValueUtils {
 
     /**
      * delete all internal nodes
+     *
      * @param trees
      */
     public static void deleteAllInternalNodes(TreeData[] trees) {
@@ -61,6 +63,7 @@ public class SupportValueUtils {
 
     /**
      * set edge labels from internal node labels
+     *
      * @param tree
      * @return edge labels
      */
@@ -76,6 +79,7 @@ public class SupportValueUtils {
 
     /**
      * set internal node labels from edge labels
+     *
      * @param tree
      */
     public static void setInternalNodeLabelsFromEdgeLabels(PhyloTree tree, EdgeArray<String> edgeLabels) {

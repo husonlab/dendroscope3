@@ -191,7 +191,7 @@ public class TanglegramNeighborNetCommand extends CommandBaseMultiViewer impleme
 
         int rows = Math.min(4, (int) (Math.sqrt(trees.length)));
         int cols = trees.length / rows;
-        
+
         final Director theDir;
         final MultiViewer theMultiViewer;
         final Document theDoc;
