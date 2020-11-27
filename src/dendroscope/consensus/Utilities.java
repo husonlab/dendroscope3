@@ -264,7 +264,7 @@ public class Utilities {
 
             for (Edge e = v.getFirstAdjacentEdge(); e != null; e = v.getNextAdjacentEdge(e)) {
                 Node w = e.getOpposite(v);
-                sorted.add(new Pair<>(numbering.getValue(w), e));
+                sorted.add(new Pair<>(numbering.get(w), e));
             }
             List<Edge> result = new LinkedList<>();
             for (Pair<Integer, Edge> pair : sorted) {

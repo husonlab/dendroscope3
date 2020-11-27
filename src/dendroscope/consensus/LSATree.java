@@ -100,7 +100,7 @@ public class LSATree implements IConsensusTreeMethod {
                     for (Edge e = v.getFirstInEdge(); e != null; e = v.getNextInEdge(e))
                         toDelete.add(e);
                     Edge e = tree.newEdge(lsa, v);
-                    tree.setWeight(e, reticulation2LSAEdgeLength.getValue(v));
+                    tree.setWeight(e, reticulation2LSAEdgeLength.get(v));
                     // System.err.println("WEIGHT: " + (float) reticulation2LSAEdgeLength.getValue(v));
                     // tree.setLabel(v,tree.getLabel(v)!=null?tree.getLabel(v)+"/"+(float)tree.getWeight(e):""+(float)tree.getWeight(e));
                 }
@@ -191,7 +191,7 @@ public class LSATree implements IConsensusTreeMethod {
                     for (Edge e = v.getFirstInEdge(); e != null; e = v.getNextInEdge(e))
                         toDelete.add(e);
                     Edge e = tree.newEdge(lsa, v);
-                    tree.setWeight(e, reticulation2LSAEdgeLength.getValue(v));
+                    tree.setWeight(e, reticulation2LSAEdgeLength.get(v));
                     // System.err.println("WEIGHT: " + (float) reticulation2LSAEdgeLength.getValue(v));
                     // tree.setLabel(v,tree.getLabel(v)!=null?tree.getLabel(v)+"/"+(float)tree.getWeight(e):""+(float)tree.getWeight(e));
                 }
@@ -493,7 +493,7 @@ public class LSATree implements IConsensusTreeMethod {
                 double length = 0;
                 for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
                     Node w = f.getTarget();
-                    length += node2Dist.getValue(w);
+                    length += node2Dist.get(w);
                     if (!tree.isSpecial(f))
                         length += tree.getWeight(f);
                 }

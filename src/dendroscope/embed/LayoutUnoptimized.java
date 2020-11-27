@@ -124,9 +124,9 @@ public class LayoutUnoptimized implements ILayoutOptimizer {
                 SortedSet<Node> sorted = new TreeSet<Node>(new Comparator<Node>() {
 
                     public int compare(Node v1, Node v2) {
-                        if (ordering.getValue(v1) < ordering.getValue(v2))
+                        if (ordering.get(v1) < ordering.get(v2))
                             return -1;
-                        else if (ordering.getValue(v1) > ordering.getValue(v2))
+                        else if (ordering.get(v1) > ordering.get(v2))
                             return 1;
                         if (v1.getId() != v2.getId())
                             System.err.println("ERROR in sort");
