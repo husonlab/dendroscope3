@@ -179,7 +179,7 @@ public class OpenFileCommand extends CommandBaseMultiViewer implements ICommand 
                         doc.setInternalNodeLabelsAreEdgeLabels(false);
 
                     if (choice.equals(choices[2])) { // delete
-                        SupportValueUtils.deleteAllInternalNodes(doc.getTrees());
+                        SupportValueUtils.deleteAllInternalNodeLabels(doc.getTrees());
                         doc.setDocumentIsDirty(true);
                     }
                 }

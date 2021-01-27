@@ -79,9 +79,9 @@ public class Nexml extends IOBase implements IOFormat {
      * @throws java.io.IOException
      */
     @Override
-    public void write(Writer writer, TreeData[] trees) throws IOException {
+    public void write(Writer writer, boolean internalNodeLabelsAreEdgeLabels, TreeData[] trees) throws IOException {
         try {
-            Document document = ConvertTreeDataToNexmlDoc.apply(trees, connectors);
+            Document document = ConvertTreeDataToNexmlDoc.apply(internalNodeLabelsAreEdgeLabels, trees, connectors);
             writer.write(document.getXmlString());
             writer.flush();
         } catch (ParserConfigurationException e) {

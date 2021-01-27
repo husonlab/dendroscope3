@@ -249,17 +249,14 @@ public class Dendro extends IOBase implements IOFormat {
      * @param w0
      * @param trees
      */
-    public void write(Writer w0, TreeData[] trees) throws IOException {
+    public void write(Writer w0, boolean internalNodeLabelsAreEdgeLabels, TreeData[] trees) throws IOException {
 
         if (trees != null) {
-            BufferedWriter w = new BufferedWriter(w0);
-            try {
+            try (BufferedWriter w = new BufferedWriter(w0)) {
                 w.write("#DENDROSCOPE\n");
                 for (TreeData tree : trees) {
                     write(w, tree);
                 }
-            } finally {
-                w.close();
             }
         }
     }

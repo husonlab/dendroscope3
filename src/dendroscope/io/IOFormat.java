@@ -68,7 +68,7 @@ public interface IOFormat {
      * @param trees
      * @throws IOException
      */
-    public void write(File file, TreeData[] trees) throws IOException;
+    public void write(File file, boolean internalNodeLabelsAreEdgeLabels, TreeData[] trees) throws IOException;
 
     /**
      * write trees
@@ -77,7 +77,7 @@ public interface IOFormat {
      * @param trees
      * @throws IOException
      */
-    public void write(Writer w, TreeData[] trees) throws IOException;
+    public void write(Writer w, boolean internalNodeLabelsAreEdgeLabels, TreeData[] trees) throws IOException;
 
     /**
      * gets a description of the file type

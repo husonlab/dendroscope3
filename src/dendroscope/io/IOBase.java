@@ -21,6 +21,7 @@ package dendroscope.io;
 import dendroscope.core.TreeData;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 /**
  * base class for  io classes
@@ -61,9 +62,9 @@ public abstract class IOBase extends javax.swing.filechooser.FileFilter implemen
      * @param trees
      * @throws java.io.IOException
      */
-    public void write(File file, TreeData[] trees) throws IOException {
+    public void write(File file, boolean internalNodeLabelsAreEdgeLabels, TreeData[] trees) throws IOException {
         write(new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(file), "UTF-8")), trees);
+                new FileOutputStream(file), StandardCharsets.UTF_8)), internalNodeLabelsAreEdgeLabels, trees);
     }
 
     /**
@@ -73,7 +74,7 @@ public abstract class IOBase extends javax.swing.filechooser.FileFilter implemen
      * @param trees
      * @throws java.io.IOException
      */
-    public abstract void write(Writer w0, TreeData[] trees) throws IOException;
+    public abstract void write(Writer w0, boolean internalNodeLabelsAreEdgeLabels, TreeData[] trees) throws IOException;
 
     /**
      * creates a new unique tree name

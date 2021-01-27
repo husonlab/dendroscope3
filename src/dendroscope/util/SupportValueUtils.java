@@ -47,14 +47,14 @@ public class SupportValueUtils {
     }
 
     /**
-     * delete all internal nodes
+     * delete all internal node labels
      *
      * @param trees
      */
-    public static void deleteAllInternalNodes(TreeData[] trees) {
+    public static void deleteAllInternalNodeLabels(TreeData[] trees) {
         for (PhyloTree tree : trees) {
             for (Node v = tree.getFirstNode(); v != null; v = tree.getNextNode(v)) {
-                if (v.getInDegree() > 0 && v.getOutDegree() > 0) {
+                if (v.getOutDegree() > 0) {
                     tree.setLabel(v, null);
                 }
             }

@@ -34,6 +34,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiFunction;
 
 /**
  * converts tree data to nexml document
@@ -60,10 +61,11 @@ public class ConvertTreeDataToNexmlDoc {
      * @return nexml document
      * @throws ParserConfigurationException
      */
-    public static Document apply(TreeData[] treeDataArray, Connectors connectors) throws ParserConfigurationException {
-        Document document = DocumentFactory.createDocument();
-        OTUs otus = document.createOTUs();
-        TreeBlock treeBlock = document.createTreeBlock(otus);
+    public static Document apply(boolean internalNodeLabelsAreEdgeLabels, TreeData[] treeDataArray, Connectors connectors) throws ParserConfigurationException {
+        final Document document = DocumentFactory.createDocument();
+        final OTUs otus = document.createOTUs();
+        final Map<String, OTU> label2otu = new HashMap<>();
+        final TreeBlock treeBlock = document.createTreeBlock(otus);
 
         Map<String, Node> globalSrc2Target = new HashMap<>();
 
@@ -95,7 +97,19 @@ public class ConvertTreeDataToNexmlDoc {
                         network.addAnnotationValue("default_edge_format", NAMESPACE_URI, defaultEdgeFormat.toString(null, false, false));
                     }
                 }
-                copyRec(treeData, root, network, src2tarNode, defaultNodeFormat, defaultEdgeFormat);
+                final BiFunction<jloda.graph.Node, String, OTU> getOtu = (v, s) -> {
+                    if (!internalNodeLabelsAreEdgeLabels || v.getOutDegree() == 0 || !Basic.isDouble(s)) {
+                        if (!label2otu.containsKey(s)) {
+                            final OTU otu = otus.createOTU();
+                            otu.setLabel(s);
+                            label2otu.put(s, otu);
+                        }
+                        return label2otu.get(s);
+                    } else
+                        return null;
+                };
+
+                copyRec(getOtu, treeData, root, network, src2tarNode, defaultNodeFormat, defaultEdgeFormat);
             } else {
                 System.err.println("Skipped unrooted tree or network: " + treeData.getName());
                 continue;
@@ -175,19 +189,22 @@ public class ConvertTreeDataToNexmlDoc {
      * @param network
      * @param src2tarNode
      */
-    private static void copyRec(TreeData treeData, jloda.graph.Node v, Network network, NodeArray<Node> src2tarNode, NodeView defaultNodeView, EdgeView defaultEdgeView) {
+    private static void copyRec(BiFunction<jloda.graph.Node, String, OTU> getOTU, TreeData treeData, jloda.graph.Node v, Network network, NodeArray<Node> src2tarNode, NodeView defaultNodeView, EdgeView defaultEdgeView) {
         if (src2tarNode.get(v) == null) {
             Node p = network.createNode();
             src2tarNode.put(v, p);
             String label = treeData.getLabel(v);
             if (label != null) {
                 p.setLabel(label);
+                final OTU otu = getOTU.apply(v, label);
+                if (otu != null)
+                    p.setOTU(otu);
             }
             if (treeData.hasAdditional()) {
                 p.addAnnotationValue("format", NAMESPACE_URI, treeData.getNV(v).toString(defaultNodeView, true, false));
             }
             for (jloda.graph.Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
-                copyRec(treeData, e.getTarget(), network, src2tarNode, defaultNodeView, defaultEdgeView);
+                copyRec(getOTU, treeData, e.getTarget(), network, src2tarNode, defaultNodeView, defaultEdgeView);
             }
             for (jloda.graph.Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
                 Node q = src2tarNode.get(e.getTarget());

@@ -204,7 +204,7 @@ public class Nexus extends IOBase implements IOFormat {
      * @param trees
      * @throws java.io.IOException
      */
-    public void write(Writer w0, TreeData[] trees) throws IOException {
+    public void write(Writer w0, boolean internalNodeLabelsAreEdgeLabels, TreeData[] trees) throws IOException {
         try (BufferedWriter w = new BufferedWriter(w0)) {
             w.write("#NEXUS\n");
             w.write("BEGIN trees;\n");

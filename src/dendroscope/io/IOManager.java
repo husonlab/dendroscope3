@@ -45,7 +45,7 @@ public class IOManager {
         IOFormat format = createIOFormatForName(formatName);
 
         try {
-            format.write(file, doc.getTrees());
+            format.write(file, doc.isInternalNodeLabelsAreEdgeLabels(), doc.getTrees());
         } catch (IOException e) {
             Basic.caught(e);
             new Alert("File NOT saved: " + e.getMessage());

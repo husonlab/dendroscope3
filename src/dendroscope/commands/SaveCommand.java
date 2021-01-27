@@ -111,7 +111,7 @@ public class SaveCommand extends CommandBaseMultiViewer implements ICommand {
             if (format instanceof Newick && formatName.equalsIgnoreCase("Newick-no-weights")) {
                 ((Newick) format).setSaveEdgeWeights(false);
             }
-            format.write(file, doc.getTrees());
+            format.write(file, doc.isInternalNodeLabelsAreEdgeLabels(), doc.getTrees());
             if (format instanceof Nexml) {
                 doc.setFile(file);
                 doc.setDocumentIsDirty(false);

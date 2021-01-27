@@ -93,7 +93,7 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     public TreeViewer(PhyloTree graph, boolean computeEmbedding, final Director dir) {
         super(graph, computeEmbedding);
         collapsedNodes = new NodeSet(getPhyloTree());
-        node2CollapsedShape = new NodeArray<CollapsedShape>(graph);
+        node2CollapsedShape = new NodeArray<>(graph);
         this.dir = dir;
         this.doc = dir.getDocument();
 

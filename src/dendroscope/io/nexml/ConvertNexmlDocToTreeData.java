@@ -162,7 +162,7 @@ public class ConvertNexmlDocToTreeData {
             }
         }
 
-        return list.toArray(new TreeData[list.size()]);
+        return list.toArray(new TreeData[0]);
     }
 
     /**

@@ -447,6 +447,8 @@ public class TreeGrid extends JPanel {
      */
     public void loadTrees(Document doc, BitSet which) {
         if (mainScrollBar != null && doc != null) {
+            multiViewer.getDir().getDocument().setInternalNodeLabelsAreEdgeLabels(doc.isInternalNodeLabelsAreEdgeLabels());
+
             //    mainScrollBar.setMinimum(1) ;
             if (!avoidScrollBarBounce) {
                 avoidScrollBarBounce = true;
