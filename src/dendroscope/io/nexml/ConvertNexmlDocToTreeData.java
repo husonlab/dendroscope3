@@ -20,6 +20,7 @@ package dendroscope.io.nexml;
 
 import dendroscope.core.Connectors;
 import dendroscope.core.TreeData;
+import jloda.phylo.PhyloTree;
 import jloda.swing.graphview.EdgeView;
 import jloda.swing.graphview.NodeView;
 import jloda.util.Basic;
@@ -37,12 +38,13 @@ import java.util.*;
  * Daniel Huson, 2.2011
  */
 public class ConvertNexmlDocToTreeData {
+
     public static TreeData[] apply(Document document, Connectors connectors) {
 
-        List<TreeData> list = new LinkedList<>();
+        final List<TreeData> trees = new LinkedList<>();
 
         TreeBlock metaBlock = null;
-        Map<String, Pair<jloda.graph.Node, TreeData>> src2tarNode = new HashMap<>();
+        final Map<String, Pair<jloda.graph.Node, TreeData>> src2tarNode = new HashMap<>();
 
         for (TreeBlock treeBlock : document.getTreeBlockList()) {
             if (treeBlock.getLabel().equals("InterTreeConnectors")) {
@@ -50,6 +52,7 @@ public class ConvertNexmlDocToTreeData {
                 continue;
             }
             for (Network network : treeBlock) {
+                // src2tarNode.clear();
                 final Set<Node> nodes = network.getNodes();
 
                 Node root = null;
@@ -107,6 +110,8 @@ public class ConvertNexmlDocToTreeData {
                     continue;
                 }
 
+                System.err.println(((PhyloTree) treeData.getRoot().getOwner()).toBracketString());
+
                 if (treeData.hasAdditional()) {
                     treeData.setDrawerKind(getFirstString(network.getAnnotationValues("drawer")));
                     treeData.setToScale(getFirstBoolean(network.getAnnotationValues("toscale")));
@@ -114,8 +119,7 @@ public class ConvertNexmlDocToTreeData {
                     treeData.setSparseLabels(getFirstBoolean(network.getAnnotationValues("sparselabels")));
                     String collapsed = getFirstString(network.getAnnotationValues("collapsed"));
                     if (collapsed != null) {
-                        Set<String> ids = new HashSet<>();
-                        ids.addAll(Arrays.asList(collapsed.split(" ")));
+                        final Set<String> ids = new HashSet<>(Arrays.asList(collapsed.split(" ")));
                         for (Node p : nodes) {
                             if (ids.contains(p.getId())) {
                                 jloda.graph.Node v = src2tarNode.get(p.getId()).getFirst();
@@ -125,7 +129,7 @@ public class ConvertNexmlDocToTreeData {
                         }
 
                     }
-                    String trans = getFirstString(network.getAnnotationValues("trans"));
+                    final String trans = getFirstString(network.getAnnotationValues("trans"));
                     if (trans != null) {
                         try {
                             treeData.getTrans().read(new StringReader(trans));
@@ -135,7 +139,7 @@ public class ConvertNexmlDocToTreeData {
                     }
                 }
 
-                list.add(treeData);
+                trees.add(treeData);
             }
         }
         if (metaBlock != null) {
@@ -162,7 +166,7 @@ public class ConvertNexmlDocToTreeData {
             }
         }
 
-        return list.toArray(new TreeData[0]);
+        return trees.toArray(new TreeData[0]);
     }
 
     /**
@@ -194,24 +198,17 @@ public class ConvertNexmlDocToTreeData {
                     }
                 }
             }
-            Set<Node> nodes = new TreeSet<>(new Comparator<Node>() {
-                public int compare(Node o1, Node o2) {
-                    int id1 = Basic.parseInt(o1.getId());
-                    int id2 = Basic.parseInt(o2.getId());
-                    if (id1 < id2)
-                        return -1;
-                    else if (id1 > id2)
-                        return 1;
-                    else
-                        return 0;
-                }
+            final Set<Node> nodes = new TreeSet<>((o1, o2) -> {
+                int id1 = Basic.parseInt(o1.getId());
+                int id2 = Basic.parseInt(o2.getId());
+                return Integer.compare(id1, id2);
             });
             nodes.addAll(network.getOutNodes(p));
             for (Node q : nodes) {
                 copyRec(network, q, treeData, src2tarNode, defaultNodeView, defaultEdgeView);
             }
             for (Node q : nodes) {
-                Edge edge = network.getEdge(p, q);
+                final Edge edge = network.getEdge(p, q);
                 jloda.graph.Node w = src2tarNode.get(q.getId()).getFirst();
                 jloda.graph.Edge e = treeData.newEdge(v, w);
                 String eLabel = edge.getLabel().trim();
