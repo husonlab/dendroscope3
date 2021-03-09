@@ -21,7 +21,6 @@ package dendroscope.commands.select;
 import dendroscope.core.Director;
 import dendroscope.window.MultiViewer;
 import dendroscope.window.TreeViewer;
-import jloda.graph.Node;
 import jloda.graph.NodeSet;
 import jloda.swing.commands.CommandBase;
 import jloda.swing.commands.ICommand;
@@ -87,9 +86,7 @@ public class SelectRootCommand extends CommandBase implements ICommand {
             TreeViewer viewer = it.next();
 
             NodeSet nS = new NodeSet(viewer.getGraph());
-            Iterator<Node> itNode = viewer.getGraph().nodeIterator();
-            while (itNode.hasNext()) {
-                Node v = itNode.next();
+            for (var v : viewer.getGraph().nodes()) {
                 if (v.getInDegree() == 0)
                     nS.add(v);
             }

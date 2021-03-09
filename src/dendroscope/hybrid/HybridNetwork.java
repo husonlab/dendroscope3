@@ -420,13 +420,11 @@ public class HybridNetwork extends PhyloTree {
 
     // returns true if the network is bicombining
     private boolean isBicombining() {
-        Iterator<Node> it = nodeIterator();
-        while (it.hasNext()) {
-            Node v = it.next();
-            if (!(getRoot().equals(v) || v.getInDegree() == 2 || v
-                    .getInDegree() == 1))
-                return false;
-        }
+            for (var v : nodes()) {
+                if (!(getRoot().equals(v) || v.getInDegree() == 2 || v
+                        .getInDegree() == 1))
+                    return false;
+            }
         return true;
     }
 

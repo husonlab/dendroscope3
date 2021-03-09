@@ -59,7 +59,7 @@ public class EmbedderForOrderPrescribedNetwork {
 
             int numberOfSubTrees = 0;
             for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
-                if (node2SubTreeId.get(v) == null && v.getInDegree() != 1) {
+                if (node2SubTreeId.getValue(v) == null && v.getInDegree() != 1) {
                     computeNode2SubTreeIdRec(v, ++numberOfSubTrees, node2SubTreeId);
                     subTreeId2Root.put(numberOfSubTrees, v);
                 }
@@ -68,22 +68,22 @@ public class EmbedderForOrderPrescribedNetwork {
                 System.err.println("Leaf to subtree:");
                 for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
                     if (v.getOutDegree() == 0) {
-                        System.err.println("Leaf " + tree.getLabel(v) + " contained in subtree: " + node2SubTreeId.get(v));
+                        System.err.println("Leaf " + tree.getLabel(v) + " contained in subtree: " + node2SubTreeId.getValue(v));
                     }
                 }
 
                 System.err.println("Position to subtree:");
                 for (int p = 0; p < orderedLabeledLeaves.length; p++) {
                     Node v = orderedLabeledLeaves[p];
-                    System.err.println(" Position=" + p + " has label: " + tree.getLabel(v) + ", is subtree: " + node2SubTreeId.get(v));
+                    System.err.println(" Position=" + p + " has label: " + tree.getLabel(v) + ", is subtree: " + node2SubTreeId.getValue(v));
                 }
             }
 
             // map each reticulate node to its lsa parent
             Map<Node, Node> node2lsaParent = new HashMap<Node, Node>();
             for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
-                if (tree.getNode2GuideTreeChildren().get(v) != null) {
-                    for (Node w : tree.getNode2GuideTreeChildren().get(v)) {
+                if (tree.getNode2GuideTreeChildren().getValue(v) != null) {
+                    for (Node w : tree.getNode2GuideTreeChildren().getValue(v)) {
                         if (w.getInDegree() > 1)
                             node2lsaParent.put(w, v);
                     }
@@ -126,7 +126,7 @@ public class EmbedderForOrderPrescribedNetwork {
         int pos = 0;
         for (Node v : orderedLabeledLeaves) {
             if (v != null) {
-                int id = node2SubTreeId.get(v);
+                int id = node2SubTreeId.getValue(v);
                 // System.err.println("Leaf: " + tree.getLabel(v) + " subtreeId: " + id);
                 if (first[id] == null)
                     first[id] = pos;
@@ -153,7 +153,7 @@ public class EmbedderForOrderPrescribedNetwork {
                 for (int p = 0; p < orderedLabeledLeaves.length; p++) {
                     Node v = orderedLabeledLeaves[p];
                     if (v != null) {
-                        int vId = node2SubTreeId.get(v);
+                        int vId = node2SubTreeId.getValue(v);
                         if (p < firstPos)
                             before.set(vId);
                         else if (p > firstPos && p < lastPos)
@@ -178,7 +178,7 @@ public class EmbedderForOrderPrescribedNetwork {
                     for (int p = firstPos - 1; p >= 0; p--) {
                         Node v = orderedLabeledLeaves[p];
                         if (v != null) {
-                            int vId = node2SubTreeId.get(v);
+                            int vId = node2SubTreeId.getValue(v);
                             if (spans.get(vId)) {
                                 spanId = vId;
                                 leftNode = v;
@@ -189,7 +189,7 @@ public class EmbedderForOrderPrescribedNetwork {
                     for (int p = lastPos + 1; p < orderedLabeledLeaves.length; p++) {
                         Node v = orderedLabeledLeaves[p];
                         if (v != null) {
-                            int vId = node2SubTreeId.get(v);
+                            int vId = node2SubTreeId.getValue(v);
                             if (vId == spanId) {
                                 rightNode = v;
                                 break;
@@ -242,13 +242,13 @@ public class EmbedderForOrderPrescribedNetwork {
                 System.err.println("Moving parent of subtree containing '" + label + "' to LCA(" + tree.getLabel(leftNode) + "," + tree.getLabel(rightNode) + ")");
         }
 
-        if (!tree.getNode2GuideTreeChildren().get(lsaParent).contains(v))
+        if (!tree.getNode2GuideTreeChildren().getValue(lsaParent).contains(v))
             throw new IOException("Not an LSA child");
 
-        tree.getNode2GuideTreeChildren().get(lsaParent).remove(v);
+        tree.getNode2GuideTreeChildren().getValue(lsaParent).remove(v);
 
         Node lca = getLCA(leftNode, rightNode);
-        tree.getNode2GuideTreeChildren().get(lca).add(v);
+        tree.getNode2GuideTreeChildren().getValue(lca).add(v);
     }
 
 
@@ -282,12 +282,12 @@ public class EmbedderForOrderPrescribedNetwork {
                 System.err.println("Moving parent of subtree containing '" + label + "' to root");
         }
 
-        if (!tree.getNode2GuideTreeChildren().get(lsaParent).contains(v))
+        if (!tree.getNode2GuideTreeChildren().getValue(lsaParent).contains(v))
             throw new IOException("Not an LSA child");
 
-        tree.getNode2GuideTreeChildren().get(lsaParent).remove(v);
+        tree.getNode2GuideTreeChildren().getValue(lsaParent).remove(v);
 
-        tree.getNode2GuideTreeChildren().get(root).add(v);
+        tree.getNode2GuideTreeChildren().getValue(root).add(v);
     }
 
 
@@ -345,8 +345,8 @@ public class EmbedderForOrderPrescribedNetwork {
      */
     private static List<Node> getLSAChildren(Node v) {
         List<Node> targetNodes = null;
-        if (((PhyloTree) v.getOwner()).getNode2GuideTreeChildren().get(v) != null)
-            targetNodes = ((PhyloTree) v.getOwner()).getNode2GuideTreeChildren().get(v);
+        if (((PhyloTree) v.getOwner()).getNode2GuideTreeChildren().getValue(v) != null)
+            targetNodes = ((PhyloTree) v.getOwner()).getNode2GuideTreeChildren().getValue(v);
         List<Node> list = new LinkedList<Node>();
 
         if (targetNodes == null) {
@@ -390,7 +390,7 @@ public class EmbedderForOrderPrescribedNetwork {
      * @param subTreeId
      */
     private static void computeNode2SubTreeIdRec(Node v, int subTreeId, NodeArray<Integer> node2SubTreeId) {
-        if (node2SubTreeId.get(v) == null) {
+        if (node2SubTreeId.getValue(v) == null) {
             node2SubTreeId.put(v, subTreeId);
             for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
                 Node w = e.getTarget();
@@ -410,7 +410,7 @@ public class EmbedderForOrderPrescribedNetwork {
      * @param node2pos
      */
     private static void reorderChildren(Node v, final Map<Node, Float> node2pos) {
-        List<Node> lsaChildren = ((PhyloTree) v.getOwner()).getNode2GuideTreeChildren().get(v);
+        List<Node> lsaChildren = ((PhyloTree) v.getOwner()).getNode2GuideTreeChildren().getValue(v);
         if (lsaChildren != null) {
             SortedSet<Node> nodes = new TreeSet<Node>(new Comparator<Node>() {
                 public int compare(Node w1, Node w2) {

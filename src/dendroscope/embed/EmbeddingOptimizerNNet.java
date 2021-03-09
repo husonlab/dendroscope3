@@ -208,7 +208,7 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
                 for (int s = 0; s < 2; s++) {
                     //System.err.println("tree " +s);
 
-                    for (Iterator<Node> itN = trees[s].nodeIterator(); itN.hasNext(); ) {
+                    for (Iterator<Node> itN = trees[s].nodes().iterator(); itN.hasNext(); ) {
                         Node node = itN.next();
 
                         if (node.getInDegree() > 1) {
@@ -445,7 +445,7 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
             for (Node v : dummyLeaves) {
                 PhyloTree tree = (PhyloTree) v.getOwner();
                 for (Node w = tree.getFirstNode(); w != null; w = w.getNext()) {
-                    List<Node> children = tree.getNode2GuideTreeChildren().get(w);
+                    List<Node> children = tree.getNode2GuideTreeChildren().getValue(w);
                     if (children != null)
                         children.remove(v);
                 }
@@ -674,13 +674,13 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
      * @param taxaBelow
      */
     public static void computeTaxaBelowRec(Node v, NodeArray<BitSet> taxaBelow) {
-        if (v.getOutDegree() > 0 && taxaBelow.get(v) == null) {
+        if (v.getOutDegree() > 0 && taxaBelow.getValue(v) == null) {
             BitSet below = new BitSet();
 
             for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
                 Node w = e.getTarget();
                 computeTaxaBelowRec(w, taxaBelow);
-                below.or(taxaBelow.get(w));
+                below.or(taxaBelow.getValue(w));
             }
             taxaBelow.put(v, below);
         }
@@ -715,8 +715,8 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
                             Node w = f.getTarget();
 
                             // lexicographically smaller is smaller
-                            BitSet taxaBelowV = taxaBelow.get(v);
-                            BitSet taxaBelowW = taxaBelow.get(w);
+                            BitSet taxaBelowV = taxaBelow.getValue(v);
+                            BitSet taxaBelowW = taxaBelow.getValue(w);
 
                             int i = taxaBelowV.nextSetBit(0);
                             int j = taxaBelowW.nextSetBit(0);
@@ -808,7 +808,7 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
 
 
                         Node toDelete = null;
-                        for (Iterator<Node> itN = newTrees[s].nodeIterator(); itN.hasNext(); ) {
+                        for (Iterator<Node> itN = newTrees[s].nodes().iterator(); itN.hasNext(); ) {
                             Node node = itN.next();
                             if (node.getOutDegree() == 0 && newTrees[s].getLabel(node) == taxon) {
                                 toDelete = node;
@@ -823,7 +823,7 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
                     boolean weird = true;  //todo : problem with delete!
                     while (weird) {
                         weird = false;
-                        for (Iterator<Node> itN = newTrees[s].nodeIterator(); itN.hasNext(); ) {
+                        for (Iterator<Node> itN = newTrees[s].nodes().iterator(); itN.hasNext(); ) {
                             Node node = itN.next();
                             if (node.getOutDegree() == 0 && newTrees[s].getLabel(node) == null) {
                                 newTrees[s].deleteNode(node);

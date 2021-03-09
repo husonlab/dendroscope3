@@ -59,7 +59,7 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
             return;
 
         if (debug) {
-            Iterator it2 = tree.nodeIterator();
+            Iterator it2 = tree.nodes().iterator();
             while (it2.hasNext()) {
                 Node n = (Node) it2.next();
                 System.out.print("Node: " + n + "label: " + tree.getLabel(n) + "\tdecendants: ");
@@ -98,7 +98,7 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
         if (debug) System.out.println("\nstart top down:");
         recTopDownLabelNodes(root, new HashSet(), parent2rNodes, nodes2rNodes, rNode2ReticulationNodeData, nodes2Orderings);
         if (debug) {
-            it = tree.nodeIterator();
+            it = tree.nodes().iterator();
             while (it.hasNext()) {
                 Node n = (Node) it.next();
                 System.out.println("Node: " + n + "\tordered decendants: " + nodes2Orderings.get(n));
@@ -121,7 +121,7 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
      */
     private Map getActiveRNodesForInEdges(PhyloSplitsGraph graph, Map rNode2ReticulationNodeData) {
         Map nodes = new HashMap();
-        Iterator it = graph.nodeIterator();
+        Iterator it = graph.nodes().iterator();
         while (it.hasNext()) nodes.put(it.next(), new HashSet());
         it = rNode2ReticulationNodeData.keySet().iterator();
         while (it.hasNext()) {
@@ -176,7 +176,7 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
      */
     private void createAuxiliaryEdges(PhyloSplitsGraph graph, Node root, Map rNode2ReticulationNodeData) {
         Map node2parent = new HashMap();
-        Iterator it = graph.nodeIterator();
+        Iterator it = graph.nodes().iterator();
         // find first common anceestor
         while (it.hasNext()) {
             Node n = (Node) it.next();
@@ -638,7 +638,7 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
         Map rNode2DepRetNode = new HashMap();
         PhyloSplitsGraph depRet = new PhyloSplitsGraph();
         // init depRet
-        Iterator it = graph.nodeIterator();
+        Iterator it = graph.nodes().iterator();
         while (it.hasNext()) {
             Node retN = (Node) it.next();
             if (retN.getInDegree() == 2) {
@@ -699,7 +699,7 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
         Map node2Predecessor = new HashMap();
         Map node2time = new HashMap();
         LinkedList sortedNodes = new LinkedList();
-        Iterator it = graph.nodeIterator();
+        Iterator it = graph.nodes().iterator();
         while (it.hasNext()) {
             Node n = (Node) it.next();
             node2Color.put(n, white);
@@ -709,7 +709,7 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
         }
         time = 0;
         LinkedList sorted = new LinkedList();
-        it = graph.nodeIterator();
+        it = graph.nodes().iterator();
         while (it.hasNext()) {
             Node n = (Node) it.next();
             if (node2Color.get(n).equals(white))

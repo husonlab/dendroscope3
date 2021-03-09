@@ -19,12 +19,15 @@
 package dendroscope.io;
 
 import dendroscope.core.TreeData;
-import jloda.graph.*;
+import jloda.graph.Edge;
+import jloda.graph.Node;
 import jloda.phylo.PhyloTree;
+import jloda.phylo.PhyloTreeUtils;
 import jloda.swing.graphview.EdgeView;
 import jloda.swing.graphview.GraphView;
 import jloda.swing.graphview.NodeView;
 import jloda.util.Basic;
+import jloda.util.Pair;
 import jloda.util.parse.NexusStreamParser;
 
 import java.io.*;
@@ -162,7 +165,7 @@ public class Dendro extends IOBase implements IOFormat {
             {
                 num2node = new Num2NodeArray();
                 num2edge = new Num2EdgeArray();
-                tree.setNum2NodeEdgeArray(num2node, num2edge);
+                setNum2NodeEdgeArray(tree.getRoot(), num2node, num2edge);
             }
 
             np.matchRespectCase("nnodes = " + tree.getNumberOfNodes() + " nedges = " + tree.getNumberOfEdges());
@@ -284,7 +287,7 @@ public class Dendro extends IOBase implements IOFormat {
         if (tree.getSpecialEdges().size() > 0 && !tree.getNode2GuideTreeChildren().isClear()) {
             w.write("{LSA\n");
             for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
-                List<Node> order = tree.getNode2GuideTreeChildren().get(v);
+                List<Node> order = tree.getNode2GuideTreeChildren().getValue(v);
                 if (order != null && order.size() > 0) {
                     w.write(nodeId2Number.get(v.getId()) + ":");
                     for (Node u : order) {
@@ -503,4 +506,40 @@ public class Dendro extends IOBase implements IOFormat {
         }
         np.matchRespectCase("}");
     }
+
+    /**
+     * sets the number 2 node and number 2 edge maps
+     *
+     * @param num2node
+     * @param num2edge
+     */
+    private static void setNum2NodeEdgeArray(Node root, Num2NodeArray num2node, Num2EdgeArray num2edge) {
+        num2node.clear(root.getOwner().getNumberOfNodes());
+        num2edge.clear(root.getOwner().getNumberOfEdges());
+        setNum2NodeEdgeArrayRec(root, null, new Pair<>(0, 0), num2node, num2edge);
+    }
+
+    /**
+     * recursively do the work
+     *
+     * @param v
+     * @param e
+     * @param nodeNumberEdgeNumber
+     * @param num2node
+     * @param num2edge
+     */
+    private static void setNum2NodeEdgeArrayRec(Node v, Edge e, Pair<Integer, Integer> nodeNumberEdgeNumber, Num2NodeArray num2node, Num2EdgeArray num2edge) {
+        int nodes = nodeNumberEdgeNumber.getFirstInt() + 1;
+        nodeNumberEdgeNumber.setFirst(nodes);
+        num2node.put(nodes, v);
+        for (Edge f = v.getFirstAdjacentEdge(); f != null; f = v.getNextAdjacentEdge(f))
+            if (f != e) {
+                int edges = nodeNumberEdgeNumber.getSecondInt() + 1;
+                nodeNumberEdgeNumber.setSecond(edges);
+                num2edge.put(edges, f);
+                if (PhyloTreeUtils.okToDescendDownThisEdge((PhyloTree) v.getOwner(), f, v))
+                    setNum2NodeEdgeArrayRec(f.getOpposite(v), f, nodeNumberEdgeNumber, num2node, num2edge);
+            }
+    }
+
 }

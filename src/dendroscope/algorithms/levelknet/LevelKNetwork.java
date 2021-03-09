@@ -387,7 +387,7 @@ public class LevelKNetwork {
                 }
                 for (Node src = componentTree.getFirstNode(); src != null; src = componentTree.getNextNode(src)) {
                     for (Edge e = src.getFirstOutEdge(); e != null; e = src.getNextOutEdge(e)) {
-                        Edge f = backboneNetwork.newEdge(src2target.get(e.getSource()), src2target.get(e.getTarget()));
+                        Edge f = backboneNetwork.newEdge(src2target.getValue(e.getSource()), src2target.getValue(e.getTarget()));
                         backboneNetwork.setWeight(f, componentTree.getWeight(e));
                         backboneNetwork.setLabel(f, componentTree.getLabel(e));
                     }

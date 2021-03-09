@@ -128,7 +128,7 @@ public class TanglegramUtils {
         if (tree.computeSetOfLeaves().contains(v)) {
             leavesList.add(tree.getLabel(v));
         } else {
-            List<Node> lsaChildren = tree.getNode2GuideTreeChildren().get(v);
+            List<Node> lsaChildren = tree.getNode2GuideTreeChildren().getValue(v);
             for (Node w : lsaChildren) {
                 getLsaOrderRec(tree, w, leavesList);
             }
@@ -200,7 +200,7 @@ public class TanglegramUtils {
         /*for (Edge edge =v.getFirstOutEdge();edge !=null;edge = v.getNextOutEdge(edge)){
             getMinMaxInLSATree(tree,edge.getTarget(),orderInLsaTree, minInLsaTree,maxInLsaTree);
         }*/
-        List<Node> lsaChildren = tree.getNode2GuideTreeChildren().get(v);
+        List<Node> lsaChildren = tree.getNode2GuideTreeChildren().getValue(v);
         for (Node node : lsaChildren)
             getMinMaxInLSATree(tree, node, orderInLsaTree, minInLsaTree, maxInLsaTree);
 
@@ -442,7 +442,7 @@ public class TanglegramUtils {
 
         // now check if we should swap somewhere to optimize
 
-        List<Node> lsaChildren = tree.getNode2GuideTreeChildren().get(v);
+        List<Node> lsaChildren = tree.getNode2GuideTreeChildren().getValue(v);
 
         if (lsaChildren.size() > 1) {
 

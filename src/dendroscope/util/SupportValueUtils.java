@@ -86,7 +86,7 @@ public class SupportValueUtils {
         for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
             if (v.getInDegree() == 1 && v.getOutDegree() > 0) {
                 final Edge e = v.getFirstInEdge();
-                tree.setLabel(v, edgeLabels.get(e));
+                tree.setLabel(v, edgeLabels.getValue(e));
             } else if (v.getInDegree() == 0) // root node
                 tree.setLabel(v, null);
         }

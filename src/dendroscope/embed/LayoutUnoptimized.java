@@ -113,7 +113,7 @@ public class LayoutUnoptimized implements ILayoutOptimizer {
     private void reorderLSAChildren(PhyloTree tree, final NodeIntegerArray ordering) {
         // System.err.println("------ v="+v);
         for (Node v = tree.getFirstNode(); v != null; v = tree.getNextNode(v)) {
-            List<Node> children = tree.getNode2GuideTreeChildren().get(v);
+            List<Node> children = tree.getNode2GuideTreeChildren().getValue(v);
             if (children != null) {
                 /*
                 System.err.println("LSA children old:");

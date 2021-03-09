@@ -69,7 +69,7 @@ public class ComputeNodeWeightsSparse {
 
         for (MyPhyloTree n : networks) {
             double sumOcc = 0;
-            Iterator<MyNode> it = n.nodeIterator();
+            Iterator<MyNode> it = n.getNodes().iterator();
             while (it.hasNext()) {
                 MyNode v = it.next();
                 if (v.getInDegree() > 1 && !isClusterNode(v)) {

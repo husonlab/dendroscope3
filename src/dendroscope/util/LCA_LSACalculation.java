@@ -61,12 +61,27 @@ public class LCA_LSACalculation {
         this.eulerTour = new Vector<Node>();
         this.levels = new Vector<Integer>();
         //this.firstOccurences = new int[tree.getNumberOfNodes()];
-        this.firstOccurences = new int[tree.computeMaxId()];
+        this.firstOccurences = new int[computeMaxId(tree)];
         //filling the arrays and the preprocessing matrix for RMQs.
         int numNodes = doEulerTour(tree, this.eulerTour, this.levels, this.firstOccurences, computeLSA);
         //System.err.println("numNodes " + numNodes);
         this.matrixRMQ = preprocessRMQ(tree, numNodes);
     }
+
+    /**
+     * compute the max id of any node
+     *
+     * @return max id
+     */
+    private int computeMaxId(PhyloTree tree) {
+        int max = 0;
+        for (var v : tree.nodes()) {
+            if (max < v.getId())
+                max = v.getId();
+        }
+        return max;
+    }
+
 
     /**
      * filling the vectors in a depth-first search
@@ -86,8 +101,8 @@ public class LCA_LSACalculation {
         if (t.getNode2GuideTreeChildren() == null)
             System.err.println("errore");
         if (computeLSA) {
-            while (t.getNode2GuideTreeChildren().get(n).size() == 1) {
-                n = t.getNode2GuideTreeChildren().get(n).get(0);
+            while (t.getNode2GuideTreeChildren().getValue(n).size() == 1) {
+                n = t.getNode2GuideTreeChildren().getValue(n).get(0);
             }
         }
         eulerTour.add(n);
@@ -104,7 +119,7 @@ public class LCA_LSACalculation {
                 levels.add(currentLevel - 1);
             }
         } else {
-            List<Node> LSAChildren = t.getNode2GuideTreeChildren().get(n);
+            List<Node> LSAChildren = t.getNode2GuideTreeChildren().getValue(n);
             for (Iterator<Node> it = LSAChildren.iterator(); it.hasNext(); ) {
                 Node LSASon = it.next();
                 numNodes = doEulerTourRec(t, LSASon, currentLevel, eulerTour, levels, firstOccurences, computeLSA, numNodes);

@@ -256,7 +256,7 @@ public class TransferVisualization {
 
         for (Object horizontalEdge : horizontalEdges) {
             TransferEdge hEdge = (TransferEdge) horizontalEdge;
-            Node v = (Node) oldNode2NewNode.get(hEdge.getSource());
+            Node v = (Node) oldNode2NewNode.getValue(hEdge.getSource());
 
             String label;
             String name = hEdge.getLabel();
@@ -274,7 +274,7 @@ public class TransferVisualization {
             int countTargets = 0;
             for (int i = 0; i < hEdge.getTargets().length; i++) {
                 {
-                    Node w = (Node) oldNode2NewNode.get(hEdge.getTargets()[i]);
+                    Node w = (Node) oldNode2NewNode.getValue(hEdge.getTargets()[i]);
 
                     if (name != null && name.length() > 0)
                         label = "<TT" + (countTransfers) + "." + (++countTargets) + "-" + name + ">";

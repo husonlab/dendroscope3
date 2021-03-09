@@ -141,9 +141,9 @@ public class ClusterNetwork {
             nodes[i] = tree.newNode();
             node2id.set(nodes[i], i);
             if (node2weight != null)
-                node2weight.set(nodes[i], clusters[i].getWeight());
+                node2weight.put(nodes[i], clusters[i].getWeight());
             if (node2confidence != null)
-                node2confidence.set(nodes[i], clusters[i].getConfidence());
+                node2confidence.put(nodes[i], clusters[i].getConfidence());
             //System.err.println("cluster: " + clusters[i] + " confidence: " + clusters[i].getConfidence());
         }
 
@@ -355,10 +355,10 @@ public class ClusterNetwork {
         computeConfidenceBelowRec(tree, tree.getRoot(), averageConfidenceBelow, countBelow);
         for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
             if (countBelow.get(v) > 0)
-                averageConfidenceBelow.set(v, averageConfidenceBelow.get(v) / countBelow.get(v));
+                averageConfidenceBelow.put(v, averageConfidenceBelow.get(v) / countBelow.get(v));
         }
         for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
-            Node lsa = reticulate2lsa.get(v);
+            Node lsa = reticulate2lsa.getValue(v);
             if (lsa != null) {
                 //System.err.println("node v=" + v);
                 //System.err.println("lsa=" + lsa);
@@ -417,7 +417,7 @@ public class ClusterNetwork {
             confidence += confidenceBelow.get(w);
             count += countBelow.get(w);
         }
-        confidenceBelow.set(v, confidence);
+        confidenceBelow.put(v, confidence);
         countBelow.set(v, count);
     }
 

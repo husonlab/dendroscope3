@@ -403,7 +403,7 @@ public class RerootingUtils {
             }
         });
         for (Edge e = tree.getFirstEdge(); e != null; e = tree.getNextEdge(e)) {
-            Triplet<Edge, Float, Float> triplet = new Triplet<Edge, Float, Float>(e, maxTopDownDistance.get(e), maxBottomUpDistance.get(e));
+            Triplet<Edge, Float, Float> triplet = new Triplet<Edge, Float, Float>(e, maxTopDownDistance.getValue(e), maxBottomUpDistance.getValue(e));
             result.add(triplet);
         }
         if (false) {
@@ -430,7 +430,7 @@ public class RerootingUtils {
 
         EdgeArray<Float> scores = new EdgeArray<Float>(tree);
         for (Edge e = tree.getRoot().getFirstOutEdge(); e != null; e = tree.getRoot().getNextOutEdge(e)) {
-            scores.put(e, Math.abs(maxBottomUpDistance.get(e) - maxTopDownDistance.get(e)));
+            scores.put(e, Math.abs(maxBottomUpDistance.getValue(e) - maxTopDownDistance.getValue(e)));
         }
         return scores;
     }
@@ -503,7 +503,7 @@ public class RerootingUtils {
         float bestUp;
         Edge inEdge = v.getFirstInEdge();
         if (inEdge != null)
-            bestUp = maxUpDistance.get(inEdge) + (float) tree.getWeight(inEdge);
+            bestUp = maxUpDistance.getValue(inEdge) + (float) tree.getWeight(inEdge);
         else
             bestUp = 0;
 
@@ -511,7 +511,7 @@ public class RerootingUtils {
             float best = bestUp;
             for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
                 if (f != e) {
-                    best = Math.max(best, maxDownDistance.get(f) + (float) tree.getWeight(f));
+                    best = Math.max(best, maxDownDistance.getValue(f) + (float) tree.getWeight(f));
                 }
             }
             maxUpDistance.put(e, best);

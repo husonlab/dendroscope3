@@ -314,7 +314,7 @@ public class TreeDrawerParallel extends TreeDrawerBase implements IOptimizedGrap
                     first = last;
                 if (last.getX() < minX)
                     minX = last.getX();
-                Rectangle2D bboxChild = node2bb.get(w);
+                Rectangle2D bboxChild = node2bb.getValue(w);
                 if (bboxChild != null) {
                     if (bbox == null)
                         bbox = (Rectangle2D) bboxChild.clone();
@@ -409,11 +409,11 @@ public class TreeDrawerParallel extends TreeDrawerBase implements IOptimizedGrap
     protected boolean mustVisitSubTreeBelowNode(Node v) {
         if (v.getDegree() == 1) // is leaf or root
             return true;
-        if (node2ProxyShape.get(v) == null)
+        if (node2ProxyShape.getValue(v) == null)
             return true;
         if (isCollapsed(v))
             return false;
-        Rectangle2D bbW = node2bb.get(v);
+        Rectangle2D bbW = node2bb.getValue(v);
         Rectangle bbD = trans.w2d(bbW).getBounds();
         if (visibleRect != null && bbD.intersects(visibleRect) == false)
             return false; // not visible on screen

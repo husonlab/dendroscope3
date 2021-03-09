@@ -119,11 +119,11 @@ public class ConvertTreeDataToNexmlDoc {
                 for (jloda.graph.Node v = treeData.getFirstNode(); v != null; v = v.getNext()) {
                     String name = treeData.getLabel(v);
                     if (name != null && name.length() > 0)
-                        globalSrc2Target.put(treeData.getName() + " " + name, src2tarNode.get(v));
+                        globalSrc2Target.put(treeData.getName() + " " + name, src2tarNode.getValue(v));
                 }
             }
 
-            Node p = src2tarNode.get(root);
+            Node p = src2tarNode.getValue(root);
             if (p != null) {
                 p.setRoot(true);
                 network.addAnnotationValue("root", NAMESPACE_URI, p.getId());
@@ -143,7 +143,7 @@ public class ConvertTreeDataToNexmlDoc {
                             first = false;
                         else
                             buf.append(" ");
-                        buf.append(src2tarNode.get(v).getId());
+                        buf.append(src2tarNode.getValue(v).getId());
                     }
                     network.addAnnotationValue("collapsed", NAMESPACE_URI, buf.toString());
                 }
@@ -190,7 +190,7 @@ public class ConvertTreeDataToNexmlDoc {
      * @param src2tarNode
      */
     private static void copyRec(BiFunction<jloda.graph.Node, String, OTU> getOTU, TreeData treeData, jloda.graph.Node v, Network network, NodeArray<Node> src2tarNode, NodeView defaultNodeView, EdgeView defaultEdgeView) {
-        if (src2tarNode.get(v) == null) {
+        if (src2tarNode.getValue(v) == null) {
             Node p = network.createNode();
             src2tarNode.put(v, p);
             String label = treeData.getLabel(v);
@@ -207,7 +207,7 @@ public class ConvertTreeDataToNexmlDoc {
                 copyRec(getOTU, treeData, e.getTarget(), network, src2tarNode, defaultNodeView, defaultEdgeView);
             }
             for (jloda.graph.Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
-                Node q = src2tarNode.get(e.getTarget());
+                Node q = src2tarNode.getValue(e.getTarget());
                 Edge edge = network.createEdge(p, q);
                 label = treeData.getLabel(e);
                 if (label != null)

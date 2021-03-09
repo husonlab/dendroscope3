@@ -19,6 +19,7 @@
 package dendroscope.util;
 
 import jloda.graph.*;
+import jloda.graphs.algorithms.Dijkstra;
 import jloda.phylo.PhyloTree;
 import jloda.swing.graphview.PhyloGraphView;
 import jloda.util.Basic;
@@ -320,8 +321,8 @@ public class PhyloTreeUtils {
 
             if (node2NumberInducedChildren.getValue(w) != 0) {
                 Node newW;
-                if (old2new.get(w) != null)
-                    newW = (Node) old2new.get(w);
+                if (old2new.getValue(w) != null)
+                    newW = (Node) old2new.getValue(w);
                 else {
                     newW = newTree.newNode();
                     old2new.put(w, newW);
@@ -474,15 +475,15 @@ public class PhyloTreeUtils {
                 //System.out.println("idS" + idS);
 
                 //NodeArray predecessor = new NodeArray(graph);
-                NodeIntegerArray dist = new NodeIntegerArray(graph);
+                NodeDoubleArray dist = graph.newNodeDoubleArray();
 
                 for (Node v = graph.getFirstNode(); v != null; v = graph.getNextNode(v)) {
-                    dist.set(v, 10000);
+                    dist.setValue(v, 10000.0);
                     int idV = idTemp.getValue(v);
                     distMatrixTemp[idS][idV] = 10000;
                     //predecessor.set(v, null);
                 }
-                dist.set(source, 0);
+                dist.setValue(source, 0.0);
                 distMatrixTemp[idS][idS] = 0;
 
                 SortedSet<Node> priorityQueue = Dijkstra.newFullQueue(graph, dist);
@@ -507,7 +508,7 @@ public class PhyloTreeUtils {
                             // priorty of v changes, so must re-and to queue:
                             priorityQueue.remove(v);
                             distMatrixTemp[idS][idV] = distMatrixTemp[idS][idU] + 1;
-                            dist.set(v, distMatrixTemp[idS][idU] + 1);
+                            dist.setValue(v, distMatrixTemp[idS][idU] + 1.0);
                             priorityQueue.add(v);
                             //predecessor.set(v, u);
                         }

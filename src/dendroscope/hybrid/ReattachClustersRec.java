@@ -51,9 +51,8 @@ public class ReattachClustersRec {
 
         //adding edges of a cluster network for special treatment
         if (rI.isClusterNetwork(n)) {
-            Iterator<Edge> it = n.edgeIterator();
-            while (it.hasNext())
-                tM.addClusterNetworkEdge(it.next());
+            for (var e : n.edges())
+                tM.addClusterNetworkEdge(e);
         }
 
         // generating several networks by adding each combination of all

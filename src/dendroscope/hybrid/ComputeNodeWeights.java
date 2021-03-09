@@ -100,7 +100,7 @@ public class ComputeNodeWeights {
 
         for (HybridNetwork n : networks) {
 
-            Iterator<Node> it = n.nodeIterator();
+            Iterator<Node> it = n.nodes().iterator();
             while (it.hasNext()) {
                 Node v = it.next();
                 if (v.getInDegree() == 2) {
@@ -127,7 +127,7 @@ public class ComputeNodeWeights {
     // Graph g = viewer.getGraph();
     // PhyloTree n = (PhyloTree) g;
     //
-    // Iterator<Node> it = n.nodeIterator();
+    // Iterator<Node> it = n.nodes().iterator();
     // while (it.hasNext()) {
     // Node v = it.next();
     // if (v.getInDegree() == 2) {

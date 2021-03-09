@@ -150,7 +150,7 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
 
         for (Node v : leafOrder) {
             double alpha = factor * (node2AngleOfInEdge.getValue(v) - 1) + offset;
-            node2AngleOfInEdge.set(v, alpha);
+            node2AngleOfInEdge.put(v, alpha);
         }
 
         computeAnglesRec(root, node2AngleOfInEdge);
@@ -178,7 +178,7 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
                 for (Node u : leaves) {
                     alpha += angle.getValue(u);
                 }
-                angle.set(v, alpha / leaves.size());
+                angle.put(v, alpha / leaves.size());
             }
         } else {
             leaves.add(v);
@@ -301,7 +301,7 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
             if (PhyloTreeUtils.okToDescendDownThisEdge(tree, f, root)) {
                 Node w = f.getTarget();
                 recomputeOptimizationRec(w);
-                bbox.add(node2bb.get(w));
+                bbox.add(node2bb.getValue(w));
             }
             node2bb.put(root, bbox);
         }
@@ -348,7 +348,7 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
                     SubTreePoints wSTP = recomputeOptimizationRec(w);
                     leaves += node2NumberLeaves.getValue(w);
 
-                    bbox.add(node2bb.get(w));
+                    bbox.add(node2bb.getValue(w));
 
                     vSTP.addAll(wSTP);
                 }
@@ -482,14 +482,14 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
     protected boolean mustVisitSubTreeBelowNode(Node v) {
         if (v.getDegree() == 1 || v == tree.getRoot()) // always true for root or leaf
             return true;
-        if (node2ProxyShape.get(v) == null)
+        if (node2ProxyShape.getValue(v) == null)
             return true;
         if (v.isAdjacent(tree.getRoot()))
             return true; // always draw nodes adjacent to root
         if (isCollapsed(v))
             return false;
 
-        Rectangle2D bbW = node2bb.get(v);
+        Rectangle2D bbW = node2bb.getValue(v);
         Rectangle bbD = trans.w2d(bbW).getBounds();
         if (visibleRect != null && bbD.intersects(visibleRect) == false)
             return false; // not visible on screen

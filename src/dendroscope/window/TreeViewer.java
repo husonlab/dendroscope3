@@ -454,8 +454,8 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     private int swapSubtreeRec(Node v, int found, NodeSet nodes) {
         if (nodes.contains(v)) {
             v.reverseOrderAdjacentEdges();
-            if (getPhyloTree().getNode2GuideTreeChildren().get(v) != null) {
-                getPhyloTree().getNode2GuideTreeChildren().put(v, Basic.reverseList(getPhyloTree().getNode2GuideTreeChildren().get(v)));
+            if (getPhyloTree().getNode2GuideTreeChildren().getValue(v) != null) {
+                getPhyloTree().getNode2GuideTreeChildren().put(v, Basic.reverseList(getPhyloTree().getNode2GuideTreeChildren().getValue(v)));
             }
             found++;
         }
@@ -495,8 +495,8 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     private int rotateSubtreeRec(Node v, int found, NodeSet nodes) {
         if (nodes.contains(v)) {
             v.rotateOrderAdjacentEdges();
-            if (getPhyloTree().getNode2GuideTreeChildren().get(v) != null) {
-                getPhyloTree().getNode2GuideTreeChildren().put(v, Basic.rotateList(getPhyloTree().getNode2GuideTreeChildren().get(v)));
+            if (getPhyloTree().getNode2GuideTreeChildren().getValue(v) != null) {
+                getPhyloTree().getNode2GuideTreeChildren().put(v, Basic.rotateList(getPhyloTree().getNode2GuideTreeChildren().getValue(v)));
             }
 
             found++;
@@ -1206,7 +1206,7 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
      * @return collapsed node shape
      */
     public CollapsedShape getCollapsedShape(Node v) {
-        return node2CollapsedShape.get(v);
+        return node2CollapsedShape.getValue(v);
     }
 
     public void setCollapsedShape(Node v, CollapsedShape collapsedShape) {

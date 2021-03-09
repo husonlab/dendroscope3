@@ -87,7 +87,7 @@ public class GalledNetworkChecker {
             for (Edge e = tree.getFirstEdge(); e != null; e = e.getNext()) {
                 if (!tree.isSpecial(e)) {
                     BitSet seen = new BitSet();
-                    for (Object o : ((List) edge2TaxonSets.get(e))) {
+                    for (Object o : ((List) edge2TaxonSets.getValue(e))) {
                         BitSet set = (BitSet) o;
                         if (set.cardinality() > 0 && Cluster.contains(seen, set)) {
                             System.err.println("WARNING: error in GalledNetworkChecker");
@@ -110,7 +110,7 @@ public class GalledNetworkChecker {
      * @param node2reticulate    reticlate  below v reachable by a path of tree edges
      */
     private void computeNodeMapsRec(Node v, NodeArray node2AllTaxaBelow, NodeArray node2AllNodesBelow, NodeArray node2leaves, NodeArray node2reticulate) {
-        if (node2AllTaxaBelow.get(v) != null)
+        if (node2AllTaxaBelow.getValue(v) != null)
             return;   // already processed this node
 
         NodeSet nodesBelow = new NodeSet(tree);
@@ -139,18 +139,18 @@ public class GalledNetworkChecker {
             Node w = e.getTarget();
             computeNodeMapsRec(w, node2AllTaxaBelow, node2AllNodesBelow, node2leaves, node2reticulate);
 
-            nodesBelow.addAll((NodeSet) node2AllNodesBelow.get(w));
+            nodesBelow.addAll((NodeSet) node2AllNodesBelow.getValue(w));
 
             if (tree.isSpecial(e)) // w is reticulate node
             {
                 reticulate.add(w);
             } else // w is tree node
             {
-                leaves.addAll((NodeSet) node2leaves.get(w));
-                reticulate.addAll((NodeSet) node2reticulate.get(w));
+                leaves.addAll((NodeSet) node2leaves.getValue(w));
+                reticulate.addAll((NodeSet) node2reticulate.getValue(w));
             }
 
-            taxaBelow.or((BitSet) node2AllTaxaBelow.get(w));
+            taxaBelow.or((BitSet) node2AllTaxaBelow.getValue(w));
         }
         node2AllTaxaBelow.put(v, taxaBelow);
         node2AllNodesBelow.put(v, nodesBelow);
@@ -175,14 +175,14 @@ public class GalledNetworkChecker {
      */
     private void computeAlwaysOnAndOptional(Node v, NodeArray node2taxaBelow, NodeArray node2nodesBelow, NodeArray node2leaves, NodeArray node2reticulate, BitSet alwaysOn, Set optional) {
 
-        NodeSet leaves = (NodeSet) node2leaves.get(v);
+        NodeSet leaves = (NodeSet) node2leaves.getValue(v);
         for (Node l = leaves.getFirstElement(); l != null; l = leaves.getNextElement(l)) {
-            BitSet taxa = (BitSet) node2taxaBelow.get(l);
+            BitSet taxa = (BitSet) node2taxaBelow.getValue(l);
             alwaysOn.or(taxa);
         }
 
-        NodeSet reticulate = (NodeSet) node2reticulate.get(v);
-        NodeSet belowV = (NodeSet) node2nodesBelow.get(v);
+        NodeSet reticulate = (NodeSet) node2reticulate.getValue(v);
+        NodeSet belowV = (NodeSet) node2nodesBelow.getValue(v);
 
         for (Node r = reticulate.getFirstElement(); r != null; r = reticulate.getNextElement(r)) {
             boolean allBelow = true;
@@ -190,7 +190,7 @@ public class GalledNetworkChecker {
                 if (!belowV.contains(in.getSource()))
                     allBelow = false;
             }
-            BitSet taxa = (BitSet) node2taxaBelow.get(r);
+            BitSet taxa = (BitSet) node2taxaBelow.getValue(r);
 
             if (allBelow) // not optional
                 alwaysOn.or(taxa);
@@ -306,7 +306,7 @@ public class GalledNetworkChecker {
         if (tree.isSpecial(e)) {
             throw new RuntimeException("illegal to method on special edge");
         }
-        List taxonSets = (List) edge2TaxonSets.get(e);
+        List taxonSets = (List) edge2TaxonSets.getValue(e);
         BitSet seen = new BitSet();
 
         boolean first = true;

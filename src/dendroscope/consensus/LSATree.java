@@ -86,7 +86,7 @@ public class LSATree implements IConsensusTreeMethod {
             // check that all reticulation nodes have a LSA:
             for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
                 if (v.getInDegree() >= 2) {
-                    Node lsa = reticulation2LSA.get(v);
+                    Node lsa = reticulation2LSA.getValue(v);
                     if (lsa == null)
                         System.err.println("WARNING: no LSA found for node: " + v);
                 }
@@ -94,7 +94,7 @@ public class LSATree implements IConsensusTreeMethod {
 
             List<Edge> toDelete = new LinkedList<>();
             for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
-                Node lsa = reticulation2LSA.get(v);
+                Node lsa = reticulation2LSA.getValue(v);
 
                 if (lsa != null) {
                     for (Edge e = v.getFirstInEdge(); e != null; e = v.getNextInEdge(e))
@@ -177,7 +177,7 @@ public class LSATree implements IConsensusTreeMethod {
             // check that all reticulation nodes have a LSA:
             for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
                 if (v.getInDegree() >= 2) {
-                    Node lsa = (Node) reticulation2LSA.get(v);
+                    Node lsa = (Node) reticulation2LSA.getValue(v);
                     if (lsa == null)
                         System.err.println("WARNING: no LSA found for node: " + v);
                 }
@@ -185,7 +185,7 @@ public class LSATree implements IConsensusTreeMethod {
 
             List toDelete = new LinkedList();
             for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
-                Node lsa = (Node) reticulation2LSA.get(v);
+                Node lsa = (Node) reticulation2LSA.getValue(v);
 
                 if (lsa != null) {
                     for (Edge e = v.getFirstInEdge(); e != null; e = v.getNextInEdge(e))
@@ -280,9 +280,9 @@ public class LSATree implements IConsensusTreeMethod {
                 tree.getNode2GuideTreeChildren().put(v, children);
             }
             for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
-                Node lsa = reticulation2LSA.get(v);
+                Node lsa = reticulation2LSA.getValue(v);
                 if (lsa != null)
-                    tree.getNode2GuideTreeChildren().get(lsa).add(v);
+                    tree.getNode2GuideTreeChildren().getValue(lsa).add(v);
             }
         }
     }
@@ -299,7 +299,7 @@ public class LSATree implements IConsensusTreeMethod {
         NodeIntegerArray rSize = new NodeIntegerArray(tree);
 
         for (Node r = tree.getFirstNode(); r != null; r = r.getNext()) {
-            Node lsa = (Node) reticulation2LSA.get(r);
+            Node lsa = (Node) reticulation2LSA.getValue(r);
             if (lsa != null) {
                 System.err.println("lsa: " + lsa + " r: " + r);
                 EdgeSet visited = new EdgeSet(tree);
@@ -380,9 +380,9 @@ public class LSATree implements IConsensusTreeMethod {
         // visit all children and determine all reticulations below this node
         for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
             Node w = f.getTarget();
-            if (node2below.get(w) == null) // if haven't processed child yet, do it:
+            if (node2below.getValue(w) == null) // if haven't processed child yet, do it:
                 computeReticulation2LSARec(tree, w);
-            reticulationsBelow.addAll(node2below.get(w));
+            reticulationsBelow.addAll(node2below.getValue(w));
             if (w.getInDegree() > 1)
                 reticulationsBelow.add(w);
         }
@@ -392,15 +392,15 @@ public class LSATree implements IConsensusTreeMethod {
         List<Node> toDelete = new LinkedList<>();
         for (Node r : reticulationsBelow) {
             // determine which paths from the reticulation lead to this node
-            EdgeArray edge2PathSet = ret2Edge2PathSet.get(r);
+            EdgeArray edge2PathSet = ret2Edge2PathSet.getValue(r);
             BitSet paths = new BitSet();
             for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
-                BitSet eSet = (BitSet) edge2PathSet.get(f);
+                BitSet eSet = (BitSet) edge2PathSet.getValue(f);
                 if (eSet != null)
                     paths.or(eSet);
 
             }
-            BitSet alive = ret2PathSet.get(r);
+            BitSet alive = ret2PathSet.getValue(r);
             if (paths.equals(alive)) // if the set of paths equals all alive paths, v is lsa of r
             {
                 reticulation2LSA.put(r, v);
@@ -415,12 +415,12 @@ public class LSATree implements IConsensusTreeMethod {
         if (v.getInDegree() >= 1) {
             for (Node r : reticulationsBelow) {
                 // determine which paths from the reticulation lead to this node
-                EdgeArray<BitSet> edge2PathSet = ret2Edge2PathSet.get(r);
+                EdgeArray<BitSet> edge2PathSet = ret2Edge2PathSet.getValue(r);
 
                 BitSet newSet = new BitSet();
 
                 for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
-                    BitSet pathSet = edge2PathSet.get(e);
+                    BitSet pathSet = edge2PathSet.getValue(e);
                     if (pathSet != null)
                         newSet.or(pathSet);
                 }
@@ -430,9 +430,9 @@ public class LSATree implements IConsensusTreeMethod {
         // open new paths on all additional in-edges:
         if (v.getInDegree() >= 2) {
             for (Node r : reticulationsBelow) {
-                BitSet existingPathsForR = ret2PathSet.get(r);
+                BitSet existingPathsForR = ret2PathSet.getValue(r);
 
-                EdgeArray<BitSet> edge2PathSet = ret2Edge2PathSet.get(r);
+                EdgeArray<BitSet> edge2PathSet = ret2Edge2PathSet.getValue(r);
                 // start with the second in edge:
                 for (Edge e = v.getNextInEdge(v.getFirstInEdge()); e != null; e = v.getNextInEdge(e)) {
                     BitSet pathsForEdge = new BitSet();
@@ -483,13 +483,13 @@ public class LSATree implements IConsensusTreeMethod {
 
             for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
                 computeReticulation2LSAEdgeLengthRec(tree, f.getTarget(), visited);
-                reticulationsBelow.addAll(node2below.get(f.getTarget()));
+                reticulationsBelow.addAll(node2below.getValue(f.getTarget()));
             }
 
-            reticulationsBelow.removeAll(node2below.get(v)); // because reticulations mentioned here don't hve v as LSA
+            reticulationsBelow.removeAll(node2below.getValue(v)); // because reticulations mentioned here don't hve v as LSA
 
             for (Node r : reticulationsBelow) {
-                NodeDoubleArray node2Dist = ret2Node2Length.get(r);
+                NodeDoubleArray node2Dist = ret2Node2Length.getValue(r);
                 double length = 0;
                 for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
                     Node w = f.getTarget();
@@ -499,9 +499,9 @@ public class LSATree implements IConsensusTreeMethod {
                 }
                 if (v.getOutDegree() > 0)
                     length /= v.getOutDegree();
-                node2Dist.set(v, length);
-                if (reticulation2LSA.get(r) == v)
-                    ret2length.set(r, length);
+                node2Dist.put(v, length);
+                if (reticulation2LSA.getValue(r) == v)
+                    ret2length.put(r, length);
             }
         }
     }

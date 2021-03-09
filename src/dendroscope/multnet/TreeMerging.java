@@ -45,7 +45,7 @@ public class TreeMerging {
             t.add(tmpTree);
         }
         //now connect the old roots with the new one.
-        Iterator<Node> nodesIt = t.nodeIterator();
+        Iterator<Node> nodesIt = t.nodes().iterator();
         while (nodesIt.hasNext()) {
             Node n = nodesIt.next();
             if (n.getInDegree() == 0 && !n.equals(root)) {

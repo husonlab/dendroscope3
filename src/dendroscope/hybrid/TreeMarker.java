@@ -48,10 +48,8 @@ public class TreeMarker {
                 TreeViewer viewer = it.next();
                 Graph g = viewer.getGraph();
 
-                Iterator<Edge> itEdges = g.edgeIterator();
                 viewer.selectAllEdges(false);
-                while (itEdges.hasNext()) {
-                    Edge e = itEdges.next();
+                for (var e : g.edges()) {
                     if (e.getInfo().equals("-1"))
                         viewer.setSelected(e, true);
                 }
@@ -73,9 +71,7 @@ public class TreeMarker {
             TreeViewer viewer = it.next();
             Graph g = viewer.getGraph();
 
-            Iterator<Edge> itEdges = g.edgeIterator();
-            while (itEdges.hasNext()) {
-                Edge e = itEdges.next();
+            for (var e : g.edges()) {
                 if (treeT1) {
                     if (e.getInfo().equals("1"))
                         viewer.setSelected(e, true);
@@ -101,9 +97,7 @@ public class TreeMarker {
             TreeViewer viewer = it.next();
             Graph g = viewer.getGraph();
 
-            Iterator<Edge> itEdges = g.edgeIterator();
-            while (itEdges.hasNext()) {
-                Edge e = itEdges.next();
+            for (var e : g.edges()) {
                 if (e.getInfo().equals("0"))
                     viewer.setSelected(e, true);
             }
@@ -121,10 +115,8 @@ public class TreeMarker {
             TreeViewer viewer = it.next();
             Graph g = viewer.getGraph();
 
-            Iterator<Edge> itEdges = g.edgeIterator();
             viewer.selectAllEdges(false);
-            while (itEdges.hasNext()) {
-                Edge e = itEdges.next();
+            for (var e : g.edges()) {
                 if (g.isSpecial(e) && !e.getInfo().equals("-1"))
                     viewer.setSelected(e, true);
             }
@@ -140,10 +132,8 @@ public class TreeMarker {
             TreeViewer viewer = it.next();
             Graph g = viewer.getGraph();
 
-            Iterator<Edge> itEdges = g.edgeIterator();
             viewer.selectAllEdges(false);
-            while (itEdges.hasNext()) {
-                Edge e = itEdges.next();
+            for (var e : g.edges()) {
                 if (!g.isSpecial(e) && !e.getInfo().equals("-1"))
                     viewer.setSelected(e, true);
             }
@@ -158,9 +148,7 @@ public class TreeMarker {
 
     public void initT1Edges() {
         for (HybridNetwork n : networks) {
-            Iterator<Edge> it = n.edgeIterator();
-            while (it.hasNext()) {
-                Edge e = it.next();
+            for (var e : n.edges()) {
                 if (edgesOfclusterNetworks.contains(e))
                     e.setInfo("-1");
                 else if (n.isSpecial(e)) {
@@ -195,38 +183,31 @@ public class TreeMarker {
     public void assignEdges(HybridNetwork n1, HybridNetwork n2) {
 
         // keeping track of special t1 edges
-        Iterator<Edge> it = n1.edgeIterator();
         Vector<Integer> edgePos = new Vector<>();
         int i = 0;
-        while (it.hasNext()) {
-            Edge e = it.next();
+
+        for (var e : n1.edges()) {
             if (specialEdgesOfT1.contains(e))
                 edgePos.add(i);
             i++;
         }
-        it = n2.edgeIterator();
         i = 0;
-        while (it.hasNext()) {
-            Edge e = it.next();
+        for (var e : n2.edges()) {
             if (edgePos.contains(i))
                 insertT1Edge(e);
             i++;
         }
 
         // adding edges of a cluster network
-        it = n1.edgeIterator();
         edgePos.clear();
         i = 0;
-        while (it.hasNext()) {
-            Edge e = it.next();
+        for (var e : n1.edges()) {
             if (edgesOfclusterNetworks.contains(e))
                 edgePos.add(i);
             i++;
         }
-        it = n2.edgeIterator();
         i = 0;
-        while (it.hasNext()) {
-            Edge e = it.next();
+        for (var e : n2.edges()) {
             if (edgePos.contains(i))
                 edgesOfclusterNetworks.add(e);
             i++;

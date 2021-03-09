@@ -104,7 +104,7 @@ public class TreeDrawerInnerCircular extends TreeDrawerRadial implements IOptimi
         }
         if (root.getOutDegree() > 0)
             angle /= root.getOutDegree();
-        node2AngleOfInEdge.set(root, angle);
+        node2AngleOfInEdge.put(root, angle);
         viewer.setLocation(root, Geometry.rotate(new Point2D.Double(maxLevel + 100, 0), angle));
 
         addInternalPoints();

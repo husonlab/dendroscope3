@@ -114,8 +114,8 @@ public class TreeDrawerAngled extends TreeDrawerBase implements IOptimizedGraphD
         final NodeView nv = viewer.getNV(v);
         if (v.getOutDegree() == 0) {
             double y = yCoord.getValue(v);
-            yMin.set(v, y);
-            yMax.set(v, y);
+            yMin.put(v, y);
+            yMax.put(v, y);
             nv.setLocation(new Point2D.Double(0, y));
         } else {
             double min = Double.MAX_VALUE;
@@ -142,8 +142,8 @@ public class TreeDrawerAngled extends TreeDrawerBase implements IOptimizedGraphD
                 max = Math.max(y, max);
             }
 
-            yMin.set(v, min);
-            yMax.set(v, max);
+            yMin.put(v, min);
+            yMax.put(v, max);
 
             if (v.getOutDegree() == 1) {
                 Node w = v.getFirstOutEdge().getTarget();
@@ -207,7 +207,7 @@ public class TreeDrawerAngled extends TreeDrawerBase implements IOptimizedGraphD
             Rectangle2D.Double bb = new Rectangle2D.Double(x, y, 0, 0);
             for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
                 Node w = f.getTarget();
-                bb.add(node2bb.get(w));
+                bb.add(node2bb.getValue(w));
             }
             // set bounding box
             node2bb.put(v, bb);
@@ -294,11 +294,11 @@ public class TreeDrawerAngled extends TreeDrawerBase implements IOptimizedGraphD
     protected boolean mustVisitSubTreeBelowNode(Node v) {
         if (v.getDegree() == 1 && v != tree.getRoot())
             return true;
-        if (node2ProxyShape.get(v) == null)
+        if (node2ProxyShape.getValue(v) == null)
             return true;
         if (isCollapsed(v))
             return false;
-        Rectangle2D bbW = node2bb.get(v);
+        Rectangle2D bbW = node2bb.getValue(v);
         Rectangle bbD = trans.w2d(bbW).getBounds();
         if (visibleRect != null && bbD.intersects(visibleRect) == false)
             return false; // not visible on screen

@@ -220,9 +220,7 @@ public class DistanceMethods {
 
         initPathTable(t.getRoot(), new HashSet<Edge>(), t);
 
-        Iterator<Edge> it = t.edgeIterator();
-        while (it.hasNext()) {
-            Edge e = it.next();
+        for (var e : t.edges()) {
             if (!t.isSpecial(e) && e.getTarget().getOutDegree() != 0) {
                 Vector<String> setA = new Vector<String>();
                 Vector<String> setB = new Vector<String>();
@@ -591,9 +589,8 @@ public class DistanceMethods {
         retToBiComponents = new Hashtable<Node, HashSet<BitSet>>();
 
         edgeOrder = new Vector<Edge>();
-        Iterator<Edge> it = tree.edgeIterator();
-        while (it.hasNext())
-            edgeOrder.add(it.next());
+        for (var e : tree.edges())
+            edgeOrder.add(e);
 
         for (Node v : tree.nodes()) {
             if (v.getInDegree() > 1)
@@ -806,7 +803,7 @@ public class DistanceMethods {
         nodeToLevel = new Hashtable<Node, Integer>();
 
         Node start = g.newNode();
-        Iterator<Node> itNodes = g.nodeIterator();
+        Iterator<Node> itNodes = g.nodes().iterator();
         while (itNodes.hasNext()) {
             Node v = itNodes.next();
             if (!v.equals(start))

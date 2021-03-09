@@ -107,11 +107,11 @@ public class TreeData extends PhyloTree {
         if (srcTree.getSpecialEdges().size() > 0) {
             setupLSA();
             for (Node v = srcTree.getFirstNode(); v != null; v = v.getNext()) {
-                Node w = oldNode2NewNode.get(v);
-                if (srcTree.getNode2GuideTreeChildren().get(v) != null) {
+                Node w = oldNode2NewNode.getValue(v);
+                if (srcTree.getNode2GuideTreeChildren().getValue(v) != null) {
                     List<Node> children = new LinkedList<Node>();
-                    for (Node u : srcTree.getNode2GuideTreeChildren().get(v)) {
-                        children.add(oldNode2NewNode.get(u));
+                    for (Node u : srcTree.getNode2GuideTreeChildren().getValue(v)) {
+                        children.add(oldNode2NewNode.getValue(u));
                     }
                     targetTree.getNode2GuideTreeChildren().put(w, children);
                 } else
@@ -132,7 +132,7 @@ public class TreeData extends PhyloTree {
 
             collapsedNodes.clear();
             for (Node v = srcTree.getFirstNode(); v != null; v = v.getNext()) {
-                Node w = oldNode2NewNode.get(v);
+                Node w = oldNode2NewNode.getValue(v);
 
                 setNV(w, new NodeView(treeViewer.getNV(v)));
                 if (treeViewer.getCollapsedNodes().contains(v))
@@ -141,7 +141,7 @@ public class TreeData extends PhyloTree {
             }
 
             for (Edge e = srcTree.getFirstEdge(); e != null; e = e.getNext()) {
-                Edge f = oldEdge2NewEdge.get(e);
+                Edge f = oldEdge2NewEdge.getValue(e);
                 setEV(f, new EdgeView(treeViewer.getEV(e)));
                 targetTree.setLabel(f, treeViewer.getLabel(e));
             }
@@ -171,14 +171,14 @@ public class TreeData extends PhyloTree {
         // copy lsa information
         if (srcTree.getSpecialEdges().size() > 0) {
             for (Node v = srcTree.getFirstNode(); v != null; v = v.getNext()) {
-                Node w = oldNode2NewNode.get(v);
+                Node w = oldNode2NewNode.getValue(v);
                 // todo: next line just for testing:
                 //  targetTree.setLabel(w, srcTree.getLabel(v));
 
-                if (srcTree.getNode2GuideTreeChildren().get(v) != null) {
+                if (srcTree.getNode2GuideTreeChildren().getValue(v) != null) {
                     List<Node> children = new LinkedList<Node>();
-                    for (Node u : srcTree.getNode2GuideTreeChildren().get(v)) {
-                        children.add(oldNode2NewNode.get(u));
+                    for (Node u : srcTree.getNode2GuideTreeChildren().getValue(v)) {
+                        children.add(oldNode2NewNode.getValue(u));
                     }
                     targetTree.getNode2GuideTreeChildren().put(w, children);
                 } else
@@ -200,33 +200,33 @@ public class TreeData extends PhyloTree {
 
             viewer.getCollapsedNodes().clear();
             for (Node v = srcTree.getFirstNode(); v != null; v = v.getNext()) {
-                Node w = oldNode2NewNode.get(v);
+                Node w = oldNode2NewNode.getValue(v);
                 viewer.getNV(w).copy(getNV(v));
                 viewer.setLabel(w, srcTree.getLabel(v));
                 if (getCollapsedNodes().contains(v))
                     viewer.getCollapsedNodes().add(w);
-                if (srcTree.getNode2GuideTreeChildren().get(v) != null) {
+                if (srcTree.getNode2GuideTreeChildren().getValue(v) != null) {
                     List<Node> children = new LinkedList<Node>();
-                    for (Node u : srcTree.getNode2GuideTreeChildren().get(v)) {
-                        children.add(oldNode2NewNode.get(u));
+                    for (Node u : srcTree.getNode2GuideTreeChildren().getValue(v)) {
+                        children.add(oldNode2NewNode.getValue(u));
                     }
                     targetTree.getNode2GuideTreeChildren().put(w, children);
                 } else
                     targetTree.getNode2GuideTreeChildren().put(w, null);
             }
             for (Edge e = srcTree.getFirstEdge(); e != null; e = e.getNext()) {
-                Edge f = oldEdge2NewEdge.get(e);
+                Edge f = oldEdge2NewEdge.getValue(e);
                 viewer.getEV(f).copy(getEV(e));
                 viewer.setLabel(f, srcTree.getLabel(e));
             }
         } else // nothing additional has been saved, just make  a straight copy of the labels
         {
             for (Node v = srcTree.getFirstNode(); v != null; v = v.getNext()) {
-                Node w = oldNode2NewNode.get(v);
+                Node w = oldNode2NewNode.getValue(v);
                 viewer.setLabel(w, srcTree.getLabel(v));
             }
             for (Edge e = srcTree.getFirstEdge(); e != null; e = e.getNext()) {
-                Edge f = oldEdge2NewEdge.get(e);
+                Edge f = oldEdge2NewEdge.getValue(e);
                 if (!srcTree.isSpecial(e))
                     viewer.setLabel(f, srcTree.getLabel(e));
                 else
@@ -257,11 +257,11 @@ public class TreeData extends PhyloTree {
         if (srcTree.getSpecialEdges().size() > 0 && !srcTree.getNode2GuideTreeChildren().isClear()) {
             target.setupLSA();
             for (Node v = srcTree.getFirstNode(); v != null; v = v.getNext()) {
-                Node w = oldNode2NewNode.get(v);
-                if (srcTree.getNode2GuideTreeChildren().get(v) != null) {
+                Node w = oldNode2NewNode.getValue(v);
+                if (srcTree.getNode2GuideTreeChildren().getValue(v) != null) {
                     List<Node> children = new LinkedList<Node>();
-                    for (Node u : srcTree.getNode2GuideTreeChildren().get(v)) {
-                        children.add(oldNode2NewNode.get(u));
+                    for (Node u : srcTree.getNode2GuideTreeChildren().getValue(v)) {
+                        children.add(oldNode2NewNode.getValue(u));
                     }
                     target.getNode2GuideTreeChildren().put(w, children);
                 } else
@@ -281,25 +281,25 @@ public class TreeData extends PhyloTree {
             if (hasAdditional()) {
                 target.getCollapsedNodes().clear();
                 for (Node v = srcTree.getFirstNode(); v != null; v = v.getNext()) {
-                    Node w = oldNode2NewNode.get(v);
+                    Node w = oldNode2NewNode.getValue(v);
                     target.node2NodeView.put(w, new NodeView(getNV(v)));
                     target.setLabel(w, srcTree.getLabel(v));
                     if (getCollapsedNodes().contains(v))
                         target.getCollapsedNodes().add(w);
                 }
                 for (Edge e = srcTree.getFirstEdge(); e != null; e = e.getNext()) {
-                    Edge f = oldEdge2NewEdge.get(e);
+                    Edge f = oldEdge2NewEdge.getValue(e);
                     target.edge2EdgeView.put(f, new EdgeView(getEV(e)));
                     target.setLabel(f, srcTree.getLabel(e));
                 }
             }
         } else {
             for (Node v = srcTree.getFirstNode(); v != null; v = v.getNext()) {
-                Node w = oldNode2NewNode.get(v);
+                Node w = oldNode2NewNode.getValue(v);
                 target.setLabel(w, srcTree.getLabel(v));
             }
             for (Edge e = srcTree.getFirstEdge(); e != null; e = e.getNext()) {
-                Edge f = oldEdge2NewEdge.get(e);
+                Edge f = oldEdge2NewEdge.getValue(e);
                 target.setLabel(f, srcTree.getLabel(e));
             }
         }
@@ -388,7 +388,7 @@ public class TreeData extends PhyloTree {
      * @return node view
      */
     public NodeView getNV(Node v) {
-        return node2NodeView.get(v);
+        return node2NodeView.getValue(v);
     }
 
     /**
@@ -409,7 +409,7 @@ public class TreeData extends PhyloTree {
      * @return edge view
      */
     public EdgeView getEV(Edge e) {
-        return edge2EdgeView.get(e);
+        return edge2EdgeView.getValue(e);
     }
 
     /**
