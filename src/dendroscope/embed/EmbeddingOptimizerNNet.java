@@ -472,7 +472,7 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
             orderEmbeddeding[1] = new LinkedList<String>();
 
             for (PhyloTree tree : trees) {
-                if (newOrder[t].size() != tree.getNumberOfLeaves())
+                if (newOrder[t].size() != tree.countLeaves())
                     System.err.println("\n\nERROR order in tree number " + t);
                 final NodeArray<BitSet> taxaBelow = new NodeArray<BitSet>(tree);
                 for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {

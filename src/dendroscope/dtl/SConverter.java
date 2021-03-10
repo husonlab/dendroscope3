@@ -82,7 +82,7 @@ public class SConverter {
 
             }
 
-            System.out.println(STree.getNumberOfLeaves());
+            System.out.println(STree.countLeaves());
 
         }
     }
