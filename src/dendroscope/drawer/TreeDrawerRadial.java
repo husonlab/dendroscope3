@@ -131,7 +131,7 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
         computeYCoordinates(tree.getRoot(), leafOrder, node2AngleOfInEdge);
 
         int leaves = 0;   // number of true leaves
-        if (tree.getSpecialEdges().size() > 0) {
+        if (tree.getNumberSpecialEdges() > 0) {
             for (Node v : leafOrder) {
                 if (v.getOutDegree() == 0)
                     leaves++;

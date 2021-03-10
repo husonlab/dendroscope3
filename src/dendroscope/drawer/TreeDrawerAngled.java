@@ -107,7 +107,7 @@ public class TreeDrawerAngled extends TreeDrawerBase implements IOptimizedGraphD
      */
     private void computeEmbeddingRec(Node v, NodeDoubleArray yCoord, NodeDoubleArray yMin, NodeDoubleArray yMax, NodeSet visited) {
 
-        if (!warnedSlantedCladogram && tree.getSpecialEdges().size() > 0) {
+        if (!warnedSlantedCladogram && tree.getNumberSpecialEdges() > 0) {
             new Alert("Slanted cladogram:\nThis visualization is not well-defined for networks\nDrawing may contain errors");
             warnedSlantedCladogram = true;
         }

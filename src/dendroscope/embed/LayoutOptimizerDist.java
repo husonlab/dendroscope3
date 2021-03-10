@@ -45,7 +45,7 @@ public class LayoutOptimizerDist implements ILayoutOptimizer {
      * @param progressListener
      */
     public void apply(PhyloTree tree, ProgressListener progressListener) {
-        if (tree.getRoot() == null || tree.getSpecialEdges().size() == 0) {
+        if (tree.getRoot() == null || tree.getNumberSpecialEdges() == 0) {
             tree.getNode2GuideTreeChildren().clear();
             return;
         }

@@ -104,7 +104,7 @@ public class TreeData extends PhyloTree {
         targetTree.copy(srcTree, oldNode2NewNode, oldEdge2NewEdge);
 
         // copy lsa information
-        if (srcTree.getSpecialEdges().size() > 0) {
+        if (srcTree.getNumberSpecialEdges() > 0) {
             setupLSA();
             for (Node v = srcTree.getFirstNode(); v != null; v = v.getNext()) {
                 Node w = oldNode2NewNode.getValue(v);
@@ -169,7 +169,7 @@ public class TreeData extends PhyloTree {
         targetTree.copy(srcTree, oldNode2NewNode, oldEdge2NewEdge);
 
         // copy lsa information
-        if (srcTree.getSpecialEdges().size() > 0) {
+        if (srcTree.getNumberSpecialEdges() > 0) {
             for (Node v = srcTree.getFirstNode(); v != null; v = v.getNext()) {
                 Node w = oldNode2NewNode.getValue(v);
                 // todo: next line just for testing:
@@ -254,7 +254,7 @@ public class TreeData extends PhyloTree {
         target.copy(srcTree, oldNode2NewNode, oldEdge2NewEdge);
 
         // copy lsa information
-        if (srcTree.getSpecialEdges().size() > 0 && !srcTree.getNode2GuideTreeChildren().isClear()) {
+        if (srcTree.getNumberSpecialEdges() > 0 && !srcTree.getNode2GuideTreeChildren().isClear()) {
             target.setupLSA();
             for (Node v = srcTree.getFirstNode(); v != null; v = v.getNext()) {
                 Node w = oldNode2NewNode.getValue(v);

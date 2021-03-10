@@ -1031,7 +1031,7 @@ public class TreeDrawerBase {
      */
     public void computeYCoordinates(Node root, List<Node> leafOrder, NodeDoubleArray yCoord) {
         computeYCoordinateOfLeavesRec(root, 0, yCoord, leafOrder);
-        if (tree.getSpecialEdges().size() > 0)
+        if (tree.getNumberSpecialEdges() > 0)
             fixSpacing(leafOrder, yCoord);
         computeYCoordinateOfInternalRec(root, yCoord);
     }

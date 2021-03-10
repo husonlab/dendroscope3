@@ -182,8 +182,8 @@ public class ComputeHybroscaleCommand extends CommandBaseMultiViewer implements 
     public boolean isApplicable() {
         // too expensive to check for equal label sets here...
         Iterator<TreeViewer> it = multiViewer.getTreeGrid().getSelectedOrAllIterator();
-        return it.hasNext() && it.next().getPhyloTree().getSpecialEdges().size() == 0 && it.hasNext()
-                && it.next().getPhyloTree().getSpecialEdges().size() == 0
+        return it.hasNext() && it.next().getPhyloTree().getNumberSpecialEdges() == 0 && it.hasNext()
+                && it.next().getPhyloTree().getNumberSpecialEdges() == 0
                 && ((MultiViewer) getViewer()).getDir().getDocument().getNumberOfTrees() > 0;
     }
 

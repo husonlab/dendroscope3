@@ -101,7 +101,7 @@ public class Utilities {
         int outgroupId = allTaxa.add("__outgroup__");
 
         for (int i = 0; i < trees.length; i++) {
-            if (trees[i].getSpecialEdges().size() == 0) {
+            if (trees[i].getNumberSpecialEdges() == 0) {
                 tree2taxa[i].set(outgroupId);
                 tree2splits[i] = SplitSystem.getSplitsFromTree(allTaxa, tree2taxa[i], trees[i]);
 

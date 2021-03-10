@@ -172,7 +172,7 @@ public class MUL2NetworkCommand extends CommandBaseMultiViewer implements IComma
         MultiViewer multiViewer = (MultiViewer) getViewer();
         for (Iterator<TreeViewer> it = multiViewer.getTreeGrid().getSelectedOrAllIterator(); it.hasNext(); ) {
             TreeViewer treeViewer = it.next();
-            if (treeViewer.getPhyloTree().getSpecialEdges().size() > 0)
+            if (treeViewer.getPhyloTree().getNumberSpecialEdges() > 0)
                 return false;
         }
         return multiViewer.getTreeGrid().getSelectedOrAllIterator().hasNext();

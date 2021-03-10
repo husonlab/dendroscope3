@@ -19,7 +19,7 @@
 package dendroscope.util;
 
 import jloda.graph.*;
-import jloda.graphs.algorithms.Dijkstra;
+import jloda.graph.algorithms.Dijkstra;
 import jloda.phylo.PhyloTree;
 import jloda.swing.graphview.PhyloGraphView;
 import jloda.util.Basic;
@@ -69,7 +69,7 @@ public class PhyloTreeUtils {
         for (Edge e = newTree.getFirstEdge(); e != null; e = e.getNext()) {
 
             if (e.getTarget().getInDegree() > 1)
-                newTree.getSpecialEdges().add(e);
+                newTree.setSpecial(e, true);
         }
         return newTree;
     }
@@ -87,7 +87,7 @@ public class PhyloTreeUtils {
         findInducedSubnetworkRec(network.getRoot(), node2NumberInducedChildren, new NodeSet(network), collapsed, selected);
 
         Node subtreeRoot = null;
-        if (network.getSpecialEdges().size() == 0) { //tree
+        if (network.getNumberSpecialEdges() == 0) { //tree
             subtreeRoot = findSubtreeNetworkRec(network, network.getRoot(), node2NumberInducedChildren, selected);
         } else {
             LCA_LSACalculation LSA = new LCA_LSACalculation(network, true);
@@ -115,7 +115,7 @@ public class PhyloTreeUtils {
         for (Edge e = newTree.getFirstEdge(); e != null; e = e.getNext()) {
 
             if (e.getTarget().getInDegree() > 1)
-                newTree.getSpecialEdges().add(e);
+                newTree.setSpecial(e, true);
         }
         return newTree;
 
@@ -138,7 +138,7 @@ public class PhyloTreeUtils {
         findInducedSubnetworkRec(network.getRoot(), node2NumberInducedChildren, new NodeSet(network), collapsed, selected);
 
         Node subtreeRoot = null;
-        if (network.getSpecialEdges().size() == 0) { //tree
+        if (network.getNumberSpecialEdges() == 0) { //tree
             subtreeRoot = findSubtreeNetworkRec(network, network.getRoot(), node2NumberInducedChildren, selected);
         } else {
             LCA_LSACalculation LSA = new LCA_LSACalculation(network, true);
@@ -185,7 +185,7 @@ public class PhyloTreeUtils {
         NodeIntegerArray node2NumberInducedChildren = new NodeIntegerArray(network);
 
         Node subtreeRoot = null;
-        if (network.getSpecialEdges().size() == 0) { //tree
+        if (network.getNumberSpecialEdges() == 0) { //tree
             findInducedSubnetworkRec(network.getRoot(), node2NumberInducedChildren, new NodeSet(network), collapsed, selected);
             subtreeRoot = findSubtreeNetworkRec(network, network.getRoot(), node2NumberInducedChildren, selected);
         } else {
@@ -215,7 +215,7 @@ public class PhyloTreeUtils {
         findInducedSubnetworkRec(network.getRoot(), node2NumberInducedChildren, new NodeSet(network), collapsed, selected);
 
         Node subtreeRoot;
-        if (network.getSpecialEdges().size() == 0) { //tree
+        if (network.getNumberSpecialEdges() == 0) { //tree
             subtreeRoot = findSubtreeNetworkRec(network, network.getRoot(), node2NumberInducedChildren, selected);
         } else {
             LCA_LSACalculation LSA = new LCA_LSACalculation(network, true);

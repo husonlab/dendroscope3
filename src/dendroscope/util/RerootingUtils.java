@@ -203,7 +203,7 @@ public class RerootingUtils {
         if (tree.getRoot() == null)
             return false;
 
-        if (tree.getSpecialEdges().size() > 0) {
+        if (tree.getNumberSpecialEdges() > 0) {
             new Alert("Reroot by outgroup: not implemented for network");
             return false;
         }

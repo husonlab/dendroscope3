@@ -284,7 +284,7 @@ public class Dendro extends IOBase implements IOFormat {
             w.write("}\n");
         }
 
-        if (tree.getSpecialEdges().size() > 0 && !tree.getNode2GuideTreeChildren().isClear()) {
+        if (tree.getNumberSpecialEdges() > 0 && !tree.getNode2GuideTreeChildren().isClear()) {
             w.write("{LSA\n");
             for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
                 List<Node> order = tree.getNode2GuideTreeChildren().getValue(v);

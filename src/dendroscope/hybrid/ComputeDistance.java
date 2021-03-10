@@ -36,7 +36,7 @@ public class ComputeDistance {
                 distance += MAF.size() - 1;
             for (HybridNetwork component : MAF) {
                 if (component.getNumberOfNodes() == 1) {
-                    String label = component.getNodeLabels().iterator().next();
+                    String label = component.nodeLabels().iterator().next();
                     if (rI.getPrunedLabels().contains(label))
                         distance -= 1;
                 }

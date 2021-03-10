@@ -94,7 +94,7 @@ public class RerootCommand extends CommandBaseMultiViewer implements ICommand {
             if (treeViewer.getSelectedNodeLabelsNotInternalNumbers().size() > 0) {
                 PhyloTree tree = treeViewer.getPhyloTree();
                 Set selectedLabels = treeViewer.getSelectedNodeLabels();
-                if (tree.getSpecialEdges().size() > 0) {
+                if (tree.getNumberSpecialEdges() > 0) {
                     if (!warned) {
                         warned = true;
                         new Alert(getViewer().getFrame(), "Reroot by outgroup: not implemented for networks");

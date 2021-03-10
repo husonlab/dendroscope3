@@ -101,7 +101,7 @@ public class RefineCommand extends CommandBaseMultiViewer implements ICommand {
             return false;
         Iterator<TreeViewer> it = multiViewer.getTreeGrid().getSelectedOrAllIterator();
         // too expensive to check for equal label sets here...
-        return it.next().getPhyloTree().getSpecialEdges().size() == 0 && it.next().getPhyloTree().getSpecialEdges().size() == 0
+        return it.next().getPhyloTree().getNumberSpecialEdges() == 0 && it.next().getPhyloTree().getNumberSpecialEdges() == 0
                 && ((MultiViewer) getViewer()).getDir().getDocument().getNumberOfTrees() > 0;
     }
 

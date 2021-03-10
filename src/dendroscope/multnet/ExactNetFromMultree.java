@@ -111,7 +111,7 @@ public class ExactNetFromMultree {
         }
         long seconds = (new Date().getTime() - startTime);
         System.err.println("Algorithm required " + seconds / 1000.0 + " seconds");
-        System.err.println("number of reticulations: " + t.getSpecialEdges().size() / 2);
+        System.err.println("number of reticulations: " + t.getNumberSpecialEdges() / 2);
         return t;
     }
 }

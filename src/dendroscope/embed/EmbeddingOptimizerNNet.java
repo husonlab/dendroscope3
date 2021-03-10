@@ -66,7 +66,7 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
             }
         }
 
-        if (tree.getRoot() == null || tree.getSpecialEdges().size() == 0) {
+        if (tree.getRoot() == null || tree.getNumberSpecialEdges() == 0) {
             tree.getNode2GuideTreeChildren().clear();
             return;
         }
@@ -496,7 +496,7 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
                 (new LayoutUnoptimized()).apply(tree, null);
 
                 //todo: check these changes
-                if (tree.getSpecialEdges().size() != 0)
+                if (tree.getNumberSpecialEdges() != 0)
                     orderEmbeddeding[t] = GeneralMethods.getLsaOrderRec(tree, tree.getRoot(), orderEmbeddeding[t]);
                 else
                     orderEmbeddeding[t] = newOrder[t];

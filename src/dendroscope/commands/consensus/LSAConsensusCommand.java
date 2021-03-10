@@ -87,7 +87,7 @@ public class LSAConsensusCommand extends CommandBase implements ICommand {
         int count = 0;
         for (Iterator<TreeViewer> it = multiViewer.getTreeGrid().getSelectedOrAllIterator(); it.hasNext(); ) {
             TreeViewer treeViewer = it.next();
-            if (treeViewer.getPhyloTree().getSpecialEdges().size() > 0)
+            if (treeViewer.getPhyloTree().getNumberSpecialEdges() > 0)
                 return false;
             count++;
         }

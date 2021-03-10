@@ -521,7 +521,7 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     public boolean collapseSelectedNodes(boolean collapse, boolean all) {
         boolean changed = false;
         if (getSelectedNodes().size() > 0) {
-            if (collapse && getPhyloTree().getSpecialEdges().size() > 0) { // check that this is collapsible: no special edges between a node below these nodes and the outside
+            if (collapse && getPhyloTree().getNumberSpecialEdges() > 0) { // check that this is collapsible: no special edges between a node below these nodes and the outside
                 // label all nodes below:
                 Set<Node> visited = new HashSet<Node>();
                 Stack<Node> stack = new Stack<Node>();
@@ -923,7 +923,7 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
             if (tree.isSpecial(e) && tree.getWeight(e) == -1) {
                 setDirection(e, EdgeView.DIRECTED);
             }
-            if (tree.getSpecialEdges().size() > 0 && ProgramProperties.get("scaleconfidence", false)) {
+            if (tree.getNumberSpecialEdges() > 0 && ProgramProperties.get("scaleconfidence", false)) {
                 //System.err.println("scaleconfidence e="+e+" weight: "+tree.getWeight(e));
                 int width = tree.isSpecial(e) ? ((int) (10 * tree.getWeight(e))) : 10;
                 setLineWidth(e, width);
@@ -1258,7 +1258,7 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
                 || drawerKind.equals(SLANTED_CLADOGRAM) || drawerKind.equals(CIRCULAR_CLADOGRAM)
                 || drawerKind.equals(CIRCULAR_PHYLOGRAM) || drawerKind.equals(INNERCIRCULAR_CLADOGRAM)) {
             PhyloTree tree = getPhyloTree();
-            if (tree.getSpecialEdges().size() == 0 || getSelectedNodes().size() == 0)
+            if (tree.getNumberSpecialEdges() == 0 || getSelectedNodes().size() == 0)
                 return false;
 
             for (Iterator it = getSelectedNodes().iterator(); it.hasNext(); ) {
@@ -1316,8 +1316,8 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     public boolean removeTaxa(NodeSet toRemove) {
         boolean changed = false;
         PhyloTree tree = getPhyloTree();
-        Node[] selected = toRemove.toArray(new Node[toRemove.size()]);
-        List<Node> nakedLeaves = new LinkedList<Node>();
+        Node[] selected = toRemove.toArray(new Node[0]);
+        List<Node> nakedLeaves = new LinkedList<>();
 
         for (Node v : selected) {
             if (v.getOwner() != null && tree.getLabel(v) != null) // not yet deleted

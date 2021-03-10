@@ -83,7 +83,7 @@ public class ClusterNetwork {
             if (A.cardinality() < taxa.size() - 1)
                 list.add(new Cluster(A, split.getWeight()));
         }
-        Cluster[] clusters = list.toArray(new Cluster[list.size()]);
+        Cluster[] clusters = list.toArray(new Cluster[0]);
 
         List<Triplet<Cluster, Cluster, Boolean>> additionalEdges = new LinkedList<>();
 
@@ -94,15 +94,13 @@ public class ClusterNetwork {
 
         convertHasseToClusterNetwork(tree, node2weight, node2confidence);
 
-        computeConfidenceOnReticulate(tree);
+        // computeConfidenceOnReticulate(tree);
 
         for (Edge e = tree.getFirstEdge(); e != null; e = e.getNext()) {
             if (ProgramProperties.get("scaleconfidence", false) && tree.isSpecial(e)) {
                 tree.setWeight(e, tree.getConfidence(e));
             }
         }
-        // todO: for now, supress confidences:
-        tree.edgeConfidencesSet = false;
 
         //if (!optionOptimize) // only simply if we haven't optimized
         //simplify(root);

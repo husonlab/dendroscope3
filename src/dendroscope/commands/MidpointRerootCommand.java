@@ -88,7 +88,7 @@ public class MidpointRerootCommand extends CommandBaseMultiViewer implements ICo
 
             boolean changed = false;
             PhyloTree tree = treeViewer.getPhyloTree();
-            if (tree.getSpecialEdges().size() > 0) {
+            if (tree.getNumberSpecialEdges() > 0) {
                 if (!warned) {
                     warned = true;
                     new Alert(getViewer().getFrame(), "Reroot by midpoint: not implemented for network");
@@ -100,7 +100,7 @@ public class MidpointRerootCommand extends CommandBaseMultiViewer implements ICo
                 treeViewer.setDirty(true);
                 tree.getNode2GuideTreeChildren().clear();
 
-                if (tree.getSpecialEdges().size() > 0) {
+                if (tree.getNumberSpecialEdges() > 0) {
                     treeViewer.resetViewSpecialEdges();
                     LayoutOptimizerManager.apply(multiViewer.getEmbedderName(), treeViewer.getPhyloTree());
                 }

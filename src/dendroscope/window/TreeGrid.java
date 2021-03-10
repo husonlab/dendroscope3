@@ -330,12 +330,12 @@ public class TreeGrid extends JPanel {
                             if (clicks == 2) {
                                 multiViewer.getDir().execute("select subpart;", multiViewer.getCommandManager());
                             } else if (clicks == 3) {
-                                if (treeViewer.getPhyloTree().getSpecialEdges().size() > 0)
+                                if (treeViewer.getPhyloTree().getNumberSpecialEdges() > 0)
                                     multiViewer.getDir().execute("select subnetwork;", multiViewer.getCommandManager());
                                 else
                                     multiViewer.getDir().execute("select subpart;select invert;", multiViewer.getCommandManager());
                             } else if (clicks == 4) {
-                                if (treeViewer.getPhyloTree().getSpecialEdges().size() > 0)
+                                if (treeViewer.getPhyloTree().getNumberSpecialEdges() > 0)
                                     multiViewer.getDir().execute("select subnetwork;select invert;", multiViewer.getCommandManager());
                             }
                         }
