@@ -132,7 +132,7 @@ public class ClusterNetwork {
                                       NodeDoubleArray node2confidence, List<Triplet<Cluster, Cluster, Boolean>> additionalEdges, int maxTaxonId) {
         clusters = Cluster.getClustersSortedByDecreasingCardinality(clusters);
         Node[] nodes = new Node[clusters.length];
-        NodeIntegerArray node2id = new NodeIntegerArray(tree);
+        NodeIntArray node2id = new NodeIntArray(tree);
         NodeSet additionalEdgeSources = new NodeSet(tree);
 
         for (int i = 0; i < clusters.length; i++) {
@@ -162,7 +162,7 @@ public class ClusterNetwork {
                     if (newEdges.contains(e)) {
                         {
                             Node w = e.getTarget();
-                            int j = node2id.get(w);
+                            int j = node2id.getInt(w);
                             if (Cluster.contains(clusters[j], cluster)) {
                                 isBelow = true;
                                 if (!visited.contains(w)) {
@@ -185,12 +185,12 @@ public class ClusterNetwork {
         visited.add(root);
         while (stack.size() > 0) {
             Node v = stack.pop();
-            BitSet cluster = (BitSet) clusters[node2id.get(v)].clone();
+            BitSet cluster = (BitSet) clusters[node2id.getInt(v)].clone();
 
             for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
                 if (newEdges.contains(e)) {
                     Node w = e.getTarget();
-                    cluster = Cluster.setminus(cluster, clusters[node2id.get(w)]);
+                    cluster = Cluster.setminus(cluster, clusters[node2id.getInt(w)]);
                     if (!visited.contains(w)) {
                         stack.push(w);
                         visited.add(w);
@@ -293,11 +293,11 @@ public class ClusterNetwork {
                 }
                 Edge f = tree.newEdge(w, v);
                 if (node2weight != null) {
-                    if (node2weight.get(v) == -1)  // todo: fix code so that is ok for node to have only special edges
+                    if (node2weight.getDouble(v) == -1)  // todo: fix code so that is ok for node to have only special edges
                     {
                         tree.setWeight(f, 0);
                     } else {
-                        tree.setWeight(f, node2weight.get(v));
+                        tree.setWeight(f, node2weight.getDouble(v));
                     }
                 }
 
@@ -308,7 +308,7 @@ public class ClusterNetwork {
             } else if (v.getInDegree() == 1) {
                 Edge e = v.getFirstInEdge();
                 if (node2weight != null)
-                    tree.setWeight(e, node2weight.get(v));
+                    tree.setWeight(e, node2weight.getDouble(v));
             }
         }
         Node root = tree.getRoot();
@@ -349,14 +349,14 @@ public class ClusterNetwork {
         (new LSATree()).computeReticulation2LSA(tree, reticulate2lsa);
 
         NodeDoubleArray averageConfidenceBelow = new NodeDoubleArray(tree);
-        NodeIntegerArray countBelow = new NodeIntegerArray(tree, -1);
+        NodeIntArray countBelow = new NodeIntArray(tree, -1);
         computeConfidenceBelowRec(tree, tree.getRoot(), averageConfidenceBelow, countBelow);
         for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
-            if (countBelow.get(v) > 0)
-                averageConfidenceBelow.put(v, averageConfidenceBelow.get(v) / countBelow.get(v));
+            if (countBelow.getInt(v) > 0)
+                averageConfidenceBelow.put(v, averageConfidenceBelow.getDouble(v) / countBelow.getInt(v));
         }
         for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
-            Node lsa = reticulate2lsa.getValue(v);
+            Node lsa = reticulate2lsa.get(v);
             if (lsa != null) {
                 //System.err.println("node v=" + v);
                 //System.err.println("lsa=" + lsa);
@@ -387,7 +387,7 @@ public class ClusterNetwork {
                 }
                 for (Edge e : e2AverageConfidence.keySet()) {
                     double value = e2AverageConfidence.get(e);
-                    double confidence = (sum == 0 ? 0 : (averageConfidenceBelow.get(e.getTarget()) * value) / sum);
+                    double confidence = (sum == 0 ? 0 : (averageConfidenceBelow.getDouble(e.getTarget()) * value) / sum);
                 }
             }
         }
@@ -401,7 +401,7 @@ public class ClusterNetwork {
      * @param confidenceBelow
      * @param countBelow
      */
-    private static void computeConfidenceBelowRec(PhyloTree tree, Node v, NodeDoubleArray confidenceBelow, NodeIntegerArray countBelow) {
+    private static void computeConfidenceBelowRec(PhyloTree tree, Node v, NodeDoubleArray confidenceBelow, NodeIntArray countBelow) {
         double confidence = 0;
         int count = 0;
         for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
@@ -410,10 +410,10 @@ public class ClusterNetwork {
                 count++;
             }
             Node w = e.getTarget();
-            if (countBelow.get(w) == -1)
+            if (countBelow.getInt(w) == -1)
                 computeConfidenceBelowRec(tree, w, confidenceBelow, countBelow);
-            confidence += confidenceBelow.get(w);
-            count += countBelow.get(w);
+            confidence += confidenceBelow.getDouble(w);
+            count += countBelow.getInt(w);
         }
         confidenceBelow.put(v, confidence);
         countBelow.set(v, count);
@@ -448,13 +448,13 @@ public class ClusterNetwork {
      * @return partitioning of taxa
      */
     public static Partition getPartitionDefinedByNode(PhyloTree tree, Taxa taxa, Node v) {
-        NodeIntegerArray node2component = new NodeIntegerArray(tree);
+        NodeIntArray node2component = new NodeIntArray(tree);
         int componentNumber = 0;
 
         node2component.set(v, -1); // always avoid this node
         for (Edge e = v.getFirstAdjacentEdge(); e != null; e = v.getNextAdjacentEdge(e)) {
             Node w = e.getOpposite(v);
-            if (node2component.get(w) == 0) {
+            if (node2component.getInt(w) == 0) {
                 componentNumber++;
                 node2component.set(w, componentNumber);
                 getTwoConnectedComponentRec(w, componentNumber, node2component);
@@ -469,7 +469,7 @@ public class ClusterNetwork {
             if (label != null) {
                 int t = taxa.indexOf(label);
                 if (t > 0) {
-                    int n = node2component.get(w);
+                    int n = node2component.getInt(w);
                     if (n > 0)
                         partition[n - 1].set(t);
                 }
@@ -494,7 +494,7 @@ public class ClusterNetwork {
      * @return partitioning defined by edge
      */
     public static Partition getPartitionDefinedByEdge(PhyloTree tree, Taxa taxa, Edge e0) {
-        NodeIntegerArray node2component = new NodeIntegerArray(tree);
+        NodeIntArray node2component = new NodeIntArray(tree);
         int componentNumber = 0;
 
         Node source = e0.getSource();
@@ -506,7 +506,7 @@ public class ClusterNetwork {
         for (Edge e = source.getFirstAdjacentEdge(); e != null; e = source.getNextAdjacentEdge(e)) {
             if (e != e0) {
                 Node w = e.getOpposite(source);
-                if (node2component.get(w) == 0) {
+                if (node2component.getInt(w) == 0) {
                     if (first)
                         first = false;
                     else
@@ -517,12 +517,12 @@ public class ClusterNetwork {
             }
         }
 
-        if (node2component.get(target) == 0) {
+        if (node2component.getInt(target) == 0) {
             node2component.set(target, ++componentNumber);
             first = true;
             for (Edge e = target.getFirstAdjacentEdge(); e != null; e = target.getNextAdjacentEdge(e)) {
                 Node w = e.getOpposite(target);
-                if (node2component.get(w) == 0) {
+                if (node2component.getInt(w) == 0) {
                     if (first)
                         first = false;
                     else
@@ -541,7 +541,7 @@ public class ClusterNetwork {
             if (label != null) {
                 int t = taxa.indexOf(label);
                 if (t > 0) {
-                    int n = node2component.get(w);
+                    int n = node2component.getInt(w);
                     if (n > 0)
                         partition[n - 1].set(t);
                 }
@@ -564,10 +564,10 @@ public class ClusterNetwork {
      * @param componentNumber
      * @param node2component
      */
-    private static void getTwoConnectedComponentRec(Node v, int componentNumber, NodeIntegerArray node2component) {
+    private static void getTwoConnectedComponentRec(Node v, int componentNumber, NodeIntArray node2component) {
         for (Edge f = v.getFirstAdjacentEdge(); f != null; f = v.getNextAdjacentEdge(f)) {
             Node w = f.getOpposite(v);
-            if (node2component.get(w) == 0) {
+            if (node2component.getInt(w) == 0) {
                 node2component.set(w, componentNumber);
                 getTwoConnectedComponentRec(w, componentNumber, node2component);
             }

@@ -147,7 +147,7 @@ public class TreeDrawerBase {
             for (Node v = tree.getFirstNode(); v != null; v = tree.getNextNode(v)) {
                 if (viewer.getSelected(v)) {
                     gc.setColor(Color.RED);
-                    Rectangle2D.Double bbW = (Rectangle2D.Double) node2bb.getValue(v);
+                    Rectangle2D.Double bbW = (Rectangle2D.Double) node2bb.get(v);
                     gc.draw(trans.w2d(bbW));
                 }
             }
@@ -155,13 +155,13 @@ public class TreeDrawerBase {
         if (this.showProxyShapes) {
             for (Node v = tree.getFirstNode(); v != null; v = tree.getNextNode(v)) {
                 if (viewer.getSelected(v)) {
-                    PolygonDouble shapeWC = node2ProxyShape.getValue(v);
+                    PolygonDouble shapeWC = node2ProxyShape.get(v);
                     if (shapeWC != null) {
                         gc.setColor(Color.GREEN);
                         gc.draw(trans.w2d(shapeWC));
                     } else {
                         gc.setColor(Color.GRAY);
-                        gc.draw(trans.w2d(node2bb.getValue(v)));
+                        gc.draw(trans.w2d(node2bb.get(v)));
                     }
                 }
             }
@@ -208,10 +208,10 @@ public class TreeDrawerBase {
                 nv.setLabelSize(BasicSwing.getStringSize(gc, viewer.getLabel(v), viewer.getFont(v))); // ensure label rect is set
 
             if (!mustVisitSubTreeBelowNode(v)) {
-                if (visibleRect != null && trans.w2d(node2bb.getValue(v)).getBounds().intersects(visibleRect)) {
+                if (visibleRect != null && trans.w2d(node2bb.get(v)).getBounds().intersects(visibleRect)) {
                     // draw proxy shape
                     gc.setColor(Color.BLACK);
-                    PolygonDouble shapeWC = node2ProxyShape.getValue(v);
+                    PolygonDouble shapeWC = node2ProxyShape.get(v);
                     if (v.getInDegree() > 0)
                         gc.setColor(viewer.getEV(v.getFirstInEdge()).getColor());
                     if (shapeWC != null) {
@@ -219,7 +219,7 @@ public class TreeDrawerBase {
                         gc.fillPolygon(shapeDC);
                         //gc.drawPolygon(shapeDC);
                     } else {
-                        gc.fill(trans.w2d(node2bb.getValue(v)));
+                        gc.fill(trans.w2d(node2bb.get(v)));
                     }
                 }
             } else {
@@ -265,10 +265,10 @@ public class TreeDrawerBase {
                             paintRec(f.getTarget(), gc);
 
 
-                        if (showLSAEdges && node2LSAChildren.getValue(v) != null) {
+                        if (showLSAEdges && node2LSAChildren.get(v) != null) {
                             gc.setColor(Color.GREEN);
                             Point a = viewer.trans.w2d(viewer.getLocation(v));
-                            for (Node w : node2LSAChildren.getValue(v)) {
+                            for (Node w : node2LSAChildren.get(v)) {
                                 if (v.getCommonEdge(w) == null) {
                                     Point b = viewer.trans.w2d(viewer.getLocation(w));
                                     gc.drawLine(a.x + 1, a.y + 1, b.x + 1, b.y + 1);
@@ -305,9 +305,9 @@ public class TreeDrawerBase {
     protected boolean mustVisitSubTreeBelowNode(Node v) {
         if (v.getOutDegree() == 1)
             return true;
-        if (node2ProxyShape.getValue(v) == null && isCollapsed(v))
+        if (node2ProxyShape.get(v) == null && isCollapsed(v))
             return false;
-        Rectangle bbD = trans.w2d(node2bb.getValue(v)).getBounds();
+        Rectangle bbD = trans.w2d(node2bb.get(v)).getBounds();
         if (visibleRect != null && bbD.intersects(visibleRect) == false)
             return false; // not visible on screen
         return !(bbD.height <= 2 || bbD.width < 2);
@@ -324,7 +324,7 @@ public class TreeDrawerBase {
      * @return true, if hits
      */
     protected boolean hitsBBox(Node v, int dx, int dy, int x, int y) {
-        Rectangle bbD = trans.w2d(node2bb.getValue(v)).getBounds();
+        Rectangle bbD = trans.w2d(node2bb.get(v)).getBounds();
         if (dx != 0 || dy != 0)
             bbD.grow(dx, dy);
         return bbD.contains(x, y);
@@ -341,7 +341,7 @@ public class TreeDrawerBase {
      * @return true, if intersects
      */
     protected boolean hitsBBox(Node v, int dx, int dy, Rectangle rect) {
-        Rectangle bbD = trans.w2d(node2bb.getValue(v)).getBounds();
+        Rectangle bbD = trans.w2d(node2bb.get(v)).getBounds();
         if (visibleRect != null && bbD.intersects(visibleRect) == false)
             return false; // not visible on screen
         if (bbD.height <= 2 || bbD.width < 2) // bbox too small
@@ -401,7 +401,7 @@ public class TreeDrawerBase {
                 for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
                     if (PhyloTreeUtils.okToDescendDownThisEdge(tree, f, v)) {
                         Node w = f.getOpposite(v);
-                        Rectangle bbD = trans.w2d(node2bb.getValue(w)).getBounds();
+                        Rectangle bbD = trans.w2d(node2bb.get(w)).getBounds();
                         bbD.grow(10, 10);
                         if ((viewer.getLocation(w) != null && viewer.getNV(w).contains(trans, x, y)) || bbD.contains(x, y)) {
                             if (getHitNodesRectangleRec(w, x, y, moreThanOne) && moreThanOne)
@@ -437,7 +437,7 @@ public class TreeDrawerBase {
             for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
                 if (PhyloTreeUtils.okToDescendDownThisEdge(tree, f, v)) {
                     Node next = f.getOpposite(v);
-                    Rectangle bbD = trans.w2d(node2bb.getValue(next)).getBounds();
+                    Rectangle bbD = trans.w2d(node2bb.get(next)).getBounds();
                     bbD.grow(10, 10);
                     if ((viewer.getLocation(next) != null && viewer.getNV(next).intersects(trans, rect)) || bbD.intersects(rect)) {
                         if (getHitNodesRectangleRec(next, rect, moreThanOne) && moreThanOne)
@@ -946,7 +946,7 @@ public class TreeDrawerBase {
     protected List<Node> getLSAChildren(Node v) {
         List<Node> targetNodes = null;
         if (node2LSAChildren != null)
-            targetNodes = node2LSAChildren.getValue(v);
+            targetNodes = node2LSAChildren.get(v);
         List<Node> list = new LinkedList<>();
 
         if (targetNodes == null) {
@@ -981,8 +981,8 @@ public class TreeDrawerBase {
      * @param add
      * @return levels
      */
-    protected NodeIntegerArray computeLevels(int add) {
-        NodeIntegerArray levels = new NodeIntegerArray(tree, -1);
+    protected NodeIntArray computeLevels(int add) {
+        NodeIntArray levels = new NodeIntArray(tree, -1);
         computeLevelsRec(tree.getRoot(), levels, add, new HashSet<Node>());
         return levels;
     }
@@ -995,25 +995,25 @@ public class TreeDrawerBase {
      * @param add
      * @return max height
      */
-    private int computeLevelsRec(Node v, NodeIntegerArray levels, int add, Set<Node> path) {
+    private int computeLevelsRec(Node v, NodeIntArray levels, int add, Set<Node> path) {
         path.add(v);
         int level = 0;
         Set<Node> below = new HashSet<>();
         for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
             Node w = f.getTarget();
             below.add(w);
-            if (levels.getValue(w) == -1)
+            if (levels.get(w) == -1)
                 computeLevelsRec(w, levels, add, path);
-            level = Math.max(level, levels.getValue(w) + (tree.isTransferEdge(f) ? 0 : add));
+            level = Math.max(level, levels.get(w) + (tree.isTransferEdge(f) ? 0 : add));
         }
-        Collection<Node> lsaChildren = tree.getNode2GuideTreeChildren().getValue(v);
+        Collection<Node> lsaChildren = tree.getNode2GuideTreeChildren().get(v);
         if (lsaChildren != null) {
             for (Node w : lsaChildren) {
                 if (!below.contains(w) && !path.contains(w)) {
-                    int levelW = levels.getValue(w);
+                    int levelW = levels.get(w);
                     if (levelW == -1)
                         computeLevelsRec(w, levels, add, path);
-                    level = Math.max(level, levels.getValue(w) + add);
+                    level = Math.max(level, levels.get(w) + add);
                 }
             }
         }
@@ -1071,10 +1071,10 @@ public class TreeDrawerBase {
             double last = Double.NEGATIVE_INFINITY;
 
             for (Node w : getLSAChildren(v)) {
-                Double y = yCoord.getValue(w);
+                Double y = yCoord.get(w);
                 if (y == null) {
                     computeYCoordinateOfInternalRec(w, yCoord);
-                    y = yCoord.getValue(w);
+                    y = yCoord.get(w);
                 }
                 last = y;
                 if (first == Double.NEGATIVE_INFINITY)

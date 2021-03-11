@@ -240,7 +240,7 @@ public class Apply2Component {
 
             // check that all clusters at the root node contain t, otherwise must attach above root
             boolean mustAttachRoot = false;
-            BitSet oClusters = (BitSet) backboneNodes2OriginalClusters.getValue(root);
+            BitSet oClusters = (BitSet) backboneNodes2OriginalClusters.get(root);
             if (oClusters != null) {
                 for (int c = oClusters.nextSetBit(0); c != -1; c = oClusters.nextSetBit(c + 1)) {
                     // System.err.println("Original cluster: " + clusters[c]);
@@ -289,7 +289,7 @@ public class Apply2Component {
                             if (nextV == null) {
                                 nextV = u;
 
-                                oClusters = (BitSet) backboneNodes2OriginalClusters.getValue(u);
+                                oClusters = (BitSet) backboneNodes2OriginalClusters.get(u);
 
                                 for (int c = oClusters.nextSetBit(0); c != -1; c = oClusters.nextSetBit(c + 1)) {
 

@@ -119,13 +119,13 @@ public class PrimordialConsensus implements IConsensusTreeMethod {
             System.err.println("The following triplets are not present in any input tree:");
             for (Triplet<Integer, Integer, Integer> triplet : missingTriplets) {
                 SortedSet<String> labels = new TreeSet<>();
-                counts[triplet.get1()]++;
-                counts[triplet.get2()]++;
-                counts[triplet.get3()]++;
+                counts[triplet.getFirst()]++;
+                counts[triplet.getSecond()]++;
+                counts[triplet.getThird()]++;
                 if (missingTriplets.size() < 100) {
-                    labels.add(taxa.getLabel(triplet.get1()));
-                    labels.add(taxa.getLabel(triplet.get2()));
-                    labels.add(taxa.getLabel(triplet.get3()));
+                    labels.add(taxa.getLabel(triplet.getFirst()));
+                    labels.add(taxa.getLabel(triplet.getSecond()));
+                    labels.add(taxa.getLabel(triplet.getThird()));
                 }
                 Iterator<String> it = labels.iterator();
                 if (it != null && it.hasNext())

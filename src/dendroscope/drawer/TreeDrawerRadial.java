@@ -43,7 +43,7 @@ import java.util.Stack;
 public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphDrawer {
     final static public String DESCRIPTION = "Draw (rooted) tree using radial layout";
 
-    final NodeIntegerArray node2NumberLeaves; //
+    final NodeIntArray node2NumberLeaves; //
     final NodeDoubleArray node2AngleOfInEdge; // maps each node to the angle of it's (auxilary) in-edge
     boolean edge2AngleHasBeenSet = false; // need to check this before recomputing optimization
 
@@ -56,7 +56,7 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
      */
     public TreeDrawerRadial(TreeViewer viewer, PhyloTree tree) {
         super(viewer, tree);
-        node2NumberLeaves = new NodeIntegerArray(tree);
+        node2NumberLeaves = new NodeIntArray(tree);
         node2AngleOfInEdge = new NodeDoubleArray(tree); // maps each node to the angle of it's (auxilary) in-edge
 
         setAuxilaryParameter(100);
@@ -109,8 +109,8 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
         if (toScale) {
             setCoordinatesPhylogram(root);
         } else {
-            NodeIntegerArray nodeHeights = computeLevels(1);
-            computeCoordinatesCladogramRec(tree.getRoot(), nodeHeights, nodeHeights.getValue(tree.getRoot()));
+            NodeIntArray nodeHeights = computeLevels(1);
+            computeCoordinatesCladogramRec(tree.getRoot(), nodeHeights, nodeHeights.get(tree.getRoot()));
         }
 
         // setup optimization datastructures:
@@ -149,7 +149,7 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
         double offset = 2 * Math.PI - (value / 100.0) * Math.PI;
 
         for (Node v : leafOrder) {
-            double alpha = factor * (node2AngleOfInEdge.getValue(v) - 1) + offset;
+            double alpha = factor * (node2AngleOfInEdge.get(v) - 1) + offset;
             node2AngleOfInEdge.put(v, alpha);
         }
 
@@ -176,7 +176,7 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
             if (leaves.size() > 0) {
                 double alpha = 0;
                 for (Node u : leaves) {
-                    alpha += angle.getValue(u);
+                    alpha += angle.get(u);
                 }
                 angle.put(v, alpha / leaves.size());
             }
@@ -222,7 +222,7 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
                     ok = false;
                 } else {
                     double weight = (optionUseWeights ? tree.getWeight(e) : 1);
-                    double angle = node2AngleOfInEdge.getValue(w);
+                    double angle = node2AngleOfInEdge.get(w);
                     Point2D wPt = Geometry.translateByAngle(vPt, angle, weight);
                     viewer.setLocation(e.getTarget(), wPt);
                 }
@@ -247,7 +247,7 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
                 if (ok) {
                     Point2D wPt = new Point2D.Double(x / count, y / count);
                     double dist = maxDistance - wPt.distance(rootPt) + smallDistance;
-                    double angle = w.getOutDegree() > 0 ? node2AngleOfInEdge.getValue(w.getFirstOutEdge().getTarget()) : 0;
+                    double angle = w.getOutDegree() > 0 ? node2AngleOfInEdge.get(w.getFirstOutEdge().getTarget()) : 0;
                     wPt = Geometry.translateByAngle(wPt, angle, dist);
                     viewer.setLocation(w, wPt);
                 }
@@ -268,15 +268,15 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
      *
      * @param v Node
      */
-    private void computeCoordinatesCladogramRec(Node v, NodeIntegerArray nodeHeight, int maxHeight) {
+    private void computeCoordinatesCladogramRec(Node v, NodeIntArray nodeHeight, int maxHeight) {
 
         java.util.List<Node> childNodes = getLSAChildren(v);
 
         for (Node w : childNodes) {
             computeCoordinatesCladogramRec(w, nodeHeight, maxHeight);
 
-            Point2D apt = new Point2D.Double(maxHeight - nodeHeight.getValue(w), 0);
-            viewer.setLocation(w, Geometry.rotate(apt, node2AngleOfInEdge.getValue(w)));
+            Point2D apt = new Point2D.Double(maxHeight - nodeHeight.get(w), 0);
+            viewer.setLocation(w, Geometry.rotate(apt, node2AngleOfInEdge.get(w)));
         }
     }
 
@@ -301,7 +301,7 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
             if (PhyloTreeUtils.okToDescendDownThisEdge(tree, f, root)) {
                 Node w = f.getTarget();
                 recomputeOptimizationRec(w);
-                bbox.add(node2bb.getValue(w));
+                bbox.add(node2bb.get(w));
             }
             node2bb.put(root, bbox);
         }
@@ -346,9 +346,9 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
                 // RECURSE:
                 if (PhyloTreeUtils.okToDescendDownThisEdge(tree, f, v)) {
                     SubTreePoints wSTP = recomputeOptimizationRec(w);
-                    leaves += node2NumberLeaves.getValue(w);
+                    leaves += node2NumberLeaves.get(w);
 
-                    bbox.add(node2bb.getValue(w));
+                    bbox.add(node2bb.get(w));
 
                     vSTP.addAll(wSTP);
                 }
@@ -384,12 +384,12 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
             final Point2D vPt = viewer.getLocation(v);
             final double height = originPt.distance(vPt);
             // add internal points to edges
-            final double vAngle = node2AngleOfInEdge.getValue(v);
+            final double vAngle = node2AngleOfInEdge.get(v);
             for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
                 Node w = f.getTarget();
                 if (!tree.isSpecial(f) || tree.getWeight(f) == 1) {
                     viewer.getEV(f).setShape(EdgeView.ARC_LINE_EDGE);
-                    double wAngle = node2AngleOfInEdge.getValue(w);
+                    double wAngle = node2AngleOfInEdge.get(w);
                     java.util.List<Point2D> list = new LinkedList<>();
                     list.add(originPt);
                     Point2D aPt = Geometry.rotate(vPt, wAngle - vAngle);
@@ -397,7 +397,7 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
                     viewer.setInternalPoints(f, list);
                 } else if (tree.isSpecial(f)) {
                     viewer.getEV(f).setShape(EdgeView.QUAD_EDGE);
-                    double wAngle = node2AngleOfInEdge.getValue(w);
+                    double wAngle = node2AngleOfInEdge.get(w);
                     java.util.List<Point2D> list = new LinkedList<>();
                     Point2D aPt = Geometry.rotate(vPt, wAngle - vAngle);
                     list.add(aPt);
@@ -482,19 +482,19 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
     protected boolean mustVisitSubTreeBelowNode(Node v) {
         if (v.getDegree() == 1 || v == tree.getRoot()) // always true for root or leaf
             return true;
-        if (node2ProxyShape.getValue(v) == null)
+        if (node2ProxyShape.get(v) == null)
             return true;
         if (v.isAdjacent(tree.getRoot()))
             return true; // always draw nodes adjacent to root
         if (isCollapsed(v))
             return false;
 
-        Rectangle2D bbW = node2bb.getValue(v);
+        Rectangle2D bbW = node2bb.get(v);
         Rectangle bbD = trans.w2d(bbW).getBounds();
         if (visibleRect != null && bbD.intersects(visibleRect) == false)
             return false; // not visible on screen
 
-        Integer numLeaves = node2NumberLeaves.getValue(v);
+        Integer numLeaves = node2NumberLeaves.get(v);
         return !(numLeaves != null && numLeaves > 10 * (Math.min(bbD.height, bbD.width)));
     }
 

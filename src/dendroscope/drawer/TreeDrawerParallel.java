@@ -120,7 +120,7 @@ public class TreeDrawerParallel extends TreeDrawerBase implements IOptimizedGrap
             setCoordinatesPhylogram(root, yCoord);
             addInternalPoints();
         } else {
-            NodeIntegerArray levels = computeLevels(1);
+            NodeIntArray levels = computeLevels(1);
             computeCoordinatesCladogramRec(root, yCoord, levels);
             addInternalPoints();
         }
@@ -151,8 +151,8 @@ public class TreeDrawerParallel extends TreeDrawerBase implements IOptimizedGrap
      *
      * @param v Node
      */
-    private void computeCoordinatesCladogramRec(Node v, NodeDoubleArray yCoord, NodeIntegerArray levels) {
-        viewer.setLocation(v, new Point2D.Double(-levels.getValue(v), yCoord.getValue(v)));
+    private void computeCoordinatesCladogramRec(Node v, NodeDoubleArray yCoord, NodeIntArray levels) {
+        viewer.setLocation(v, new Point2D.Double(-levels.get(v), yCoord.get(v)));
         for (Node w : getLSAChildren(v)) {
             computeCoordinatesCladogramRec(w, yCoord, levels);
         }
@@ -206,7 +206,7 @@ public class TreeDrawerParallel extends TreeDrawerBase implements IOptimizedGrap
             smallDistance = (percentOffset / 100.0) * largestDistance;
         }
 
-        double rootHeight = yCoord.getValue(root);
+        double rootHeight = yCoord.get(root);
 
         NodeSet assigned = new NodeSet(tree);
 
@@ -229,12 +229,12 @@ public class TreeDrawerParallel extends TreeDrawerBase implements IOptimizedGrap
                     ok = false;
                 } else {
                     double weight = (useWeights ? tree.getWeight(e) : 1);
-                    double height = yCoord.getValue(e.getTarget());
+                    double height = yCoord.get(e.getTarget());
                     Node u = e.getTarget();
                     viewer.setLocation(u, location.getX() + weight, height);
                     assigned.add(u);
                     java.util.List<Point2D> internalPoints = new LinkedList<>();
-                    internalPoints.add(new Point2D.Double(location.getX(), yCoord.getValue(w)));
+                    internalPoints.add(new Point2D.Double(location.getX(), yCoord.get(w)));
                     viewer.setInternalPoints(e, internalPoints);
                 }
             } else if (w.getInDegree() > 1) // all in edges are 'blue' edges
@@ -251,7 +251,7 @@ public class TreeDrawerParallel extends TreeDrawerBase implements IOptimizedGrap
                 }
                 if (ok && x > Double.NEGATIVE_INFINITY) {
                     x += smallDistance;
-                    viewer.setLocation(w, x, yCoord.getValue(w));
+                    viewer.setLocation(w, x, yCoord.get(w));
                     assigned.add(w);
                     for (Edge f = w.getFirstInEdge(); f != null; f = w.getNextInEdge(f)) {
                         java.util.List<Point2D> internal = new LinkedList<>();
@@ -314,7 +314,7 @@ public class TreeDrawerParallel extends TreeDrawerBase implements IOptimizedGrap
                     first = last;
                 if (last.getX() < minX)
                     minX = last.getX();
-                Rectangle2D bboxChild = node2bb.getValue(w);
+                Rectangle2D bboxChild = node2bb.get(w);
                 if (bboxChild != null) {
                     if (bbox == null)
                         bbox = (Rectangle2D) bboxChild.clone();
@@ -409,11 +409,11 @@ public class TreeDrawerParallel extends TreeDrawerBase implements IOptimizedGrap
     protected boolean mustVisitSubTreeBelowNode(Node v) {
         if (v.getDegree() == 1) // is leaf or root
             return true;
-        if (node2ProxyShape.getValue(v) == null)
+        if (node2ProxyShape.get(v) == null)
             return true;
         if (isCollapsed(v))
             return false;
-        Rectangle2D bbW = node2bb.getValue(v);
+        Rectangle2D bbW = node2bb.get(v);
         Rectangle bbD = trans.w2d(bbW).getBounds();
         if (visibleRect != null && bbD.intersects(visibleRect) == false)
             return false; // not visible on screen

@@ -90,19 +90,19 @@ public class RerootByHybridNumber {
                         (new Comparator<Pair<Triplet<Integer, Float, Float>, Triplet<Integer, Float, Float>>>() {
                             public int compare(Pair<Triplet<Integer, Float, Float>, Triplet<Integer, Float, Float>> a,
                                                Pair<Triplet<Integer, Float, Float>, Triplet<Integer, Float, Float>> b) {
-                                double scoreA = Math.max(Math.abs(a.get1().get2() - a.get1().get3()), Math.abs(a.get2().get2() - a.get2().get3()));
-                                double scoreB = Math.max(Math.abs(b.get1().get2() - b.get1().get3()), Math.abs(b.get2().get2() - b.get2().get3()));
+                                double scoreA = Math.max(Math.abs(a.getFirst().getSecond() - a.getFirst().getThird()), Math.abs(a.getSecond().getSecond() - a.getSecond().getThird()));
+                                double scoreB = Math.max(Math.abs(b.getFirst().getSecond() - b.getFirst().getThird()), Math.abs(b.getSecond().getSecond() - b.getSecond().getThird()));
                                 if (scoreA < scoreB)
                                     return -1;
                                 else if (scoreA > scoreB)
                                     return 1;
-                                else if (a.get1().get1() < b.get1().get1())
+                                else if (a.getFirst().getFirst() < b.getFirst().getFirst())
                                     return -1;
-                                else if (a.get1().get1() > b.get1().get1())
+                                else if (a.getFirst().getFirst() > b.getFirst().getFirst())
                                     return 1;
-                                else if (a.get2().get1() < b.get2().get1())
+                                else if (a.getSecond().getFirst() < b.getSecond().getFirst())
                                     return -1;
-                                else if (a.get2().get1() > b.get2().get1())
+                                else if (a.getSecond().getFirst() > b.getSecond().getFirst())
                                     return 1;
                                 else
                                     return 0;
@@ -116,10 +116,10 @@ public class RerootByHybridNumber {
 
             System.err.println("Determining all pairs of possible rootings");
             for (Triplet<Edge, Float, Float> triplet1 : rerootingTriplets1) {
-                Triplet<Integer, Float, Float> newTriplet1 = new Triplet<Integer, Float, Float>(edge2number1.get(triplet1.get1()), triplet1.get2(), triplet1.get3());
+                Triplet<Integer, Float, Float> newTriplet1 = new Triplet<Integer, Float, Float>(edge2number1.get(triplet1.getFirst()), triplet1.getSecond(), triplet1.getThird());
                 for (Triplet<Edge, Float, Float> triplet2 : rerootingTriplets2) {
-                    if (triplet2.get1().getTarget().getOutDegree() > 0) {
-                        Triplet<Integer, Float, Float> newTriplet2 = new Triplet<Integer, Float, Float>(edge2number2.get(triplet2.get1()), triplet2.get2(), triplet2.get3());
+                    if (triplet2.getFirst().getTarget().getOutDegree() > 0) {
+                        Triplet<Integer, Float, Float> newTriplet2 = new Triplet<Integer, Float, Float>(edge2number2.get(triplet2.getFirst()), triplet2.getSecond(), triplet2.getThird());
 
                         Pair<Triplet<Integer, Float, Float>, Triplet<Integer, Float, Float>>
                                 pair = new Pair<Triplet<Integer, Float, Float>, Triplet<Integer, Float, Float>>(newTriplet1, newTriplet2);
@@ -169,16 +169,16 @@ public class RerootByHybridNumber {
             for (Pair<Triplet<Integer, Float, Float>, Triplet<Integer, Float, Float>> pair : allPairs) {
                 count++;
 
-                Integer ie1 = pair.get1().get1();
-                Integer ie2 = pair.get2().get1();
+                Integer ie1 = pair.getFirst().getFirst();
+                Integer ie2 = pair.getSecond().getFirst();
 
                 Edge e1 = number2edge1[ie1];
                 if (e1 == null || e1.getOwner() == null)
                     System.err.println("ie1 " + ie1 + ": " + e1);
                 float weight1 = (float) tree1.getWeight(e1);
-                float halfOfTotal1 = (pair.get1().get2() + pair.get1().get3() + weight1) / 2;
-                float sourceLength1 = halfOfTotal1 - pair.get1().get2();
-                float targetLength1 = pair.get1().get2() + weight1 - halfOfTotal1;
+                float halfOfTotal1 = (pair.getFirst().getSecond() + pair.getFirst().getThird() + weight1) / 2;
+                float sourceLength1 = halfOfTotal1 - pair.getFirst().getSecond();
+                float targetLength1 = pair.getFirst().getSecond() + weight1 - halfOfTotal1;
                 tree1.setRoot((Node) null);
                 tree1.setRoot(e1, sourceLength1, targetLength1, null);
                 tree1.redirectEdgesAwayFromRoot();
@@ -188,9 +188,9 @@ public class RerootByHybridNumber {
                 if (e2 == null || e2.getOwner() == null)
                     System.err.println("ie2 " + ie2 + ": " + e2);
                 float weight2 = (float) tree2.getWeight(e2);
-                float halfOfTotal2 = (pair.get2().get2() + pair.get2().get3() + weight2) / 2;
-                float sourceLength2 = halfOfTotal2 - pair.get2().get2();
-                float targetLength2 = pair.get2().get2() + weight2 - halfOfTotal2;
+                float halfOfTotal2 = (pair.getSecond().getSecond() + pair.getSecond().getThird() + weight2) / 2;
+                float sourceLength2 = halfOfTotal2 - pair.getSecond().getSecond();
+                float targetLength2 = pair.getSecond().getSecond() + weight2 - halfOfTotal2;
                 tree2.setRoot((Node) null);
                 tree2.setRoot(e2, sourceLength2, targetLength2, null);
                 tree2.redirectEdgesAwayFromRoot();

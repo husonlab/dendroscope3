@@ -21,7 +21,7 @@ package dendroscope.drawer;
 import dendroscope.window.TreeViewer;
 import jloda.graph.Edge;
 import jloda.graph.Node;
-import jloda.graph.NodeIntegerArray;
+import jloda.graph.NodeIntArray;
 import jloda.phylo.PhyloTree;
 import jloda.phylo.PhyloTreeUtils;
 import jloda.swing.graphview.EdgeView;
@@ -99,8 +99,8 @@ public class TreeDrawerCircular extends TreeDrawerRadial implements IOptimizedGr
             setCoordinatesPhylogram(root);
             addInternalPoints();
         } else {
-            NodeIntegerArray levels = computeLevels(1);
-            int maxLevel = levels.getValue(tree.getRoot());
+            NodeIntArray levels = computeLevels(1);
+            int maxLevel = levels.get(tree.getRoot());
             computeCoordinatesCladogramRec(tree.getRoot(), levels, maxLevel);
             addInternalPoints();
         }
@@ -149,7 +149,7 @@ public class TreeDrawerCircular extends TreeDrawerRadial implements IOptimizedGr
                 } else {
                     double weight = (optionUseWeights ? tree.getWeight(e) : 1);
                     double dist = rootPt.distance(vPt) + weight;
-                    Point2D wPt = Geometry.translateByAngle(rootPt, node2AngleOfInEdge.getValue(w), dist);
+                    Point2D wPt = Geometry.translateByAngle(rootPt, node2AngleOfInEdge.get(w), dist);
                     viewer.setLocation(w, wPt);
                 }
             } else if (w.getInDegree() > 1) // all in edges are 'blue' edges
@@ -165,7 +165,7 @@ public class TreeDrawerCircular extends TreeDrawerRadial implements IOptimizedGr
                     }
                 }
                 if (ok) {
-                    double angle = w.getOutDegree() > 0 ? node2AngleOfInEdge.getValue(w.getFirstOutEdge().getTarget()) : 0;
+                    double angle = w.getOutDegree() > 0 ? node2AngleOfInEdge.get(w.getFirstOutEdge().getTarget()) : 0;
                     Point2D wPt = Geometry.translateByAngle(rootPt, angle, maxDistance + smallDistance);
                     wPt = Geometry.translateByAngle(wPt, angle, smallDistance);
                     viewer.setLocation(w, wPt);
@@ -187,13 +187,13 @@ public class TreeDrawerCircular extends TreeDrawerRadial implements IOptimizedGr
      *
      * @param v Node
      */
-    private void computeCoordinatesCladogramRec(Node v, NodeIntegerArray levels, int maxLevel) {
+    private void computeCoordinatesCladogramRec(Node v, NodeIntArray levels, int maxLevel) {
         for (Node w : getLSAChildren(v)) {
             computeCoordinatesCladogramRec(w, levels, maxLevel);
 
-            int level = maxLevel - levels.getValue(w);
+            int level = maxLevel - levels.get(w);
             Point2D apt = new Point2D.Double(level, 0);
-            viewer.setLocation(w, Geometry.rotate(apt, node2AngleOfInEdge.getValue(w)));
+            viewer.setLocation(w, Geometry.rotate(apt, node2AngleOfInEdge.get(w)));
         }
     }
 

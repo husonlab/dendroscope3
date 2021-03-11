@@ -68,7 +68,7 @@ public class LayoutUnoptimized implements ILayoutOptimizer {
             LSATree.computeLSAOrdering(tree, retNode2GuideParent); // maps reticulate nodes to lsa nodes
 
             // compute preorder numbering of all nodes
-            NodeIntegerArray ordering = new NodeIntegerArray(tree);
+            NodeIntArray ordering = new NodeIntArray(tree);
             computePreOrderNumberingRec(tree, tree.getRoot(), new NodeSet(tree), ordering, 0);
             reorderLSAChildren(tree, ordering);
         }
@@ -83,7 +83,7 @@ public class LayoutUnoptimized implements ILayoutOptimizer {
      * @param number
      * @return last number assigned
      */
-    private int computePreOrderNumberingRec(PhyloTree tree, Node v, NodeSet visited, NodeIntegerArray ordering, int number) {
+    private int computePreOrderNumberingRec(PhyloTree tree, Node v, NodeSet visited, NodeIntArray ordering, int number) {
         if (!visited.contains(v)) {
             visited.add(v);
             ordering.set(v, ++number);
@@ -110,10 +110,10 @@ public class LayoutUnoptimized implements ILayoutOptimizer {
      * @param tree
      * @param ordering
      */
-    private void reorderLSAChildren(PhyloTree tree, final NodeIntegerArray ordering) {
+    private void reorderLSAChildren(PhyloTree tree, final NodeIntArray ordering) {
         // System.err.println("------ v="+v);
         for (Node v = tree.getFirstNode(); v != null; v = tree.getNextNode(v)) {
-            List<Node> children = tree.getNode2GuideTreeChildren().getValue(v);
+            List<Node> children = tree.getNode2GuideTreeChildren().get(v);
             if (children != null) {
                 /*
                 System.err.println("LSA children old:");
@@ -124,9 +124,9 @@ public class LayoutUnoptimized implements ILayoutOptimizer {
                 SortedSet<Node> sorted = new TreeSet<Node>(new Comparator<Node>() {
 
                     public int compare(Node v1, Node v2) {
-                        if (ordering.get(v1) < ordering.get(v2))
+                        if (ordering.getInt(v1) < ordering.getInt(v2))
                             return -1;
-                        else if (ordering.get(v1) > ordering.get(v2))
+                        else if (ordering.getInt(v1) > ordering.getInt(v2))
                             return 1;
                         if (v1.getId() != v2.getId())
                             System.err.println("ERROR in sort");

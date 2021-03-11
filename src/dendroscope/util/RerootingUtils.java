@@ -212,20 +212,20 @@ public class RerootingUtils {
         int totalNodes = tree.getNumberOfNodes();
 
         // compute number of outgroup taxa for each node
-        NodeIntegerArray node2NumberOutgroup = new NodeIntegerArray(tree);
+        NodeIntArray node2NumberOutgroup = new NodeIntArray(tree);
         for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
             if (tree.getLabel(v) != null && outgroupLabels.contains(tree.getLabel(v))) {
-                node2NumberOutgroup.set(v, node2NumberOutgroup.get(v) + 1);
+                node2NumberOutgroup.set(v, node2NumberOutgroup.getInt(v) + 1);
                 totalOutgroup++;
             }
         }
 
         System.err.println("total outgroup " + totalOutgroup + " total nodes " + totalNodes);
 
-        EdgeIntegerArray edge2OutgroupBelow = new EdgeIntegerArray(tree); // how many outgroup taxa below this edge?
-        EdgeIntegerArray edge2NodesBelow = new EdgeIntegerArray(tree);  // how many nodes below this edge?
-        NodeIntegerArray node2OutgroupBelow = new NodeIntegerArray(tree); // how many outgroup taxa below this multifurcation?
-        NodeIntegerArray node2NodesBelow = new NodeIntegerArray(tree);     // how many nodes below this multifurcation (including this?)
+        EdgeIntArray edge2OutgroupBelow = new EdgeIntArray(tree); // how many outgroup taxa below this edge?
+        EdgeIntArray edge2NodesBelow = new EdgeIntArray(tree);  // how many nodes below this edge?
+        NodeIntArray node2OutgroupBelow = new NodeIntArray(tree); // how many outgroup taxa below this multifurcation?
+        NodeIntArray node2NodesBelow = new NodeIntArray(tree);     // how many nodes below this multifurcation (including this?)
 
         rerootByOutgroupRec(tree.getRoot(), null, node2NumberOutgroup, edge2OutgroupBelow, edge2NodesBelow, node2OutgroupBelow, node2NodesBelow, totalNodes, totalOutgroup);
 
@@ -236,8 +236,8 @@ public class RerootingUtils {
         int nodesBelowBestEdge = 0;
 
         for (Edge e = tree.getFirstEdge(); e != null; e = e.getNext()) {
-            int outgroupBelowE = edge2OutgroupBelow.get(e);
-            int nodesBelowE = edge2NodesBelow.get(e);
+            int outgroupBelowE = edge2OutgroupBelow.getInt(e);
+            int nodesBelowE = edge2NodesBelow.getInt(e);
             if (outgroupBelowE < 0.5 * totalOutgroup) {
                 outgroupBelowE = totalOutgroup - outgroupBelowE;
                 nodesBelowE = totalNodes - nodesBelowE;
@@ -257,8 +257,8 @@ public class RerootingUtils {
         int nodesBelowBestNode = nodesBelowBestEdge;
 
         for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
-            int outgroupBelowV = node2OutgroupBelow.get(v);
-            int nodesBelowV = node2NodesBelow.get(v);
+            int outgroupBelowV = node2OutgroupBelow.getInt(v);
+            int nodesBelowV = node2NodesBelow.getInt(v);
             if (outgroupBelowV > 0 && (outgroupBelowV > outgroupBelowBestNode || (outgroupBelowV == outgroupBelowBestNode && nodesBelowV < nodesBelowBestNode))) {
                 bestNode = v;
                 outgroupBelowBestNode = outgroupBelowV;
@@ -287,15 +287,15 @@ public class RerootingUtils {
      * @param totalNodes
      * @param totalOutgroup
      */
-    private static void rerootByOutgroupRec(Node v, Edge e, NodeIntegerArray node2NumberOutgroup, EdgeIntegerArray edge2OutgroupBelow,
-                                            EdgeIntegerArray edge2NodesBelow, NodeIntegerArray node2OutgroupBelow, NodeIntegerArray node2NodesBelow, int totalNodes, int totalOutgroup) {
-        int outgroupBelowE = node2NumberOutgroup.get(v);
+    private static void rerootByOutgroupRec(Node v, Edge e, NodeIntArray node2NumberOutgroup, EdgeIntArray edge2OutgroupBelow,
+                                            EdgeIntArray edge2NodesBelow, NodeIntArray node2OutgroupBelow, NodeIntArray node2NodesBelow, int totalNodes, int totalOutgroup) {
+        int outgroupBelowE = node2NumberOutgroup.getInt(v);
         int nodesBelowE = 1; // including v
 
         for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
             rerootByOutgroupRec(f.getTarget(), f, node2NumberOutgroup, edge2OutgroupBelow, edge2NodesBelow, node2OutgroupBelow, node2NodesBelow, totalNodes, totalOutgroup);
-            outgroupBelowE += edge2OutgroupBelow.get(f);
-            nodesBelowE += edge2NodesBelow.get(f);
+            outgroupBelowE += edge2OutgroupBelow.getInt(f);
+            nodesBelowE += edge2NodesBelow.getInt(f);
         }
         if (e != null) {
             edge2NodesBelow.set(e, nodesBelowE);
@@ -305,7 +305,7 @@ public class RerootingUtils {
         // if v is a multifurcation then we may need to use it as root
         if (v.getOutDegree() > 2) // multifurcation
         {
-            final int outgroupBelowV = outgroupBelowE + node2NumberOutgroup.get(v);
+            final int outgroupBelowV = outgroupBelowE + node2NumberOutgroup.getInt(v);
 
             if (outgroupBelowV == totalOutgroup) // all outgroup taxa lie below here
             {
@@ -314,8 +314,8 @@ public class RerootingUtils {
 
                 int nodesBelowV = 1;
                 for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
-                    if (edge2OutgroupBelow.get(f) > 0)
-                        nodesBelowV += edge2NodesBelow.get(f);
+                    if (edge2OutgroupBelow.getInt(f) > 0)
+                        nodesBelowV += edge2NodesBelow.getInt(f);
                 }
                 node2NodesBelow.set(v, nodesBelowV);
             } else // outgroupBelowE<totalOutgroup, i.e. some outgroup nodes lie above e
@@ -325,10 +325,10 @@ public class RerootingUtils {
                 boolean keep = false;
                 int nodesBelowV = 0;
                 for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
-                    if (edge2OutgroupBelow.get(f) > 0)
+                    if (edge2OutgroupBelow.getInt(f) > 0)
                         keep = true;   // need to have at least one node below that contains outgroup taxa
                     else
-                        nodesBelowV += edge2NodesBelow.get(f);
+                        nodesBelowV += edge2NodesBelow.getInt(f);
                 }
                 if (keep) {
                     node2OutgroupBelow.set(v, totalOutgroup);
@@ -350,11 +350,11 @@ public class RerootingUtils {
         final SortedSet<Triplet<Edge, Float, Float>> rankedMidpointRootings = getRankedMidpointRootings(tree);
 
         final Triplet<Edge, Float, Float> best = rankedMidpointRootings.first();
-        final Edge e = best.get1();
+        final Edge e = best.getFirst();
         final Node v = e.getSource();
         final Node w = e.getTarget();
-        final float a = best.get2();
-        final float b = best.get3();
+        final float a = best.getSecond();
+        final float b = best.getThird();
         final float weight = (float) tree.getWeight(e);
         final float halfOfTotal = (a + b + weight) / 2;
 
@@ -389,21 +389,21 @@ public class RerootingUtils {
 
         SortedSet<Triplet<Edge, Float, Float>> result = new TreeSet<Triplet<Edge, Float, Float>>(new Comparator<Triplet<Edge, Float, Float>>() {
             public int compare(Triplet<Edge, Float, Float> a, Triplet<Edge, Float, Float> b) {
-                float compare = Math.abs(a.get2() - a.get3()) - Math.abs(b.get2() - b.get3());
+                float compare = Math.abs(a.getSecond() - a.getThird()) - Math.abs(b.getSecond() - b.getThird());
                 if (compare < 0)
                     return -1;
                 else if (compare > 0)
                     return 1;
-                else if (a.get1().getId() < b.get1().getId())
+                else if (a.getFirst().getId() < b.getFirst().getId())
                     return -1;
-                else if (a.get1().getId() > b.get1().getId())
+                else if (a.getFirst().getId() > b.getFirst().getId())
                     return 1;
                 else
                     return 0;
             }
         });
         for (Edge e = tree.getFirstEdge(); e != null; e = tree.getNextEdge(e)) {
-            Triplet<Edge, Float, Float> triplet = new Triplet<Edge, Float, Float>(e, maxTopDownDistance.getValue(e), maxBottomUpDistance.getValue(e));
+            Triplet<Edge, Float, Float> triplet = new Triplet<Edge, Float, Float>(e, maxTopDownDistance.get(e), maxBottomUpDistance.get(e));
             result.add(triplet);
         }
         if (false) {
@@ -430,7 +430,7 @@ public class RerootingUtils {
 
         EdgeArray<Float> scores = new EdgeArray<Float>(tree);
         for (Edge e = tree.getRoot().getFirstOutEdge(); e != null; e = tree.getRoot().getNextOutEdge(e)) {
-            scores.put(e, Math.abs(maxBottomUpDistance.getValue(e) - maxTopDownDistance.getValue(e)));
+            scores.put(e, Math.abs(maxBottomUpDistance.get(e) - maxTopDownDistance.get(e)));
         }
         return scores;
     }
@@ -503,7 +503,7 @@ public class RerootingUtils {
         float bestUp;
         Edge inEdge = v.getFirstInEdge();
         if (inEdge != null)
-            bestUp = maxUpDistance.getValue(inEdge) + (float) tree.getWeight(inEdge);
+            bestUp = maxUpDistance.get(inEdge) + (float) tree.getWeight(inEdge);
         else
             bestUp = 0;
 
@@ -511,7 +511,7 @@ public class RerootingUtils {
             float best = bestUp;
             for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
                 if (f != e) {
-                    best = Math.max(best, maxDownDistance.getValue(f) + (float) tree.getWeight(f));
+                    best = Math.max(best, maxDownDistance.get(f) + (float) tree.getWeight(f));
                 }
             }
             maxUpDistance.put(e, best);

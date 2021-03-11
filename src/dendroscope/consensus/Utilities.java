@@ -22,7 +22,7 @@ import dendroscope.core.TreeData;
 import dendroscope.window.MultiViewer;
 import jloda.graph.Edge;
 import jloda.graph.Node;
-import jloda.graph.NodeIntegerArray;
+import jloda.graph.NodeIntArray;
 import jloda.graph.NodeSet;
 import jloda.phylo.PhyloTree;
 import jloda.swing.util.Alert;
@@ -207,7 +207,7 @@ public class Utilities {
         for (int t = 1; t < ordering.length; t++) {
             orderingInv[ordering[t]] = t;
         }
-        NodeIntegerArray numbering = new NodeIntegerArray(tree);
+        NodeIntArray numbering = new NodeIntArray(tree);
 
         for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
             String label = tree.getLabel(v);
@@ -228,18 +228,18 @@ public class Utilities {
      * @param v
      * @param numbering
      */
-    private static void applyOrderingToTreeRec(Node v, NodeIntegerArray numbering) {
+    private static void applyOrderingToTreeRec(Node v, NodeIntArray numbering) {
         int min;
 
-        if (numbering.getValue(v) != null)
-            min = numbering.getValue(v);
+        if (numbering.get(v) != null)
+            min = numbering.get(v);
         else
             min = Integer.MAX_VALUE;
 
         for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
             Node w = f.getTarget();
             applyOrderingToTreeRec(w, numbering);
-            min = Math.min(min, numbering.getValue(w));
+            min = Math.min(min, numbering.get(w));
         }
         java.util.List<Edge> newOrder = orderEdges(v, numbering);
         v.rearrangeAdjacentEdges(newOrder);
@@ -254,7 +254,7 @@ public class Utilities {
      * @param numbering
      * @return edges ordered by numbering of nodes
      */
-    private static List<Edge> orderEdges(Node v, NodeIntegerArray numbering) {
+    private static List<Edge> orderEdges(Node v, NodeIntArray numbering) {
         {
             SortedSet<Pair<Integer, Edge>> sorted = new TreeSet<>(new Comparator<Pair<Integer, Edge>>() {
                 public int compare(Pair<Integer, Edge> o1, Pair<Integer, Edge> o2) {
@@ -264,7 +264,7 @@ public class Utilities {
 
             for (Edge e = v.getFirstAdjacentEdge(); e != null; e = v.getNextAdjacentEdge(e)) {
                 Node w = e.getOpposite(v);
-                sorted.add(new Pair<>(numbering.get(w), e));
+                sorted.add(new Pair<>(numbering.getInt(w), e));
             }
             List<Edge> result = new LinkedList<>();
             for (Pair<Integer, Edge> pair : sorted) {

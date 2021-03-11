@@ -21,7 +21,7 @@ package dendroscope.drawer;
 import dendroscope.window.TreeViewer;
 import jloda.graph.Edge;
 import jloda.graph.Node;
-import jloda.graph.NodeIntegerArray;
+import jloda.graph.NodeIntArray;
 import jloda.phylo.PhyloTree;
 import jloda.swing.graphview.EdgeView;
 import jloda.swing.graphview.GraphView;
@@ -92,15 +92,15 @@ public class TreeDrawerInnerCircular extends TreeDrawerRadial implements IOptimi
 
         // compute coordinates
         viewer.setLocation(root, new Point(0, 0));
-        NodeIntegerArray levels = computeLevels(getAuxilaryParameter());
+        NodeIntArray levels = computeLevels(getAuxilaryParameter());
 
-        int maxLevel = levels.getValue(tree.getRoot());
+        int maxLevel = levels.get(tree.getRoot());
         computeCoordinatesCladogramRec(tree.getRoot(), levels);
 
         // set root location:
         double angle = 0;
         for (Edge e = root.getFirstOutEdge(); e != null; e = root.getNextOutEdge(e)) {
-            angle += node2AngleOfInEdge.getValue(e.getTarget());
+            angle += node2AngleOfInEdge.get(e.getTarget());
         }
         if (root.getOutDegree() > 0)
             angle /= root.getOutDegree();
@@ -123,13 +123,13 @@ public class TreeDrawerInnerCircular extends TreeDrawerRadial implements IOptimi
      *
      * @param v Node
      */
-    private void computeCoordinatesCladogramRec(Node v, NodeIntegerArray levels) {
+    private void computeCoordinatesCladogramRec(Node v, NodeIntArray levels) {
         for (Node w : getLSAChildren(v)) {
             computeCoordinatesCladogramRec(w, levels);
 
-            int level = levels.getValue(w) + 100;
+            int level = levels.get(w) + 100;
             Point2D apt = new Point2D.Double(level, 0);
-            viewer.setLocation(w, Geometry.rotate(apt, node2AngleOfInEdge.getValue(w)));
+            viewer.setLocation(w, Geometry.rotate(apt, node2AngleOfInEdge.get(w)));
         }
     }
 

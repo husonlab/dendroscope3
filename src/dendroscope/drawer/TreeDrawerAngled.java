@@ -113,7 +113,7 @@ public class TreeDrawerAngled extends TreeDrawerBase implements IOptimizedGraphD
         }
         final NodeView nv = viewer.getNV(v);
         if (v.getOutDegree() == 0) {
-            double y = yCoord.getValue(v);
+            double y = yCoord.get(v);
             yMin.put(v, y);
             yMax.put(v, y);
             nv.setLocation(new Point2D.Double(0, y));
@@ -131,13 +131,13 @@ public class TreeDrawerAngled extends TreeDrawerBase implements IOptimizedGraphD
                     visited.add(w);
                     computeEmbeddingRec(w, yCoord, yMin, yMax, visited);
                 }
-                min = Math.min(yMin.getValue(w), min);
-                max = Math.max(yMax.getValue(w), max);
+                min = Math.min(yMin.get(w), min);
+                max = Math.max(yMax.get(w), max);
             }
 
-            if (yCoord.getValue(v) > 0) // must be a pseudo leaf in a network
+            if (yCoord.get(v) > 0) // must be a pseudo leaf in a network
             {
-                double y = yCoord.getValue(v);
+                double y = yCoord.get(v);
                 min = Math.min(y, min);
                 max = Math.max(y, max);
             }
@@ -207,7 +207,7 @@ public class TreeDrawerAngled extends TreeDrawerBase implements IOptimizedGraphD
             Rectangle2D.Double bb = new Rectangle2D.Double(x, y, 0, 0);
             for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
                 Node w = f.getTarget();
-                bb.add(node2bb.getValue(w));
+                bb.add(node2bb.get(w));
             }
             // set bounding box
             node2bb.put(v, bb);
@@ -294,11 +294,11 @@ public class TreeDrawerAngled extends TreeDrawerBase implements IOptimizedGraphD
     protected boolean mustVisitSubTreeBelowNode(Node v) {
         if (v.getDegree() == 1 && v != tree.getRoot())
             return true;
-        if (node2ProxyShape.getValue(v) == null)
+        if (node2ProxyShape.get(v) == null)
             return true;
         if (isCollapsed(v))
             return false;
-        Rectangle2D bbW = node2bb.getValue(v);
+        Rectangle2D bbW = node2bb.get(v);
         Rectangle bbD = trans.w2d(bbW).getBounds();
         if (visibleRect != null && bbD.intersects(visibleRect) == false)
             return false; // not visible on screen

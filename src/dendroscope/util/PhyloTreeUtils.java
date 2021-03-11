@@ -43,7 +43,7 @@ public class PhyloTreeUtils {
     public static PhyloTree extractInducedSubtree(PhyloTree tree, NodeSet selected, NodeSet collapsed, boolean reduce) {
         if (selected.size() == 0)
             return tree;
-        NodeIntegerArray node2NumberInducedChildren = new NodeIntegerArray(tree);
+        NodeIntArray node2NumberInducedChildren = new NodeIntArray(tree);
         findInducedSubnetworkRec(tree.getRoot(), node2NumberInducedChildren, new NodeSet(tree), collapsed, selected);
         Node subtreeRoot = null;
         if (reduce)
@@ -83,7 +83,7 @@ public class PhyloTreeUtils {
         if (selected.size() == 0)
             return network;
 
-        NodeIntegerArray node2NumberInducedChildren = new NodeIntegerArray(network);
+        NodeIntArray node2NumberInducedChildren = new NodeIntArray(network);
         findInducedSubnetworkRec(network.getRoot(), node2NumberInducedChildren, new NodeSet(network), collapsed, selected);
 
         Node subtreeRoot = null;
@@ -134,7 +134,7 @@ public class PhyloTreeUtils {
             return network;
 
 
-        NodeIntegerArray node2NumberInducedChildren = new NodeIntegerArray(network);
+        NodeIntArray node2NumberInducedChildren = new NodeIntArray(network);
         findInducedSubnetworkRec(network.getRoot(), node2NumberInducedChildren, new NodeSet(network), collapsed, selected);
 
         Node subtreeRoot = null;
@@ -182,7 +182,7 @@ public class PhyloTreeUtils {
      */
     public static Node selectLSAInducedSubNetwork(PhyloGraphView viewer, PhyloTree network, NodeSet selected, NodeSet collapsed) {
 
-        NodeIntegerArray node2NumberInducedChildren = new NodeIntegerArray(network);
+        NodeIntArray node2NumberInducedChildren = new NodeIntArray(network);
 
         Node subtreeRoot = null;
         if (network.getNumberSpecialEdges() == 0) { //tree
@@ -211,7 +211,7 @@ public class PhyloTreeUtils {
     public static void selectInducedSubNetwork(PhyloGraphView viewer, PhyloTree network, NodeSet selected, NodeSet collapsed) {
 
 
-        NodeIntegerArray node2NumberInducedChildren = new NodeIntegerArray(network);
+        NodeIntArray node2NumberInducedChildren = new NodeIntArray(network);
         findInducedSubnetworkRec(network.getRoot(), node2NumberInducedChildren, new NodeSet(network), collapsed, selected);
 
         Node subtreeRoot;
@@ -238,7 +238,7 @@ public class PhyloTreeUtils {
      * @param v
      * @param node2NumberInducedChildren
      */
-    private static void findInducedSubnetworkRec(Node v, NodeIntegerArray node2NumberInducedChildren, NodeSet visited,
+    private static void findInducedSubnetworkRec(Node v, NodeIntArray node2NumberInducedChildren, NodeSet visited,
                                                  NodeSet collapsed, NodeSet selected) {
         int count = 0;
         if (collapsed == null || !collapsed.contains(v)) {
@@ -248,7 +248,7 @@ public class PhyloTreeUtils {
                     visited.add(w);
                     findInducedSubnetworkRec(w, node2NumberInducedChildren, visited, collapsed, selected);
                 }
-                if (node2NumberInducedChildren.getValue(w) != 0)
+                if (node2NumberInducedChildren.get(w) != 0)
                     count++;
             }
         }
@@ -265,13 +265,13 @@ public class PhyloTreeUtils {
      * @param node2NumberInducedChildren
      * @return root
      */
-    private static Node findSubtreeNetworkRec(PhyloTree tree, Node v, NodeIntegerArray node2NumberInducedChildren, NodeSet selected) {
-        if (node2NumberInducedChildren.getValue(v) > 1 || selected.contains(v))
+    private static Node findSubtreeNetworkRec(PhyloTree tree, Node v, NodeIntArray node2NumberInducedChildren, NodeSet selected) {
+        if (node2NumberInducedChildren.get(v) > 1 || selected.contains(v))
             return v;
         for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
             if (jloda.phylo.PhyloTreeUtils.okToDescendDownThisEdge(tree, f, v)) {
                 Node w = f.getTarget();
-                if (node2NumberInducedChildren.getValue(w) != 0) {
+                if (node2NumberInducedChildren.get(w) != 0) {
                     Node u = findSubtreeNetworkRec(tree, w, node2NumberInducedChildren, selected);
                     if (u != null)
                         return u;
@@ -287,12 +287,12 @@ public class PhyloTreeUtils {
      * @param v
      * @param tree
      */
-    private static void selectInducedSubnetworkRec(PhyloGraphView viewer, Node v, PhyloTree tree, NodeSet visited, NodeIntegerArray node2NumberInducedChildren) {
+    private static void selectInducedSubnetworkRec(PhyloGraphView viewer, Node v, PhyloTree tree, NodeSet visited, NodeIntArray node2NumberInducedChildren) {
 
         for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
             Node w = f.getTarget();
 
-            if (node2NumberInducedChildren.getValue(w) != 0) {
+            if (node2NumberInducedChildren.get(w) != 0) {
 
                 viewer.setSelected(w, true);
                 viewer.setSelected(f, true);
@@ -315,14 +315,14 @@ public class PhyloTreeUtils {
      * @param old2new
      */
     private static void createInducedSubnetworkRec(Node v, Node newV, PhyloTree tree, NodeSet visited, PhyloTree newTree, NodeArray old2new,
-                                                   NodeIntegerArray node2NumberInducedChildren) {
+                                                   NodeIntArray node2NumberInducedChildren) {
         for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
             Node w = f.getTarget();
 
-            if (node2NumberInducedChildren.getValue(w) != 0) {
+            if (node2NumberInducedChildren.get(w) != 0) {
                 Node newW;
-                if (old2new.getValue(w) != null)
-                    newW = (Node) old2new.getValue(w);
+                if (old2new.get(w) != null)
+                    newW = (Node) old2new.get(w);
                 else {
                     newW = newTree.newNode();
                     old2new.put(w, newW);
@@ -455,7 +455,7 @@ public class PhyloTreeUtils {
             NodeSet leaves = graph.computeSetOfLeaves();
             int[][] distMatrixTemp = new int[graph.getNumberOfNodes()][graph.getNumberOfNodes()];   // temp matrix
 
-            NodeIntegerArray idTemp = new NodeIntegerArray(graph);   //temp id used to fill distMatrixTemp
+            NodeIntArray idTemp = new NodeIntArray(graph);   //temp id used to fill distMatrixTemp
             int nN = 0;
 
 
@@ -471,19 +471,19 @@ public class PhyloTreeUtils {
             */
 
             for (Node source : graph.nodes()) {
-                int idS = idTemp.getValue(source);
+                int idS = idTemp.get(source);
                 //System.out.println("idS" + idS);
 
                 //NodeArray predecessor = new NodeArray(graph);
                 NodeDoubleArray dist = graph.newNodeDoubleArray();
 
                 for (Node v = graph.getFirstNode(); v != null; v = graph.getNextNode(v)) {
-                    dist.setValue(v, 10000.0);
-                    int idV = idTemp.getValue(v);
+                    dist.put(v, 10000.0);
+                    int idV = idTemp.get(v);
                     distMatrixTemp[idS][idV] = 10000;
                     //predecessor.set(v, null);
                 }
-                dist.setValue(source, 0.0);
+                dist.put(source, 0.0);
                 distMatrixTemp[idS][idS] = 0;
 
                 SortedSet<Node> priorityQueue = Dijkstra.newFullQueue(graph, dist);
@@ -499,16 +499,16 @@ public class PhyloTreeUtils {
                         throw new RuntimeException("remove u=" + u + " failed: size=" + size);
 
 
-                    int idU = idTemp.getValue(u);
+                    int idU = idTemp.get(u);
                     for (Edge e : u.outEdges()) {
                         Node v = graph.getOpposite(u, e);
-                        int idV = idTemp.getValue(v);
+                        int idV = idTemp.get(v);
                         if (distMatrixTemp[idS][idV] > distMatrixTemp[idS][idU] + 1) {
                             //System.out.println("enter");
                             // priorty of v changes, so must re-and to queue:
                             priorityQueue.remove(v);
                             distMatrixTemp[idS][idV] = distMatrixTemp[idS][idU] + 1;
-                            dist.setValue(v, distMatrixTemp[idS][idU] + 1.0);
+                            dist.put(v, distMatrixTemp[idS][idU] + 1.0);
                             priorityQueue.add(v);
                             //predecessor.set(v, u);
                         }
@@ -526,20 +526,20 @@ public class PhyloTreeUtils {
 
             for (Iterator l = leaves.iterator(); l.hasNext(); ) {
                 Node source = (Node) l.next();
-                int idS = idTemp.getValue(source);
+                int idS = idTemp.get(source);
                 int labelS = taxon2ID.get(graph.getLabel(source)); // Franzi uses values from 1 to n, me from 0 to n-1
                 leaves.remove(source);
                 for (Iterator l2 = leaves.iterator(); l2.hasNext(); ) {
 
                     Node target = (Node) l2.next();
-                    int idT = idTemp.getValue(target);
+                    int idT = idTemp.get(target);
                     int labelT = taxon2ID.get(graph.getLabel(target)); // Same as above
 
                     //System.out.println("labelS " + labelS+ " labelT " + labelT);
 
                     int min = 1000000;
                     for (Node node : graph.nodes()) {
-                        int nodeID = idTemp.getValue(node);
+                        int nodeID = idTemp.get(node);
                         if (distMatrixTemp[nodeID][idS] + distMatrixTemp[nodeID][idT] < min)
                             min = distMatrixTemp[nodeID][idS] + distMatrixTemp[nodeID][idT];
                     }

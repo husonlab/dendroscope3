@@ -69,14 +69,14 @@ public class Utilities {
             for (Node vOther = tree.getFirstNode(); vOther != null; vOther = tree.getNextNode(vOther)) {
                 if (vOther.getOutDegree() == 0) {
                     Integer id = taxon2Id.get(tree.getLabel(vOther));
-                    taxon2distFirstTree[id] = distFromFirst.getValue(vOther);
+                    taxon2distFirstTree[id] = distFromFirst.get(vOther);
                 }
             }
 
             for (int iOther = 1; iOther <= ntax; iOther++) {
                 Node vOther = id2node[iOther];
                 if (vOther != null && vOther != vFirst) {
-                    Pair<Integer, Integer> pair = distFromFirst.getValue(vOther);
+                    Pair<Integer, Integer> pair = distFromFirst.get(vOther);
                     if (pair != null) {
                         dist[iOther][iFirst] = dist[iFirst][iOther] = pair.getFirst() + pair.getSecond();
                     }
@@ -113,7 +113,7 @@ public class Utilities {
                 Node w = e.getTarget();
                 if (computeDistFirst2AncestorRec(w, first, distFromFirst)) {
                     isBelow = true;
-                    Pair<Integer, Integer> pairW = distFromFirst.getValue(w);
+                    Pair<Integer, Integer> pairW = distFromFirst.get(w);
                     if (pairW.getFirst() + 1 < pairV.getFirst())
                         pairV.setFirst(pairW.getFirst() + 1);
                 }
@@ -133,25 +133,25 @@ public class Utilities {
 
         for (Edge e = v.getFirstInEdge(); e != null; e = v.getNextInEdge(e)) {
             Node w = e.getSource();
-            Pair<Integer, Integer> pairW = distFromFirst.getValue(w);
+            Pair<Integer, Integer> pairW = distFromFirst.get(w);
             if (pairW.getSecond() == Integer.MAX_VALUE)
                 return; // parents have not yet all been processed
             if (bestParent == null)
                 bestParent = w;
             else {
-                Pair<Integer, Integer> pairBest = distFromFirst.getValue(bestParent);
+                Pair<Integer, Integer> pairBest = distFromFirst.get(bestParent);
                 if (pairW.getFirst() < pairBest.getFirst()
                         || (pairW.getFirst() == pairBest.getFirst() && pairW.getSecond() > pairBest.getSecond()))
                     bestParent = w;
             }
         }
 
-        Pair<Integer, Integer> pairV = distFromFirst.getValue(v);
+        Pair<Integer, Integer> pairV = distFromFirst.get(v);
         if (bestParent == null) {
             if (pairV.getFirst() != Integer.MAX_VALUE)
                 pairV.setSecond(0);
         } else {
-            Pair<Integer, Integer> pairBest = distFromFirst.getValue(bestParent);
+            Pair<Integer, Integer> pairBest = distFromFirst.get(bestParent);
             if (pairBest.getFirst() < pairV.getFirst()) {
                 pairV.setFirst(pairBest.getFirst());
                 pairV.setSecond(pairBest.getSecond() + 1);

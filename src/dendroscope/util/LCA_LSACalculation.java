@@ -101,8 +101,8 @@ public class LCA_LSACalculation {
         if (t.getNode2GuideTreeChildren() == null)
             System.err.println("errore");
         if (computeLSA) {
-            while (t.getNode2GuideTreeChildren().getValue(n).size() == 1) {
-                n = t.getNode2GuideTreeChildren().getValue(n).get(0);
+            while (t.getNode2GuideTreeChildren().get(n).size() == 1) {
+                n = t.getNode2GuideTreeChildren().get(n).get(0);
             }
         }
         eulerTour.add(n);
@@ -119,7 +119,7 @@ public class LCA_LSACalculation {
                 levels.add(currentLevel - 1);
             }
         } else {
-            List<Node> LSAChildren = t.getNode2GuideTreeChildren().getValue(n);
+            List<Node> LSAChildren = t.getNode2GuideTreeChildren().get(n);
             for (Iterator<Node> it = LSAChildren.iterator(); it.hasNext(); ) {
                 Node LSASon = it.next();
                 numNodes = doEulerTourRec(t, LSASon, currentLevel, eulerTour, levels, firstOccurences, computeLSA, numNodes);

@@ -163,7 +163,7 @@ void build(MyTree * tree,MyNode & nodo,vector < int> toIns, MatrixTriplet & Trip
           for(unsigned int i=0;i< toIns.size();i++){
               for(unsigned int j=0;j< toIns.size();j++){
                      for(unsigned int z=0;z< toIns.size();z++){
-                         if(Triplets.getValue( toIns[i],toIns[j],toIns[z]) != 0){
+                         if(Triplets.get( toIns[i],toIns[j],toIns[z]) != 0){
                                 iter =  association.find(toIns[i]);
                           iter2 =  association.find(toIns[j]);
                           if(!((edge( iter->second, iter2->second, * g)).second)){

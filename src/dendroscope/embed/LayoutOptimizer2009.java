@@ -78,13 +78,13 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
         for (Edge e = tree.getFirstEdge(); e != null; e = e.getNext()) {
             if (tree.isSpecial(e) && tree.getWeight(e) <= 0) {
                 num++;
-                BitSet sources = node2SpecialSource.getValue(e.getSource());
+                BitSet sources = node2SpecialSource.get(e.getSource());
                 if (sources == null) {
                     sources = new BitSet();
                     node2SpecialSource.put(e.getSource(), sources);
                 }
                 sources.set(num);
-                BitSet targets = node2SpecialTarget.getValue(e.getTarget());
+                BitSet targets = node2SpecialTarget.get(e.getTarget());
                 if (targets == null) {
                     targets = new BitSet();
                     node2SpecialTarget.put(e.getTarget(), targets);
@@ -99,8 +99,8 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
         computeExtendedMapRec(tree.getRoot(), tree.getNode2GuideTreeChildren(), node2SpecialSource, node2SpecialTarget);
         NodeArray<BitSet> node2Special = new NodeArray<BitSet>(tree);
         for (Node v = tree.getFirstNode(); v != null; v = tree.getNextNode(v)) {
-            BitSet sources = node2SpecialSource.getValue(v);
-            BitSet targets = node2SpecialTarget.getValue(v);
+            BitSet sources = node2SpecialSource.get(v);
+            BitSet targets = node2SpecialTarget.get(v);
             BitSet set = null;
             if (sources != null && sources.cardinality() != 0) {
                 set = (BitSet) sources.clone();
@@ -141,11 +141,11 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
      * @param node2Special
      */
     private void optimizeTopologicalEmbedding(Node v, Node before, Node after, Map<Node, Integer> node2NumberOfLeavesBelow, NodeArray<List<Node>> node2GuideTreeChildren, NodeArray<Node> retNode2GuideParent, NodeArray<BitSet> node2Special) {
-        if (node2GuideTreeChildren.getValue(v).size() > 1) {
+        if (node2GuideTreeChildren.get(v).size() > 1) {
             AttractionMatrix matrix = computeAttractionMatrix(v, before, after, node2GuideTreeChildren, retNode2GuideParent, node2Special);
             //System.err.println("matrix:\n" + matrix.toString());
 
-            List<Node> ordering = node2GuideTreeChildren.getValue(v);
+            List<Node> ordering = node2GuideTreeChildren.get(v);
 
             /*
             System.err.print("original ordering for v=" + v.getId() + ": ");
@@ -171,7 +171,7 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
             ordering.remove(after);
         }
 
-        for (Node w : node2GuideTreeChildren.getValue(v)) {
+        for (Node w : node2GuideTreeChildren.get(v)) {
             optimizeTopologicalEmbedding(w, before, after, node2NumberOfLeavesBelow, node2GuideTreeChildren, retNode2GuideParent, node2Special);
         }
     }
@@ -295,7 +295,7 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
      */
     private int countLeaves(Node v, NodeArray<List<Node>> node2GuideTreeChildren, Map<Node, Integer> node2NumberOfLeavesBelow) {
         int count = 0;
-        List<Node> children = node2GuideTreeChildren.getValue(v);
+        List<Node> children = node2GuideTreeChildren.get(v);
 
         if (children == null || children.size() == 0) {
             count = 1;
@@ -324,25 +324,25 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
         Node w = v;
         while (true) {
             Node u;
-            if (retNode2GuideParent.getValue(w) != null)
-                u = retNode2GuideParent.getValue(w);
+            if (retNode2GuideParent.get(w) != null)
+                u = retNode2GuideParent.get(w);
             else if (w.getInDegree() == 1)
                 u = w.getFirstInEdge().getSource();
             else
                 break;
             boolean isBefore = true;
-            List<Node> children = node2GuideTreeChildren.getValue(u);
+            List<Node> children = node2GuideTreeChildren.get(u);
             for (Node child : children) {
                 if (child == w)
                     isBefore = false;
                 else if (isBefore) {
-                    BitSet set = node2Special.getValue(child);
+                    BitSet set = node2Special.get(child);
                     if (set != null)
-                        (node2Special.getValue(before)).or(set);
+                        (node2Special.get(before)).or(set);
                 } else {
-                    BitSet set = node2Special.getValue(child);
+                    BitSet set = node2Special.get(child);
                     if (set != null)
-                        (node2Special.getValue(after)).or(set);
+                        (node2Special.get(after)).or(set);
                 }
             }
             w = u;
@@ -352,13 +352,13 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
         AttractionMatrix aMatrix = new AttractionMatrix();
 
         List<Node> children = new LinkedList<Node>();
-        children.addAll(node2GuideTreeChildren.getValue(v));
+        children.addAll(node2GuideTreeChildren.get(v));
         children.add(before);
         children.add(after);
         for (Node p : children) {
             for (Node q : children) {
                 if (p.getId() < q.getId()) {
-                    int count = Cluster.intersection(node2Special.getValue(p), node2Special.getValue(q)).cardinality();
+                    int count = Cluster.intersection(node2Special.get(p), node2Special.get(q)).cardinality();
                     aMatrix.set(p, q, count);
                 }
             }
@@ -379,20 +379,20 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
     private void computeExtendedMapRec(Node v, NodeArray<List<Node>> node2GuideTreeChildren, NodeArray<BitSet> node2SpecialSource, NodeArray<BitSet> node2SpecialTarget) {
         BitSet sources = new BitSet();
         BitSet targets = new BitSet();
-        BitSet vSources = node2SpecialSource.getValue(v);
+        BitSet vSources = node2SpecialSource.get(v);
         if (vSources != null)
             sources.or(vSources);
-        BitSet vTargets = node2SpecialTarget.getValue(v);
+        BitSet vTargets = node2SpecialTarget.get(v);
         if (vTargets != null)
             targets.or(vTargets);
 
-        List<Node> children = node2GuideTreeChildren.getValue(v);
+        List<Node> children = node2GuideTreeChildren.get(v);
         for (Node w : children) {
             computeExtendedMapRec(w, node2GuideTreeChildren, node2SpecialSource, node2SpecialTarget);
-            BitSet wSources = node2SpecialSource.getValue(w);
+            BitSet wSources = node2SpecialSource.get(w);
             if (wSources != null)
                 sources.or(wSources);
-            BitSet wTargets = node2SpecialTarget.getValue(w);
+            BitSet wTargets = node2SpecialTarget.get(w);
             if (wTargets != null)
                 targets.or(wTargets);
         }

@@ -251,7 +251,7 @@ public class LayoutOptimizerDist implements ILayoutOptimizer {
             for (Node v = tree.getFirstNode(); v != null; v = tree.getNextNode(v)) {
                 if (v.getOutDegree() == 0) {
                     Integer id = taxon2Id.get(tree.getLabel(v));
-                    taxon2distFirstTree[id] = distFromFirst.getValue(v);
+                    taxon2distFirstTree[id] = distFromFirst.get(v);
                     // System.err.println(id2Taxon.get(id)+": "+id+": "+distFromFirst.get(v));
                 }
             }
@@ -313,7 +313,7 @@ public class LayoutOptimizerDist implements ILayoutOptimizer {
                 Node w = e.getTarget();
                 if (computeDistFirst2AncestorRec(w, first, distFromFirst)) {
                     isBelow = true;
-                    Pair<Integer, Integer> pairW = distFromFirst.getValue(w);
+                    Pair<Integer, Integer> pairW = distFromFirst.get(w);
                     if (pairW.getFirst() + 1 < pairV.getFirst())
                         pairV.setFirst(pairW.getFirst() + 1);
                 }
@@ -333,25 +333,25 @@ public class LayoutOptimizerDist implements ILayoutOptimizer {
 
         for (Edge e = v.getFirstInEdge(); e != null; e = v.getNextInEdge(e)) {
             Node w = e.getSource();
-            Pair<Integer, Integer> pairW = distFromFirst.getValue(w);
+            Pair<Integer, Integer> pairW = distFromFirst.get(w);
             if (pairW.getSecond() == Integer.MAX_VALUE)
                 return; // parents have not yet all been processed
             if (bestParent == null)
                 bestParent = w;
             else {
-                Pair<Integer, Integer> pairBest = distFromFirst.getValue(bestParent);
+                Pair<Integer, Integer> pairBest = distFromFirst.get(bestParent);
                 if (pairW.getFirst() < pairBest.getFirst()
                         || (pairW.getFirst() == pairBest.getFirst() && pairW.getSecond() > pairBest.getSecond()))
                     bestParent = w;
             }
         }
 
-        Pair<Integer, Integer> pairV = distFromFirst.getValue(v);
+        Pair<Integer, Integer> pairV = distFromFirst.get(v);
         if (bestParent == null) {
             if (pairV.getFirst() != Integer.MAX_VALUE)
                 pairV.setSecond(0);
         } else {
-            Pair<Integer, Integer> pairBest = distFromFirst.getValue(bestParent);
+            Pair<Integer, Integer> pairBest = distFromFirst.get(bestParent);
             if (pairBest.getFirst() < pairV.getFirst()) {
                 pairV.setFirst(pairBest.getFirst());
                 pairV.setSecond(pairBest.getSecond() + 1);
@@ -393,7 +393,7 @@ public class LayoutOptimizerDist implements ILayoutOptimizer {
     private int computeScoreRec(Node v, NodeArray<Integer> leaf2taxonId, NodeSet visited, int[] leafPos) {
         visited.add(v);
         if (v.getOutDegree() == 0) {
-            int value = Math.abs((++leafPos[0]) - leaf2taxonId.getValue(v));
+            int value = Math.abs((++leafPos[0]) - leaf2taxonId.get(v));
             /* if(DEBUG) {
                 PhyloTree tree=(PhyloTree)v.getOwner();                
             System.err.println("-------taxon="+tree.getLabel(v));
@@ -422,13 +422,13 @@ public class LayoutOptimizerDist implements ILayoutOptimizer {
      * @param taxaBelow
      */
     private void computeTaxaBelowRec(Node v, NodeArray<BitSet> taxaBelow) {
-        if (v.getOutDegree() > 0 && taxaBelow.getValue(v) == null) {
+        if (v.getOutDegree() > 0 && taxaBelow.get(v) == null) {
             BitSet below = new BitSet();
 
             for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
                 Node w = e.getTarget();
                 computeTaxaBelowRec(w, taxaBelow);
-                below.or(taxaBelow.getValue(w));
+                below.or(taxaBelow.get(w));
             }
             taxaBelow.put(v, below);
         }
@@ -470,8 +470,8 @@ public class LayoutOptimizerDist implements ILayoutOptimizer {
                             Node w = f.getTarget();
 
                             // lexicographically smaller is smaller
-                            BitSet taxaBelowV = taxaBelow.getValue(v);
-                            BitSet taxaBelowW = taxaBelow.getValue(w);
+                            BitSet taxaBelowV = taxaBelow.get(v);
+                            BitSet taxaBelowW = taxaBelow.get(w);
 
                             int i = taxaBelowV.nextSetBit(0);
                             int j = taxaBelowW.nextSetBit(0);

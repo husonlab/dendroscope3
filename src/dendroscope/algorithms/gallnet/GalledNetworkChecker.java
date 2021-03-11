@@ -87,7 +87,7 @@ public class GalledNetworkChecker {
             for (Edge e = tree.getFirstEdge(); e != null; e = e.getNext()) {
                 if (!tree.isSpecial(e)) {
                     BitSet seen = new BitSet();
-                    for (Object o : ((List) edge2TaxonSets.getValue(e))) {
+                    for (Object o : ((List) edge2TaxonSets.get(e))) {
                         BitSet set = (BitSet) o;
                         if (set.cardinality() > 0 && Cluster.contains(seen, set)) {
                             System.err.println("WARNING: error in GalledNetworkChecker");
@@ -110,7 +110,7 @@ public class GalledNetworkChecker {
      * @param node2reticulate    reticlate  below v reachable by a path of tree edges
      */
     private void computeNodeMapsRec(Node v, NodeArray node2AllTaxaBelow, NodeArray node2AllNodesBelow, NodeArray node2leaves, NodeArray node2reticulate) {
-        if (node2AllTaxaBelow.getValue(v) != null)
+        if (node2AllTaxaBelow.get(v) != null)
             return;   // already processed this node
 
         NodeSet nodesBelow = new NodeSet(tree);
@@ -139,18 +139,18 @@ public class GalledNetworkChecker {
             Node w = e.getTarget();
             computeNodeMapsRec(w, node2AllTaxaBelow, node2AllNodesBelow, node2leaves, node2reticulate);
 
-            nodesBelow.addAll((NodeSet) node2AllNodesBelow.getValue(w));
+            nodesBelow.addAll((NodeSet) node2AllNodesBelow.get(w));
 
             if (tree.isSpecial(e)) // w is reticulate node
             {
                 reticulate.add(w);
             } else // w is tree node
             {
-                leaves.addAll((NodeSet) node2leaves.getValue(w));
-                reticulate.addAll((NodeSet) node2reticulate.getValue(w));
+                leaves.addAll((NodeSet) node2leaves.get(w));
+                reticulate.addAll((NodeSet) node2reticulate.get(w));
             }
 
-            taxaBelow.or((BitSet) node2AllTaxaBelow.getValue(w));
+            taxaBelow.or((BitSet) node2AllTaxaBelow.get(w));
         }
         node2AllTaxaBelow.put(v, taxaBelow);
         node2AllNodesBelow.put(v, nodesBelow);
@@ -175,14 +175,14 @@ public class GalledNetworkChecker {
      */
     private void computeAlwaysOnAndOptional(Node v, NodeArray node2taxaBelow, NodeArray node2nodesBelow, NodeArray node2leaves, NodeArray node2reticulate, BitSet alwaysOn, Set optional) {
 
-        NodeSet leaves = (NodeSet) node2leaves.getValue(v);
+        NodeSet leaves = (NodeSet) node2leaves.get(v);
         for (Node l = leaves.getFirstElement(); l != null; l = leaves.getNextElement(l)) {
-            BitSet taxa = (BitSet) node2taxaBelow.getValue(l);
+            BitSet taxa = (BitSet) node2taxaBelow.get(l);
             alwaysOn.or(taxa);
         }
 
-        NodeSet reticulate = (NodeSet) node2reticulate.getValue(v);
-        NodeSet belowV = (NodeSet) node2nodesBelow.getValue(v);
+        NodeSet reticulate = (NodeSet) node2reticulate.get(v);
+        NodeSet belowV = (NodeSet) node2nodesBelow.get(v);
 
         for (Node r = reticulate.getFirstElement(); r != null; r = reticulate.getNextElement(r)) {
             boolean allBelow = true;
@@ -190,7 +190,7 @@ public class GalledNetworkChecker {
                 if (!belowV.contains(in.getSource()))
                     allBelow = false;
             }
-            BitSet taxa = (BitSet) node2taxaBelow.getValue(r);
+            BitSet taxa = (BitSet) node2taxaBelow.get(r);
 
             if (allBelow) // not optional
                 alwaysOn.or(taxa);
@@ -204,8 +204,8 @@ public class GalledNetworkChecker {
      *
      * @return labeling of nodes by tree components
      */
-    private NodeIntegerArray labelNodesByTreeComponents() {
-        NodeIntegerArray node2component = new NodeIntegerArray(tree);
+    private NodeIntArray labelNodesByTreeComponents() {
+        NodeIntArray node2component = new NodeIntArray(tree);
 
         IntegerVariable maxComponentNumber = new IntegerVariable(0);
 
@@ -222,16 +222,16 @@ public class GalledNetworkChecker {
      * @param maxComponentNumber
      * @param node2component
      */
-    private void labelNodesByTreeComponentsRec(Node v, Edge e, IntegerVariable maxComponentNumber, NodeIntegerArray node2component) {
+    private void labelNodesByTreeComponentsRec(Node v, Edge e, IntegerVariable maxComponentNumber, NodeIntArray node2component) {
         if (e == null || tree.isSpecial(e))        // either root or reticulate node, start a new component
             node2component.set(v, maxComponentNumber.increment());
         else            // in same component, keep number
-            node2component.set(v, node2component.getValue(e.getSource()));
+            node2component.set(v, node2component.get(e.getSource()));
 
         for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f))  // visit all children
         {
             Node w = f.getTarget();
-            if (node2component.getValue(w) == null) // not yet visited
+            if (node2component.get(w) == null) // not yet visited
                 labelNodesByTreeComponentsRec(w, f, maxComponentNumber, node2component);
         }
     }
@@ -244,14 +244,14 @@ public class GalledNetworkChecker {
      */
     public int isGalledNetwork() {
         int problems = 0;
-        NodeIntegerArray node2component = labelNodesByTreeComponents();
+        NodeIntArray node2component = labelNodesByTreeComponents();
         for (Node v = tree.getFirstNode(); v != null; v = tree.getNextNode(v)) {
             if (v.getInDegree() > 1) {
                 int parentComponentNumber = -1;
                 for (Edge e = v.getFirstInEdge(); e != null; e = v.getNextInEdge(e)) {
                     if (parentComponentNumber == -1)
-                        parentComponentNumber = node2component.getValue(e.getSource());
-                    else if (parentComponentNumber != node2component.getValue(e.getSource())) {
+                        parentComponentNumber = node2component.get(e.getSource());
+                    else if (parentComponentNumber != node2component.get(e.getSource())) {
                         problems++;
                         System.err.println("WARNING: galled network property does not hold for node: " + v);
                         tree.setLabel(v, "BAD");
@@ -306,7 +306,7 @@ public class GalledNetworkChecker {
         if (tree.isSpecial(e)) {
             throw new RuntimeException("illegal to method on special edge");
         }
-        List taxonSets = (List) edge2TaxonSets.getValue(e);
+        List taxonSets = (List) edge2TaxonSets.get(e);
         BitSet seen = new BitSet();
 
         boolean first = true;

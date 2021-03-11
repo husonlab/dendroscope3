@@ -454,8 +454,8 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     private int swapSubtreeRec(Node v, int found, NodeSet nodes) {
         if (nodes.contains(v)) {
             v.reverseOrderAdjacentEdges();
-            if (getPhyloTree().getNode2GuideTreeChildren().getValue(v) != null) {
-                getPhyloTree().getNode2GuideTreeChildren().put(v, Basic.reverseList(getPhyloTree().getNode2GuideTreeChildren().getValue(v)));
+            if (getPhyloTree().getNode2GuideTreeChildren().get(v) != null) {
+                getPhyloTree().getNode2GuideTreeChildren().put(v, Basic.reverseList(getPhyloTree().getNode2GuideTreeChildren().get(v)));
             }
             found++;
         }
@@ -495,8 +495,8 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     private int rotateSubtreeRec(Node v, int found, NodeSet nodes) {
         if (nodes.contains(v)) {
             v.rotateOrderAdjacentEdges();
-            if (getPhyloTree().getNode2GuideTreeChildren().getValue(v) != null) {
-                getPhyloTree().getNode2GuideTreeChildren().put(v, Basic.rotateList(getPhyloTree().getNode2GuideTreeChildren().getValue(v)));
+            if (getPhyloTree().getNode2GuideTreeChildren().get(v) != null) {
+                getPhyloTree().getNode2GuideTreeChildren().put(v, Basic.rotateList(getPhyloTree().getNode2GuideTreeChildren().get(v)));
             }
 
             found++;
@@ -785,7 +785,7 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
             return true;
         } else
             return false; // nothing to do
-        NodeIntegerArray height = new NodeIntegerArray(getPhyloTree());
+        NodeIntArray height = new NodeIntArray(getPhyloTree());
         ladderizeRec(getPhyloTree().getRoot(), left, height);
         return true;
     }
@@ -797,7 +797,7 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
      * @param left
      * @param node2height
      */
-    private void ladderizeRec(Node v, boolean left, NodeIntegerArray node2height) {
+    private void ladderizeRec(Node v, boolean left, NodeIntArray node2height) {
         if (collapsedNodes.contains(v) || v.getOutDegree() == 0) // leaf
         {
             node2height.set(v, 1);
@@ -807,7 +807,7 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
                 if (PhyloTreeUtils.okToDescendDownThisEdge(getPhyloTree(), f, v)) {
                     Node w = f.getTarget();
                     ladderizeRec(w, left, node2height);
-                    best = Math.max(best, node2height.getValue(w));
+                    best = Math.max(best, node2height.get(w));
                 }
                 node2height.set(v, best + 1);
             }
@@ -846,12 +846,12 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
      * @param left
      * @return ordered edges
      */
-    private List<Edge> orderEdges(Node v, NodeIntegerArray node2height, boolean left) {
+    private List<Edge> orderEdges(Node v, NodeIntArray node2height, boolean left) {
         SortedSet<Pair<Integer, Edge>> sorted = new TreeSet<Pair<Integer, Edge>>(new Pair<Integer, Edge>());
 
         for (Edge f = v.getFirstAdjacentEdge(); f != null; f = v.getNextAdjacentEdge(f)) {
             Node w = f.getTarget();
-            sorted.add(new Pair<Integer, Edge>((left ? -1 : 1) * node2height.getValue(w), f));
+            sorted.add(new Pair<Integer, Edge>((left ? -1 : 1) * node2height.get(w), f));
         }
         List<Edge> result = new LinkedList<Edge>();
         for (Pair<Integer, Edge> pair : sorted) {
@@ -1206,7 +1206,7 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
      * @return collapsed node shape
      */
     public CollapsedShape getCollapsedShape(Node v) {
-        return node2CollapsedShape.getValue(v);
+        return node2CollapsedShape.get(v);
     }
 
     public void setCollapsedShape(Node v, CollapsedShape collapsedShape) {

@@ -126,7 +126,7 @@ public class TripletUtils {
                             for (Node sonBi : sonBis) {
                                 for (Node aLeavesRemaining : leavesRemaining) {
                                     (Triplets).addOne(tree.getNodeId(aSon), tree.getNodeId(sonBi), tree.getNodeId(aLeavesRemaining));
-                                    //System.out.println((Triplets).getValue(tree.getNodeId(son.get(i1)),tree.getNodeId(sonBis.get(i2)),tree.getNodeId(leavesRemaining.get(i3))));
+                                    //System.out.println((Triplets).get(tree.getNodeId(son.get(i1)),tree.getNodeId(sonBis.get(i2)),tree.getNodeId(leavesRemaining.get(i3))));
 
                                 }
                             }
