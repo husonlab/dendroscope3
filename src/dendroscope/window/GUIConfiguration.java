@@ -61,19 +61,20 @@ public class GUIConfiguration {
 
         menuConfig.defineMenu("Algorithms", "@Advanced Algorithms;@Multi-Labeled Tree To Network;|;Strict Consensus...;Loose Consensus...;" +
                 "Majority Consensus...;|;LSA Consensus...;Primordial Consensus...;|;Cluster Network Consensus...;Level-k Network Consensus...;"
-                + "Galled Network Consensus...;|;Hybridization Networks...;Hybridization Networks (Binary Trees)...;" + ProgramProperties.getIfEnabled("allow-hybroscale", "Hybridization Networks (Hybroscale)...;") + "Reroot by Hybridization Number...;"
+                + "Galled Network Consensus...;|;Hybridization Networks...;Reroot by Hybridization Number...;"
                 + ProgramProperties.getIfEnabled("allow-hybroscale", "Reroot by Hybridization Number(Hybroscale)...;")
                 + "|;Tanglegram...;"
                 + (ProgramProperties.get("enable_experimental", false) ? "|;Merge Isomorphic Induced...;|;" +
                 "Refine...;Subtree Reduction...;Cluster Reduction...;|;Test for Duplicates;" : "")
         );
 
-        menuConfig.defineMenu("Advanced Algorithms", "Hybridization Number...;Hybridization Number (Binary Trees)...;" +
-                ProgramProperties.getIfEnabled("allow-hybroscale", "Hybridization Number (Hybroscale)...;") + "rSPR Distance (Binary Trees)...;|;DTL Reconciliation...;"
-                + "|;Hardwired Cluster Distance...;Softwired Cluster Distance...;Displayed Trees Distance...;Tripartition Distance...;Nested Labels Distance...;Path Multiplicity Distance...;"
+        menuConfig.defineMenu("Advanced Algorithms", "Hybridization Number...;|;"
+                + "|;Hardwired Cluster Distance...;Softwired Cluster Distance...;Displayed Trees Distance...;Tripartition Distance...;" +
+                "Nested Labels Distance...;Path Multiplicity Distance...;"
                 + "|;Distance To Root...;|;Topological Constraints...;Network Properties...;|;Simplistic...;");
 
-        menuConfig.defineMenu("Multi-Labeled Tree To Network", "MUL to Network, Cluster-based...;MUL to Network, HOLM 2006...;MUL to Network, Level-k-based...;|;MUL to Contracted Tree...;");
+        menuConfig.defineMenu("Multi-Labeled Tree To Network", "MUL to Network, Cluster-based...;MUL to Network, HOLM 2006...;" +
+                "MUL to Network, Level-k-based...;|;MUL to Contracted Tree...;");
 
         menuConfig.defineMenu("Layout", "Draw Rectangular Phylogram;Draw Rectangular Cladogram;|;Draw Slanted Cladogram;|;"
                 + "Draw Circular Phylogram;Draw Circular Cladogram;Draw Inner Circular Cladogram;|;" +

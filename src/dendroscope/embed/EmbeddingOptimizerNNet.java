@@ -22,15 +22,16 @@ import dendroscope.consensus.LSATree;
 import dendroscope.consensus.NeighborNetCycle;
 import dendroscope.consensus.SplitSystem;
 import dendroscope.consensus.Taxa;
-import dendroscope.hybrid.EasyTree;
 import dendroscope.tanglegram.TanglegramUtils;
 import dendroscope.util.PhyloTreeUtils;
 import jloda.graph.Edge;
+import jloda.graph.Graph;
 import jloda.graph.Node;
 import jloda.graph.NodeArray;
 import jloda.phylo.PhyloTree;
 import jloda.util.Basic;
 import jloda.util.CanceledException;
+import jloda.util.IteratorUtils;
 import jloda.util.ProgressListener;
 
 import java.util.*;
@@ -212,54 +213,14 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
                         Node node = itN.next();
 
                         if (node.getInDegree() > 1) {
-                            EasyTree temp = new EasyTree();
-                            temp.copyNoRet(trees[s], node);
-                            //todo : finish that
-
-                            /*Vector<EasyNode> nodes = temp.getNodes();
-                            Vector<EasyNode>  toDelete = new Vector<EasyNode>();
-                            for (EasyNode c : nodes) {
-                                if(c.getOutDegree()== 0 && c.getLabel()==null){
-                                    toDelete.add(c);
-                                }
-
-                            }
-
-                            for (int c=0; c <toDelete.size() ;c++) {
-                                temp.deleteNode(toDelete.get(toDelete.size()-1));
-                            }*/
-                            PhyloTree tempP = temp.getPhyloTree();
+                            var tempP = copyNoRet(trees[s], node);
                             LSATree.computeLSAOrdering(tempP);
                             forests[s].add(tempP);
-
                         }
                     }
-
-                    EasyTree temp = new EasyTree();
-                    temp.copyNoRet(trees[s], trees[s].getRoot());
-                    //todo : finish that  ex paper
-                    /*Vector<EasyNode> nodes = temp.getNodes();
-                    Vector<EasyNode>  toDelete = new Vector<EasyNode>();
-                    for (EasyNode c : nodes) {
-                        if(c.getOutDegree()== 0 && c.getLabel()==null){
-                            toDelete.add(c);
-                        }
-
-                    }
-
-                    for (int c=0; c <toDelete.size() ;c++) {
-                        temp.deleteNode(toDelete.get(toDelete.size()-1));
-                    }*/
-
-                    PhyloTree tempP = temp.getPhyloTree();
+                    var tempP = copyNoRet(trees[s], trees[s].getRoot());
                     LSATree.computeLSAOrdering(tempP);
                     forests[s].add(tempP);
-
-
-                    //List<String> whatWeGot =new LinkedList<String>();
-                    //whatWeGot.add("t2"); whatWeGot.add("t3"); whatWeGot.add("t1"); whatWeGot.add("t17"); whatWeGot.add("t18"); whatWeGot.add("t20"); whatWeGot.add("t11"); whatWeGot.add("t8"); whatWeGot.add("t9"); whatWeGot.add("t10"); whatWeGot.add("t5"); whatWeGot.add("t4"); whatWeGot.add("t12");
-                    //System.err.println("old " + GeneralMethods.computeCrossingNum(whatWeGot, currOrderingListNew));
-
 
                     for (int a = 0; a < forests[s].size(); a++) {
                         TanglegramUtils.lsaOptimization(forests[s].get(a), currOrderingListNew, 0, null, null);
@@ -990,5 +951,27 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
      */
     public List<String> getSecondOrder() {
         return secondOrder;
+    }
+
+    private static PhyloTree copyNoRet(PhyloTree src, Node v) {
+        var tar = new PhyloTree();
+        var nodes = src.newNodeSet();
+        var queue = new LinkedList<Node>();
+        queue.add(v);
+        nodes.add(v);
+        while (queue.size() > 0) {
+            var w = queue.removeFirst();
+            if (w.getInDegree() <= 1 || w == v) {
+                nodes.add(w);
+                queue.addAll(IteratorUtils.asList(w.children()));
+            }
+        }
+        var src2tar = Graph.extract(src, nodes, null, tar);
+        tar.setRoot(src2tar.get(v));
+        for (var s : src2tar.keys()) {
+            if (src.getLabel(s) != null)
+                tar.setLabel(src2tar.get(s), src.getLabel(s));
+        }
+        return tar;
     }
 }

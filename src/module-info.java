@@ -14,8 +14,6 @@ module dendroscope {
     exports dendroscope.commands.draw;
     exports dendroscope.commands.formatting;
     exports dendroscope.commands.go;
-    exports dendroscope.commands.hybrid;
-    exports dendroscope.commands.hybroscale;
     exports dendroscope.commands.mul;
     exports dendroscope.commands.select;
 
