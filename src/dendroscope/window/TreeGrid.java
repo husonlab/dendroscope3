@@ -436,7 +436,10 @@ public class TreeGrid extends JPanel {
      * @return
      */
     public TreeViewer getTreeViewer(int row, int col) {
-        return treeViewers[row][col];
+        if (row < treeViewers.length && col < treeViewers[row].length)
+            return treeViewers[row][col];
+        else
+            return null;
     }
 
     /**
