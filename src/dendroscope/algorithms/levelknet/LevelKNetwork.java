@@ -29,7 +29,6 @@ import dendroscope.consensus.Taxa;
 import jloda.graph.Edge;
 import jloda.graph.Node;
 import jloda.graph.NodeArray;
-import jloda.graph.NodeDoubleArray;
 import jloda.phylo.PhyloTree;
 import jloda.swing.util.Alert;
 import jloda.swing.util.ProgressDialog;
@@ -202,7 +201,11 @@ public class LevelKNetwork {
 
 
         for (PhyloTree network : networks) {
-            ClusterNetwork.convertHasseToClusterNetwork(network, new NodeDoubleArray(network, 1.0), new NodeDoubleArray(network, 1.0));
+            var nodeWeight = network.newNodeDoubleArray();
+            for (var v : network.nodes()) {
+                nodeWeight.put(v, 1.0);
+            }
+            ClusterNetwork.convertHasseToClusterNetwork(network, nodeWeight);
             // convert taxon ids back to taxon labels:
             List<Node> toDelete = new LinkedList<>();
             for (Node v = network.getFirstNode(); v != null; v = network.getNextNode(v)) {

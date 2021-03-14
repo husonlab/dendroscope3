@@ -284,7 +284,7 @@ public class Dendro extends IOBase implements IOFormat {
             w.write("}\n");
         }
 
-        if (tree.getNumberSpecialEdges() > 0 && !tree.getNode2GuideTreeChildren().isClear()) {
+        if (tree.getNumberSpecialEdges() > 0 && !tree.getNode2GuideTreeChildren().isEmpty()) {
             w.write("{LSA\n");
             for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
                 List<Node> order = tree.getNode2GuideTreeChildren().get(v);
@@ -529,12 +529,12 @@ public class Dendro extends IOBase implements IOFormat {
      * @param num2edge
      */
     private static void setNum2NodeEdgeArrayRec(Node v, Edge e, Pair<Integer, Integer> nodeNumberEdgeNumber, Num2NodeArray num2node, Num2EdgeArray num2edge) {
-        int nodes = nodeNumberEdgeNumber.getFirstInt() + 1;
+        var nodes = nodeNumberEdgeNumber.getFirst() + 1;
         nodeNumberEdgeNumber.setFirst(nodes);
         num2node.put(nodes, v);
         for (Edge f = v.getFirstAdjacentEdge(); f != null; f = v.getNextAdjacentEdge(f))
             if (f != e) {
-                int edges = nodeNumberEdgeNumber.getSecondInt() + 1;
+                var edges = nodeNumberEdgeNumber.getSecond() + 1;
                 nodeNumberEdgeNumber.setSecond(edges);
                 num2edge.put(edges, f);
                 if (PhyloTreeUtils.okToDescendDownThisEdge((PhyloTree) v.getOwner(), f, v))

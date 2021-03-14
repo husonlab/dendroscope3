@@ -92,7 +92,7 @@ public class ClusterNetwork {
 
         constructHasse(taxa, tree, root, clusters, node2weight, node2confidence, additionalEdges, taxa.size());
 
-        convertHasseToClusterNetwork(tree, node2weight, node2confidence);
+        convertHasseToClusterNetwork(tree, node2weight);
 
         // computeConfidenceOnReticulate(tree);
 
@@ -273,7 +273,7 @@ public class ClusterNetwork {
      *
      * @param node2weight
      */
-    public static void convertHasseToClusterNetwork(PhyloTree tree, NodeDoubleArray node2weight, NodeDoubleArray node2confidence) {
+    public static void convertHasseToClusterNetwork(PhyloTree tree, NodeDoubleArray node2weight) {
         // split every node that has indegree>1 and outdegree!=1
         List<Node> nodes = new LinkedList<>();
         for (Node v = tree.getFirstNode(); v != null; v = v.getNext())
@@ -283,8 +283,7 @@ public class ClusterNetwork {
             if (v.getInDegree() > 1) {
                 Node w = tree.newNode();
                 List<Edge> toDelete = new LinkedList<>();
-                for (Iterator ite = v.inEdges().iterator(); ite.hasNext(); ) {
-                    Edge e = (Edge) ite.next();
+                for (var e : v.inEdges()) {
                     Node u = e.getSource();
                     Edge f = tree.newEdge(u, w);
                     tree.setWeight(f, 0); // special edges have zero weight
@@ -348,14 +347,14 @@ public class ClusterNetwork {
         NodeArray<Node> reticulate2lsa = new NodeArray<>(tree);
         (new LSATree()).computeReticulation2LSA(tree, reticulate2lsa);
 
-        NodeDoubleArray averageConfidenceBelow = new NodeDoubleArray(tree);
-        NodeIntArray countBelow = new NodeIntArray(tree, -1);
+        var averageConfidenceBelow = new NodeDoubleArray(tree);
+        var countBelow = tree.newNodeIntArray();
         computeConfidenceBelowRec(tree, tree.getRoot(), averageConfidenceBelow, countBelow);
-        for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
+        for (var v : tree.nodes()) {
             if (countBelow.getInt(v) > 0)
                 averageConfidenceBelow.put(v, averageConfidenceBelow.getDouble(v) / countBelow.getInt(v));
         }
-        for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
+        for (var v : tree.nodes()) {
             Node lsa = reticulate2lsa.get(v);
             if (lsa != null) {
                 //System.err.println("node v=" + v);
@@ -410,7 +409,7 @@ public class ClusterNetwork {
                 count++;
             }
             Node w = e.getTarget();
-            if (countBelow.getInt(w) == -1)
+            if (countBelow.get(w) == null)
                 computeConfidenceBelowRec(tree, w, confidenceBelow, countBelow);
             confidence += confidenceBelow.getDouble(w);
             count += countBelow.getInt(w);

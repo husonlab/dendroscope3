@@ -128,7 +128,7 @@ public class ComputeGalledNetwork {
 
         if (DEBUG)
             System.err.println("Converting Hasse Diagram to Cluster Network...");
-        ClusterNetwork.convertHasseToClusterNetwork(tree, node2weight, node2confidence);
+        ClusterNetwork.convertHasseToClusterNetwork(tree, node2weight);
         /*
         for(Edge e=tree.getFirstEdge();e!=null;e=tree.getNextEdge(e))
         {

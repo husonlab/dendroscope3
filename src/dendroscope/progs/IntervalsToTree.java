@@ -115,7 +115,7 @@ public class IntervalsToTree {
         PhyloTree tree = new PhyloTree();
         tree.setRoot(tree.newNode());
         ClusterNetwork.constructHasse(taxa, tree, tree.getRoot(), clusters.toArray(new Cluster[clusters.size()]), null, null, null, taxa.size());
-        ClusterNetwork.convertHasseToClusterNetwork(tree, null, null);
+        ClusterNetwork.convertHasseToClusterNetwork(tree, null);
 
         System.out.println(tree.toBracketString(false) + ";");
     }

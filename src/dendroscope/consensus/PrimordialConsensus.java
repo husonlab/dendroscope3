@@ -281,7 +281,7 @@ public class PrimordialConsensus implements IConsensusTreeMethod {
 
         ClusterNetwork.constructHasse(taxa, tree, root, clusters.toArray(new Cluster[clusters.size()]), node2weight, node2confidence, additionalEdges, taxa.size());
 
-        ClusterNetwork.convertHasseToClusterNetwork(tree, node2weight, node2confidence);
+        ClusterNetwork.convertHasseToClusterNetwork(tree, node2weight);
         for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
             if (tree.getNumberOfTaxa(v) > 0) {
                 tree.setLabel(v, taxa.getLabel(tree.getTaxa(v).iterator().next()));

@@ -254,7 +254,7 @@ public class TreeData extends PhyloTree {
         target.copy(srcTree, oldNode2NewNode, oldEdge2NewEdge);
 
         // copy lsa information
-        if (srcTree.getNumberSpecialEdges() > 0 && !srcTree.getNode2GuideTreeChildren().isClear()) {
+        if (srcTree.getNumberSpecialEdges() > 0 && !srcTree.getNode2GuideTreeChildren().isEmpty()) {
             target.setupLSA();
             for (Node v = srcTree.getFirstNode(); v != null; v = v.getNext()) {
                 Node w = oldNode2NewNode.get(v);

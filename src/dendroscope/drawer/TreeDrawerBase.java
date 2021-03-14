@@ -982,8 +982,11 @@ public class TreeDrawerBase {
      * @return levels
      */
     protected NodeIntArray computeLevels(int add) {
-        NodeIntArray levels = new NodeIntArray(tree, -1);
-        computeLevelsRec(tree.getRoot(), levels, add, new HashSet<Node>());
+        NodeIntArray levels = tree.newNodeIntArray();
+        for (var v : tree.nodes()) {
+            levels.set(v, -1);
+        }
+        computeLevelsRec(tree.getRoot(), levels, add, new HashSet<>());
         return levels;
     }
 
