@@ -25,7 +25,6 @@ import dendroscope.consensus.Taxa;
 import dendroscope.tanglegram.TanglegramUtils;
 import dendroscope.util.PhyloTreeUtils;
 import jloda.graph.Edge;
-import jloda.graph.Graph;
 import jloda.graph.Node;
 import jloda.graph.NodeArray;
 import jloda.phylo.PhyloTree;
@@ -795,7 +794,7 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
 
                 }
 
-                // we extract the clusters from the modified trees
+                // we extractSubGraph the clusters from the modified trees
 
                 Set<Set<String>> clustersAll = PhyloTreeUtils.collectAllHardwiredClusters(newTrees[0]);
                 clustersAll.addAll(PhyloTreeUtils.collectAllHardwiredClusters(newTrees[1]));
@@ -966,7 +965,7 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
                 queue.addAll(IteratorUtils.asList(w.children()));
             }
         }
-        var src2tar = Graph.extract(src, nodes, null, tar);
+        var src2tar = src.extractSubGraph(nodes, null, tar);
         tar.setRoot(src2tar.get(v));
         for (var s : src2tar.keys()) {
             if (src.getLabel(s) != null)

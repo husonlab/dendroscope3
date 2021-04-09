@@ -467,7 +467,7 @@ public class NeighborNetCycle {
             x = x.next;
         }
 
-        /* extract the ordering */
+        /* extractSubGraph the ordering */
         a = x;
         int t = 0;
         do {

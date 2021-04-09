@@ -56,7 +56,7 @@ public class Nexus extends IOBase implements IOFormat {
      */
     public boolean isCorrectFileType(File file) {
         try {
-            return isCorrectType(Basic.toString(Basic.getFirstBytesFromFile(file, TAG.length())));
+            return isCorrectType(Basic.getFirstLineFromFile(file));
         } catch (Exception e) {
             return false;
         }
@@ -69,7 +69,7 @@ public class Nexus extends IOBase implements IOFormat {
      * @return true, if correct type of string
      */
     public boolean isCorrectType(String aLine) {
-        return aLine != null && aLine.startsWith(TAG);
+        return aLine != null && aLine.trim().toLowerCase().startsWith(TAG);
     }
 
     /**

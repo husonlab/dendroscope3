@@ -173,7 +173,7 @@ public class SplitSystem {
     }
 
     /**
-     * recursively extract splits from tree. Also works for cluster networks.
+     * recursively extractSubGraph splits from tree. Also works for cluster networks.
      *
      * @param v
      * @param tree

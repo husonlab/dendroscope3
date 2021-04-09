@@ -117,7 +117,7 @@ public class Utilities {
                     split.addToWeightList(weight);
                 }
             } else {
-                System.err.println("Tree[" + i + "] is network, can't extract splits");
+                System.err.println("Tree[" + i + "] is network, can't extractSubGraph splits");
                 if (!warned) {
                     new Alert(owner, "Input contains one or more networks, these will be skipped");
                     warned = true;
@@ -142,7 +142,7 @@ public class Utilities {
     }
 
     /**
-     * extract all taxa from the given tree and add all new ones to the set of all taxa
+     * extractSubGraph all taxa from the given tree and add all new ones to the set of all taxa
      *
      * @param i
      * @param tree
@@ -275,7 +275,7 @@ public class Utilities {
     }
 
     /**
-     * extract the most abundent root partition that is compatible with all given splits
+     * extractSubGraph the most abundent root partition that is compatible with all given splits
      *
      * @param taxa
      * @param splits
