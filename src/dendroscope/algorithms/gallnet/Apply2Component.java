@@ -864,7 +864,7 @@ public class Apply2Component {
     }
 
     /**
-     * extractSubGraph all clusters from the backbone
+     * extract all clusters from the backbone
      *
      * @param backbone
      * @return clusters

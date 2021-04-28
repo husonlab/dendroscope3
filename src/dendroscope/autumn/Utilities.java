@@ -65,7 +65,7 @@ public class Utilities {
     }
 
     /**
-     * extractSubGraph the set of clusters from the two given trees
+     * extract the set of clusters from the two given trees
      *
      * @param allTaxa
      * @param tree1

@@ -794,7 +794,7 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
 
                 }
 
-                // we extractSubGraph the clusters from the modified trees
+                // we extract the clusters from the modified trees
 
                 Set<Set<String>> clustersAll = PhyloTreeUtils.collectAllHardwiredClusters(newTrees[0]);
                 clustersAll.addAll(PhyloTreeUtils.collectAllHardwiredClusters(newTrees[1]));
@@ -965,7 +965,7 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
                 queue.addAll(IteratorUtils.asList(w.children()));
             }
         }
-        var src2tar = src.extractSubGraph(nodes, null, tar);
+        var src2tar = src.extract(nodes, null, tar);
         tar.setRoot(src2tar.get(v));
         for (var s : src2tar.keys()) {
             if (src.getLabel(s) != null)

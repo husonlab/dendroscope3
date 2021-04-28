@@ -36,7 +36,7 @@ import java.util.*;
 
 public class PhyloTreeUtils {
     /**
-     * extractSubGraph the subtree induced by a selection of nodes.
+     * extract the subtree induced by a selection of nodes.
      *
      * @return induced subtree   or null, if not possible
      */
@@ -75,7 +75,7 @@ public class PhyloTreeUtils {
     }
 
     /**
-     * extractSubGraph the subnetwork induced by a selection of nodes.
+     * extract the subnetwork induced by a selection of nodes.
      *
      * @return induced subnetwork   or null, if not possible
      */
@@ -122,7 +122,7 @@ public class PhyloTreeUtils {
     }
 
     /**
-     * extractSubGraph the subnetwork induced by a selection of nodes.
+     * extract the subnetwork induced by a selection of nodes.
      *
      * @return induced subnetwork   or null, if not possible
      */
@@ -157,7 +157,7 @@ public class PhyloTreeUtils {
     }
 
     /**
-     * extractSubGraph the subnetwork induced by a selection of nodes.
+     * extract the subnetwork induced by a selection of nodes.
      *
      * @return induced subnetwork   or null, if not possible
      */

@@ -156,7 +156,7 @@ public class ExtractInducedNetworkCommand extends CommandBaseMultiViewer impleme
      */
 
     public String getSyntax() {
-        return "extractSubGraph induced network;";
+        return "extract induced network;";
     }
 
     /**

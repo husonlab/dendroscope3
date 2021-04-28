@@ -282,7 +282,7 @@ public class Cluster extends BitSet {
     }
 
     /**
-     * extractSubGraph the set of taxa present in an array of clusters
+     * extract the set of taxa present in an array of clusters
      *
      * @param clusters
      * @return taxa

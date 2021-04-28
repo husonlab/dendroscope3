@@ -38,7 +38,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * extractSubGraph subpart of a network
+ * extract subpart of a network
  * Celine Scornavacca 7.2010
  */
 public class ExtractSubnetworkCommand extends CommandBaseMultiViewer implements ICommand {
@@ -163,7 +163,7 @@ public class ExtractSubnetworkCommand extends CommandBaseMultiViewer implements 
      */
 
     public String getSyntax() {
-        return "extractSubGraph subnetwork;";
+        return "extract subnetwork;";
     }
 
     /**
