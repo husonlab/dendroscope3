@@ -72,8 +72,8 @@ public class Dendroscope {
      * @param args
      * @throws Exception
      */
-    public void parseArguments(String args[]) throws Exception {
-        ResourceManager.addResourceRoot(Dendroscope.class, "dendroscope/resources");
+    public void parseArguments(String[] args) throws Exception {
+        ResourceManager.insertResourceRoot(Dendroscope.class);
         Basic.startCollectionStdErr();
 
         ProgramProperties.setProgramName(Version.NAME);

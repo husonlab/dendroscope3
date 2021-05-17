@@ -4,7 +4,6 @@ module dendroscope {
 
     requires commons.collections;
     requires nexml;
-    requires java.desktop;
 
     exports dendroscope.commands;
     exports dendroscope.commands.autumn;
