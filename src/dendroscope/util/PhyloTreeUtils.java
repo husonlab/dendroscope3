@@ -22,7 +22,6 @@ import jloda.graph.*;
 import jloda.graph.algorithms.Dijkstra;
 import jloda.phylo.PhyloTree;
 import jloda.swing.graphview.PhyloGraphView;
-import jloda.util.Basic;
 
 import java.util.*;
 
@@ -43,31 +42,29 @@ public class PhyloTreeUtils {
     public static PhyloTree extractInducedSubtree(PhyloTree tree, NodeSet selected, NodeSet collapsed, boolean reduce) {
         if (selected.size() == 0)
             return tree;
-        NodeIntArray node2NumberInducedChildren = new NodeIntArray(tree);
+        var node2NumberInducedChildren = new NodeIntArray(tree);
         findInducedSubnetworkRec(tree.getRoot(), node2NumberInducedChildren, new NodeSet(tree), collapsed, selected);
         Node subtreeRoot = null;
         if (reduce)
             subtreeRoot = findSubtreeNetworkRec(tree, tree.getRoot(), node2NumberInducedChildren, selected);
         if (subtreeRoot == null || subtreeRoot.getOutDegree() == 0 || (collapsed != null && collapsed.contains(subtreeRoot)))
             subtreeRoot = tree.getRoot();
-        PhyloTree newTree = new PhyloTree();
+        var newTree = new PhyloTree();
         newTree.setRoot(newTree.newNode());
         newTree.setLabel(newTree.getRoot(), tree.getLabel(subtreeRoot));
         createInducedSubnetworkRec(subtreeRoot, newTree.getRoot(), tree, new NodeSet(tree), newTree,
-                new NodeArray(tree), node2NumberInducedChildren);
+                tree.newNodeArray(), node2NumberInducedChildren);
         if (reduce) {
-            java.util.List divertices = new LinkedList();
+            var divertices = new LinkedList<Node>();
             for (Node v = newTree.getFirstNode(); v != null; v = v.getNext()) {
                 if (v.getInDegree() == 1 && v.getOutDegree() == 1)
                     divertices.add(v);
             }
-            for (Iterator it = divertices.iterator(); it.hasNext(); ) {
-                Node v = (Node) it.next();
+            for (var v : divertices) {
                 newTree.delDivertex(v);
             }
         }
-        for (Edge e = newTree.getFirstEdge(); e != null; e = e.getNext()) {
-
+        for (Edge e : newTree.edges()) {
             if (e.getTarget().getInDegree() > 1)
                 newTree.setSpecial(e, true);
         }
@@ -83,37 +80,36 @@ public class PhyloTreeUtils {
         if (selected.size() == 0)
             return network;
 
-        NodeIntArray node2NumberInducedChildren = new NodeIntArray(network);
-        findInducedSubnetworkRec(network.getRoot(), node2NumberInducedChildren, new NodeSet(network), collapsed, selected);
+        var node2NumberInducedChildren = network.newNodeIntArray();
+        findInducedSubnetworkRec(network.getRoot(), node2NumberInducedChildren, network.newNodeSet(), collapsed, selected);
 
-        Node subtreeRoot = null;
+        Node subtreeRoot;
         if (network.getNumberSpecialEdges() == 0) { //tree
             subtreeRoot = findSubtreeNetworkRec(network, network.getRoot(), node2NumberInducedChildren, selected);
         } else {
-            LCA_LSACalculation LSA = new LCA_LSACalculation(network, true);
+            var LSA = new LCA_LSACalculation(network, true);
             subtreeRoot = LSA.getLca(selected, true);
         }
 
         if (subtreeRoot == null || subtreeRoot.getOutDegree() == 0 || (collapsed != null && collapsed.contains(subtreeRoot)))
             subtreeRoot = network.getRoot();
-        PhyloTree newTree = new PhyloTree();
+
+        var newTree = new PhyloTree();
         newTree.setRoot(newTree.newNode());
         newTree.setLabel(newTree.getRoot(), network.getLabel(subtreeRoot));
         createInducedSubnetworkRec(subtreeRoot, newTree.getRoot(), network, new NodeSet(network), newTree,
-                new NodeArray(network), node2NumberInducedChildren);
+                network.newNodeArray(), node2NumberInducedChildren);
         if (reduce) {
-            java.util.List divertices = new LinkedList();
-            for (Node v = newTree.getFirstNode(); v != null; v = v.getNext()) {
+            var divertices = new LinkedList<Node>();
+            for (Node v : newTree.nodes()) {
                 if (v.getInDegree() == 1 && v.getOutDegree() == 1)
                     divertices.add(v);
             }
-            for (Iterator it = divertices.iterator(); it.hasNext(); ) {
-                Node v = (Node) it.next();
+            for (var v : divertices) {
                 newTree.delDivertex(v);
             }
         }
-        for (Edge e = newTree.getFirstEdge(); e != null; e = e.getNext()) {
-
+        for (var e : newTree.edges()) {
             if (e.getTarget().getInDegree() > 1)
                 newTree.setSpecial(e, true);
         }
@@ -127,17 +123,14 @@ public class PhyloTreeUtils {
      * @return induced subnetwork   or null, if not possible
      */
     public static PhyloTree extractLSAInducedSubNetwork(PhyloTree network, NodeSet selected, NodeSet collapsed, boolean reduce) {
-
         //System.err.println("size sel" + selected.size());
-
         if (selected.size() == 0)
             return network;
 
-
-        NodeIntArray node2NumberInducedChildren = new NodeIntArray(network);
+        var node2NumberInducedChildren = new NodeIntArray(network);
         findInducedSubnetworkRec(network.getRoot(), node2NumberInducedChildren, new NodeSet(network), collapsed, selected);
 
-        Node subtreeRoot = null;
+        Node subtreeRoot;
         if (network.getNumberSpecialEdges() == 0) { //tree
             subtreeRoot = findSubtreeNetworkRec(network, network.getRoot(), node2NumberInducedChildren, selected);
         } else {
@@ -149,11 +142,7 @@ public class PhyloTreeUtils {
         if (subtreeRoot == null || subtreeRoot.getOutDegree() == 0 || (collapsed != null && collapsed.contains(subtreeRoot)))
             subtreeRoot = network.getRoot();
 
-
-        PhyloTree newTree = getSubnetwork(network, subtreeRoot);
-
-        return newTree;
-
+        return getSubnetwork(network, subtreeRoot);
     }
 
     /**
@@ -164,12 +153,7 @@ public class PhyloTreeUtils {
     public static PhyloTree extractSubNetwork(PhyloTree network, NodeSet selected, NodeSet collapsed, boolean reduce) {
         if (selected.size() == 0)
             return network;
-
-
-        PhyloTree newTree = getSubnetwork(network, selected.getFirstElement());
-
-        return newTree;
-
+        return getSubnetwork(network, selected.getFirstElement());
     }
 
 
@@ -181,17 +165,15 @@ public class PhyloTreeUtils {
      * @param selected
      */
     public static Node selectLSAInducedSubNetwork(PhyloGraphView viewer, PhyloTree network, NodeSet selected, NodeSet collapsed) {
+        var node2NumberInducedChildren = new NodeIntArray(network);
 
-        NodeIntArray node2NumberInducedChildren = new NodeIntArray(network);
-
-        Node subtreeRoot = null;
+        Node subtreeRoot;
         if (network.getNumberSpecialEdges() == 0) { //tree
             findInducedSubnetworkRec(network.getRoot(), node2NumberInducedChildren, new NodeSet(network), collapsed, selected);
             subtreeRoot = findSubtreeNetworkRec(network, network.getRoot(), node2NumberInducedChildren, selected);
         } else {
-            LCA_LSACalculation LSA = new LCA_LSACalculation(network, true);
+            var LSA = new LCA_LSACalculation(network, true);
             subtreeRoot = LSA.getLca(selected, true);
-
         }
 
         if (subtreeRoot == null || subtreeRoot.getOutDegree() == 0 || (collapsed != null && collapsed.contains(subtreeRoot)))
@@ -209,16 +191,14 @@ public class PhyloTreeUtils {
      * @param selected
      */
     public static void selectInducedSubNetwork(PhyloGraphView viewer, PhyloTree network, NodeSet selected, NodeSet collapsed) {
-
-
-        NodeIntArray node2NumberInducedChildren = new NodeIntArray(network);
+        var node2NumberInducedChildren = new NodeIntArray(network);
         findInducedSubnetworkRec(network.getRoot(), node2NumberInducedChildren, new NodeSet(network), collapsed, selected);
 
         Node subtreeRoot;
         if (network.getNumberSpecialEdges() == 0) { //tree
             subtreeRoot = findSubtreeNetworkRec(network, network.getRoot(), node2NumberInducedChildren, selected);
         } else {
-            LCA_LSACalculation LSA = new LCA_LSACalculation(network, true);
+            var LSA = new LCA_LSACalculation(network, true);
             subtreeRoot = LSA.getLca(selected, true);
         }
 
@@ -227,8 +207,6 @@ public class PhyloTreeUtils {
 
         selectInducedSubnetworkRec(viewer, subtreeRoot, network, new NodeSet(network), node2NumberInducedChildren);
         viewer.setSelected(subtreeRoot, true);
-
-
     }
 
 
@@ -238,17 +216,15 @@ public class PhyloTreeUtils {
      * @param v
      * @param node2NumberInducedChildren
      */
-    private static void findInducedSubnetworkRec(Node v, NodeIntArray node2NumberInducedChildren, NodeSet visited,
-                                                 NodeSet collapsed, NodeSet selected) {
+    private static void findInducedSubnetworkRec(Node v, NodeIntArray node2NumberInducedChildren, NodeSet visited, NodeSet collapsed, NodeSet selected) {
         int count = 0;
         if (collapsed == null || !collapsed.contains(v)) {
-            for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
-                Node w = f.getTarget();
+            for (var w : v.children()) {
                 if (!visited.contains(w)) {
                     visited.add(w);
                     findInducedSubnetworkRec(w, node2NumberInducedChildren, visited, collapsed, selected);
                 }
-                if (node2NumberInducedChildren.get(w) != 0)
+                if (node2NumberInducedChildren.getInt(w) != 0)
                     count++;
             }
         }
@@ -266,13 +242,13 @@ public class PhyloTreeUtils {
      * @return root
      */
     private static Node findSubtreeNetworkRec(PhyloTree tree, Node v, NodeIntArray node2NumberInducedChildren, NodeSet selected) {
-        if (node2NumberInducedChildren.get(v) > 1 || selected.contains(v))
+        if (node2NumberInducedChildren.getInt(v) > 1 || selected.contains(v))
             return v;
-        for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
+        for (var f : v.outEdges()) {
             if (jloda.phylo.PhyloTreeUtils.okToDescendDownThisEdge(tree, f, v)) {
-                Node w = f.getTarget();
-                if (node2NumberInducedChildren.get(w) != 0) {
-                    Node u = findSubtreeNetworkRec(tree, w, node2NumberInducedChildren, selected);
+                var w = f.getTarget();
+                if (node2NumberInducedChildren.getInt(w) != 0) {
+                    var u = findSubtreeNetworkRec(tree, w, node2NumberInducedChildren, selected);
                     if (u != null)
                         return u;
                 }
@@ -288,12 +264,9 @@ public class PhyloTreeUtils {
      * @param tree
      */
     private static void selectInducedSubnetworkRec(PhyloGraphView viewer, Node v, PhyloTree tree, NodeSet visited, NodeIntArray node2NumberInducedChildren) {
-
-        for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
-            Node w = f.getTarget();
-
-            if (node2NumberInducedChildren.get(w) != 0) {
-
+        for (var f : v.outEdges()) {
+            var w = f.getTarget();
+            if (node2NumberInducedChildren.getInt(w) != 0) {
                 viewer.setSelected(w, true);
                 viewer.setSelected(f, true);
                 if (!visited.contains(w)) {
@@ -314,15 +287,14 @@ public class PhyloTreeUtils {
      * @param newTree
      * @param old2new
      */
-    private static void createInducedSubnetworkRec(Node v, Node newV, PhyloTree tree, NodeSet visited, PhyloTree newTree, NodeArray old2new,
+    private static void createInducedSubnetworkRec(Node v, Node newV, PhyloTree tree, NodeSet visited, PhyloTree newTree, NodeArray<Node> old2new,
                                                    NodeIntArray node2NumberInducedChildren) {
-        for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
-            Node w = f.getTarget();
-
-            if (node2NumberInducedChildren.get(w) != 0) {
+        for (var f : v.outEdges()) {
+            var w = f.getTarget();
+            if (node2NumberInducedChildren.getInt(w) != 0) {
                 Node newW;
                 if (old2new.get(w) != null)
-                    newW = (Node) old2new.get(w);
+                    newW = old2new.get(w);
                 else {
                     newW = newTree.newNode();
                     old2new.put(w, newW);
@@ -330,7 +302,7 @@ public class PhyloTreeUtils {
 
                 if (tree.getLabel(w) != null && tree.getLabel(w).length() > 0)
                     newTree.setLabel(newW, tree.getLabel(w));
-                Edge newF = newTree.newEdge(newV, newW);
+                var newF = newTree.newEdge(newV, newW);
                 if (tree.getLabel(f) != null && tree.getLabel(f).length() > 0)
                     newTree.setLabel(newF, tree.getLabel(f));
                 newTree.setWeight(newF, tree.getWeight(f));
@@ -342,17 +314,16 @@ public class PhyloTreeUtils {
         }
     }
 
-
     /**
      * calculates the subnetwork T(v).
      */
 
     public static PhyloTree getSubnetwork(PhyloTree srcTree, Node v) {
-        PhyloTree newTree = new PhyloTree();
-        Node newNode = newTree.newNode();
+        var newTree = new PhyloTree();
+        var newNode = newTree.newNode();
         newTree.setRoot(newNode);
-        List<Node> visited = new LinkedList<Node>();
-        List<Node> visitedNew = new LinkedList<Node>();
+        var visited = new LinkedList<Node>();
+        var visitedNew = new LinkedList<Node>();
         getSubnetworkRec(srcTree, newTree, v, newNode, visited, visitedNew);
         return newTree;
     }
@@ -368,16 +339,15 @@ public class PhyloTreeUtils {
     private static void getSubnetworkRec(PhyloTree oldTree, PhyloTree newTree, Node vOld, Node vNew, List<Node> visited, List<Node> visitedNew) {
         newTree.setLabel(vNew, oldTree.getLabel(vOld));
         newTree.setInfo(vNew, oldTree.getInfo(vOld));
-        for (Edge eOld = vOld.getFirstOutEdge(); eOld != null; eOld = vOld.getNextOutEdge(eOld)) {
-            Node wOld = eOld.getTarget();
+        for (Edge eOld : vOld.outEdges()) {
+            var wOld = eOld.getTarget();
             Node wNew = null;
-            boolean isVisited = false;
+            var isVisited = false;
 
             if (oldTree.isSpecial(eOld)) {
                 isVisited = visited.contains(wOld);
                 if (isVisited) {
-                    for (Iterator<Node> it = visitedNew.iterator(); it.hasNext(); ) {
-                        Node temp = it.next();
+                    for (var temp : visitedNew) {
                         if (newTree.getInfo(temp).equals(wOld.getId()))
                             wNew = temp;
                     }
@@ -392,13 +362,11 @@ public class PhyloTreeUtils {
                     }
                     visitedNew.add(wNew);
                 }
-
             } else {
                 wNew = newTree.newNode();
             }
 
-
-            Edge eNew = newTree.newEdge(vNew, wNew);
+            var eNew = newTree.newEdge(vNew, wNew);
             if (oldTree.isSpecial(eOld)) {
                 newTree.setSpecial(eNew, true);
                 newTree.setWeight(eNew, 0);
@@ -416,7 +384,7 @@ public class PhyloTreeUtils {
      * collects all clusters contained in the tree.
      */
     public static Set<Set<String>> collectAllHardwiredClusters(PhyloTree tree) {
-        Set<Set<String>> clusters = new HashSet<Set<String>>();
+        var clusters = new HashSet<Set<String>>();
         collectAllHardwiredClustersRec(tree, tree.getRoot(), clusters);
         return clusters;
     }
@@ -424,7 +392,7 @@ public class PhyloTreeUtils {
     public static Set<String> collectAllHardwiredClustersRec(PhyloTree tree, Node v, Set<Set<String>> clusters) {
         //reached a leave
         if (v.getOutDegree() == 0) {
-            Set<String> set = new HashSet<String>();
+            var set = new HashSet<String>();
             set.add(tree.getLabel(v));
             clusters.add(set);
             return set;
@@ -432,8 +400,8 @@ public class PhyloTreeUtils {
         //recursion
         else {
             TreeSet<String> set = new TreeSet<String>();
-            for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
-                Node w = f.getTarget();
+            for (Edge f : v.outEdges()) {
+                var w = f.getTarget();
                 set.addAll(collectAllHardwiredClustersRec(tree, w, clusters));
             }
             clusters.add(set);
@@ -449,60 +417,53 @@ public class PhyloTreeUtils {
      * @return dist of shortest paths for each pairs of leaves
      */
     public static void computeNumberNodesInTheShortestPath(final PhyloTree graph, Map<String, Integer> taxon2ID, double[][] distMatrix) {
-        try {
+        var leaves = graph.computeSetOfLeaves();
+        var distMatrixTemp = new int[graph.getNumberOfNodes()][graph.getNumberOfNodes()];   // temp matrix
 
+        var idTemp = new NodeIntArray(graph);   //temp id used to fill distMatrixTemp
+        var nN = 0;
 
-            NodeSet leaves = graph.computeSetOfLeaves();
-            int[][] distMatrixTemp = new int[graph.getNumberOfNodes()][graph.getNumberOfNodes()];   // temp matrix
+        for (var tempNode : graph.nodes()) {
+            idTemp.set(tempNode, nN);     //set temp id
+            nN++;
 
-            NodeIntArray idTemp = new NodeIntArray(graph);   //temp id used to fill distMatrixTemp
-            int nN = 0;
-
-
-            for (Node tempNode : graph.nodes()) {
-                idTemp.set(tempNode, nN);     //set temp id
-                nN++;
-
-            }
-
+        }
 
             /* Find the shortest path between source and and all other nodes of the DiRECTED PN.
             The values are saved in distMatrixTemp, dist is used to order the priorityQueue.
             */
 
-            for (Node source : graph.nodes()) {
-                int idS = idTemp.get(source);
-                //System.out.println("idS" + idS);
+        for (var source : graph.nodes()) {
+            var idS = idTemp.getInt(source);
+            //System.out.println("idS" + idS);
 
-                //NodeArray predecessor = new NodeArray(graph);
-                NodeDoubleArray dist = graph.newNodeDoubleArray();
+            //NodeArray predecessor = new NodeArray(graph);
+            var dist = graph.newNodeDoubleArray();
 
-                for (Node v = graph.getFirstNode(); v != null; v = graph.getNextNode(v)) {
-                    dist.put(v, 10000.0);
-                    int idV = idTemp.get(v);
-                    distMatrixTemp[idS][idV] = 10000;
-                    //predecessor.set(v, null);
-                }
+            for (var v : graph.nodes()) {
+                dist.put(v, 10000.0);
+                var idV = idTemp.getInt(v);
+                distMatrixTemp[idS][idV] = 10000;
+                //predecessor.set(v, null);
+            }
                 dist.put(source, 0.0);
                 distMatrixTemp[idS][idS] = 0;
 
-                SortedSet<Node> priorityQueue = Dijkstra.newFullQueue(graph, dist);
-
+            var priorityQueue = Dijkstra.newFullQueue(graph, dist);
 
                 while (priorityQueue.isEmpty() == false) {
-                    int size = priorityQueue.size();
-                    Node u = priorityQueue.first();
+                    var size = priorityQueue.size();
+                    var u = priorityQueue.first();
 
                     priorityQueue.remove(u);
 
                     if (priorityQueue.size() != size - 1)
                         throw new RuntimeException("remove u=" + u + " failed: size=" + size);
 
-
-                    int idU = idTemp.get(u);
+                    var idU = idTemp.getInt(u);
                     for (Edge e : u.outEdges()) {
-                        Node v = graph.getOpposite(u, e);
-                        int idV = idTemp.get(v);
+                        var v = graph.getOpposite(u, e);
+                        var idV = idTemp.getInt(v);
                         if (distMatrixTemp[idS][idV] > distMatrixTemp[idS][idU] + 1) {
                             //System.out.println("enter");
                             // priorty of v changes, so must re-and to queue:
@@ -514,9 +475,7 @@ public class PhyloTreeUtils {
                         }
                     }
                 }
-
-
-            }
+        }
 
 
             /* Find the shortest path between each pair of leaves (l1,l2) as the shortest
@@ -524,22 +483,19 @@ public class PhyloTreeUtils {
             The values are saved in distMatrix.
             */
 
-            for (Iterator l = leaves.iterator(); l.hasNext(); ) {
-                Node source = (Node) l.next();
-                int idS = idTemp.get(source);
-                int labelS = taxon2ID.get(graph.getLabel(source)); // Franzi uses values from 1 to n, me from 0 to n-1
-                leaves.remove(source);
-                for (Iterator l2 = leaves.iterator(); l2.hasNext(); ) {
-
-                    Node target = (Node) l2.next();
-                    int idT = idTemp.get(target);
-                    int labelT = taxon2ID.get(graph.getLabel(target)); // Same as above
+        for (var source : leaves) {
+            var idS = idTemp.getInt(source);
+            int labelS = taxon2ID.get(graph.getLabel(source)); // Franzi uses values from 1 to n, me from 0 to n-1
+            leaves.remove(source);
+            for (Node target : leaves) {
+                if (source != target) {
+                    var idT = idTemp.getInt(target);
+                    var labelT = taxon2ID.get(graph.getLabel(target)); // Same as above
 
                     //System.out.println("labelS " + labelS+ " labelT " + labelT);
-
-                    int min = 1000000;
-                    for (Node node : graph.nodes()) {
-                        int nodeID = idTemp.get(node);
+                    var min = 1000000;
+                    for (var node : graph.nodes()) {
+                        var nodeID = idTemp.getInt(node);
                         if (distMatrixTemp[nodeID][idS] + distMatrixTemp[nodeID][idT] < min)
                             min = distMatrixTemp[nodeID][idS] + distMatrixTemp[nodeID][idT];
                     }
@@ -547,13 +503,8 @@ public class PhyloTreeUtils {
                     distMatrix[labelS][labelT] += min;   //update distMatrix
                     distMatrix[labelT][labelS] += min;
                 }
+                }
             }
-
-
-        } catch (NotOwnerException ex) {
-            Basic.caught(ex);
-
-        }
     }
 
 }

@@ -214,6 +214,7 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
             setToScale(true);
             setGraphDrawer(new dendroscope.drawer.TreeDrawerParallel(this, getPhyloTree()));
             getGraphDrawer().setAuxilaryParameter(phylogramPercentOffset);
+
         } else // if (drawerKind.equals(RECTANGULAR_CLADOGRAM))
         {
             setToScale(false);

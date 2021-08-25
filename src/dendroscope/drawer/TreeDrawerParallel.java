@@ -55,7 +55,7 @@ public class TreeDrawerParallel extends TreeDrawerBase implements IOptimizedGrap
     }
 
     /**
-     * setd up the graphview
+     * set up the graphview
      *
      * @param graphView
      */

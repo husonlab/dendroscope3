@@ -34,7 +34,6 @@ import java.awt.event.ActionEvent;
 import java.util.BitSet;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 
 /**
  * close the window
@@ -92,30 +91,28 @@ public class ExtractInducedNetworkCommand extends CommandBaseMultiViewer impleme
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase(getSyntax());
 
-        String[] names = new String[multiViewer.getTreeGrid().getNumberSelectedOrAllViewers()];
-        List<PhyloTree> subNetworks = new LinkedList<>();
+        var names = new String[multiViewer.getTreeGrid().getNumberSelectedOrAllViewers()];
+        var subNetworks = new LinkedList<PhyloTree>();
 
-        int numbNetworksSelected = 0;
+        var numbNetworksSelected = 0;
         for (Iterator<TreeViewer> it = multiViewer.getTreeGrid().getSelectedOrAllIterator(); it.hasNext(); ) {
-            TreeViewer viewer = it.next();
-            PhyloTree newTree = dendroscope.util.PhyloTreeUtils.extractInducedSubnetwork(viewer.getPhyloTree(),
-                    viewer.getSelectedNodes(), viewer.getCollapsedNodes(), true);
+            var viewer = it.next();
+            var newTree = dendroscope.util.PhyloTreeUtils.extractInducedSubnetwork(viewer.getPhyloTree(), viewer.getSelectedNodes(), viewer.getCollapsedNodes(), true);
             subNetworks.add(newTree);
             names[numbNetworksSelected] = viewer.getName();
             numbNetworksSelected++;
 
         }
 
-        int rows = Math.min(4, (int) (Math.sqrt(subNetworks.size())));
-        int cols = subNetworks.size() / rows;
+        var rows = Math.min(4, (int) (Math.sqrt(subNetworks.size())));
+        var cols = subNetworks.size() / rows;
 
-
-        Director newDir = Director.newProject(rows, cols);
+        var newDir = Director.newProject(rows, cols);
         MultiViewer newMultiViewer = (MultiViewer) newDir.getViewerByClass(MultiViewer.class);
         newMultiViewer.setEmbedderName(LayoutOptimizerManager.UNOPTIMIZED); // don't change best common embedding
         Document newDoc = newDir.getDocument();
         BitSet which = new BitSet();
-        for (int i = 0; i < subNetworks.size(); i++) {
+        for (var i = 0; i < subNetworks.size(); i++) {
             newDoc.appendTree(names[i], subNetworks.get(i), i);
             which.set(i);
         }
