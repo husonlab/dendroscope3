@@ -54,7 +54,7 @@ public class ShowEdgeLabelsCommand extends CommandBaseMultiViewer implements ICh
         boolean result = false;
         for (Iterator<TreeViewer> it = multiViewer.getTreeGrid().getSelectedEdgesIterator(); it.hasNext(); ) {
             TreeViewer treeViewer = it.next();
-            EdgeSet selected = treeViewer.getSelectedEdges();
+			var selected = treeViewer.getSelectedEdges();
             for (Edge e : selected) {
                 if (!treeViewer.getLabelVisible(e)) {
                     result = false;

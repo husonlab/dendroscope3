@@ -295,39 +295,46 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
      * @param useSpecialEdges cross special edges
      */
     public void selectSubTree(boolean useSpecialEdges) {
-        NodeSet seeds = (NodeSet) getSelectedNodes().clone();
-        selectSubTreeRec(getPhyloTree().getRoot(), seeds, false, useSpecialEdges);
-    }
+		var seeds = (NodeSet) getSelectedNodes().clone();
+		var selectedNodes = getPhyloTree().newNodeSet();
+		var selectedEdges = getPhyloTree().newEdgeSet();
+		selectSubTreeRec(getPhyloTree().getRoot(), seeds, false, useSpecialEdges, selectedNodes, selectedEdges);
+		System.err.println("Selected nodes: " + selectedNodes.size());
+		this.selectedNodes.addAll(selectedNodes);
+		fireDoSelect(selectedNodes);
+		System.err.println("Selected edges: " + selectedEdges.size());
+		this.selectedEdges.addAll(selectedEdges);
+		fireDoSelect(selectedEdges);
 
-    /**
-     * recursively does the work
-     *
-     * @param v
-     * @param seeds
-     * @param select
-     */
-    private void selectSubTreeRec(Node v, NodeSet seeds, boolean select, boolean useSpecialEdges) {
-        if (!select && seeds.contains(v))
-            select = true;
-        if (select)
-            selectedNodes.add(v);
+	}
 
-        if (!collapsedNodes.contains(v)) {
-            for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
-                if (useSpecialEdges || !select || !getPhyloTree().isSpecial(f) || getPhyloTree().getWeight(f) > 0) {
-                    if (select)
-                        selectedEdges.add(f);
-                    Node w = f.getTarget();
-                    if (!select && getSelected(f)) {
-                        selectedNodes.add(w);
-                    }
-                    selectSubTreeRec(w, seeds, select, useSpecialEdges);
-                }
-            }
+	/**
+	 * recursively does the work
+	 *
+	 * @param v
+	 * @param seeds
+	 * @param select
+	 */
+	private void selectSubTreeRec(Node v, NodeSet seeds, boolean select, boolean useSpecialEdges, NodeSet selectedNodes, EdgeSet selectedEdges) {
+		if (!select && seeds.contains(v))
+			select = true;
+		if (select && !getSelected(v))
+			selectedNodes.add(v);
+
+		if (!collapsedNodes.contains(v)) {
+			for (Edge f : v.outEdges()) {
+				if (useSpecialEdges || !select || !getPhyloTree().isSpecial(f) || getPhyloTree().getWeight(f) > 0) {
+					if (select && !getSelected(f))
+						selectedEdges.add(f);
+					var w = f.getTarget();
+					if (!select && !getSelected(w) && (getSelected(f) || selectedEdges.contains(f))) {
+						selectedNodes.add(w);
+					}
+					selectSubTreeRec(w, seeds, select, useSpecialEdges, selectedNodes, selectedEdges);
+				}
+			}
         }
-        fireDoSelect(selectedNodes);
-        fireDoSelect(selectedEdges);
-    }
+	}
 
     /**
      * recursively does the work
@@ -342,17 +349,17 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
             selectedNodes.add(v);
 
         if (!collapsedNodes.contains(v)) {
-            for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
-                if (useSpecialEdges || !select || !getPhyloTree().isSpecial(f) || getPhyloTree().getWeight(f) > 0) {
-                    if (select)
-                        selectedEdges.add(f);
-                    Node w = f.getTarget();
-                    if (!select && getSelected(f)) {
-                        selectedNodes.add(w);
-                    }
-                    selectSubTreeRec(w, select, useSpecialEdges);
-                }
-            }
+			for (Edge f : v.outEdges()) {
+				if (useSpecialEdges || !select || !getPhyloTree().isSpecial(f) || getPhyloTree().getWeight(f) > 0) {
+					if (select)
+						selectedEdges.add(f);
+					Node w = f.getTarget();
+					if (!select && getSelected(f)) {
+						selectedNodes.add(w);
+					}
+					selectSubTreeRec(w, select, useSpecialEdges);
+				}
+			}
         }
         fireDoSelect(selectedNodes);
         fireDoSelect(selectedEdges);

@@ -19,7 +19,6 @@
 package dendroscope.commands;
 
 import dendroscope.window.MultiViewer;
-import dendroscope.window.TreeViewer;
 import jloda.swing.commands.ICommand;
 import jloda.swing.graphview.GraphView;
 import jloda.swing.graphview.ScrollPaneAdjuster;
@@ -28,7 +27,6 @@ import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.util.Iterator;
 
 /**
  * contract vertically
@@ -84,19 +82,19 @@ public class ContractVerticalCommand extends CommandBaseMultiViewer implements I
         np.matchIgnoreCase(";");
 
 
-        for (Iterator<TreeViewer> it = multiViewer.getTreeGrid().getSelectedOrAllIterator(); it.hasNext(); ) {
-            TreeViewer viewer = it.next();
+        for (var it = multiViewer.getTreeGrid().getSelectedOrAllIterator(); it.hasNext(); ) {
+            var viewer = it.next();
             if (direction.equalsIgnoreCase("horizontal")) {
-                double scale = 1.2 * viewer.trans.getScaleX();
+                var scale = 1.2 * viewer.trans.getScaleX();
                 if (scale <= GraphView.XMAX_SCALE) {
-                    ScrollPaneAdjuster spa = new ScrollPaneAdjuster(viewer.getScrollPane(), viewer.trans);
+                    var spa = new ScrollPaneAdjuster(viewer.getScrollPane(), viewer.trans);
                     viewer.trans.composeScale(1 / 1.2, 1);
                     spa.adjust(true, false);
                 }
             } else {
-                double scale = 2 * viewer.trans.getScaleY();
+                var scale = 2 * viewer.trans.getScaleY();
                 if (scale <= GraphView.YMAX_SCALE) {
-                    ScrollPaneAdjuster spa = new ScrollPaneAdjuster(viewer.getScrollPane(), viewer.trans);
+                    var spa = new ScrollPaneAdjuster(viewer.getScrollPane(), viewer.trans);
                     viewer.trans.composeScale(1, 1 / 1.2);
                     spa.adjust(false, true);
                 }
