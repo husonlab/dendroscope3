@@ -22,7 +22,7 @@ import dendroscope.commands.CommandBaseMultiViewer;
 import dendroscope.window.MultiViewer;
 import jloda.swing.commands.ICommand;
 import jloda.swing.util.ResourceManager;
-import jloda.util.Basic;
+import jloda.util.NumberUtils;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;
@@ -108,7 +108,7 @@ public class GoToTreeCommand extends CommandBaseMultiViewer implements ICommand 
                 multiViewer.goToTree(getDir().getDocument().getNumberOfTrees());
                 break;
             default:
-                if (!Basic.isInteger(which))
+                if (!NumberUtils.isInteger(which))
                     throw new IOException("go tree=" + which + " illegal specification, expected: first, prev, prevpage, next, nextpage, last or <number>");
                 multiViewer.goToTree(Integer.parseInt(which));
                 break;

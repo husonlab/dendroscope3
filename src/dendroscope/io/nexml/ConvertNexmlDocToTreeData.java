@@ -24,6 +24,7 @@ import jloda.phylo.PhyloTree;
 import jloda.swing.graphview.EdgeView;
 import jloda.swing.graphview.NodeView;
 import jloda.util.Basic;
+import jloda.util.NumberUtils;
 import jloda.util.Pair;
 import org.nexml.model.*;
 
@@ -151,7 +152,7 @@ public class ConvertNexmlDocToTreeData {
                     int rgb = Color.GRAY.getRGB();
                     String label = e.getLabel();
                     if (label != null)
-                        rgb = Basic.parseInt(e.getLabel());
+                        rgb = NumberUtils.parseInt(e.getLabel());
                     Color color = new Color(rgb);
                     String nodeLabel1 = p.getLabel();
                     String nodeLabel2 = q.getLabel();
@@ -199,8 +200,8 @@ public class ConvertNexmlDocToTreeData {
                 }
             }
             final Set<Node> nodes = new TreeSet<>((o1, o2) -> {
-                int id1 = Basic.parseInt(o1.getId());
-                int id2 = Basic.parseInt(o2.getId());
+                int id1 = NumberUtils.parseInt(o1.getId());
+                int id2 = NumberUtils.parseInt(o2.getId());
                 return Integer.compare(id1, id2);
             });
             nodes.addAll(network.getOutNodes(p));

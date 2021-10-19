@@ -28,7 +28,7 @@ import jloda.graph.Node;
 import jloda.swing.commands.CommandBase;
 import jloda.swing.commands.ICommand;
 import jloda.swing.util.Message;
-import jloda.util.Basic;
+import jloda.util.NumberUtils;
 import jloda.util.ProgramProperties;
 import jloda.util.parse.NexusStreamParser;
 
@@ -100,8 +100,8 @@ public class ContractEdgeBySupportValueCommand extends CommandBase implements IC
 
             for (Edge e = treeViewer.getGraph().getFirstEdge(); e != null; e = e.getNext()) {
                 final Node w = e.getTarget();
-                if (w.getDegree() > 1 && Basic.isDouble(treeViewer.getLabel(w))) {
-                    final double value = Basic.parseDouble(treeViewer.getLabel(w));
+                if (w.getDegree() > 1 && NumberUtils.isDouble(treeViewer.getLabel(w))) {
+                    final double value = NumberUtils.parseDouble(treeViewer.getLabel(w));
                     {
                         if (value < minSupport)
                             toDelete.add(e);
@@ -137,8 +137,8 @@ public class ContractEdgeBySupportValueCommand extends CommandBase implements IC
         double minSupport = ProgramProperties.get("CollapseEdgeThreshold", 75.0);
 
         final String result = JOptionPane.showInputDialog(viewer.getFrame(), "Enter minimum support threshold:", String.format("%.2f", minSupport));
-        if (result != null && Basic.isDouble(result)) {
-            minSupport = Basic.parseDouble(result);
+        if (result != null && NumberUtils.isDouble(result)) {
+            minSupport = NumberUtils.parseDouble(result);
             ProgramProperties.put("CollapseEdgeThreshold", minSupport);
             execute(String.format("contractEdges minSupport=%.2f;", minSupport));
         }

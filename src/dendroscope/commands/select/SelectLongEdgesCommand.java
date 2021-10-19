@@ -22,7 +22,7 @@ import dendroscope.core.Director;
 import jloda.swing.commands.CommandBase;
 import jloda.swing.commands.ICommand;
 import jloda.swing.util.ResourceManager;
-import jloda.util.Basic;
+import jloda.util.NumberUtils;
 import jloda.util.ProgramProperties;
 import jloda.util.parse.NexusStreamParser;
 
@@ -88,7 +88,7 @@ public class SelectLongEdgesCommand extends CommandBase implements ICommand {
     public void actionPerformed(ActionEvent ev) {
         float threshold = (float) ProgramProperties.get("LongEdgeThreshold", 0.1);
         String result = JOptionPane.showInputDialog(getViewer().getFrame(), "Enter minimum edge length to select:", "" + threshold);
-        if (result != null && Basic.isFloat(result)) {
+        if (result != null && NumberUtils.isFloat(result)) {
             ProgramProperties.put("LongEdgeThreshold", (double) threshold);
             executeImmediately("select edges=long threshold=" + result + ";");
         }

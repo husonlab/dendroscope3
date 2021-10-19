@@ -20,7 +20,7 @@ package dendroscope.commands;
 
 import dendroscope.window.TreeViewer;
 import jloda.swing.commands.ICommand;
-import jloda.util.Basic;
+import jloda.util.NumberUtils;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;
@@ -82,7 +82,7 @@ public class SetScaleCommand extends CommandBaseMultiViewer implements ICommand 
         }
 
         label = JOptionPane.showInputDialog(getViewer().getFrame(), "Set units per 100 pixel: ", label);
-        if (label != null && Basic.isDouble(label))
+        if (label != null && NumberUtils.isDouble(label))
             execute("set scale=" + ((float) 100 / Double.parseDouble(label)) + ";");
     }
 

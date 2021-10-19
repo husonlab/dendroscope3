@@ -24,7 +24,7 @@ import dendroscope.window.TreeViewer;
 import jloda.swing.commands.CommandBase;
 import jloda.swing.commands.ICommand;
 import jloda.swing.util.Alert;
-import jloda.util.Basic;
+import jloda.util.NumberUtils;
 import jloda.util.ProgramProperties;
 import jloda.util.parse.NexusStreamParser;
 
@@ -47,7 +47,7 @@ public class ClusterNetworkConsensusCommand extends CommandBase implements IComm
             result = JOptionPane.showInputDialog(getViewer().getFrame(), "Enter percent threshold for network consensus construction", "" + threshold);
         }
         if (result != null) {
-            float threshold = Basic.parseFloat(result);
+            float threshold = NumberUtils.parseFloat(result);
             if (threshold >= 0) {
                 ProgramProperties.put("ConsensusThreshold", threshold);
                 execute("compute consensus method=" + ComputeNetworkConsensus.CLUSTER_NETWORK + " threshold='" + threshold + "';");

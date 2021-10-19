@@ -22,7 +22,7 @@ import dendroscope.core.TreeData;
 import jloda.graph.Node;
 import jloda.phylo.PhyloTree;
 import jloda.swing.graphview.PhyloGraphView;
-import jloda.util.Basic;
+import jloda.util.NumberUtils;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -75,7 +75,7 @@ public class MultiLabeledTreeProcessor {
                 int pos = label.lastIndexOf(".") + 1;
                 if (pos > 0) {
                     String suffix = label.substring(pos);
-                    if (Basic.isInteger(suffix) && Basic.parseInt(suffix) > 0) {
+                    if (NumberUtils.isInteger(suffix) && NumberUtils.parseInt(suffix) > 0) {
                         treeViewer.setSelected(v, true);
                     }
                 }
@@ -96,10 +96,10 @@ public class MultiLabeledTreeProcessor {
                             int pos = label.lastIndexOf(".") + 1;
                             if (pos > 0) {
                                 String suffix = label.substring(pos);
-                                if (Basic.isInteger(suffix)) {
-                                    if (Basic.parseInt(suffix) > 1) {
+                                if (NumberUtils.isInteger(suffix)) {
+                                    if (NumberUtils.parseInt(suffix) > 1) {
                                         toDelete.add(v);
-                                    } else if (Basic.parseInt(suffix) == 1) {
+                                    } else if (NumberUtils.parseInt(suffix) == 1) {
                                         treeViewer.setLabel(v, label.substring(0, pos - 1));
                                         mulTree.setLabel(v, treeViewer.getLabel(v));
                                     }

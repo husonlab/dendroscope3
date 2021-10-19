@@ -22,7 +22,7 @@ import dendroscope.algorithms.clusternet.ClusterNetwork;
 import dendroscope.consensus.Cluster;
 import dendroscope.consensus.Taxa;
 import jloda.phylo.PhyloTree;
-import jloda.util.Basic;
+import jloda.util.NumberUtils;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -55,17 +55,17 @@ public class IntervalsToTree {
         System.err.print("Enter name of file containing taxon labels or number of taxa:");
         String input = r.readLine();
 
-        if (Basic.isInteger(input)) {
-            int nTaxa = Integer.parseInt(input);
-            for (int i = 1; i <= nTaxa; i++) {
-                taxa.add("t" + i);
-            }
-        } else {
-            BufferedReader reader = new BufferedReader(new FileReader(input));
-            String aLine;
-            int t = 0;
-            while ((aLine = reader.readLine()) != null) {
-                taxa.add(aLine.trim() + "[" + (++t) + "]");
+		if (NumberUtils.isInteger(input)) {
+			int nTaxa = Integer.parseInt(input);
+			for (int i = 1; i <= nTaxa; i++) {
+				taxa.add("t" + i);
+			}
+		} else {
+			BufferedReader reader = new BufferedReader(new FileReader(input));
+			String aLine;
+			int t = 0;
+			while ((aLine = reader.readLine()) != null) {
+				taxa.add(aLine.trim() + "[" + (++t) + "]");
             }
         }
         System.err.println("Number of taxa: " + taxa.size());
@@ -88,11 +88,11 @@ public class IntervalsToTree {
             String[] words = aLine.split(" ");
             if (first) {
                 first = false;
-                if (!Basic.isInteger(words[0])) {
-                    System.err.println("Reading input from file: " + aLine);
-                    r = new BufferedReader(new FileReader(aLine));
-                    continue;
-                }
+				if (!NumberUtils.isInteger(words[0])) {
+					System.err.println("Reading input from file: " + aLine);
+					r = new BufferedReader(new FileReader(aLine));
+					continue;
+				}
             }
             if (words.length != 2) {
                 System.err.println("Skipping: " + aLine);

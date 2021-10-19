@@ -30,10 +30,7 @@ import jloda.phylo.PhyloTreeUtils;
 import jloda.swing.director.IDirector;
 import jloda.swing.find.SearchManager;
 import jloda.swing.graphview.*;
-import jloda.util.Basic;
-import jloda.util.IteratorUtils;
-import jloda.util.Pair;
-import jloda.util.ProgramProperties;
+import jloda.util.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -464,7 +461,7 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
         if (nodes.contains(v)) {
             v.reverseOrderAdjacentEdges();
             if (getPhyloTree().getNode2GuideTreeChildren().get(v) != null) {
-                getPhyloTree().getNode2GuideTreeChildren().put(v, Basic.reverseList(getPhyloTree().getNode2GuideTreeChildren().get(v)));
+                getPhyloTree().getNode2GuideTreeChildren().put(v, CollectionUtils.reverseList(getPhyloTree().getNode2GuideTreeChildren().get(v)));
             }
             found++;
         }
@@ -505,7 +502,7 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
         if (nodes.contains(v)) {
             v.rotateOrderAdjacentEdges();
             if (getPhyloTree().getNode2GuideTreeChildren().get(v) != null) {
-                getPhyloTree().getNode2GuideTreeChildren().put(v, Basic.rotateList(getPhyloTree().getNode2GuideTreeChildren().get(v)));
+                getPhyloTree().getNode2GuideTreeChildren().put(v, CollectionUtils.rotateList(getPhyloTree().getNode2GuideTreeChildren().get(v)));
             }
 
             found++;
@@ -989,7 +986,7 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
         Set<String> selectedLabels = new HashSet<>();
         for (Node v = getSelectedNodes().getFirstElement(); v != null; v = getSelectedNodes().getNextElement(v)) {
             String label = getPhyloTree().getLabel(v);
-            if (label != null && label.length() > 0 && !(v.getOutDegree() > 0 && Basic.isDouble(label))) {
+            if (label != null && label.length() > 0 && !(v.getOutDegree() > 0 && NumberUtils.isDouble(label))) {
                 selectedLabels.add(getPhyloGraph().getLabel(v));
             }
         }

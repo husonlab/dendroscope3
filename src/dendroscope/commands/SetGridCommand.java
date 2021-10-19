@@ -22,7 +22,7 @@ import dendroscope.main.DendroscopeProperties;
 import jloda.swing.commands.ICommand;
 import jloda.swing.util.Alert;
 import jloda.swing.util.ResourceManager;
-import jloda.util.Basic;
+import jloda.util.NumberUtils;
 import jloda.util.ProgramProperties;
 import jloda.util.parse.NexusStreamParser;
 
@@ -104,7 +104,7 @@ public class SetGridCommand extends CommandBaseMultiViewer implements ICommand {
         String gridSize = JOptionPane.showInputDialog(getViewer().getFrame(), "Set dimensions of grid (rows x cols):", rows + "x" + cols);
         if (gridSize != null && gridSize.length() > 0) {
             String[] tokens = gridSize.split("x");
-            if (tokens.length == 2 && Basic.isInteger(tokens[0].trim()) && Basic.isInteger(tokens[1].trim())) {
+            if (tokens.length == 2 && NumberUtils.isInteger(tokens[0].trim()) && NumberUtils.isInteger(tokens[1].trim())) {
                 rows = Integer.parseInt(tokens[0].trim());
                 cols = Integer.parseInt(tokens[1].trim());
                 if (rows > 0 && cols > 0) {

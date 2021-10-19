@@ -24,6 +24,7 @@ import jloda.graph.NodeArray;
 import jloda.swing.graphview.EdgeView;
 import jloda.swing.graphview.NodeView;
 import jloda.util.Basic;
+import jloda.util.NumberUtils;
 import jloda.util.Pair;
 import jloda.util.Triplet;
 import org.nexml.model.*;
@@ -98,7 +99,7 @@ public class ConvertTreeDataToNexmlDoc {
                     }
                 }
                 final BiFunction<jloda.graph.Node, String, OTU> getOtu = (v, s) -> {
-                    if (!internalNodeLabelsAreEdgeLabels || v.getOutDegree() == 0 || !Basic.isDouble(s)) {
+                    if (!internalNodeLabelsAreEdgeLabels || v.getOutDegree() == 0 || !NumberUtils.isDouble(s)) {
                         if (!label2otu.containsKey(s)) {
                             final OTU otu = otus.createOTU();
                             otu.setLabel(s);

@@ -25,7 +25,7 @@ import jloda.graph.Edge;
 import jloda.graph.Node;
 import jloda.swing.commands.CommandBase;
 import jloda.swing.commands.ICommand;
-import jloda.util.Basic;
+import jloda.util.NumberUtils;
 import jloda.util.ProgramProperties;
 import jloda.util.parse.NexusStreamParser;
 
@@ -95,14 +95,14 @@ public class IncreaseFontCommand extends CommandBase implements ICommand {
         int newSize = 0;
         boolean increase = false;
         boolean decrease = false;
-        if (Basic.isInteger(input) && Integer.parseInt(input) >= 0)
-            newSize = Integer.parseInt(input);
-        else if (input.equalsIgnoreCase("increase"))
-            increase = true;
-        else if (input.equalsIgnoreCase("decrease"))
-            decrease = true;
-        else
-            throw new IOException("Illegal font size: " + input);
+		if (NumberUtils.isInteger(input) && Integer.parseInt(input) >= 0)
+			newSize = Integer.parseInt(input);
+		else if (input.equalsIgnoreCase("increase"))
+			increase = true;
+		else if (input.equalsIgnoreCase("decrease"))
+			decrease = true;
+		else
+			throw new IOException("Illegal font size: " + input);
 
         boolean changed = false;
 

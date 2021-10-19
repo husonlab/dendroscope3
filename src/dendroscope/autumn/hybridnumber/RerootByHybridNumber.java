@@ -144,8 +144,8 @@ public class RerootByHybridNumber {
 
         if (ProgramProperties.isUseGUI()) {
             String result = JOptionPane.showInputDialog(null, "Enter max h", "" + bestScore);
-            if (result != null && Basic.isInteger(result))
-                bestScore = Integer.parseInt(result);
+            if (result != null && NumberUtils.isInteger(result))
+				bestScore = Integer.parseInt(result);
         }
         System.err.println("Rooting trees by hybrid number");
         progressListener.setTasks("Rooting trees by hybrid number", "Comparing trees");

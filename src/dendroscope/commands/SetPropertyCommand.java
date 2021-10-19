@@ -19,7 +19,7 @@
 package dendroscope.commands;
 
 import jloda.swing.commands.ICommand;
-import jloda.util.Basic;
+import jloda.util.NumberUtils;
 import jloda.util.ProgramProperties;
 import jloda.util.parse.NexusStreamParser;
 
@@ -79,11 +79,11 @@ public class SetPropertyCommand extends CommandBaseMultiViewer implements IComma
         String label = np.getWordRespectCase();
         np.matchIgnoreCase("=");
         String value = np.getWordRespectCase();
-        if (Basic.isBoolean(value)) {
+        if (NumberUtils.isBoolean(value)) {
             ProgramProperties.put(label, Boolean.parseBoolean(value));
-        } else if (Basic.isInteger(value)) {
+        } else if (NumberUtils.isInteger(value)) {
             ProgramProperties.put(label, Integer.parseInt(value));
-        } else if (Basic.isFloat(value)) {
+        } else if (NumberUtils.isFloat(value)) {
             ProgramProperties.put(label, Float.parseFloat(value));
         } else
             ProgramProperties.put(label, value);

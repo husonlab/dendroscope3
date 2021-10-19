@@ -39,8 +39,8 @@ import jloda.swing.message.MessageWindow;
 import jloda.swing.util.*;
 import jloda.swing.window.MenuBar;
 import jloda.swing.window.MenuConfiguration;
-import jloda.util.Basic;
 import jloda.util.CanceledException;
+import jloda.util.NumberUtils;
 import jloda.util.ProgramProperties;
 
 import javax.swing.*;
@@ -109,7 +109,7 @@ public class MultiViewer implements IDirectableViewer, IViewerWithFindToolBar, I
             gridSize = JOptionPane.showInputDialog("Set dimensions of grid (rows x cols):", gridSize);
             if (gridSize != null && gridSize.length() > 0) {
                 String[] tokens = gridSize.split("x");
-                if (tokens.length == 2 && Basic.isInteger(tokens[0].trim()) && Basic.isInteger(tokens[1].trim())) {
+                if (tokens.length == 2 && NumberUtils.isInteger(tokens[0].trim()) && NumberUtils.isInteger(tokens[1].trim())) {
                     rows = Integer.parseInt(tokens[0].trim());
                     cols = Integer.parseInt(tokens[1].trim());
                     if (rows > 0 && cols > 0)

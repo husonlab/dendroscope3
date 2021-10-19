@@ -33,6 +33,7 @@ import jloda.swing.graphview.PanelActionListener;
 import jloda.swing.util.GraphViewPopupListener;
 import jloda.swing.util.ResourceManager;
 import jloda.util.Basic;
+import jloda.util.NumberUtils;
 import jloda.util.ProgramProperties;
 
 import javax.swing.*;
@@ -794,14 +795,14 @@ public class TreeGrid extends JPanel {
                 if (label1 != null) {
                     label1 = label1.trim();
                     if (label1.length() > 0) {
-                        if (!multiViewer.getDir().getDocument().isInternalNodeLabelsAreEdgeLabels() || treeViewer1.getSelected(node1) || node1.getOutDegree() == 0 || !Basic.isDouble(label1)) {
+                        if (!multiViewer.getDir().getDocument().isInternalNodeLabelsAreEdgeLabels() || treeViewer1.getSelected(node1) || node1.getOutDegree() == 0 || !NumberUtils.isDouble(label1)) {
                             for (Node node2 = treeViewer2.getGraph().getFirstNode(); node2 != null; node2 = node2.getNext()) {
                                 if (treeViewer2.getSelectedNodes().size() == 0 || treeViewer2.getSelected(node2)) {
                                     String label2 = treeViewer2.getLabel(node2);
                                     if (label2 != null) {
                                         label2 = label2.trim();
                                         if (label2.length() > 0) {
-                                            if (!multiViewer.getDir().getDocument().isInternalNodeLabelsAreEdgeLabels() || treeViewer2.getSelected(node2) || node2.getOutDegree() == 0 || !Basic.isDouble(label2)) {
+                                            if (!multiViewer.getDir().getDocument().isInternalNodeLabelsAreEdgeLabels() || treeViewer2.getSelected(node2) || node2.getOutDegree() == 0 || !NumberUtils.isDouble(label2)) {
                                                 if (label1.equals(label2)) {
                                                     addConnector(treeViewer1, node1, treeViewer2, node2, Color.LIGHT_GRAY);
                                                 }
