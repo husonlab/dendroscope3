@@ -24,7 +24,11 @@ import jloda.swing.director.*;
 import jloda.swing.message.MessageWindow;
 import jloda.swing.util.Alert;
 import jloda.swing.util.ProgressDialog;
-import jloda.util.*;
+import jloda.util.Basic;
+import jloda.util.CanceledException;
+import jloda.util.ProgramProperties;
+import jloda.util.progress.ProgressCmdLine;
+import jloda.util.progress.ProgressListener;
 
 import javax.swing.*;
 import java.awt.*;

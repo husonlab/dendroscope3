@@ -24,7 +24,7 @@ import dendroscope.io.nexml.Nexml;
 import jloda.swing.commands.ICommand;
 import jloda.swing.util.ChooseFileDialog;
 import jloda.swing.util.ResourceManager;
-import jloda.util.Basic;
+import jloda.util.FileUtils;
 import jloda.util.ProgramProperties;
 
 import javax.swing.*;
@@ -100,7 +100,7 @@ public class SaveAsCommand extends SaveCommand implements ICommand {
         if (lastOpenFile == null) {
             lastOpenFile = new File(ProgramProperties.get(ProgramProperties.SAVEFILE, ""), doc.getTitle());
         }
-        lastOpenFile = new File(lastOpenFile.getParent(), Basic.replaceFileSuffix(lastOpenFile.getName(), formatter.getExtension()));
+		lastOpenFile = new File(lastOpenFile.getParent(), FileUtils.replaceFileSuffix(lastOpenFile.getName(), formatter.getExtension()));
 
         File file = ChooseFileDialog.chooseFileToSave(multiViewer.getFrame(), lastOpenFile, IOManager.getFileFilter(), IOManager.getFilenameFilter(), event, "Save document", formatter.getExtension());
 

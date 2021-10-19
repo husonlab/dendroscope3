@@ -22,7 +22,7 @@ import dendroscope.autumn.Root;
 import dendroscope.consensus.Cluster;
 import jloda.graph.Edge;
 import jloda.graph.Graph;
-import jloda.util.Basic;
+import jloda.util.StringUtils;
 
 import java.util.BitSet;
 
@@ -49,9 +49,9 @@ public class CopyWithTaxaRemoved {
             try {
                 newRoot.checkTree();
             } catch (RuntimeException ex) {
-                System.err.println("Orig: " + v.toStringFullTreeX());
-                System.err.println("To remove: " + Basic.toString(taxa2remove));
-                System.err.println("New: " + newRoot.toStringFullTreeX());
+				System.err.println("Orig: " + v.toStringFullTreeX());
+				System.err.println("To remove: " + StringUtils.toString(taxa2remove));
+				System.err.println("New: " + newRoot.toStringFullTreeX());
                 throw ex;
             }
         }

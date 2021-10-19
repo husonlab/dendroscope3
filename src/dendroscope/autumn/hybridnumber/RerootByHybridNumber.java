@@ -24,6 +24,7 @@ import jloda.graph.Edge;
 import jloda.graph.Node;
 import jloda.phylo.PhyloTree;
 import jloda.util.*;
+import jloda.util.progress.ProgressListener;
 
 import javax.swing.*;
 import java.io.IOException;

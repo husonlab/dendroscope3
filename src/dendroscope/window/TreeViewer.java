@@ -31,6 +31,7 @@ import jloda.swing.director.IDirector;
 import jloda.swing.find.SearchManager;
 import jloda.swing.graphview.*;
 import jloda.util.Basic;
+import jloda.util.IteratorUtils;
 import jloda.util.Pair;
 import jloda.util.ProgramProperties;
 
@@ -839,8 +840,8 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
                 }
             }
             List<Edge> newOrder = new LinkedList<Edge>();
-            for (Iterator<Edge> it = Basic.randomize(v.adjacentEdges().iterator(), v.getId()); it.hasNext(); )
-                newOrder.add(it.next());
+			for (Iterator<Edge> it = IteratorUtils.randomize(v.adjacentEdges().iterator(), v.getId()); it.hasNext(); )
+				newOrder.add(it.next());
 
             v.rearrangeAdjacentEdges(newOrder);
         }

@@ -24,7 +24,7 @@ import jloda.graph.NodeArray;
 import jloda.graph.NodeSet;
 import jloda.phylo.PhyloSplitsGraph;
 import jloda.phylo.PhyloTree;
-import jloda.util.ProgressListener;
+import jloda.util.progress.ProgressListener;
 
 import java.util.*;
 

@@ -23,6 +23,8 @@ import dendroscope.core.TreeData;
 import dendroscope.io.IOBase;
 import dendroscope.io.IOFormat;
 import jloda.util.Basic;
+import jloda.util.FileUtils;
+import jloda.util.StringUtils;
 import org.nexml.model.Document;
 import org.nexml.model.DocumentFactory;
 
@@ -116,7 +118,7 @@ public class Nexml extends IOBase implements IOFormat {
      */
     public boolean isCorrectFileType(File file) {
         try {
-            return isCorrectType(Basic.toString(Basic.getFirstBytesFromFile(file, TAG.length())));
+			return isCorrectType(StringUtils.toString(FileUtils.getFirstBytesFromFile(file, TAG.length())));
         } catch (Exception e) {
             return false;
         }

@@ -22,7 +22,7 @@ import dendroscope.algorithms.levelknet.LevelKNetwork;
 import dendroscope.window.MultiViewer;
 import jloda.phylo.PhyloTree;
 import jloda.swing.util.ProgressDialog;
-import jloda.util.ProgressListener;
+import jloda.util.progress.ProgressListener;
 
 import java.util.List;
 

@@ -18,7 +18,7 @@
  */
 package dendroscope.consensus;
 
-import jloda.util.Basic;
+import jloda.util.StringUtils;
 
 import java.util.*;
 
@@ -328,7 +328,7 @@ public class Cluster extends BitSet {
      * @return string
      */
     public String toString() {
-        return Basic.toString(this);
+		return StringUtils.toString(this);
     }
 
     /**

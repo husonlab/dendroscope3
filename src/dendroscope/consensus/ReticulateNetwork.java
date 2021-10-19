@@ -22,7 +22,7 @@ import jloda.graph.Edge;
 import jloda.swing.util.ProgressDialog;
 import jloda.util.CanceledException;
 import jloda.util.Pair;
-import jloda.util.ProgressListener;
+import jloda.util.progress.ProgressListener;
 
 import java.util.*;
 

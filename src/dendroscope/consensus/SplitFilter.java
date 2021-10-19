@@ -22,7 +22,7 @@ import jloda.phylo.Distortion;
 import jloda.phylo.PhyloTree;
 import jloda.util.Basic;
 import jloda.util.CanceledException;
-import jloda.util.ProgressListener;
+import jloda.util.progress.ProgressListener;
 
 import java.io.IOException;
 import java.util.BitSet;

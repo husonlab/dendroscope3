@@ -24,7 +24,7 @@ import dendroscope.io.nexml.Nexml;
 import jloda.swing.commands.ICommand;
 import jloda.swing.util.ChooseFileDialog;
 import jloda.swing.util.ResourceManager;
-import jloda.util.Basic;
+import jloda.util.FileUtils;
 import jloda.util.ProgramProperties;
 import jloda.util.parse.NexusStreamParser;
 
@@ -119,7 +119,7 @@ public class ExportCommand extends CommandBaseMultiViewer implements ICommand {
 
         File lastOpenFile = null;
         if (lastSaveDir != null)
-            lastOpenFile = new File(lastSaveDir, Basic.replaceFileSuffix(name, formatter.getExtension()));
+			lastOpenFile = new File(lastSaveDir, FileUtils.replaceFileSuffix(name, formatter.getExtension()));
 
         File file = ChooseFileDialog.chooseFileToSave(multiViewer.getFrame(), lastOpenFile, IOManager.getFileFilter(), IOManager.getFilenameFilter(), event, "Export trees or networks", formatter.getExtension());
 

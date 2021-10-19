@@ -24,7 +24,7 @@ import dendroscope.window.TreeViewer;
 import jloda.phylo.PhyloTree;
 import jloda.swing.commands.ICommand;
 import jloda.swing.util.Alert;
-import jloda.util.Basic;
+import jloda.util.StringUtils;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;
@@ -94,7 +94,7 @@ public class SimplisticCommand extends CommandBaseMultiViewer implements IComman
     public void actionPerformed(ActionEvent ev) {
         String[] param = createPanelForInput();
         if (param != null) {
-            execute("compute triplets2network method=simplistic parameters=" + Basic.toString(param, " ") + ";");
+			execute("compute triplets2network method=simplistic parameters=" + StringUtils.toString(param, " ") + ";");
         }
     }
 

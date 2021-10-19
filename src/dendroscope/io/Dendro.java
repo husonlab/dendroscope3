@@ -27,7 +27,9 @@ import jloda.swing.graphview.EdgeView;
 import jloda.swing.graphview.GraphView;
 import jloda.swing.graphview.NodeView;
 import jloda.util.Basic;
+import jloda.util.FileUtils;
 import jloda.util.Pair;
+import jloda.util.StringUtils;
 import jloda.util.parse.NexusStreamParser;
 
 import java.io.*;
@@ -55,7 +57,7 @@ public class Dendro extends IOBase implements IOFormat {
      */
     public boolean isCorrectFileType(File file) {
         try {
-            return isCorrectType(Basic.toString(Basic.getFirstBytesFromFile(file, TAG.length())));
+			return isCorrectType(StringUtils.toString(FileUtils.getFirstBytesFromFile(file, TAG.length())));
         } catch (Exception e) {
             return false;
         }

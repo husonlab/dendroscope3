@@ -19,7 +19,7 @@
 package dendroscope.consensus;
 
 import jloda.util.CanceledException;
-import jloda.util.ProgressListener;
+import jloda.util.progress.ProgressListener;
 
 import java.util.Iterator;
 import java.util.Stack;

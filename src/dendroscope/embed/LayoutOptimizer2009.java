@@ -25,7 +25,7 @@ import jloda.graph.Node;
 import jloda.graph.NodeArray;
 import jloda.phylo.PhyloTree;
 import jloda.util.Pair;
-import jloda.util.ProgressListener;
+import jloda.util.progress.ProgressListener;
 
 import java.util.*;
 

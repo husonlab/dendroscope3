@@ -27,7 +27,7 @@ import dendroscope.window.TreeViewer;
 import jloda.swing.commands.ICommand;
 import jloda.swing.director.IDirector;
 import jloda.swing.util.Message;
-import jloda.util.Basic;
+import jloda.util.FileUtils;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;
@@ -70,8 +70,8 @@ public class ClusterReductionCommand extends CommandBaseMultiViewer implements I
 
             if (newTrees.length > 0 && newTrees[0].getNumberOfNodes() > 0) {
                 Director newDir = Director.newProject(1, 1);
-                newDir.getDocument().appendTrees(newTrees);
-                newDir.getDocument().setTitle(Basic.replaceFileSuffix(getDir().getDocument().getTitle(), "-cluster-reduction"));
+				newDir.getDocument().appendTrees(newTrees);
+				newDir.getDocument().setTitle(FileUtils.replaceFileSuffix(getDir().getDocument().getTitle(), "-cluster-reduction"));
                 MultiViewer newMultiViewer = (MultiViewer) newDir.getMainViewer();
                 newMultiViewer.chooseGridSize();
                 newMultiViewer.loadTrees(null);

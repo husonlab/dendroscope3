@@ -23,8 +23,8 @@ import dendroscope.consensus.Taxa;
 import dendroscope.core.TreeData;
 import jloda.graph.Edge;
 import jloda.graph.Node;
-import jloda.util.Basic;
 import jloda.util.Pair;
+import jloda.util.StringUtils;
 
 import java.io.IOException;
 import java.util.*;
@@ -68,7 +68,7 @@ public class Refine {
     public static void apply(Root root1, Root root2) {
         applyRec(root1, root2, new HashSet<Pair<Root, Root>>());
         if (!root1.getTaxa().equals(root2.getTaxa()))
-            throw new RuntimeException("Unequal taxon sets: " + Basic.toString(root1.getTaxa()) + " vs " + Basic.toString(root2.getTaxa()));
+			throw new RuntimeException("Unequal taxon sets: " + StringUtils.toString(root1.getTaxa()) + " vs " + StringUtils.toString(root2.getTaxa()));
     }
 
     /**

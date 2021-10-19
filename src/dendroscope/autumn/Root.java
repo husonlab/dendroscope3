@@ -24,9 +24,9 @@ import jloda.graph.Edge;
 import jloda.graph.Graph;
 import jloda.graph.Node;
 import jloda.phylo.PhyloTree;
-import jloda.util.Basic;
 import jloda.util.Pair;
 import jloda.util.Single;
+import jloda.util.StringUtils;
 
 import java.util.*;
 
@@ -347,8 +347,8 @@ public class Root extends Node {
             if (!root.getTaxa().equals(taxa))
                 throw new RuntimeException("Taxa discrepancy: " + string + ";");
             if (!root.getRemovedTaxa().equals(removed))
-                throw new RuntimeException("Removed-taxa discrepancy at " + root.toString() + ": " + string + ";"
-                        + "\nExpected(root): " + Basic.toString(root.getRemovedTaxa()) + ", got(below): " + Basic.toString(removed));
+				throw new RuntimeException("Removed-taxa discrepancy at " + root.toString() + ": " + string + ";"
+										   + "\nExpected(root): " + StringUtils.toString(root.getRemovedTaxa()) + ", got(below): " + StringUtils.toString(removed));
             if (root.getOutDegree() == 0 && root.getTaxa().cardinality() == 0 && root.getInDegree() == 1 && root.getFirstInEdge().getInfo() == null)
                 throw new RuntimeException("In-edge without tree id:: " + string + ";");
         }

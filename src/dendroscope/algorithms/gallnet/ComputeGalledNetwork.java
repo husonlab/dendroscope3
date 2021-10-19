@@ -30,8 +30,8 @@ import jloda.graph.NodeDoubleArray;
 import jloda.phylo.PhyloTree;
 import jloda.swing.util.Alert;
 import jloda.swing.util.ProgressDialog;
-import jloda.util.Basic;
-import jloda.util.ProgressListener;
+import jloda.util.StringUtils;
+import jloda.util.progress.ProgressListener;
 
 import java.util.*;
 
@@ -327,9 +327,9 @@ public class ComputeGalledNetwork {
                         found = true;
                 }
                 if (!found)
-                    System.err.println("Component not equal to any cluster: " + Basic.toString(allTaxaInComponent[n]));
+                    System.err.println("Component not equal to any cluster: " + StringUtils.toString(allTaxaInComponent[n]));
                 if (!foundIn)
-                    System.err.println("Component not contained in any cluster: " + Basic.toString(allTaxaInComponent[n]));
+                    System.err.println("Component not contained in any cluster: " + StringUtils.toString(allTaxaInComponent[n]));
             }
         }
 

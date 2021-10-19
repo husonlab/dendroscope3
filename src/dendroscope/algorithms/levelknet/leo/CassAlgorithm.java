@@ -19,7 +19,7 @@
 package dendroscope.algorithms.levelknet.leo;
 
 import jloda.util.CanceledException;
-import jloda.util.ProgressListener;
+import jloda.util.progress.ProgressListener;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

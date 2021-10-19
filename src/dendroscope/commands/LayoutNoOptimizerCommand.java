@@ -21,7 +21,7 @@ package dendroscope.commands;
 import dendroscope.embed.LayoutOptimizerManager;
 import dendroscope.window.TreeViewer;
 import jloda.swing.commands.ICheckBoxCommand;
-import jloda.util.Basic;
+import jloda.util.StringUtils;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;
@@ -74,7 +74,7 @@ public class LayoutNoOptimizerCommand extends CommandBaseMultiViewer implements 
      * @return usage
      */
     public String getSyntax() {
-        return "set layouter={" + Basic.toString(LayoutOptimizerManager.getEmbedderNames(), "|") + "};";
+		return "set layouter={" + StringUtils.toString(LayoutOptimizerManager.getEmbedderNames(), "|") + "};";
     }
 
     /**

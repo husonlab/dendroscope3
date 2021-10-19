@@ -25,7 +25,7 @@ import jloda.graph.Edge;
 import jloda.graph.Node;
 import jloda.phylo.PhyloTree;
 import jloda.util.CanceledException;
-import jloda.util.ProgressListener;
+import jloda.util.progress.ProgressListener;
 
 import java.io.IOException;
 import java.util.BitSet;

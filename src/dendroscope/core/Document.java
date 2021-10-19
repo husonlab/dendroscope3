@@ -20,10 +20,10 @@ package dendroscope.core;
 
 import dendroscope.util.NexusTrees;
 import jloda.phylo.PhyloTree;
-import jloda.util.Basic;
 import jloda.util.CanceledException;
-import jloda.util.ProgressCmdLine;
-import jloda.util.ProgressListener;
+import jloda.util.FileUtils;
+import jloda.util.progress.ProgressCmdLine;
+import jloda.util.progress.ProgressListener;
 
 import java.io.*;
 import java.util.HashSet;
@@ -146,7 +146,7 @@ public class Document {
     public void setFile(File file) {
         this.file = file;
         if (file != null) {
-            Basic.getFileWithNewUniqueName(file.getName()); // load this name
+            FileUtils.getFileWithNewUniqueName(file.getName()); // load this name
             setTitle(file.getName());
         }
     }
@@ -159,7 +159,7 @@ public class Document {
      */
     public void setFile(String name, boolean unique) {
         if (unique) {
-            file = Basic.getFileWithNewUniqueName(name);
+            file = FileUtils.getFileWithNewUniqueName(name);
         } else {
             file = new File(name);
         }

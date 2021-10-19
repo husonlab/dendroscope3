@@ -26,9 +26,9 @@ import dendroscope.core.TreeData;
 import jloda.graph.Edge;
 import jloda.graph.Node;
 import jloda.graph.NodeSet;
-import jloda.util.Basic;
 import jloda.util.Pair;
 import jloda.util.Single;
+import jloda.util.StringUtils;
 
 import java.io.IOException;
 import java.util.*;
@@ -116,7 +116,7 @@ public class SubtreeReduction {
         applyRec(v1, isomorphic1, v2, isomorphic2, subTrees, new HashSet<Pair<Node, Node>>(), changed);
 
         if (!v1.getTaxa().equals(v2.getTaxa()))
-            throw new RuntimeException("Unequal taxon sets: " + Basic.toString(v1.getTaxa()) + " vs " + Basic.toString(v2.getTaxa()));
+			throw new RuntimeException("Unequal taxon sets: " + StringUtils.toString(v1.getTaxa()) + " vs " + StringUtils.toString(v2.getTaxa()));
 
         if (checking) {
             try {

@@ -20,7 +20,7 @@ package dendroscope.embed;
 
 import jloda.phylo.PhyloTree;
 import jloda.util.CanceledException;
-import jloda.util.ProgressListener;
+import jloda.util.progress.ProgressListener;
 
 /**
  * * Interface for embedding algorithms for computing a good embedding of a phylogenetic network

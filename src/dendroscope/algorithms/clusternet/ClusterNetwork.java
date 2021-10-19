@@ -22,8 +22,8 @@ import dendroscope.consensus.*;
 import jloda.graph.*;
 import jloda.phylo.PhyloTree;
 import jloda.phylo.PhyloTreeUtils;
-import jloda.util.Basic;
 import jloda.util.ProgramProperties;
+import jloda.util.StringUtils;
 import jloda.util.Triplet;
 
 import java.util.*;
@@ -220,7 +220,7 @@ public class ClusterNetwork {
                 if (w.getInDegree() == 1 && additionalEdgeSources.contains(w.getFirstInEdge().getSource()))
                     w = w.getFirstInEdge().getSource();
 
-                System.err.println("Creating additional edge: " + Basic.toString(first) + " -> " + Basic.toString(second) + "; up=" + up);
+				System.err.println("Creating additional edge: " + StringUtils.toString(first) + " -> " + StringUtils.toString(second) + "; up=" + up);
 
                 if (up) {
                     if (additionalEdgeSources.contains(v.getFirstInEdge().getSource())) {

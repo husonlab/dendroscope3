@@ -31,7 +31,7 @@ import jloda.phylo.PhyloTree;
 import jloda.util.Basic;
 import jloda.util.CanceledException;
 import jloda.util.IteratorUtils;
-import jloda.util.ProgressListener;
+import jloda.util.progress.ProgressListener;
 
 import java.util.*;
 

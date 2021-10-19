@@ -28,6 +28,7 @@ import dendroscope.consensus.Taxa;
 import dendroscope.core.TreeData;
 import jloda.graph.Edge;
 import jloda.util.*;
+import jloda.util.progress.ProgressListener;
 import org.apache.commons.collections.map.LRUMap;
 
 import java.io.IOException;
@@ -209,8 +210,8 @@ public class ComputeHybridizationNetwork {
     private int cacheComputeRec(Root root1, Root root2, boolean isReduced, BitSet candidateHybrids, int k, Collection<Root> totalResults, String depth) throws IOException, CanceledException {
         if (true) // use caching
         {
-            String key = root1.toStringTree() + root2.toStringTree() + (candidateHybrids != null ? Basic.toString(candidateHybrids) : "");
-            Pair<Integer, Collection<Root>> cachedResults = (Pair<Integer, Collection<Root>>) lookupTable.get(key);
+			String key = root1.toStringTree() + root2.toStringTree() + (candidateHybrids != null ? StringUtils.toString(candidateHybrids) : "");
+			Pair<Integer, Collection<Root>> cachedResults = (Pair<Integer, Collection<Root>>) lookupTable.get(key);
             if (cachedResults != null) {
                 totalResults.addAll(cachedResults.getSecond());
 
@@ -264,7 +265,7 @@ public class ComputeHybridizationNetwork {
             root1.checkTree();
             root2.checkTree();
             if (!root2.getTaxa().equals(root1.getTaxa()))
-                throw new RuntimeException("Unequal taxon sets: X=" + Basic.toString(root1.getTaxa()) + " vs " + Basic.toString(root2.getTaxa()));
+				throw new RuntimeException("Unequal taxon sets: X=" + StringUtils.toString(root1.getTaxa()) + " vs " + StringUtils.toString(root2.getTaxa()));
         }
 
         if (!isReduced) {
@@ -398,9 +399,9 @@ public class ComputeHybridizationNetwork {
 
             if (candidateHybridsOriginal.get(hybridTaxon)) {
                 if (verbose) {
-                    System.err.println(depth + "Removing: " + hybridTaxon);
-                    System.err.println(depth + "candidateHybrids: " + Basic.toString(candidateHybridsOriginal));
-                    System.err.println(depth + "Tree1: " + root1.toStringFullTreeX());
+					System.err.println(depth + "Removing: " + hybridTaxon);
+					System.err.println(depth + "candidateHybrids: " + StringUtils.toString(candidateHybridsOriginal));
+					System.err.println(depth + "Tree1: " + root1.toStringFullTreeX());
                     System.err.println(depth + "Tree2: " + root2.toStringFullTreeX());
                 }
 
@@ -495,9 +496,9 @@ public class ComputeHybridizationNetwork {
      * @throws IOException
      */
     public BitSet getAllAliveTaxa(Root root1, Root root2) throws IOException {
-        if (!root1.getTaxa().equals(root2.getTaxa()))
-            throw new IOException("Trees have different sets of alive taxa: " + Basic.toString(root1.getTaxa()) + " vs "
-                    + Basic.toString(root2.getTaxa()));
+		if (!root1.getTaxa().equals(root2.getTaxa()))
+			throw new IOException("Trees have different sets of alive taxa: " + StringUtils.toString(root1.getTaxa()) + " vs "
+								  + StringUtils.toString(root2.getTaxa()));
         return (BitSet) root1.getTaxa().clone();
     }
 

@@ -22,6 +22,7 @@ import jloda.graph.Node;
 import jloda.swing.graphview.NodeImage;
 import jloda.swing.graphview.NodeView;
 import jloda.util.Basic;
+import jloda.util.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -59,17 +60,17 @@ public class NodeImageManager {
             File[] files = dir.listFiles();
             if (files != null) {
                 for (File file : files) {
-                    if (Basic.isImageFile(file))
-                        try {
-                            NodeImage image = new NodeImage(file, viewer);
-                            image.setHeight(defaultImageHeight);
-                            image.setLayout(defaultImageLayout);
-                            String name = file.getName();
-                            int p = name.lastIndexOf(".");
-                            if (p > 0)
-                                name = name.substring(0, p);
-                            name2image.put(name, image);
-                        } catch (IOException e) {
+					if (FileUtils.isImageFile(file))
+						try {
+							NodeImage image = new NodeImage(file, viewer);
+							image.setHeight(defaultImageHeight);
+							image.setLayout(defaultImageLayout);
+							String name = file.getName();
+							int p = name.lastIndexOf(".");
+							if (p > 0)
+								name = name.substring(0, p);
+							name2image.put(name, image);
+						} catch (IOException e) {
                             Basic.caught(e);
                             System.err.println("file: " + file.getName());
                         }

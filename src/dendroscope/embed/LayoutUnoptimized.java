@@ -21,7 +21,7 @@ package dendroscope.embed;
 import dendroscope.consensus.LSATree;
 import jloda.graph.*;
 import jloda.phylo.PhyloTree;
-import jloda.util.ProgressListener;
+import jloda.util.progress.ProgressListener;
 
 import java.util.*;
 

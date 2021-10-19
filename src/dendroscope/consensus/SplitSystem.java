@@ -28,8 +28,8 @@ import jloda.graph.NodeArray;
 import jloda.phylo.PhyloTree;
 import jloda.util.CanceledException;
 import jloda.util.ProgramProperties;
-import jloda.util.ProgressListener;
-import jloda.util.ProgressSilent;
+import jloda.util.progress.ProgressListener;
+import jloda.util.progress.ProgressSilent;
 
 import javax.swing.*;
 import java.io.IOException;

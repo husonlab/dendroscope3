@@ -24,7 +24,7 @@ import jloda.phylo.PhyloTree;
 import jloda.swing.graphview.EdgeView;
 import jloda.swing.graphview.Transform;
 import jloda.swing.util.Alert;
-import jloda.util.Basic;
+import jloda.util.StringUtils;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -736,7 +736,7 @@ class TransferEdge {
     }
 
     public String toString() {
-        return "Transfer-edge (" + label + "): " + source + " to " + Basic.toString(targets, ",");
+		return "Transfer-edge (" + label + "): " + source + " to " + StringUtils.toString(targets, ",");
     }
 
     public Node getSource() {

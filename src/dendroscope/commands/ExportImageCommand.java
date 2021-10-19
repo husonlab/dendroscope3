@@ -25,7 +25,7 @@ import jloda.swing.commands.CommandBase;
 import jloda.swing.commands.ICommand;
 import jloda.swing.export.*;
 import jloda.swing.util.ResourceManager;
-import jloda.util.Basic;
+import jloda.util.FileUtils;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;
@@ -102,7 +102,7 @@ public class ExportImageCommand extends CommandBase implements ICommand {
 
 
         if (format.equals("file-suffix")) {
-            format = Basic.getFileSuffix(fileName);
+			format = FileUtils.getFileSuffix(fileName);
         }
 
         try {

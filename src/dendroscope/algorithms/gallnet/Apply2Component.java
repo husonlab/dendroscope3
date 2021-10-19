@@ -25,7 +25,11 @@ import jloda.graph.Node;
 import jloda.graph.NodeArray;
 import jloda.graph.NodeSet;
 import jloda.phylo.PhyloTree;
-import jloda.util.*;
+import jloda.util.CanceledException;
+import jloda.util.Pair;
+import jloda.util.StringUtils;
+import jloda.util.Triplet;
+import jloda.util.progress.ProgressListener;
 
 import java.util.*;
 
@@ -103,7 +107,7 @@ public class Apply2Component {
         {
             boolean reticulateOk = verifyReticulateTaxa(bestChoice, clusters);
             if (!reticulateOk)
-                System.err.println("Verification of reticulation set failed on: " + Basic.toString(bestChoice));
+                System.err.println("Verification of reticulation set failed on: " + StringUtils.toString(bestChoice));
         }
 
         // compute backbone tree:
@@ -192,7 +196,7 @@ public class Apply2Component {
                 }
                 if (!ok) {
                     System.err.println("WARNING: error in reticulate set, doesn't solve imcompatibility between "
-                            + Basic.toString(clusters[i]) + " and " + Basic.toString(clusters[j]));
+                                       + StringUtils.toString(clusters[i]) + " and " + StringUtils.toString(clusters[j]));
                     allOk = false;
                 }
             }
@@ -697,7 +701,7 @@ public class Apply2Component {
         bestChoice = (BitSet) solutionIt.next();
 
         if (DEBUG)
-            System.err.println("Best solution: " + Basic.toString(bestChoice));
+            System.err.println("Best solution: " + StringUtils.toString(bestChoice));
 
         while (solutionIt.hasNext()) {
             boolean keep = false;

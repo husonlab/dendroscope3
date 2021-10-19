@@ -21,6 +21,7 @@ package dendroscope.commands;
 import jloda.swing.commands.ICommand;
 import jloda.swing.util.ResourceManager;
 import jloda.util.Basic;
+import jloda.util.StringUtils;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;
@@ -86,8 +87,8 @@ public class ShowHelpCommand extends CommandBaseMultiViewer implements ICommand 
             System.out.println("Available commands (context=" + Basic.getShortName(getViewer().getClass()).toLowerCase() + "):");
             System.out.println(getCommandManager().getUsage(getViewer().getFrame().getJMenuBar()));
         } else {
-            System.out.println("Available commands (context=" + Basic.getShortName(getViewer().getClass()).toLowerCase() + ", keyword(s)=" + Basic.toString(keywords, ",") + "):");
-            System.out.println(getCommandManager().getUsage(keywords));
+			System.out.println("Available commands (context=" + Basic.getShortName(getViewer().getClass()).toLowerCase() + ", keyword(s)=" + StringUtils.toString(keywords, ",") + "):");
+			System.out.println(getCommandManager().getUsage(keywords));
         }
     }
 

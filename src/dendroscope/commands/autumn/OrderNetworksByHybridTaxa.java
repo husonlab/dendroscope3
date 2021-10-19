@@ -30,7 +30,7 @@ import jloda.swing.commands.CommandBase;
 import jloda.swing.commands.ICommand;
 import jloda.swing.director.IDirector;
 import jloda.swing.util.Alert;
-import jloda.util.Basic;
+import jloda.util.FileUtils;
 import jloda.util.Pair;
 import jloda.util.ProgramProperties;
 import jloda.util.parse.NexusStreamParser;
@@ -163,7 +163,7 @@ public class OrderNetworksByHybridTaxa extends CommandBase implements ICommand {
             theDoc.setTrees(new TreeData[0]);
         }
 
-        theDoc.setTitle(Basic.getFileBaseName(originalDocument.getTitle()) + "-" + (order ? "ordered" : "filtered"));
+		theDoc.setTitle(FileUtils.getFileBaseName(originalDocument.getTitle()) + "-" + (order ? "ordered" : "filtered"));
         BitSet which = new BitSet();
         for (int i = 0; i < result.length; i++) {
             theDoc.appendTree(originalDocument.getName(multiViewer.getTreeGrid().getNumberOfViewerInDocument(result[i])), result[i].getPhyloTree(), i);

@@ -33,9 +33,10 @@ import jloda.swing.commands.ICommand;
 import jloda.swing.director.IDirector;
 import jloda.swing.util.Alert;
 import jloda.util.Basic;
+import jloda.util.FileUtils;
 import jloda.util.ProgramProperties;
-import jloda.util.ProgressListener;
 import jloda.util.parse.NexusStreamParser;
+import jloda.util.progress.ProgressListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -211,7 +212,7 @@ public class TanglegramNeighborNetCommand extends CommandBaseMultiViewer impleme
 
         theMultiViewer.setEmbedderName(LayoutOptimizerManager.UNOPTIMIZED); // don't change best common embedding
 
-        theDoc.setTitle(Basic.getFileBaseName(getDir().getDocument().getTitle()) + "-tanglegram");
+        theDoc.setTitle(FileUtils.getFileBaseName(getDir().getDocument().getTitle()) + "-tanglegram");
         BitSet which = new BitSet();
         for (int i = 0; i < trees.length; i++) {
             theDoc.appendTree(names[i], trees[i], i);

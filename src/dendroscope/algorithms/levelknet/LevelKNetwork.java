@@ -34,7 +34,8 @@ import jloda.swing.util.Alert;
 import jloda.swing.util.ProgressDialog;
 import jloda.util.Basic;
 import jloda.util.CanceledException;
-import jloda.util.ProgressListener;
+import jloda.util.StringUtils;
+import jloda.util.progress.ProgressListener;
 
 import java.util.*;
 
@@ -460,7 +461,7 @@ public class LevelKNetwork {
                 return v;
             }
         }
-        throw new RuntimeException("Taxa not found in backbone network: " + Basic.toString(taxa));
+        throw new RuntimeException("Taxa not found in backbone network: " + StringUtils.toString(taxa));
     }
 
     /**

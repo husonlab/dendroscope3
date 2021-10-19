@@ -20,7 +20,7 @@ package dendroscope.util.convexhull; /**
  * author: Tim Lambert, UNSW, 2000
  */
 
-import jloda.util.Basic;
+import jloda.util.StringUtils;
 
 import java.awt.geom.Point2D;
 import java.util.*;
@@ -196,10 +196,10 @@ public class GiftWrap extends HullAlgorithm {
 
                         new Point2D.Double(0.1, 0.1)};
 
-        System.err.println("Input: " + Basic.toString(input, ";"));
+		System.err.println("Input: " + StringUtils.toString(input, ";"));
 
         Set<Point2D> result = GiftWrap.apply2D(Arrays.asList(input));
-        System.err.println("Output: " + Basic.toString(result, ";"));
+		System.err.println("Output: " + StringUtils.toString(result, ";"));
     }
 
 }

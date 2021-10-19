@@ -33,7 +33,7 @@ import dendroscope.window.TreeViewer;
 import jloda.swing.commands.ICommand;
 import jloda.swing.director.IDirector;
 import jloda.swing.util.Message;
-import jloda.util.Basic;
+import jloda.util.FileUtils;
 import jloda.util.Pair;
 import jloda.util.parse.NexusStreamParser;
 
@@ -135,8 +135,8 @@ public class MergeIsomorphicInducedCommand extends CommandBaseMultiViewer implem
 
                 if (resultTrees.get(0).getNumberOfNodes() > 0) {
                     Director newDir = Director.newProject(1, 1);
-                    newDir.getDocument().appendTrees(resultTrees.toArray(new TreeData[resultTrees.size()]));
-                    newDir.getDocument().setTitle(Basic.replaceFileSuffix(getDir().getDocument().getTitle(), "-merged"));
+					newDir.getDocument().appendTrees(resultTrees.toArray(new TreeData[resultTrees.size()]));
+					newDir.getDocument().setTitle(FileUtils.replaceFileSuffix(getDir().getDocument().getTitle(), "-merged"));
                     MultiViewer newMultiViewer = (MultiViewer) newDir.getMainViewer();
                     newMultiViewer.chooseGridSize();
                     newMultiViewer.loadTrees(null);

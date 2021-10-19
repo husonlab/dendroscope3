@@ -25,10 +25,10 @@ import jloda.graph.Edge;
 import jloda.graph.Node;
 import jloda.graph.NodeDoubleArray;
 import jloda.phylo.PhyloTree;
-import jloda.util.Basic;
 import jloda.util.CanceledException;
-import jloda.util.ProgressListener;
+import jloda.util.StringUtils;
 import jloda.util.Triplet;
+import jloda.util.progress.ProgressListener;
 
 import java.io.IOException;
 import java.util.*;
@@ -101,11 +101,11 @@ public class PrimordialConsensus implements IConsensusTreeMethod {
                         FourTaxa four = new FourTaxa(0, a, b, c);
                         four2topology.put(four, topology);
                         if (verbose)
-                            System.err.println("Four: " + Basic.toString(four) + " Quartet: " + topology);
+                            System.err.println("Four: " + StringUtils.toString(four) + " Quartet: " + topology);
                     } else {
                         FourTaxa four = new FourTaxa(0, a, b, c);
                         if (verbose)
-                            System.err.println("Four: " + Basic.toString(four) + " Quartet: unresolved");
+                            System.err.println("Four: " + StringUtils.toString(four) + " Quartet: unresolved");
                     }
                 }
             }
@@ -180,7 +180,7 @@ public class PrimordialConsensus implements IConsensusTreeMethod {
                                 FourTaxa four = new FourTaxa(x, a, b1, b2);
                                 QuartetTopology topology = four2topology.get(four);
                                 if (verbose)
-                                    System.err.println("Four: " + Basic.toString(four) + " Quartet: " + topology);
+                                    System.err.println("Four: " + StringUtils.toString(four) + " Quartet: " + topology);
                                 if (topology == null || !topology.separates(a, b1, b2))
                                     ok = false;
                             }

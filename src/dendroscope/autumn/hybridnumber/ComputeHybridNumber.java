@@ -24,6 +24,7 @@ import dendroscope.consensus.Taxa;
 import jloda.graph.Node;
 import jloda.phylo.PhyloTree;
 import jloda.util.*;
+import jloda.util.progress.ProgressListener;
 import org.apache.commons.collections.map.LRUMap;
 
 import java.io.IOException;
@@ -249,7 +250,7 @@ public class ComputeHybridNumber {
         }
 
         if (!root2.getTaxa().equals(taxa))
-            throw new RuntimeException("Unequal taxon sets: X=" + Basic.toString(root1.getTaxa()) + " vs " + Basic.toString(root2.getTaxa()));
+			throw new RuntimeException("Unequal taxon sets: X=" + StringUtils.toString(root1.getTaxa()) + " vs " + StringUtils.toString(root2.getTaxa()));
         if (!isReduced) {
             switch (SubtreeReduction.apply(root1, root2, null)) {
                 case ISOMORPHIC:
@@ -404,8 +405,8 @@ public class ComputeHybridNumber {
                     public void run() {
                         try {
                             if (verbose) {
-                                System.err.println("Launching thread on " + Basic.toString(taxa2remove));
-                                System.err.println("Active threads " + scheduledThreadPoolExecutor.getActiveCount());
+								System.err.println("Launching thread on " + StringUtils.toString(taxa2remove));
+								System.err.println("Active threads " + scheduledThreadPoolExecutor.getActiveCount());
                             }
                             queue.remove(task);
                             if (scoreAbove + additionalAbove.sum() + 1 < bestScore.get()) {

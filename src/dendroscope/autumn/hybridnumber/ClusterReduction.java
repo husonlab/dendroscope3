@@ -26,9 +26,9 @@ import dendroscope.core.TreeData;
 import jloda.graph.Edge;
 import jloda.graph.Graph;
 import jloda.graph.Node;
-import jloda.util.Basic;
 import jloda.util.Pair;
 import jloda.util.Single;
+import jloda.util.StringUtils;
 
 import java.io.IOException;
 import java.util.*;
@@ -92,7 +92,7 @@ public class ClusterReduction {
 
         Pair<Root, Root> pair = applyRec(v1, v2, new HashSet<Pair<Node, Node>>(), placeHolderTaxa);
         if (!v1.getTaxa().equals(v2.getTaxa()))
-            throw new RuntimeException("Unequal taxon sets: " + Basic.toString(v1.getTaxa()) + " vs " + Basic.toString(v2.getTaxa()));
+			throw new RuntimeException("Unequal taxon sets: " + StringUtils.toString(v1.getTaxa()) + " vs " + StringUtils.toString(v2.getTaxa()));
 
         // reorder should not be necessary
         // v1.reorderSubTree();
@@ -123,7 +123,7 @@ public class ClusterReduction {
         }
 
         if (pair != null && !pair.getFirst().getTaxa().equals(pair.getSecond().getTaxa()))
-            throw new RuntimeException("Unequal taxon sets: " + Basic.toString(pair.getFirst().getTaxa()) + " vs " + Basic.toString(pair.getSecond().getTaxa()));
+			throw new RuntimeException("Unequal taxon sets: " + StringUtils.toString(pair.getFirst().getTaxa()) + " vs " + StringUtils.toString(pair.getSecond().getTaxa()));
 
         if (pair != null) {
             // reorder should not be necessary
@@ -222,7 +222,7 @@ public class ClusterReduction {
                 u2.reorderChildren();
 
                 if (!taxa1.equals(taxa2))
-                    throw new RuntimeException("Unequal taxon sets: " + Basic.toString(X) + " vs " + Basic.toString(Y));
+					throw new RuntimeException("Unequal taxon sets: " + StringUtils.toString(X) + " vs " + StringUtils.toString(Y));
                 return new Pair<Root, Root>(u1, u2);
             } else if ((v1.getOutDegree() > 1 || v2.getOutDegree() > 1) && X.equals(Y)) // no pair of connected components, but perhaps both nodes give us a component
             {

@@ -28,7 +28,7 @@ import dendroscope.window.TreeViewer;
 import jloda.swing.commands.ICommand;
 import jloda.swing.director.IDirector;
 import jloda.swing.util.ResourceManager;
-import jloda.util.Basic;
+import jloda.util.FileUtils;
 import jloda.util.ProgramProperties;
 import jloda.util.parse.NexusStreamParser;
 
@@ -108,7 +108,7 @@ public class MUL2NetworkCommand extends CommandBaseMultiViewer implements IComma
 
         MultiViewer newMultiViewer = (MultiViewer) newDir.getViewerByClass(MultiViewer.class);
         Document newDoc = newDir.getDocument();
-        newDoc.setTitle(Basic.getFileBaseName(getDir().getDocument().getTitle()) + "-networks");
+		newDoc.setTitle(FileUtils.getFileBaseName(getDir().getDocument().getTitle()) + "-networks");
         BitSet which = new BitSet();
         TreeData[] trees = list.toArray(new TreeData[list.size()]);
         for (int i = 0; i < trees.length; i++) {

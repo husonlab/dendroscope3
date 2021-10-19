@@ -20,7 +20,7 @@ package dendroscope.embed;
 
 
 import jloda.phylo.PhyloTree;
-import jloda.util.ProgressListener;
+import jloda.util.progress.ProgressListener;
 
 /**
  * computes the drawing for a given order, that already respects the LSA, suprise!: we dont have to do anything!

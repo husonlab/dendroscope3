@@ -28,7 +28,7 @@ import jloda.phylo.PhyloTree;
 import jloda.swing.commands.ICommand;
 import jloda.swing.director.IDirector;
 import jloda.swing.util.Message;
-import jloda.util.Basic;
+import jloda.util.FileUtils;
 import jloda.util.ProgramProperties;
 import jloda.util.parse.NexusStreamParser;
 
@@ -84,9 +84,9 @@ public class RerootByHybridNumberCommand extends CommandBaseMultiViewer implemen
                 theDoc.setTrees(new TreeData[0]);
             }
 
-            theDoc.appendTrees(new TreeData[]{new TreeData(tree1), new TreeData(tree2)});
-            theDoc.setTitle(Basic.replaceFileSuffix(multiViewer.getDir().getDocument().getTitle(), "-rerooted"));
-            theMultiViewer.chooseGridSize();
+			theDoc.appendTrees(new TreeData[]{new TreeData(tree1), new TreeData(tree2)});
+			theDoc.setTitle(FileUtils.replaceFileSuffix(multiViewer.getDir().getDocument().getTitle(), "-rerooted"));
+			theMultiViewer.chooseGridSize();
             theMultiViewer.loadTrees(null);
             theMultiViewer.setMustRecomputeEmbedding(true);
             theDir.setDirty(true);

@@ -21,8 +21,8 @@ package dendroscope.consensus;
 import jloda.phylo.PhyloTree;
 import jloda.util.Basic;
 import jloda.util.CanceledException;
-import jloda.util.ProgressCmdLine;
-import jloda.util.ProgressListener;
+import jloda.util.progress.ProgressCmdLine;
+import jloda.util.progress.ProgressListener;
 
 import java.util.*;
 import java.util.concurrent.CountDownLatch;

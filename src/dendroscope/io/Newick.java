@@ -19,7 +19,8 @@
 package dendroscope.io;
 
 import dendroscope.core.TreeData;
-import jloda.util.Basic;
+import jloda.util.FileUtils;
+import jloda.util.StringUtils;
 
 import java.io.*;
 import java.util.LinkedList;
@@ -44,7 +45,7 @@ public class Newick extends IOBase implements IOFormat {
      */
     public boolean isCorrectFileType(File file) {
         try {
-            return isCorrectType(Basic.toString(Basic.getFirstBytesFromFile(file, 1)));
+			return isCorrectType(StringUtils.toString(FileUtils.getFirstBytesFromFile(file, 1)));
         } catch (Exception e) {
             return false;
         }

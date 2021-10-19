@@ -22,7 +22,7 @@ import dendroscope.core.TreeData;
 import jloda.graph.Node;
 import jloda.graph.NotOwnerException;
 import jloda.phylo.PhyloTree;
-import jloda.util.Basic;
+import jloda.util.FileUtils;
 import jloda.util.parse.NexusStreamParser;
 import jloda.util.parse.NexusStreamTokenizer;
 
@@ -56,7 +56,7 @@ public class Nexus extends IOBase implements IOFormat {
      */
     public boolean isCorrectFileType(File file) {
         try {
-            return isCorrectType(Basic.getFirstLineFromFile(file));
+			return isCorrectType(FileUtils.getFirstLineFromFile(file));
         } catch (Exception e) {
             return false;
         }

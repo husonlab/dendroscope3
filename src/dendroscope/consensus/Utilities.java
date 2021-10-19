@@ -30,7 +30,7 @@ import jloda.swing.util.Message;
 import jloda.util.Basic;
 import jloda.util.CanceledException;
 import jloda.util.Pair;
-import jloda.util.ProgressListener;
+import jloda.util.progress.ProgressListener;
 
 import java.awt.*;
 import java.io.IOException;

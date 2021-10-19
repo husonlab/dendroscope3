@@ -28,7 +28,7 @@ import dendroscope.window.TreeViewer;
 import jloda.swing.commands.ICommand;
 import jloda.swing.director.IDirector;
 import jloda.swing.util.Message;
-import jloda.util.Basic;
+import jloda.util.FileUtils;
 import jloda.util.ProgramProperties;
 import jloda.util.Single;
 import jloda.util.parse.NexusStreamParser;
@@ -78,9 +78,9 @@ public class ComputeHybridizationNetworksCommand extends CommandBaseMultiViewer 
                 theDoc.setTrees(new TreeData[0]);
             }
 
-            theDoc.appendTrees(trees);
-            theDoc.setTitle(Basic.replaceFileSuffix(multiViewer.getDir().getDocument().getTitle(), "-hybrid"));
-            theMultiViewer.chooseGridSize();
+			theDoc.appendTrees(trees);
+			theDoc.setTitle(FileUtils.replaceFileSuffix(multiViewer.getDir().getDocument().getTitle(), "-hybrid"));
+			theMultiViewer.chooseGridSize();
             theMultiViewer.loadTrees(null);
             theMultiViewer.setMustRecomputeEmbedding(true);
             theDir.setDirty(true);
