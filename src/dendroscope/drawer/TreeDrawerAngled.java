@@ -122,7 +122,7 @@ public class TreeDrawerAngled extends TreeDrawerBase implements IOptimizedGraphD
             double max = Double.NEGATIVE_INFINITY;
 
             /*
-            for(Iterator it=getLSAChildren(v).iterator();it.hasNext();) {
+            for(Iterator it=lsaChildren(v).iterator();it.hasNext();) {
                 Node w = (Node)it.next();            
              */
             for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {

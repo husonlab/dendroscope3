@@ -82,13 +82,13 @@ public class EmbedderForOrderPrescribedNetwork {
             // map each reticulate node to its lsa parent
             Map<Node, Node> node2lsaParent = new HashMap<Node, Node>();
             for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
-                if (tree.getNode2GuideTreeChildren().get(v) != null) {
-                    for (Node w : tree.getNode2GuideTreeChildren().get(v)) {
-                        if (w.getInDegree() > 1)
-                            node2lsaParent.put(w, v);
-                    }
-                }
-            }
+				if (tree.getLSAChildrenMap().get(v) != null) {
+					for (Node w : tree.getLSAChildrenMap().get(v)) {
+						if (w.getInDegree() > 1)
+							node2lsaParent.put(w, v);
+					}
+				}
+			}
 
 
             // find nested subtrees and redirect their lsa edges to aim to lca of adjacent nodes of nesting subtree
@@ -242,13 +242,13 @@ public class EmbedderForOrderPrescribedNetwork {
                 System.err.println("Moving parent of subtree containing '" + label + "' to LCA(" + tree.getLabel(leftNode) + "," + tree.getLabel(rightNode) + ")");
         }
 
-        if (!tree.getNode2GuideTreeChildren().get(lsaParent).contains(v))
-            throw new IOException("Not an LSA child");
+		if (!tree.getLSAChildrenMap().get(lsaParent).contains(v))
+			throw new IOException("Not an LSA child");
 
-        tree.getNode2GuideTreeChildren().get(lsaParent).remove(v);
+		tree.getLSAChildrenMap().get(lsaParent).remove(v);
 
         Node lca = getLCA(leftNode, rightNode);
-        tree.getNode2GuideTreeChildren().get(lca).add(v);
+		tree.getLSAChildrenMap().get(lca).add(v);
     }
 
 
@@ -282,12 +282,12 @@ public class EmbedderForOrderPrescribedNetwork {
                 System.err.println("Moving parent of subtree containing '" + label + "' to root");
         }
 
-        if (!tree.getNode2GuideTreeChildren().get(lsaParent).contains(v))
-            throw new IOException("Not an LSA child");
+		if (!tree.getLSAChildrenMap().get(lsaParent).contains(v))
+			throw new IOException("Not an LSA child");
 
-        tree.getNode2GuideTreeChildren().get(lsaParent).remove(v);
+		tree.getLSAChildrenMap().get(lsaParent).remove(v);
 
-        tree.getNode2GuideTreeChildren().get(root).add(v);
+		tree.getLSAChildrenMap().get(root).add(v);
     }
 
 
@@ -344,19 +344,19 @@ public class EmbedderForOrderPrescribedNetwork {
      * @return all children
      */
     private static List<Node> getLSAChildren(Node v) {
-        List<Node> targetNodes = null;
-        if (((PhyloTree) v.getOwner()).getNode2GuideTreeChildren().get(v) != null)
-            targetNodes = ((PhyloTree) v.getOwner()).getNode2GuideTreeChildren().get(v);
-        List<Node> list = new LinkedList<Node>();
+		List<Node> targetNodes = null;
+		if (((PhyloTree) v.getOwner()).getLSAChildrenMap().get(v) != null)
+			targetNodes = ((PhyloTree) v.getOwner()).getLSAChildrenMap().get(v);
+		List<Node> list = new LinkedList<Node>();
 
-        if (targetNodes == null) {
-            for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
-                if (!v.getOwner().isSpecial(e))
-                    list.add(e.getTarget());
-            }
-        } else {
-            for (Node w : targetNodes) {
-                list.add(w);
+		if (targetNodes == null) {
+			for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
+				if (!v.getOwner().isSpecial(e))
+					list.add(e.getTarget());
+			}
+		} else {
+			for (Node w : targetNodes) {
+				list.add(w);
             }
         }
         return list;
@@ -410,7 +410,7 @@ public class EmbedderForOrderPrescribedNetwork {
      * @param node2pos
      */
     private static void reorderChildren(Node v, final Map<Node, Float> node2pos) {
-        List<Node> lsaChildren = ((PhyloTree) v.getOwner()).getNode2GuideTreeChildren().get(v);
+		List<Node> lsaChildren = ((PhyloTree) v.getOwner()).getLSAChildrenMap().get(v);
         if (lsaChildren != null) {
             SortedSet<Node> nodes = new TreeSet<Node>(new Comparator<Node>() {
                 public int compare(Node w1, Node w2) {

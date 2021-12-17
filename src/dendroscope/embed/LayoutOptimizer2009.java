@@ -43,17 +43,17 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
      */
     public void apply(PhyloTree tree, ProgressListener progressListener) {
         if (tree.getRoot() == null || tree.getNumberSpecialEdges() == 0) {
-            tree.getNode2GuideTreeChildren().clear();
+            tree.getLSAChildrenMap().clear();
             return;
         }
         System.err.println("Computing optimal embedding using (Huson, 2009)");
 
         boolean isTransferNetwork = isTransferNetwork(tree);
 
-        NodeArray<Node> retNode2GuideParent = new NodeArray<Node>(tree);
+		var retNode2GuideParent = new NodeArray<Node>(tree);
 
         if (isTransferNetwork) {
-            tree.getNode2GuideTreeChildren().clear();
+			tree.getLSAChildrenMap().clear();
             for (Node v = tree.getFirstNode(); v != null; v = tree.getNextNode(v)) {
                 List<Node> children = new LinkedList<Node>();
                 for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
@@ -62,74 +62,74 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
                         retNode2GuideParent.put(e.getTarget(), e.getSource());
                     }
 
-                }
-                tree.getNode2GuideTreeChildren().put(v, children);
+				}
+				tree.getLSAChildrenMap().put(v, children);
 
-            }
-        } else // must be combining network
-        {
-            LSATree.computeLSAOrdering(tree, retNode2GuideParent); // maps reticulate nodes to lsa nodes
-        }
+			}
+		} else // must be combining network
+		{
+			LSATree.computeNodeLSAChildrenMap(tree, retNode2GuideParent); // maps reticulate nodes to lsa nodes
+		}
 
-        // first label source and target nodes by numbers representing the different reticulate edges:
-        NodeArray<BitSet> node2SpecialSource = new NodeArray<BitSet>(tree);
-        NodeArray<BitSet> node2SpecialTarget = new NodeArray<BitSet>(tree);
-        int num = 0;
-        for (Edge e = tree.getFirstEdge(); e != null; e = e.getNext()) {
-            if (tree.isSpecial(e) && tree.getWeight(e) <= 0) {
-                num++;
-                BitSet sources = node2SpecialSource.get(e.getSource());
-                if (sources == null) {
-                    sources = new BitSet();
-                    node2SpecialSource.put(e.getSource(), sources);
-                }
-                sources.set(num);
-                BitSet targets = node2SpecialTarget.get(e.getTarget());
-                if (targets == null) {
-                    targets = new BitSet();
-                    node2SpecialTarget.put(e.getTarget(), targets);
-                }
-                targets.set(num);
-            }
-        }
+		// first label source and target nodes by numbers representing the different reticulate edges:
+		var node2SpecialSource = new NodeArray<BitSet>(tree);
+		var node2SpecialTarget = new NodeArray<BitSet>(tree);
+		int num = 0;
+		for (var e : tree.edges()) {
+			if (tree.isSpecial(e) && tree.getWeight(e) <= 0) {
+				num++;
+				var sources = node2SpecialSource.get(e.getSource());
+				if (sources == null) {
+					sources = new BitSet();
+					node2SpecialSource.put(e.getSource(), sources);
+				}
+				sources.set(num);
+				var targets = node2SpecialTarget.get(e.getTarget());
+				if (targets == null) {
+					targets = new BitSet();
+					node2SpecialTarget.put(e.getTarget(), targets);
+				}
+				targets.set(num);
+			}
+		}
 
-        // second, extend these map so that each node v is labeled  by the sources and targets
-        // that are contained in the subtree    rooted at v
+		// second, extend these map so that each node v is labeled  by the sources and targets
+		// that are contained in the subtree    rooted at v
 
-        computeExtendedMapRec(tree.getRoot(), tree.getNode2GuideTreeChildren(), node2SpecialSource, node2SpecialTarget);
-        NodeArray<BitSet> node2Special = new NodeArray<BitSet>(tree);
-        for (Node v = tree.getFirstNode(); v != null; v = tree.getNextNode(v)) {
-            BitSet sources = node2SpecialSource.get(v);
-            BitSet targets = node2SpecialTarget.get(v);
-            BitSet set = null;
-            if (sources != null && sources.cardinality() != 0) {
-                set = (BitSet) sources.clone();
-                if (targets != null && targets.cardinality() != 0) {
-                    set.or(targets);
-                }
-            } else if (targets != null && targets.cardinality() != 0) {
-                set = (BitSet) targets.clone();
-            }
-            if (set != null)
-                node2Special.put(v, set);
-        }
-        node2SpecialSource.clear();
-        node2SpecialTarget.clear();
+		computeExtendedMapRec(tree.getRoot(), tree.getLSAChildrenMap(), node2SpecialSource, node2SpecialTarget);
+		var node2Special = new NodeArray<BitSet>(tree);
+		for (var v : tree.nodes()) {
+			var sources = node2SpecialSource.get(v);
+			var targets = node2SpecialTarget.get(v);
+			BitSet set = null;
+			if (sources != null && sources.cardinality() != 0) {
+				set = (BitSet) sources.clone();
+				if (targets != null && targets.cardinality() != 0) {
+					set.or(targets);
+				}
+			} else if (targets != null && targets.cardinality() != 0) {
+				set = (BitSet) targets.clone();
+			}
+			if (set != null)
+				node2Special.put(v, set);
+		}
+		node2SpecialSource.clear();
+		node2SpecialTarget.clear();
 
-        Map<Node, Integer> node2NumberOfLeavesBelow = new HashMap<Node, Integer>();
-        countLeaves(tree.getRoot(), tree.getNode2GuideTreeChildren(), node2NumberOfLeavesBelow);
+		var node2NumberOfLeavesBelow = new HashMap<Node, Integer>();
+		countLeaves(tree.getRoot(), tree.getLSAChildrenMap(), node2NumberOfLeavesBelow);
 
-        // add two dummy nodes to the network. These are used to represent the stuff before and after the current subtree
-        Node before = tree.newNode();
-        Node after = tree.newNode();
+		// add two dummy nodes to the network. These are used to represent the stuff before and after the current subtree
+		var before = tree.newNode();
+		var after = tree.newNode();
 
-        // process nodes in a pre-order traversal
-        optimizeTopologicalEmbedding(tree.getRoot(), before, after, node2NumberOfLeavesBelow, tree.getNode2GuideTreeChildren(), retNode2GuideParent, node2Special);
+		// process nodes in a pre-order traversal
+		optimizeTopologicalEmbedding(tree.getRoot(), before, after, node2NumberOfLeavesBelow, tree.getLSAChildrenMap(), retNode2GuideParent, node2Special);
 
-        // remove dummy nodes
-        tree.deleteNode(before);
-        tree.deleteNode(after);
-    }
+		// remove dummy nodes
+		tree.deleteNode(before);
+		tree.deleteNode(after);
+	}
 
     /**
      * optimize the topological embedding of the network
@@ -142,10 +142,10 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
      */
     private void optimizeTopologicalEmbedding(Node v, Node before, Node after, Map<Node, Integer> node2NumberOfLeavesBelow, NodeArray<List<Node>> node2GuideTreeChildren, NodeArray<Node> retNode2GuideParent, NodeArray<BitSet> node2Special) {
         if (node2GuideTreeChildren.get(v).size() > 1) {
-            AttractionMatrix matrix = computeAttractionMatrix(v, before, after, node2GuideTreeChildren, retNode2GuideParent, node2Special);
+			var matrix = computeAttractionMatrix(v, before, after, node2GuideTreeChildren, retNode2GuideParent, node2Special);
             //System.err.println("matrix:\n" + matrix.toString());
 
-            List<Node> ordering = node2GuideTreeChildren.get(v);
+			var ordering = node2GuideTreeChildren.get(v);
 
             /*
             System.err.print("original ordering for v=" + v.getId() + ": ");
@@ -171,9 +171,9 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
             ordering.remove(after);
         }
 
-        for (Node w : node2GuideTreeChildren.get(v)) {
-            optimizeTopologicalEmbedding(w, before, after, node2NumberOfLeavesBelow, node2GuideTreeChildren, retNode2GuideParent, node2Special);
-        }
+		for (var w : node2GuideTreeChildren.get(v)) {
+			optimizeTopologicalEmbedding(w, before, after, node2NumberOfLeavesBelow, node2GuideTreeChildren, retNode2GuideParent, node2Special);
+		}
     }
 
 
@@ -184,12 +184,12 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
      * @param ordering
      */
     private void improveOrdering(AttractionMatrix aMatrix, List<Node> ordering, Map<Node, Integer> node2NumberOfLeavesBelow) {
-        Node[] nodes = ordering.toArray(new Node[ordering.size()]);
-        int i = 0;
-        for (Node v : ordering) {
-            nodes[i++] = v;
-        }
-        BitSet used = new BitSet();
+		var nodes = ordering.toArray(new Node[0]);
+		var i = 0;
+		for (Node v : ordering) {
+			nodes[i++] = v;
+		}
+		var used = new BitSet();
 
         /*
          System.err.println("Original ordering:");
@@ -199,19 +199,20 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
         System.err.println("Attractions:\n"+aMatrix);
         */
 
-        int[] bestOrdering = new int[nodes.length];
+		var bestOrdering = new int[nodes.length];
 
-        improveRec(aMatrix, nodes, used, node2NumberOfLeavesBelow, new int[ordering.size()], 0, 0, bestOrdering, Integer.MAX_VALUE, new int[]{0});
+		improveRec(aMatrix, nodes, used, node2NumberOfLeavesBelow, new int[ordering.size()], 0, 0, bestOrdering, Integer.MAX_VALUE, new int[]{0});
 
-        ordering.clear();
-        for (int a : bestOrdering) ordering.add(nodes[a]);
+		ordering.clear();
+		for (var a : bestOrdering)
+			ordering.add(nodes[a]);
 
         /*
         System.err.println("Best ordering:");
         for(int j=0;j<bestOrdering.length;j++)
             System.err.println(nodes[bestOrdering[j]]);
                   */
-    }
+	}
 
     /**
      * uses branch and bound to find best layout
@@ -233,46 +234,48 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
                 bestScore = score;
             }
         } else {
-            int bot = 0;
-            int top;
-            if (length == 0)
-                top = 1; // at very beginning of chain, only allow "before" node to start chain
-            else if (length < nodes.length - 1)
-                top = nodes.length - 1; // not at end of chain, don't allow "after" node
-            else {   // at end of chain, only consider "after" node
-                bot = nodes.length - 1;
-                top = nodes.length;
-            }
-            for (int p = bot; p < top; p++) {
-                if (count[0] > 100000 && bestScore < Integer.MAX_VALUE)
-                    return bestScore;
+			final int bot;
+			final int top;
+			if (length == 0) {
+				bot = 0;
+				top = 1; // at very beginning of chain, only allow "before" node to start chain
+			} else if (length < nodes.length - 1) {
+				bot = 0;
+				top = nodes.length - 1; // not at end of chain, don't allow "after" node
+			} else {   // at end of chain, only consider "after" node
+				bot = nodes.length - 1;
+				top = nodes.length;
+			}
+			for (var p = bot; p < top; p++) {
+				if (count[0] > 100000 && bestScore < Integer.MAX_VALUE)
+					return bestScore;
 
-                if (!used.get(p)) {
-                    // determine how much this placement of the node at p will add to score:
-                    int add = 0;
-                    for (int i = 0; i < length; i++) {
-                        int leaves = 0;
-                        for (int j = i + 1; j < length; j++) {
-                            Node u = nodes[currentOrdering[j]];
-                            leaves += node2NumberOfLeavesBelow.get(u);
-                        }
-                        add += leaves * leaves * aMatrix.get(nodes[currentOrdering[i]], nodes[p]);
-                    }
+				if (!used.get(p)) {
+					// determine how much this placement of the node at p will add to score:
+					var add = 0;
+					for (var i = 0; i < length; i++) {
+						var leaves = 0;
+						for (var j = i + 1; j < length; j++) {
+							Node u = nodes[currentOrdering[j]];
+							leaves += node2NumberOfLeavesBelow.get(u);
+						}
+						add += leaves * leaves * aMatrix.get(nodes[currentOrdering[i]], nodes[p]);
+					}
 
-                    // compute penalty for having all reticulation edges going either up or down:
-                    int all = 0;
-                    int up = 0;
-                    for (int q = 0; q < nodes.length; q++) {
-                        if (q != p) {
-                            all += aMatrix.get(nodes[q], nodes[p]);
-                            if (used.get(q))
-                                up += aMatrix.get(nodes[q], nodes[p]);
-                        }
-                    }
-                    if (!(all > 0 && (up == 0 || up == all)))  // not all edges up or down, lower penalty
-                        add -= 10 * all;
+					// compute penalty for having all reticulation edges going either up or down:
+					var all = 0;
+					var up = 0;
+					for (var q = 0; q < nodes.length; q++) {
+						if (q != p) {
+							all += aMatrix.get(nodes[q], nodes[p]);
+							if (used.get(q))
+								up += aMatrix.get(nodes[q], nodes[p]);
+						}
+					}
+					if (!(all > 0 && (up == 0 || up == all)))  // not all edges up or down, lower penalty
+						add -= 10 * all;
 
-                    if (score + add < bestScore) {
+					if (score + add < bestScore) {
                         currentOrdering[length] = p;
                         used.set(p);
                         bestScore = Math.min(bestScore, improveRec(aMatrix, nodes, used, node2NumberOfLeavesBelow, currentOrdering, length + 1, score + add, bestOrdering, bestScore, count));
@@ -294,15 +297,15 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
      * @return number of leaves
      */
     private int countLeaves(Node v, NodeArray<List<Node>> node2GuideTreeChildren, Map<Node, Integer> node2NumberOfLeavesBelow) {
-        int count = 0;
-        List<Node> children = node2GuideTreeChildren.get(v);
+		int count = 0;
+		var children = node2GuideTreeChildren.get(v);
 
         if (children == null || children.size() == 0) {
             count = 1;
         } else {
-            for (Node w : children) {
-                count += countLeaves(w, node2GuideTreeChildren, node2NumberOfLeavesBelow);
-            }
+			for (var w : children) {
+				count += countLeaves(w, node2GuideTreeChildren, node2NumberOfLeavesBelow);
+			}
         }
         node2NumberOfLeavesBelow.put(v, count);
         return count;
@@ -321,50 +324,49 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
         node2Special.put(before, new BitSet());
         node2Special.put(after, new BitSet());
         // compute values for boundary nodes by heading up toward the root
-        Node w = v;
+		var w = v;
         while (true) {
-            Node u;
-            if (retNode2GuideParent.get(w) != null)
-                u = retNode2GuideParent.get(w);
-            else if (w.getInDegree() == 1)
-                u = w.getFirstInEdge().getSource();
-            else
-                break;
-            boolean isBefore = true;
-            List<Node> children = node2GuideTreeChildren.get(u);
-            for (Node child : children) {
-                if (child == w)
-                    isBefore = false;
-                else if (isBefore) {
-                    BitSet set = node2Special.get(child);
-                    if (set != null)
-                        (node2Special.get(before)).or(set);
-                } else {
-                    BitSet set = node2Special.get(child);
-                    if (set != null)
-                        (node2Special.get(after)).or(set);
+			Node u;
+			if (retNode2GuideParent.get(w) != null)
+				u = retNode2GuideParent.get(w);
+			else if (w.getInDegree() == 1)
+				u = w.getFirstInEdge().getSource();
+			else
+				break;
+			var isBefore = true;
+			var children = node2GuideTreeChildren.get(u);
+			for (var child : children) {
+				if (child == w)
+					isBefore = false;
+				else if (isBefore) {
+					BitSet set = node2Special.get(child);
+					if (set != null)
+						(node2Special.get(before)).or(set);
+				} else {
+					BitSet set = node2Special.get(child);
+					if (set != null)
+						(node2Special.get(after)).or(set);
                 }
-            }
-            w = u;
-        }
+			}
+			w = u;
+		}
 
-        // now setup attraction matrix:
-        AttractionMatrix aMatrix = new AttractionMatrix();
+		// now setup attraction matrix:
+		AttractionMatrix aMatrix = new AttractionMatrix();
 
-        List<Node> children = new LinkedList<Node>();
-        children.addAll(node2GuideTreeChildren.get(v));
-        children.add(before);
-        children.add(after);
-        for (Node p : children) {
-            for (Node q : children) {
-                if (p.getId() < q.getId()) {
-                    int count = Cluster.intersection(node2Special.get(p), node2Special.get(q)).cardinality();
-                    aMatrix.set(p, q, count);
-                }
-            }
-        }
-        return aMatrix;
-    }
+		var children = new LinkedList<>(node2GuideTreeChildren.get(v));
+		children.add(before);
+		children.add(after);
+		for (var p : children) {
+			for (var q : children) {
+				if (p.getId() < q.getId()) {
+					var count = Cluster.intersection(node2Special.get(p), node2Special.get(q)).cardinality();
+					aMatrix.set(p, q, count);
+				}
+			}
+		}
+		return aMatrix;
+	}
 
 
     /**
@@ -377,28 +379,27 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
      * @param node2SpecialTarget
      */
     private void computeExtendedMapRec(Node v, NodeArray<List<Node>> node2GuideTreeChildren, NodeArray<BitSet> node2SpecialSource, NodeArray<BitSet> node2SpecialTarget) {
-        BitSet sources = new BitSet();
-        BitSet targets = new BitSet();
-        BitSet vSources = node2SpecialSource.get(v);
-        if (vSources != null)
-            sources.or(vSources);
-        BitSet vTargets = node2SpecialTarget.get(v);
-        if (vTargets != null)
-            targets.or(vTargets);
+		var sources = new BitSet();
+		var targets = new BitSet();
+		var vSources = node2SpecialSource.get(v);
+		if (vSources != null)
+			sources.or(vSources);
+		var vTargets = node2SpecialTarget.get(v);
+		if (vTargets != null)
+			targets.or(vTargets);
 
-        List<Node> children = node2GuideTreeChildren.get(v);
-        for (Node w : children) {
-            computeExtendedMapRec(w, node2GuideTreeChildren, node2SpecialSource, node2SpecialTarget);
-            BitSet wSources = node2SpecialSource.get(w);
-            if (wSources != null)
-                sources.or(wSources);
-            BitSet wTargets = node2SpecialTarget.get(w);
-            if (wTargets != null)
-                targets.or(wTargets);
-        }
-        BitSet openSources = (BitSet) sources.clone();
+		for (var w : node2GuideTreeChildren.get(v)) {
+			computeExtendedMapRec(w, node2GuideTreeChildren, node2SpecialSource, node2SpecialTarget);
+			var wSources = node2SpecialSource.get(w);
+			if (wSources != null)
+				sources.or(wSources);
+			var wTargets = node2SpecialTarget.get(w);
+			if (wTargets != null)
+				targets.or(wTargets);
+		}
+		var openSources = (BitSet) sources.clone();
         openSources.andNot(targets);
-        BitSet openTargets = (BitSet) targets.clone();
+		var openTargets = (BitSet) targets.clone();
         openTargets.andNot(sources);
         node2SpecialSource.put(v, openSources);
         node2SpecialTarget.put(v, openTargets);
@@ -411,62 +412,60 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
      * @return true, if is transfer network
      */
     public static boolean isTransferNetwork(PhyloTree tree) {
-        boolean isTransferNetwork = false;
-        for (Edge e : tree.specialEdges()) {
-            if (tree.getWeight(e) != 0) {
-                isTransferNetwork = true;
-                break;
-            }
-        }
-        return isTransferNetwork;
-    }
-}
+		var isTransferNetwork = false;
+		for (Edge e : tree.specialEdges()) {
+			if (tree.getWeight(e) != 0) {
+				isTransferNetwork = true;
+				break;
+			}
+		}
+		return isTransferNetwork;
+	}
 
-/**
- * matrix of attraction edges between two subtrees
- */
-class AttractionMatrix {
-    final private Map<Pair<Node, Node>, Integer> matrix = new HashMap<Pair<Node, Node>, Integer>();
 
-    /**
-     * get the number of special edges from subtree of v to subtree of w
-     *
-     * @param v
-     * @param w
-     * @return count
-     */
-    int get(Node v, Node w) {
-        Integer value = matrix.get(v.getId() < w.getId() ? new Pair<Node, Node>(v, w) : new Pair<Node, Node>(w, v));
-        if (value != null)
-            return value;
-        else
-            return 0;
-    }
+	/**
+	 * matrix of attraction edges between two subtrees
+	 */
+	private static class AttractionMatrix {
+		final private Map<Pair<Node, Node>, Integer> matrix = new HashMap<Pair<Node, Node>, Integer>();
 
-    /**
-     * set the number of edges from subtree of v to subtree of w
-     *
-     * @param v
-     * @param w
-     * @param value
-     */
-    void set(Node v, Node w, int value) {
-        matrix.put(v.getId() < w.getId() ? new Pair<Node, Node>(v, w) : new Pair<Node, Node>(w, v), value);
-    }
+		/**
+		 * get the number of special edges from subtree of v to subtree of w
+		 *
+		 * @param v
+		 * @param w
+		 * @return count
+		 */
+		int get(Node v, Node w) {
+			Integer value = matrix.get(v.getId() < w.getId() ? new Pair<>(v, w) : new Pair<>(w, v));
+			return Objects.requireNonNullElse(value, 0);
+		}
 
-    /**
-     * get string
-     *
-     * @return string
-     */
-    public String toString() {
-        StringBuffer buf = new StringBuffer();
-        for (Pair<Node, Node> pair : matrix.keySet()) {
-            Node v = pair.getFirst();
-            Node w = pair.getSecond();
-            buf.append(" m(").append(v.getId()).append(",").append(w.getId()).append(")=").append(matrix.get(pair));
-        }
-        return buf.toString();
-    }
+		/**
+		 * set the number of edges from subtree of v to subtree of w
+		 *
+		 * @param v
+		 * @param w
+		 * @param value
+		 */
+		void set(Node v, Node w, int value) {
+			matrix.put(v.getId() < w.getId() ? new Pair<>(v, w) : new Pair<>(w, v), value);
+		}
+
+		/**
+		 * get string
+		 *
+		 * @return string
+		 */
+		public String toString() {
+			var buf = new StringBuilder();
+			for (var pair : matrix.keySet()) {
+				var v = pair.getFirst();
+				var w = pair.getSecond();
+				buf.append(" m(").append(v.getId()).append(",").append(w.getId()).append(")=").append(matrix.get(pair));
+			}
+			return buf.toString();
+		}
+	}
 }
 

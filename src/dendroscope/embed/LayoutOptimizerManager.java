@@ -31,7 +31,6 @@ public class LayoutOptimizerManager {
     public static final String ALGORITHM2009 = "Algorithm2009";
     public static final String ALGORITHM2010 = "Algorithm2010";
     public static final String ALGORITHM2010DIST = "Algorithm2010Dist";
-    public static final String ALGORITHMlsa = "AlgorithmLSA";
 
     /**
      * applies the indicated embedding algorithm
@@ -50,8 +49,6 @@ public class LayoutOptimizerManager {
             embedder = new EmbeddingOptimizerNNet();
         else if (algorithmName.equalsIgnoreCase(ALGORITHM2010DIST))
             embedder = new LayoutOptimizerDist();
-        else if (algorithmName.equalsIgnoreCase(ALGORITHMlsa))
-            embedder = new LayoutOptimizerLSA();
         else
             embedder = new LayoutUnoptimized();
         embedder.apply(tree, null);
@@ -63,7 +60,7 @@ public class LayoutOptimizerManager {
      * @return names
      */
     public static String[] getEmbedderNames() {
-        return new String[]{UNOPTIMIZED, ALGORITHM2008, ALGORITHM2009, ALGORITHM2010, ALGORITHM2010DIST, ALGORITHMlsa};
+        return new String[]{UNOPTIMIZED, ALGORITHM2008, ALGORITHM2009, ALGORITHM2010, ALGORITHM2010DIST};
 
     }
 }

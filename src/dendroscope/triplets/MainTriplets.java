@@ -53,9 +53,9 @@ public class MainTriplets {
         Trees[1] = new PhyloTreeTri();
         Trees[1].parseBracketNotation(StringTree2, true);
 
-        Taxa allTaxa = Trees[0].getTaxa();
+        Taxa allTaxa = Trees[0].getAllTaxa();
         for (int m = 1; m < Trees.length; m++) {
-            allTaxa.addAll(Trees[1].getTaxa());
+            allTaxa.addAll(Trees[1].getAllTaxa());
         }
 
         /*for (int n=1;n<= allTaxa.size();n++) {
@@ -67,7 +67,6 @@ public class MainTriplets {
         for (int n = 1; n <= allTaxa.size(); n++) {
             taxon2ID.put(allTaxa.getLabel(n), n - 1);
         }
-
 
         TripletMatrix matrix = new TripletMatrix();
         matrix.setDim(allTaxa.size());

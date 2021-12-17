@@ -47,7 +47,7 @@ public class LevelkNetFromMultree {
             mulTree.copy(this.tree);
             mulTree.addOutgroup();
             mulTree.adaptLabeling();
-            LevelKNetwork levelKNetwork = new LevelKNetwork(mulTree.getTaxa(), mulTree.getSplitSystem());
+            LevelKNetwork levelKNetwork = new LevelKNetwork(mulTree.getAllTaxa(), mulTree.getSplitSystem());
             levelKNetwork.setComputeOnlyOne(true);
             List<PhyloTree> results = levelKNetwork.apply(progressListener);
             if (results.size() > 0)

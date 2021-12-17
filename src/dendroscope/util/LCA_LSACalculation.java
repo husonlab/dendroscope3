@@ -98,13 +98,13 @@ public class LCA_LSACalculation {
      * does the work recursively
      */
     private int doEulerTourRec(PhyloTree t, Node n, int currentLevel, Vector<Node> eulerTour, Vector<Integer> levels, int[] firstOccurences, boolean computeLSA, int numNodes) {
-        if (t.getNode2GuideTreeChildren() == null)
-            System.err.println("errore");
-        if (computeLSA) {
-            while (t.getNode2GuideTreeChildren().get(n).size() == 1) {
-                n = t.getNode2GuideTreeChildren().get(n).get(0);
-            }
-        }
+        if (t.getLSAChildrenMap() == null)
+			System.err.println("errore");
+		if (computeLSA) {
+			while (t.getLSAChildrenMap().get(n).size() == 1) {
+				n = t.getLSAChildrenMap().get(n).get(0);
+			}
+		}
         eulerTour.add(n);
         levels.add(currentLevel);
         firstOccurences[n.getId() - 1] = eulerTour.size() - 1;
@@ -119,7 +119,7 @@ public class LCA_LSACalculation {
                 levels.add(currentLevel - 1);
             }
         } else {
-            List<Node> LSAChildren = t.getNode2GuideTreeChildren().get(n);
+			List<Node> LSAChildren = t.getLSAChildrenMap().get(n);
             for (Iterator<Node> it = LSAChildren.iterator(); it.hasNext(); ) {
                 Node LSASon = it.next();
                 numNodes = doEulerTourRec(t, LSASon, currentLevel, eulerTour, levels, firstOccurences, computeLSA, numNodes);

@@ -96,8 +96,8 @@ public class ContractEdgeCommand extends CommandBaseMultiViewer implements IComm
             if (edges.size() > 0 && edges.size() < treeViewer.getGraph().getNumberOfEdges()) {
                 //   doc.getTree(multiViewer.getTreeGrid().getNumberOfViewerInDocument(treeViewer)).syncViewer2Data(treeViewer, treeViewer.isDirty());
                 if (treeViewer.contractAll(edges)) {
-                    treeViewer.getPhyloTree().getNode2GuideTreeChildren().clear();
-                    LayoutOptimizerManager.apply(multiViewer.getEmbedderName(), treeViewer.getPhyloTree());
+                    treeViewer.getPhyloTree().getLSAChildrenMap().clear();
+					LayoutOptimizerManager.apply(multiViewer.getEmbedderName(), treeViewer.getPhyloTree());
                     treeViewer.setDirty(true);
                     treeViewer.recomputeEmbedding(true, true);
                     treeViewer.resetLabelPositions(true);

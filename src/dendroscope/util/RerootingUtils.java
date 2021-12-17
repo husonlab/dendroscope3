@@ -22,7 +22,7 @@ import dendroscope.window.MultiViewer;
 import dendroscope.window.TreeViewer;
 import jloda.graph.*;
 import jloda.phylo.PhyloTree;
-import jloda.phylo.PhyloTreeUtils;
+import jloda.phylo.PhyloTreeNetworkUtils;
 import jloda.swing.graphview.EdgeView;
 import jloda.swing.util.Alert;
 import jloda.util.Triplet;
@@ -79,20 +79,20 @@ public class RerootingUtils {
         Node root = tree.getRoot();
 
         if (root.getDegree() == 2 && tree.getLabel(root) == null) {
-            final Edge ea = root.getFirstAdjacentEdge();
-            final Edge eb = root.getLastAdjacentEdge();
-            final double weight = tree.getWeight(ea) + tree.getWeight(eb);
-            final double a = PhyloTreeUtils.computeAverageDistanceToALeaf(tree, ea.getOpposite(root));
-            final double b = PhyloTreeUtils.computeAverageDistanceToALeaf(tree, eb.getOpposite(root));
-            double na = 0.5 * (b - a + weight);
-            if (na >= weight)
-                na = 0.95 * weight;
-            else if (na <= 0)
-                na = 0.05 * weight;
-            final double nb = weight - na;
-            tree.setWeight(ea, na);
-            tree.setWeight(eb, nb);
-        }
+			final Edge ea = root.getFirstAdjacentEdge();
+			final Edge eb = root.getLastAdjacentEdge();
+			final double weight = tree.getWeight(ea) + tree.getWeight(eb);
+			final double a = PhyloTreeNetworkUtils.computeAverageDistanceToALeaf(tree, ea.getOpposite(root));
+			final double b = PhyloTreeNetworkUtils.computeAverageDistanceToALeaf(tree, eb.getOpposite(root));
+			double na = 0.5 * (b - a + weight);
+			if (na >= weight)
+				na = 0.95 * weight;
+			else if (na <= 0)
+				na = 0.05 * weight;
+			final double nb = weight - na;
+			tree.setWeight(ea, na);
+			tree.setWeight(eb, nb);
+		}
 
         if (viewer.getShowEdgeWeights() && tree.getRoot() != null) {
             final Edge f = tree.getRoot().getFirstAdjacentEdge();
@@ -184,9 +184,15 @@ public class RerootingUtils {
      * @return true, if not contained in the same special-edge component as the root
      */
     private static boolean belowSpecialEdge(PhyloTree tree, Node v) {
-        NodeSet nodes = tree.getSpecialComponent(tree.getRoot());
-        return !nodes.contains(v);
-    }
+		while (true) {
+			if (v.getInDegree() == 0)
+				return false;
+			else if (v.getInDegree() == 1)
+				v = v.getParent();
+			else
+				return true;
+		}
+	}
 
 
     /**

@@ -21,7 +21,6 @@ package dendroscope.autumn.hybridnumber;
 import dendroscope.autumn.*;
 import dendroscope.consensus.Cluster;
 import dendroscope.consensus.Taxa;
-import jloda.graph.Node;
 import jloda.phylo.PhyloTree;
 import jloda.util.*;
 import jloda.util.progress.ProgressListener;
@@ -289,52 +288,46 @@ public class ComputeHybridNumber {
                 final Integer fPrevious = previousHybrid;
 
                 // setup task:
-                final Task task1 = new Task();  // first of two cluster-reduction tasks
-                task1.setRunnable(new Runnable() {
-                    public void run() {
-                        try {
-                            if (verbose) {
-                                System.err.println("Launching thread on cluster-reduction");
-                                System.err.println("Active threads " + scheduledThreadPoolExecutor.getActiveCount());
-                            }
-                            final ValuesList additionalAbove1 = additionalAbove.copyWithAdditionalElement(score2);
-                            if (scoreAbove + additionalAbove1.sum() < bestScore.get()) {
-                                int h = computeHybridNumberRec(root1, root2, false, fPrevious, fRetry, false, scoreAbove, additionalAbove1);
-                                score1.set(h);
-                            } else {
-                                score1.set(LARGE);
-                            }
-                            additionalAbove1.clear();
-                        } catch (Exception ex) {
-                            while (countDownLatch.getCount() > 0)
-                                countDownLatch.countDown();
+                final var task1 = new dendroscope.autumn.Task(() -> {
+                    try {
+                        if (verbose) {
+                            System.err.println("Launching thread on cluster-reduction");
+                            System.err.println("Active threads " + scheduledThreadPoolExecutor.getActiveCount());
                         }
-                        countDownLatch.countDown();
+                        final ValuesList additionalAbove1 = additionalAbove.copyWithAdditionalElement(score2);
+                        if (scoreAbove + additionalAbove1.sum() < bestScore.get()) {
+                            int h = computeHybridNumberRec(root1, root2, false, fPrevious, fRetry, false, scoreAbove, additionalAbove1);
+                            score1.set(h);
+                        } else {
+                            score1.set(LARGE);
+                        }
+                        additionalAbove1.clear();
+                    } catch (Exception ex) {
+                        while (countDownLatch.getCount() > 0)
+                            countDownLatch.countDown();
                     }
+                    countDownLatch.countDown();
                 });
 
-                final Task task2 = new Task(); // second of two cluster-reduction tasks
-                task2.setRunnable(new Runnable() {
-                    public void run() {
-                        try {
-                            if (verbose) {
-                                System.err.println("Launching thread on cluster-reduction");
-                                System.err.println("Active threads " + scheduledThreadPoolExecutor.getActiveCount());
-                            }
-                            final ValuesList additionalAbove2 = additionalAbove.copyWithAdditionalElement(score1);
-                            if (scoreAbove + additionalAbove2.sum() < bestScore.get()) {
-                                int h = computeHybridNumberRec(clusterTrees.getFirst(), clusterTrees.getSecond(), true, fPrevious, fRetry, false, scoreAbove, additionalAbove2);
-                                score2.set(h);
-                            } else {
-                                score2.set(LARGE);
-                            }
-                            additionalAbove2.clear();
-                        } catch (Exception ex) {
-                            while (countDownLatch.getCount() > 0)
-                                countDownLatch.countDown();
+                final var task2 = new dendroscope.autumn.Task(() -> {
+                    try {
+                        if (verbose) {
+                            System.err.println("Launching thread on cluster-reduction");
+                            System.err.println("Active threads " + scheduledThreadPoolExecutor.getActiveCount());
                         }
-                        countDownLatch.countDown();
+                        final ValuesList additionalAbove2 = additionalAbove.copyWithAdditionalElement(score1);
+                        if (scoreAbove + additionalAbove2.sum() < bestScore.get()) {
+                            int h = computeHybridNumberRec(clusterTrees.getFirst(), clusterTrees.getSecond(), true, fPrevious, fRetry, false, scoreAbove, additionalAbove2);
+                            score2.set(h);
+                        } else {
+                            score2.set(LARGE);
+                        }
+                        additionalAbove2.clear();
+                    } catch (Exception ex) {
+                        while (countDownLatch.getCount() > 0)
+                            countDownLatch.countDown();
                     }
+                    countDownLatch.countDown();
                 });
 
                 // start a task in this thread
@@ -389,10 +382,10 @@ public class ComputeHybridNumber {
         final Value bestSubH = new Value(LARGE);
 
         // schedule all tasks to be performed
-        final ConcurrentLinkedQueue<Task> queue = new ConcurrentLinkedQueue<Task>();
+        final var queue = new ConcurrentLinkedQueue<dendroscope.autumn.Task>();
 
-        for (Node leaf2remove : leaves1) {
-            final BitSet taxa2remove = ((Root) leaf2remove).getTaxa();
+        for (var leaf2remove : leaves1) {
+            final BitSet taxa2remove = leaf2remove.getTaxa();
 
             if (previousHybrid == null || previousHybrid < taxa2remove.nextSetBit(0)) {
 
@@ -400,42 +393,40 @@ public class ComputeHybridNumber {
                     return LARGE;  // other thread has found a better result, abort
 
                 // setup task:
-                final Task task = new Task();
-                task.setRunnable(new Runnable() {
-                    public void run() {
-                        try {
-                            if (verbose) {
-								System.err.println("Launching thread on " + StringUtils.toString(taxa2remove));
-								System.err.println("Active threads " + scheduledThreadPoolExecutor.getActiveCount());
-                            }
-                            queue.remove(task);
-                            if (scoreAbove + additionalAbove.sum() + 1 < bestScore.get()) {
-                                Root tree1X = CopyWithTaxaRemoved.apply(root1, taxa2remove);
-                                Root tree2X = CopyWithTaxaRemoved.apply(root2, taxa2remove);
-
-                                Refine.apply(tree1X, tree2X);
-
-                                int scoreBelow = computeHybridNumberRec(tree1X, tree2X, false, taxa2remove.nextSetBit(0), null, false, scoreAbove + 1, additionalAbove) + 1;
-
-                                if (topLevel && scoreBelow < bestScore.get()) {
-                                    bestScore.lowerTo(scoreBelow);
-                                    progressListener.setSubtask("Current best score: " + bestScore);
-                                }
-
-                                synchronized (bestSubH) {
-                                    if (scoreBelow < bestSubH.get())
-                                        bestSubH.set(scoreBelow);
-                                }
-
-                                tree1X.deleteSubTree();
-                                tree2X.deleteSubTree();
-                            }
-                        } catch (Exception ex) {
-                            while (countDownLatch.getCount() > 0)
-                                countDownLatch.countDown();
+                final var task = new dendroscope.autumn.Task();
+                task.setRunnable(() -> {
+                    try {
+                        if (verbose) {
+                            System.err.println("Launching thread on " + StringUtils.toString(taxa2remove));
+                            System.err.println("Active threads " + scheduledThreadPoolExecutor.getActiveCount());
                         }
-                        countDownLatch.countDown();
+                        queue.remove(task);
+                        if (scoreAbove + additionalAbove.sum() + 1 < bestScore.get()) {
+                            Root tree1X = CopyWithTaxaRemoved.apply(root1, taxa2remove);
+                            Root tree2X = CopyWithTaxaRemoved.apply(root2, taxa2remove);
+
+                            Refine.apply(tree1X, tree2X);
+
+                            int scoreBelow = computeHybridNumberRec(tree1X, tree2X, false, taxa2remove.nextSetBit(0), null, false, scoreAbove + 1, additionalAbove) + 1;
+
+                            if (topLevel && scoreBelow < bestScore.get()) {
+                                bestScore.lowerTo(scoreBelow);
+                                progressListener.setSubtask("Current best score: " + bestScore);
+                            }
+
+                            synchronized (bestSubH) {
+                                if (scoreBelow < bestSubH.get())
+                                    bestSubH.set(scoreBelow);
+                            }
+
+                            tree1X.deleteSubTree();
+                            tree2X.deleteSubTree();
+                        }
+                    } catch (Exception ex) {
+                        while (countDownLatch.getCount() > 0)
+                            countDownLatch.countDown();
                     }
+                    countDownLatch.countDown();
                 });
                 queue.add(task);
             } else // no task for this item, count down
@@ -445,9 +436,9 @@ public class ComputeHybridNumber {
             }
         }
         // grab one task for the current thread:
-        Task taskForCurrentThread = queue.size() > 0 ? queue.poll() : null;
+        var taskForCurrentThread = queue.size() > 0 ? queue.poll() : null;
         // launch all others in the executor
-        for (Task task : queue)
+        for (var task : queue)
             scheduledThreadPoolExecutor.execute(task);
 
         // start a task in this thread
@@ -456,7 +447,7 @@ public class ComputeHybridNumber {
 
         // try to run other tasks from the queue. Note that any task that is already running will return immediately
         while (queue.size() > 0) {
-            Task task = queue.poll();
+            var task = queue.poll();
             if (task != null)
                 task.run();
         }
@@ -473,7 +464,7 @@ public class ComputeHybridNumber {
         }
         // return the best value
         synchronized (lookupTable) {
-            Integer old = (Integer) lookupTable.get(key);
+            var old = (Integer) lookupTable.get(key);
             if (old == null || old > bestSubH.get())
                 lookupTable.put(key, bestSubH.get());
         }

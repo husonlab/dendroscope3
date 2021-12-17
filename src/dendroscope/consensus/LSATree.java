@@ -25,6 +25,7 @@ import jloda.phylo.PhyloTree;
 import jloda.util.CanceledException;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * computes the LSA tree from a reticulate network
@@ -246,66 +247,63 @@ public class LSATree implements IConsensusTreeMethod {
     }
 
 
-    /**
-     * given a reticulate network, returns a mapping of each node to a list of its children in the LSA tree
-     *
-     * @param tree
-     */
-    public static NodeArray computeLSAOrdering(PhyloTree tree) {
-        NodeArray<Node> reticulation2LSA = new NodeArray<>(tree);
-        computeLSAOrdering(tree, reticulation2LSA);
-        return reticulation2LSA;
-    }
+	/**
+	 * computes the node-to-guide-tree children map
+	 *
+	 * @param tree
+	 */
+	public static void computeNodeLSAChildrenMap(PhyloTree tree) {
+		try (NodeArray<Node> reticulation2LSA = tree.newNodeArray()) {
+			computeNodeLSAChildrenMap(tree, reticulation2LSA);
+		}
+	}
 
-    /**
-     * given a reticulate network, returns a mapping of each node to a list of its children in the LSA tree
-     *
-     * @param tree
-     * @param reticulation2LSA is returned here
-     */
-    public static void computeLSAOrdering(PhyloTree tree, NodeArray<Node> reticulation2LSA) {
-        tree.getNode2GuideTreeChildren().clear();
+	/**
+	 * given a reticulate network, returns a mapping of each node to a list of its children in the LSA tree
+	 *
+	 * @param tree
+	 * @param reticulation2LSA is returned here
+	 */
+	public static void computeNodeLSAChildrenMap(PhyloTree tree, NodeArray<Node> reticulation2LSA) {
+		tree.getLSAChildrenMap().clear();
 
-        if (tree.getRoot() != null) {
-            // first we compute the reticulate node to lsa node mapping:
-            LSATree lsaTree = new LSATree();
-            lsaTree.computeReticulation2LSA(tree, reticulation2LSA);
+		if (tree.getRoot() != null) {
+			// first we compute the reticulate node to lsa node mapping:
+			var lsaTree = new LSATree();
+			lsaTree.computeReticulation2LSA(tree, reticulation2LSA);
 
-            for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
-                List<Node> children = new LinkedList<>();
-                for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
-                    if (!tree.isSpecial(e))
-                        children.add(e.getTarget());
-                }
-                tree.getNode2GuideTreeChildren().put(v, children);
-            }
-            for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
-                Node lsa = reticulation2LSA.get(v);
-                if (lsa != null)
-                    tree.getNode2GuideTreeChildren().get(lsa).add(v);
-            }
-        }
+			for (Node v : tree.nodes()) {
+				var children = v.outEdgesStream(false).filter(e -> !tree.isSpecial(e))
+						.map(Edge::getTarget).collect(Collectors.toList());
+				tree.getLSAChildrenMap().put(v, children);
+			}
+			for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
+				Node lsa = reticulation2LSA.get(v);
+				if (lsa != null)
+					tree.getLSAChildrenMap().get(lsa).add(v);
+			}
+		}
     }
 
 
-    /**
-     * recursively determine the number of edges between a reticulation and its lsa
-     *
-     * @param tree
-     * @param reticulation2LSA
-     * @return number of edges between a reticulation and its lsa
-     */
-    private static NodeIntArray computeReticulationSize(PhyloTree tree, NodeArray reticulation2LSA) {
-        NodeIntArray rSize = new NodeIntArray(tree);
+	/**
+	 * recursively determine the number of edges between a reticulation and its lsa
+	 *
+	 * @param tree
+	 * @param reticulation2LSA
+	 * @return number of edges between a reticulation and its lsa
+	 */
+	private static NodeIntArray computeReticulationSize(PhyloTree tree, NodeArray<Node> reticulation2LSA) {
+		NodeIntArray rSize = new NodeIntArray(tree);
 
-        for (Node r = tree.getFirstNode(); r != null; r = r.getNext()) {
-            Node lsa = (Node) reticulation2LSA.get(r);
-            if (lsa != null) {
-                System.err.println("lsa: " + lsa + " r: " + r);
-                EdgeSet visited = new EdgeSet(tree);
-                computeReticulationSizeRec(r, lsa, visited);
-                rSize.set(r, visited.size());
-            }
+		for (Node r = tree.getFirstNode(); r != null; r = r.getNext()) {
+			Node lsa = reticulation2LSA.get(r);
+			if (lsa != null) {
+				System.err.println("lsa: " + lsa + " r: " + r);
+				EdgeSet visited = new EdgeSet(tree);
+				computeReticulationSizeRec(r, lsa, visited);
+				rSize.set(r, visited.size());
+			}
         }
 
         return rSize;
@@ -391,20 +389,20 @@ public class LSATree implements IConsensusTreeMethod {
         // look at all reticulations below v:
         List<Node> toDelete = new LinkedList<>();
         for (Node r : reticulationsBelow) {
-            // determine which paths from the reticulation lead to this node
-            EdgeArray edge2PathSet = ret2Edge2PathSet.get(r);
-            BitSet paths = new BitSet();
-            for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
-                BitSet eSet = (BitSet) edge2PathSet.get(f);
-                if (eSet != null)
-                    paths.or(eSet);
+			// determine which paths from the reticulation lead to this node
+			var edge2PathSet = ret2Edge2PathSet.get(r);
+			var paths = new BitSet();
+			for (var f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
+				BitSet eSet = (BitSet) edge2PathSet.get(f);
+				if (eSet != null)
+					paths.or(eSet);
 
-            }
-            BitSet alive = ret2PathSet.get(r);
-            if (paths.equals(alive)) // if the set of paths equals all alive paths, v is lsa of r
-            {
-                reticulation2LSA.put(r, v);
-                toDelete.add(r); // don't need to consider this reticulation any more
+			}
+			BitSet alive = ret2PathSet.get(r);
+			if (paths.equals(alive)) // if the set of paths equals all alive paths, v is lsa of r
+			{
+				reticulation2LSA.put(r, v);
+				toDelete.add(r); // don't need to consider this reticulation any more
             }
         }
         // don't need to consider reticulations for which lsa has been found:

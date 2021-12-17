@@ -43,7 +43,7 @@ public class ClusterNetFromMultree {
 
         mulTree.addOutgroup();
         mulTree.adaptLabeling();
-        this.clusterNetwork = new ClusterNetwork(mulTree.getTaxa(), mulTree.getSplitSystem());
+        this.clusterNetwork = new ClusterNetwork(mulTree.getAllTaxa(), mulTree.getSplitSystem());
         return (this.clusterNetwork.apply());
     }
 }

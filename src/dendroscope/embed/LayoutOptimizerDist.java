@@ -46,7 +46,7 @@ public class LayoutOptimizerDist implements ILayoutOptimizer {
      */
     public void apply(PhyloTree tree, ProgressListener progressListener) {
         if (tree.getRoot() == null || tree.getNumberSpecialEdges() == 0) {
-            tree.getNode2GuideTreeChildren().clear();
+            tree.getLSAChildrenMap().clear();
             return;
         }
         System.err.println("Computing optimal embedding using distance-based algorithm");

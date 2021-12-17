@@ -23,7 +23,7 @@ import jloda.graph.Edge;
 import jloda.graph.Node;
 import jloda.graph.NodeIntArray;
 import jloda.phylo.PhyloTree;
-import jloda.phylo.PhyloTreeUtils;
+import jloda.phylo.PhyloTreeNetworkUtils;
 import jloda.swing.graphview.EdgeView;
 import jloda.swing.graphview.GraphView;
 import jloda.swing.graphview.NodeView;
@@ -227,10 +227,10 @@ public class TreeDrawerCircular extends TreeDrawerRadial implements IOptimizedGr
 
         boolean isLeaf = true;
         for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
-            if (PhyloTreeUtils.okToDescendDownThisEdge(tree, f, v)) {
-                isLeaf = false;
-                resetLabelPositionsRec(f.getOpposite(v), f, resetAll);
-            }
+			if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(tree, f, v)) {
+				isLeaf = false;
+				resetLabelPositionsRec(f.getOpposite(v), f, resetAll);
+			}
         }
         NodeView nv = viewer.getNV(v);
 

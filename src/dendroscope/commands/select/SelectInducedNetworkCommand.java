@@ -84,7 +84,7 @@ public class SelectInducedNetworkCommand extends CommandBaseMultiViewer implemen
         for (Iterator<TreeViewer> it = ((MultiViewer) getViewer()).getTreeGrid().getSelectedNodesIterator(); it.hasNext(); ) {
 
             TreeViewer viewer = it.next();
-            //Node subnetworkRoot = dendroscope.util.PhyloTreeUtils.selectLSAInducedSubNetwork(viewer, viewer.getPhyloTree(), viewer.getSelectedNodes(), viewer.getCollapsedNodes());
+            //Node subnetworkRoot = dendroscope.util.PhyloTreeNetworkUtils.selectLSAInducedSubNetwork(viewer, viewer.getPhyloTree(), viewer.getSelectedNodes(), viewer.getCollapsedNodes());
             //viewer.selectSubTreeRec(subnetworkRoot, true, true);
             dendroscope.util.PhyloTreeUtils.selectInducedSubNetwork(viewer, viewer.getPhyloTree(), viewer.getSelectedNodes(), viewer.getCollapsedNodes());
             viewer.repaint();

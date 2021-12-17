@@ -98,7 +98,7 @@ public class MidpointRerootCommand extends CommandBaseMultiViewer implements ICo
 
             if (changed) {
                 treeViewer.setDirty(true);
-                tree.getNode2GuideTreeChildren().clear();
+				tree.getLSAChildrenMap().clear();
 
                 if (tree.getNumberSpecialEdges() > 0) {
                     treeViewer.resetViewSpecialEdges();

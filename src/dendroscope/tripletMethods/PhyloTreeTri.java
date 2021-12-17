@@ -84,7 +84,7 @@ public class PhyloTreeTri extends PhyloTree {
      * @return taxa
      */
 
-    public Taxa getTaxa() {        //DUPLI
+    public Taxa getAllTaxa() {        //DUPLI
         Taxa taxa = new Taxa();
         for (Node leave : this.computeSetOfLeaves()) {
             taxa.add(this.getLabel(leave));

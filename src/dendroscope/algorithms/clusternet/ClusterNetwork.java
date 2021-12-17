@@ -21,7 +21,7 @@ package dendroscope.algorithms.clusternet;
 import dendroscope.consensus.*;
 import jloda.graph.*;
 import jloda.phylo.PhyloTree;
-import jloda.phylo.PhyloTreeUtils;
+import jloda.phylo.PhyloTreeNetworkUtils;
 import jloda.util.ProgramProperties;
 import jloda.util.StringUtils;
 import jloda.util.Triplet;
@@ -316,8 +316,8 @@ public class ClusterNetwork {
             Edge e = root.getFirstAdjacentEdge();
             Edge f = root.getLastAdjacentEdge();
             double weight = 0.5 * (tree.getWeight(e) + tree.getWeight(f));
-            double a = PhyloTreeUtils.computeAverageDistanceToALeaf(tree, e.getOpposite(root));
-            double b = PhyloTreeUtils.computeAverageDistanceToALeaf(tree, f.getOpposite(root));
+            double a = PhyloTreeNetworkUtils.computeAverageDistanceToALeaf(tree, e.getOpposite(root));
+            double b = PhyloTreeNetworkUtils.computeAverageDistanceToALeaf(tree, f.getOpposite(root));
             double na = 0.5 * (b - a + weight);
             if (na >= weight)
                 na = 0.95 * weight;

@@ -198,7 +198,7 @@ public class MultilabeledTree extends PhyloTree {
     }
 
 
-    public Taxa getTaxa() {
+    public Taxa getAllTaxa() {
         Taxa taxa = new Taxa();
         for (Node leave : this.computeSetOfLeaves()) {
             taxa.add(this.getLabel(leave));
@@ -207,7 +207,7 @@ public class MultilabeledTree extends PhyloTree {
     }
 
     public SplitSystem getSplitSystem() {
-        return (new SplitSystem(getTaxa(), this));
+        return (new SplitSystem(getAllTaxa(), this));
     }
 
 

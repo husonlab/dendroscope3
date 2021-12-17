@@ -608,12 +608,12 @@ public class Apply2Component {
         while (candidates.size() > 0) {
             //System.err.println("Nb of candidates: "+candidates.size());
             //if minCandidates is empty, transfer candidates of smallest size from candidates
-            Pair currentPair = candidates.first();
+            var currentPair = candidates.first();
             candidates.remove(currentPair);
-            BitSet maxLevelCluster = (BitSet) ((BitSet) currentPair.getFirst()).clone();
+			BitSet maxLevelCluster = (BitSet) (currentPair.getFirst()).clone();
             previousMinSize = minSize;
-            minSize = maxLevelCluster.cardinality();
-            currentMaxLevel = currentPair.getSecondInt();
+			minSize = maxLevelCluster.cardinality();
+			currentMaxLevel = currentPair.getSecond();
             try {
                 if (previousMinSize != minSize) {
                     progressListener.setTasks("Searching for minimum reticulate set", "(step " + minSize + "/" + greedySolution.cardinality() + ")");
@@ -628,10 +628,9 @@ public class Apply2Component {
                     //System.err.println("Those candidates are useless:");
                     while (!candidates.isEmpty()) {
                         if (DEBUG)
-                            System.err.println("- " + ((Pair) candidates.first()).getFirst());
+							System.err.println("- " + (candidates.first()).getFirst());
                         candidates.remove(candidates.first());
                     }
-                    candidates.clear();
                 } else {
                     //Does this set solve the next incompatibility?
                     boolean solvesIncompatibility = false;

@@ -46,7 +46,7 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
      */
     public void apply(PhyloTree tree, ProgressListener progressListener) {
         if (tree.getRoot() == null || tree.getNumberSpecialEdges() == 0) {
-            tree.getNode2GuideTreeChildren().clear();
+            tree.getLSAChildrenMap().clear();
             return;
         }
         System.err.println("Computing optimal embedding using (Kloepper and Huson, 2008)");
@@ -107,7 +107,7 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
 
         // copy result:
         for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
-            tree.getNode2GuideTreeChildren().put(v, nodes2Orderings.get(v));
+			tree.getLSAChildrenMap().put(v, nodes2Orderings.get(v));
         }
     }
 

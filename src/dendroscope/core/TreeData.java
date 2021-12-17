@@ -108,14 +108,14 @@ public class TreeData extends PhyloTree {
             setupLSA();
             for (Node v = srcTree.getFirstNode(); v != null; v = v.getNext()) {
                 Node w = oldNode2NewNode.get(v);
-                if (srcTree.getNode2GuideTreeChildren().get(v) != null) {
-                    List<Node> children = new LinkedList<Node>();
-                    for (Node u : srcTree.getNode2GuideTreeChildren().get(v)) {
-                        children.add(oldNode2NewNode.get(u));
-                    }
-                    targetTree.getNode2GuideTreeChildren().put(w, children);
-                } else
-                    targetTree.getNode2GuideTreeChildren().put(w, null);
+                if (srcTree.getLSAChildrenMap().get(v) != null) {
+					List<Node> children = new LinkedList<Node>();
+					for (Node u : srcTree.getLSAChildrenMap().get(v)) {
+						children.add(oldNode2NewNode.get(u));
+					}
+					targetTree.getLSAChildrenMap().put(w, children);
+				} else
+					targetTree.getLSAChildrenMap().put(w, null);
             }
         } else
             clearLSA();
@@ -175,14 +175,14 @@ public class TreeData extends PhyloTree {
                 // todo: next line just for testing:
                 //  targetTree.setLabel(w, srcTree.getLabel(v));
 
-                if (srcTree.getNode2GuideTreeChildren().get(v) != null) {
-                    List<Node> children = new LinkedList<Node>();
-                    for (Node u : srcTree.getNode2GuideTreeChildren().get(v)) {
-                        children.add(oldNode2NewNode.get(u));
-                    }
-                    targetTree.getNode2GuideTreeChildren().put(w, children);
-                } else
-                    targetTree.getNode2GuideTreeChildren().put(w, null);
+				if (srcTree.getLSAChildrenMap().get(v) != null) {
+					List<Node> children = new LinkedList<Node>();
+					for (Node u : srcTree.getLSAChildrenMap().get(v)) {
+						children.add(oldNode2NewNode.get(u));
+					}
+					targetTree.getLSAChildrenMap().put(w, children);
+				} else
+					targetTree.getLSAChildrenMap().put(w, null);
             }
         }
 
@@ -203,16 +203,16 @@ public class TreeData extends PhyloTree {
                 Node w = oldNode2NewNode.get(v);
                 viewer.getNV(w).copy(getNV(v));
                 viewer.setLabel(w, srcTree.getLabel(v));
-                if (getCollapsedNodes().contains(v))
-                    viewer.getCollapsedNodes().add(w);
-                if (srcTree.getNode2GuideTreeChildren().get(v) != null) {
-                    List<Node> children = new LinkedList<Node>();
-                    for (Node u : srcTree.getNode2GuideTreeChildren().get(v)) {
-                        children.add(oldNode2NewNode.get(u));
-                    }
-                    targetTree.getNode2GuideTreeChildren().put(w, children);
-                } else
-                    targetTree.getNode2GuideTreeChildren().put(w, null);
+				if (getCollapsedNodes().contains(v))
+					viewer.getCollapsedNodes().add(w);
+				if (srcTree.getLSAChildrenMap().get(v) != null) {
+					List<Node> children = new LinkedList<Node>();
+					for (Node u : srcTree.getLSAChildrenMap().get(v)) {
+						children.add(oldNode2NewNode.get(u));
+					}
+					targetTree.getLSAChildrenMap().put(w, children);
+				} else
+					targetTree.getLSAChildrenMap().put(w, null);
             }
             for (Edge e = srcTree.getFirstEdge(); e != null; e = e.getNext()) {
                 Edge f = oldEdge2NewEdge.get(e);
@@ -254,18 +254,18 @@ public class TreeData extends PhyloTree {
         target.copy(srcTree, oldNode2NewNode, oldEdge2NewEdge);
 
         // copy lsa information
-        if (srcTree.getNumberSpecialEdges() > 0 && !srcTree.getNode2GuideTreeChildren().isEmpty()) {
-            target.setupLSA();
-            for (Node v = srcTree.getFirstNode(); v != null; v = v.getNext()) {
-                Node w = oldNode2NewNode.get(v);
-                if (srcTree.getNode2GuideTreeChildren().get(v) != null) {
-                    List<Node> children = new LinkedList<Node>();
-                    for (Node u : srcTree.getNode2GuideTreeChildren().get(v)) {
-                        children.add(oldNode2NewNode.get(u));
-                    }
-                    target.getNode2GuideTreeChildren().put(w, children);
-                } else
-                    target.getNode2GuideTreeChildren().put(w, null);
+		if (srcTree.getNumberSpecialEdges() > 0 && !srcTree.getLSAChildrenMap().isEmpty()) {
+			target.setupLSA();
+			for (Node v = srcTree.getFirstNode(); v != null; v = v.getNext()) {
+				Node w = oldNode2NewNode.get(v);
+				if (srcTree.getLSAChildrenMap().get(v) != null) {
+					List<Node> children = new LinkedList<Node>();
+					for (Node u : srcTree.getLSAChildrenMap().get(v)) {
+						children.add(oldNode2NewNode.get(u));
+					}
+					target.getLSAChildrenMap().put(w, children);
+				} else
+					target.getLSAChildrenMap().put(w, null);
             }
         }
 
@@ -564,13 +564,13 @@ public class TreeData extends PhyloTree {
         // clean all single quotes from taxon labels:
         boolean changed = false;
         for (Node v = getFirstNode(); v != null; v = v.getNext()) {
-            String label = getLabel(v);
-            if (label != null && label.contains("\'")) {
-                label = label.replaceAll("\'", "-");
-                setLabel(v, label);
-                changed = true;
-            }
-        }
+			String label = getLabel(v);
+			if (label != null && label.contains("'")) {
+				label = label.replaceAll("'", "-");
+				setLabel(v, label);
+				changed = true;
+			}
+		}
         if (changed)
             System.err.println("Warning: labels in tree contain single quotes, replaced by '-'");
     }

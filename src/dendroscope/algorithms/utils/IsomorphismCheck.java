@@ -20,7 +20,7 @@ package dendroscope.algorithms.utils;
 
 import jloda.graph.Node;
 import jloda.phylo.PhyloTree;
-import jloda.phylo.PhyloTreeUtils;
+import jloda.phylo.PhyloTreeNetworkUtils;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -41,30 +41,28 @@ public class IsomorphismCheck {
 
         try {
 
-            PhyloTree t1 = new PhyloTree();
-            t1.parseBracketNotation(tree1.toBracketString(), true);
-            PhyloTree t2 = new PhyloTree();
-            t2.parseBracketNotation(tree2.toBracketString(), true);
+			PhyloTree t1 = new PhyloTree();
+			t1.parseBracketNotation(tree1.toBracketString(), true);
+			PhyloTree t2 = new PhyloTree();
+			t2.parseBracketNotation(tree2.toBracketString(), true);
 
-            if (!PhyloTreeUtils.areSingleLabeledTreesWithSameTaxa(t1, t2))
-                return false;
+			if (!PhyloTreeNetworkUtils.areSingleLabeledTreesWithSameTaxa(t1, t2))
+				return false;
 
-            if ((PhyloTreeUtils.isBifurcatingTree(t1) && !PhyloTreeUtils
-                    .isBifurcatingTree(t2))
-                    || (!PhyloTreeUtils.isBifurcatingTree(t1) && PhyloTreeUtils
-                    .isBifurcatingTree(t2)))
-                return false;
+			var isBifurcatingTree1 = !t1.isRootedNetwork() && t1.isBifurcating();
+			var isBifurcatingTree2 = !t2.isRootedNetwork() && t2.isBifurcating();
 
-            if (t1.getNumberOfNodes() != t2.getNumberOfNodes())
-                return false;
+			if (isBifurcatingTree1 != !isBifurcatingTree2)
+				return false;
 
-            if (PhyloTreeUtils.isBifurcatingTree(t1)
-                    && PhyloTreeUtils.isBifurcatingTree(t2))
-                return (treeIsomorphism(t1, t2));
+			if (t1.getNumberOfNodes() != t2.getNumberOfNodes())
+				return false;
 
-            return (networkIsomorphism(t1, t2));
+			if (isBifurcatingTree1 == isBifurcatingTree2)
+				return treeIsomorphism(t1, t2);
+			return (networkIsomorphism(t1, t2));
 
-        } catch (IOException e) {
+		} catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }

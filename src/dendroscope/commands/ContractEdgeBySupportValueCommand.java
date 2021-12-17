@@ -110,8 +110,8 @@ public class ContractEdgeBySupportValueCommand extends CommandBase implements IC
             }
             final int count = toDelete.size();
             if (count > 0 && treeViewer.contractAll(toDelete)) {
-                treeViewer.getPhyloTree().getNode2GuideTreeChildren().clear();
-                LayoutOptimizerManager.apply(multiViewer.getEmbedderName(), treeViewer.getPhyloTree());
+                treeViewer.getPhyloTree().getLSAChildrenMap().clear();
+				LayoutOptimizerManager.apply(multiViewer.getEmbedderName(), treeViewer.getPhyloTree());
                 treeViewer.setDirty(true);
                 treeViewer.recomputeEmbedding(true, true);
                 treeViewer.resetLabelPositions(true);

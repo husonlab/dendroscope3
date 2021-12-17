@@ -112,7 +112,7 @@ public class MultiLabeledTreeProcessor {
                     mulTree.deleteNode(v);
                 }
 
-                mulTree.getNode2GuideTreeChildren().clear();
+                mulTree.getLSAChildrenMap().clear();
             }
 
         }

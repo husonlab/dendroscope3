@@ -1,5 +1,5 @@
 /*
- *   PhyloTreeUtils.java Copyright (C) 2020 Daniel H. Huson
+ *   PhyloTreeNetworkUtils.java Copyright (C) 2020 Daniel H. Huson
  *
  *   (Some files contain contributions from other authors, who are then mentioned separately.)
  *
@@ -21,6 +21,7 @@ package dendroscope.util;
 import jloda.graph.*;
 import jloda.graph.algorithms.Dijkstra;
 import jloda.phylo.PhyloTree;
+import jloda.phylo.PhyloTreeNetworkUtils;
 import jloda.swing.graphview.PhyloGraphView;
 
 import java.util.*;
@@ -245,14 +246,14 @@ public class PhyloTreeUtils {
         if (node2NumberInducedChildren.getInt(v) > 1 || selected.contains(v))
             return v;
         for (var f : v.outEdges()) {
-            if (jloda.phylo.PhyloTreeUtils.okToDescendDownThisEdge(tree, f, v)) {
-                var w = f.getTarget();
-                if (node2NumberInducedChildren.getInt(w) != 0) {
-                    var u = findSubtreeNetworkRec(tree, w, node2NumberInducedChildren, selected);
-                    if (u != null)
-                        return u;
-                }
-            }
+			if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(tree, f, v)) {
+				var w = f.getTarget();
+				if (node2NumberInducedChildren.getInt(w) != 0) {
+					var u = findSubtreeNetworkRec(tree, w, node2NumberInducedChildren, selected);
+					if (u != null)
+						return u;
+				}
+			}
         }
         return null;
     }

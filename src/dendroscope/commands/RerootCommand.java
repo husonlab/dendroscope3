@@ -108,8 +108,8 @@ public class RerootCommand extends CommandBaseMultiViewer implements ICommand {
                     changed = RerootingUtils.rerootByNode(treeViewer, treeViewer.getSelectedNodes().getFirstElement());
             }
             if (changed) {
-                treeViewer.getPhyloTree().getNode2GuideTreeChildren().clear();
-                LayoutOptimizerManager.apply(multiViewer.getEmbedderName(), treeViewer.getPhyloTree());
+                treeViewer.getPhyloTree().getLSAChildrenMap().clear();
+				LayoutOptimizerManager.apply(multiViewer.getEmbedderName(), treeViewer.getPhyloTree());
                 treeViewer.setDirty(true);
                 treeViewer.recomputeEmbedding(true, true);
                 treeViewer.resetLabelPositions(true);

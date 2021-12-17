@@ -50,9 +50,9 @@ public class AhoBasedMethods {
             trees[n] = tempTree;
         }
 
-        Taxa allTaxa = trees[0].getTaxa();
+        Taxa allTaxa = trees[0].getAllTaxa();
         for (int m = 1; m < trees.length; m++) {
-            allTaxa.addAll(trees[1].getTaxa());
+            allTaxa.addAll(trees[1].getAllTaxa());
         }
 
         HashMap<Integer, String> ID2taxon = new HashMap<>();

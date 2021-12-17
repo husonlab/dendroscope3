@@ -21,7 +21,7 @@ package dendroscope.drawer;
 import dendroscope.window.TreeViewer;
 import jloda.graph.*;
 import jloda.phylo.PhyloTree;
-import jloda.phylo.PhyloTreeUtils;
+import jloda.phylo.PhyloTreeNetworkUtils;
 import jloda.swing.graphview.EdgeView;
 import jloda.swing.graphview.GraphView;
 import jloda.swing.graphview.NodeView;
@@ -173,15 +173,15 @@ public class TreeDrawerParallel extends TreeDrawerBase implements IOptimizedGrap
                 pts.add(new Point2D.Double(vPt.getX(), viewer.getLocation(w).getY()));
                 viewer.setInternalPoints(f, pts);
 
-                if (isReticulateEdge(f))
-                    viewer.setShape(f, EdgeView.QUAD_EDGE);
-                else if (tree.isTransferEdge(f))
-                    viewer.setShape(f, EdgeView.STRAIGHT_EDGE);
-                else // draw as curved edge
-                    viewer.setShape(f, EdgeView.POLY_EDGE);
-                if (PhyloTreeUtils.okToDescendDownThisEdge(tree, f, v) && !isCollapsed(w)) {
-                    stack.push(w);
-                }
+				if (isReticulateEdge(f))
+					viewer.setShape(f, EdgeView.QUAD_EDGE);
+				else if (tree.isTransferEdge(f))
+					viewer.setShape(f, EdgeView.STRAIGHT_EDGE);
+				else // draw as curved edge
+					viewer.setShape(f, EdgeView.POLY_EDGE);
+				if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(tree, f, v) && !isCollapsed(w)) {
+					stack.push(w);
+				}
             }
         }
     }

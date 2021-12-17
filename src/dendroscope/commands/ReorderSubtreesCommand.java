@@ -146,8 +146,8 @@ public class ReorderSubtreesCommand extends CommandBaseMultiViewer implements IC
                             edges.add(((EdgeListElement) aNewOrder).edge);
                         }
                         v.rearrangeAdjacentEdges(edges);
-                        viewer.getPhyloTree().getNode2GuideTreeChildren().put(v, null);
-                        viewer.recomputeEmbedding(false, true);
+						viewer.getPhyloTree().getLSAChildrenMap().put(v, null);
+						viewer.recomputeEmbedding(false, true);
                         viewer.setDirty(true);
                     }
                 }

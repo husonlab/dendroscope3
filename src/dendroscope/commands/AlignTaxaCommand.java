@@ -88,7 +88,7 @@ public class AlignTaxaCommand extends CommandBaseMultiViewer implements ICommand
             TreeViewer viewer = it.next();
             if (viewer.getPhyloTree().getNumberOfNodes() > 0) {
                 trees.add(viewer.getPhyloTree());
-                viewer.getPhyloTree().getNode2GuideTreeChildren().clear();
+				viewer.getPhyloTree().getLSAChildrenMap().clear();
             }
         }
 

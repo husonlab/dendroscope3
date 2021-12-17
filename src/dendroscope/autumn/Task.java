@@ -51,23 +51,30 @@ public class Task implements Runnable {
         PENDING, RUNNING, DONE
     }
 
-    private Status status = Status.PENDING;
-    private Runnable runnable;
+	private Status status = Status.PENDING;
+	private Runnable runnable;
 
-    /**
-     * construct a new task
-     */
-    public Task() {
-    }
+	/**
+	 * construct a new task
+	 */
+	public Task() {
+	}
 
-    /**
-     * set the runnable
-     *
-     * @param runnable
-     */
-    public void setRunnable(Runnable runnable) {
-        this.runnable = runnable;
-    }
+	/**
+	 * construct a new task
+	 */
+	public Task(Runnable runnable) {
+		setRunnable(runnable);
+	}
+
+	/**
+	 * set the runnable
+	 *
+	 * @param runnable
+	 */
+	public void setRunnable(Runnable runnable) {
+		this.runnable = runnable;
+	}
 
     /**
      * try to run the task. It will only be executed, if it has status pending.

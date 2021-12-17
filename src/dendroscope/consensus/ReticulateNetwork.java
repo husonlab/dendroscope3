@@ -668,60 +668,56 @@ public class ReticulateNetwork {
      * @return remaining choices in decreasing order of triples hit
      */
     private BitSet[] orderChoices(List triples, Set choices) {
-        Map choice2countChoice = new HashMap();
+        var choice2countChoice = new HashMap<BitSet, Pair<Integer, BitSet>>();
 
         for (Object triple1 : triples) {
             Triple triple = (Triple) triple1;
             for (Object choice : choices) {
                 BitSet c = (BitSet) choice;
 
-                if (triple.isHitBy(c)) {
-                    Pair pair = (Pair) choice2countChoice.get(c);
-                    if (pair == null)
-                        choice2countChoice.put(c, new Pair(1, c));
-                    else
-                        pair.setFirst(pair.getFirstInt() + 1);
-                }
-            }
-        }
+				if (triple.isHitBy(c)) {
+					var pair = choice2countChoice.get(c);
+					if (pair == null)
+						choice2countChoice.put(c, new Pair<Integer, BitSet>(1, c));
+					else
+						pair.setFirst(pair.getFirst() + 1);
+				}
+			}
+		}
 
-        SortedSet sorted = new TreeSet(new Comparator() {
-            public int compare(Object o1, Object o2) {
-                Pair p1 = (Pair) o1;
-                Pair p2 = (Pair) o2;
-                if (p1.getFirstInt() > p2.getFirstInt())
-                    return -1;
-                else if (p1.getFirstInt() < p2.getFirstInt())
-                    return 1;
-                BitSet cluster1 = (BitSet) p1.getSecond();
-                BitSet cluster2 = (BitSet) p2.getSecond();
-                int t1 = cluster1.nextSetBit(0);
-                int t2 = cluster2.nextSetBit(0);
-                while (true) {
-                    if (t1 < t2)
-                        return -1;
-                    else if (t1 > t2)
-                        return 1;
-                    t1 = cluster1.nextSetBit(t1 + 1);
-                    t2 = cluster2.nextSetBit(t2 + 1);
-                    if (t1 == -1 && t2 > -1)
-                        return -1;
-                    else if (t1 > -1 && t2 == -1)
-                        return 1;
-                    else if (t1 == -1 && t2 == -1)
-                        return 0;
-                }
-            }
-        });
-        for (Object o : choice2countChoice.keySet()) sorted.add(choice2countChoice.get(o));
+		var sorted = new TreeSet<Pair<Integer, BitSet>>((p1, p2) -> {
+			if (p1.getFirst() > p2.getFirst())
+				return -1;
+			else if (p1.getFirst() < p2.getFirst())
+				return 1;
+			BitSet cluster1 = p1.getSecond();
+			BitSet cluster2 = p2.getSecond();
+			int t1 = cluster1.nextSetBit(0);
+			int t2 = cluster2.nextSetBit(0);
+			while (true) {
+				if (t1 < t2)
+					return -1;
+				else if (t1 > t2)
+					return 1;
+				t1 = cluster1.nextSetBit(t1 + 1);
+				t2 = cluster2.nextSetBit(t2 + 1);
+				if (t1 == -1 && t2 > -1)
+					return -1;
+				else if (t1 > -1 && t2 == -1)
+					return 1;
+				else if (t1 == -1 && t2 == -1)
+					return 0;
+			}
+		});
+		sorted.addAll(choice2countChoice.values());
 
-        BitSet[] result = new BitSet[sorted.size()];
-        int i = 0;
-        for (Object aSorted : sorted) {
-            result[i++] = (BitSet) ((Pair) aSorted).getSecond();
-        }
-        return result;
-    }
+		var result = new BitSet[sorted.size()];
+		int i = 0;
+		for (var pair : sorted) {
+			result[i++] = pair.getSecond();
+		}
+		return result;
+	}
 
 
     /**

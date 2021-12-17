@@ -109,8 +109,8 @@ public class RemoveTaxaCommand extends CommandBaseMultiViewer implements IComman
             if (nodes.size() > 0) {
                 //   doc.getTree(multiViewer.getTreeGrid().getNumberOfViewerInDocument(treeViewer)).syncViewer2Data(treeViewer, treeViewer.isDirty());
                 if (treeViewer.removeTaxa(nodes)) {
-                    treeViewer.getPhyloTree().getNode2GuideTreeChildren().clear();
-                    LayoutOptimizerManager.apply(multiViewer.getEmbedderName(), treeViewer.getPhyloTree());
+                    treeViewer.getPhyloTree().getLSAChildrenMap().clear();
+					LayoutOptimizerManager.apply(multiViewer.getEmbedderName(), treeViewer.getPhyloTree());
                     treeViewer.setDirty(true);
                     treeViewer.recomputeEmbedding(true, true);
                     treeViewer.resetLabelPositions(true);

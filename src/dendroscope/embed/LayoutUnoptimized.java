@@ -19,11 +19,19 @@
 package dendroscope.embed;
 
 import dendroscope.consensus.LSATree;
-import jloda.graph.*;
+import jloda.graph.Edge;
+import jloda.graph.Node;
+import jloda.graph.NodeIntArray;
+import jloda.graph.NodeSet;
+import jloda.phylo.LSAUtils;
 import jloda.phylo.PhyloTree;
+import jloda.util.Counter;
+import jloda.util.IteratorUtils;
+import jloda.util.StringUtils;
 import jloda.util.progress.ProgressListener;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -39,7 +47,7 @@ public class LayoutUnoptimized implements ILayoutOptimizer {
      */
     public void apply(PhyloTree tree, ProgressListener progressListener) {
         if (tree.getRoot() == null || tree.getNumberSpecialEdges() == 0) {
-            tree.getNode2GuideTreeChildren().clear();
+            tree.getLSAChildrenMap().clear();
             return; // if this is a tree, don't need LSA guide tree
         }
 
@@ -47,30 +55,84 @@ public class LayoutUnoptimized implements ILayoutOptimizer {
 
         boolean isTransferNetwork = isTransferNetwork(tree);
 
-        NodeArray<Node> retNode2GuideParent = new NodeArray<Node>(tree);
-
         if (isTransferNetwork) {
-            tree.getNode2GuideTreeChildren().clear();
+            tree.getLSAChildrenMap().clear();
             for (Node v = tree.getFirstNode(); v != null; v = tree.getNextNode(v)) {
                 List<Node> children = new LinkedList<Node>();
                 for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
                     if (!tree.isSpecial(e) || tree.getWeight(e) > 0) {
                         children.add(e.getTarget());
-                        retNode2GuideParent.put(e.getTarget(), e.getSource());
                     }
 
                 }
-                tree.getNode2GuideTreeChildren().put(v, children);
+                tree.getLSAChildrenMap().put(v, children);
 
             }
         } else // must be combining network
         {
-            LSATree.computeLSAOrdering(tree, retNode2GuideParent); // maps reticulate nodes to lsa nodes
+            if (false) {
+                System.err.println("++++++++ Nodes 0:");
+                tree.preorderTraversal(tree.getRoot(), v -> true, v -> {
+                    if (v.isLeaf())
+                        System.err.println(v + " " + tree.getLabel(v));
+                    else {
+                        System.err.println("Node:" + v.getId());
+                        System.err.println("Children:" + StringUtils.toString(v.childrenStream().map(w -> w.getId()).collect(Collectors.toList()), " "));
+                        System.err.println("LSA Chld:" + StringUtils.toString(IteratorUtils.asStream(tree.lsaChildren(v)).map(w -> w.getId()).collect(Collectors.toList()), " "));
+                    }
+                });
+            }
+            LSATree.computeNodeLSAChildrenMap(tree); // maps reticulate nodes to lsa nodes
 
+            if (true) {
+                System.err.println("before reorder:");
+                System.err.println("network: " + tree.toBracketString(false));
+                System.err.println("LSAtree: " + jloda.phylo.LSAUtils.getLSATree(tree).toBracketString(false));
+            }
             // compute preorder numbering of all nodes
-            NodeIntArray ordering = new NodeIntArray(tree);
+            var ordering = new NodeIntArray(tree);
             computePreOrderNumberingRec(tree, tree.getRoot(), new NodeSet(tree), ordering, 0);
             reorderLSAChildren(tree, ordering);
+
+            if (false) {
+                System.err.println("++++++++ Nodes 3:");
+                LSAUtils.preorderTraversalLSA(tree, tree.getRoot(), v -> {
+                    if (v.isLeaf())
+                        System.err.println(v.getId() + " " + tree.getLabel(v));
+                    else {
+                        System.err.println("Node:" + v.getId());
+                        System.err.println("Children:" + StringUtils.toString(v.childrenStream().map(w -> w.getId()).collect(Collectors.toList()), " "));
+                        System.err.println("LSA Chld:" + StringUtils.toString(IteratorUtils.asStream(tree.lsaChildren(v)).map(w -> w.getId()).collect(Collectors.toList()), " "));
+                    }
+                });
+            }
+
+            {
+                if (false) {
+                    var counter = new Counter(0);
+                    System.err.println("Leaves:");
+                    LSAUtils.preorderTraversalLSA(tree, tree.getRoot(), v -> {
+                        if (v.isLeaf())
+                            System.err.println(tree.getLabel(v) + ": " + counter.incrementAndGet());
+                    });
+                }
+            }
+
+            if (true) {
+                System.err.println("network: " + tree.toBracketString(false));
+                System.err.println("LSAtree: " + jloda.phylo.LSAUtils.getLSATree(tree).toBracketString(false));
+
+                var pos = new Counter(0);
+                System.err.println("Traversal:");
+                LSAUtils.preorderTraversalLSA(tree, tree.getRoot(), v -> {
+                    System.err.println("node: " + v.getId() + " (pos: " + pos.incrementAndGet() + ")");
+                    System.err.println("Children: " + StringUtils.toString(v.childrenStream().map(w -> w.getId()).collect(Collectors.toList()), " "));
+                    System.err.println("LSA Chd: " + StringUtils.toString(IteratorUtils.asStream(tree.lsaChildren(v)).map(w -> w.getId()).collect(Collectors.toList()), " "));
+                    if (tree.getLabel(v) != null)
+                        System.err.println("taxon: " + tree.getLabel(v));
+                });
+            }
+
         }
     }
 
@@ -113,14 +175,14 @@ public class LayoutUnoptimized implements ILayoutOptimizer {
     private void reorderLSAChildren(PhyloTree tree, final NodeIntArray ordering) {
         // System.err.println("------ v="+v);
         for (Node v = tree.getFirstNode(); v != null; v = tree.getNextNode(v)) {
-            List<Node> children = tree.getNode2GuideTreeChildren().get(v);
+            List<Node> children = tree.getLSAChildrenMap().get(v);
             if (children != null) {
-                /*
-                System.err.println("LSA children old:");
-                for(Node u:children) {
-                    System.err.println(" "+u+" order: "+ordering.get(u));
+                if (false) {
+                    System.err.println("LSA children old for v=" + v.getId() + ":");
+                    for (Node u : children) {
+                        System.err.println(" " + u.getId() + " order: " + ordering.get(u));
+                    }
                 }
-                */
                 SortedSet<Node> sorted = new TreeSet<Node>(new Comparator<Node>() {
 
                     public int compare(Node v1, Node v2) {
@@ -137,14 +199,13 @@ public class LayoutUnoptimized implements ILayoutOptimizer {
                 sorted.addAll(children);
                 List<Node> list = new LinkedList<Node>();
                 list.addAll(sorted);
-                tree.getNode2GuideTreeChildren().put(v, list);
-                /*
-                System.err.println("LSA children new:");
-                 for(Node u: list) {
-                     System.err.println(u+" order: "+ordering.get(u));
-                 }
-                System.err.println();
-                */
+                tree.getLSAChildrenMap().put(v, list);
+                if (false) {
+                    System.err.println("LSA children new for v=" + v.getId() + ":");
+                    for (Node u : children) {
+                        System.err.println(" " + u.getId() + " order: " + ordering.get(u));
+                    }
+                }
             }
         }
     }

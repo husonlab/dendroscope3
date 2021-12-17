@@ -51,8 +51,8 @@ public class LayoutNoOptimizerCommand extends CommandBaseMultiViewer implements 
         for (Iterator<TreeViewer> it = multiViewer.getTreeGrid().getSelectedOrAllIterator(); it.hasNext(); ) {
             TreeViewer treeViewer = it.next();
             treeViewer.setDirty(true);
-            treeViewer.getPhyloTree().getNode2GuideTreeChildren().clear(); // this will force recomputation of embedding
-            LayoutOptimizerManager.apply(embedder, treeViewer.getPhyloTree());
+			treeViewer.getPhyloTree().getLSAChildrenMap().clear(); // this will force recomputation of embedding
+			LayoutOptimizerManager.apply(embedder, treeViewer.getPhyloTree());
         }
         multiViewer.getCommandManager().updateEnableState();
         multiViewer.setMustRecomputeEmbedding(true);
