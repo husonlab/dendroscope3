@@ -23,15 +23,10 @@ import jloda.graph.Edge;
 import jloda.graph.Node;
 import jloda.graph.NodeIntArray;
 import jloda.graph.NodeSet;
-import jloda.phylo.LSAUtils;
 import jloda.phylo.PhyloTree;
-import jloda.util.Counter;
-import jloda.util.IteratorUtils;
-import jloda.util.StringUtils;
 import jloda.util.progress.ProgressListener;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 /**
@@ -70,69 +65,11 @@ public class LayoutUnoptimized implements ILayoutOptimizer {
             }
         } else // must be combining network
         {
-            if (false) {
-                System.err.println("++++++++ Nodes 0:");
-                tree.preorderTraversal(tree.getRoot(), v -> true, v -> {
-                    if (v.isLeaf())
-                        System.err.println(v + " " + tree.getLabel(v));
-                    else {
-                        System.err.println("Node:" + v.getId());
-                        System.err.println("Children:" + StringUtils.toString(v.childrenStream().map(w -> w.getId()).collect(Collectors.toList()), " "));
-                        System.err.println("LSA Chld:" + StringUtils.toString(IteratorUtils.asStream(tree.lsaChildren(v)).map(w -> w.getId()).collect(Collectors.toList()), " "));
-                    }
-                });
-            }
             LSATree.computeNodeLSAChildrenMap(tree); // maps reticulate nodes to lsa nodes
-
-            if (true) {
-                System.err.println("before reorder:");
-                System.err.println("network: " + tree.toBracketString(false));
-                System.err.println("LSAtree: " + jloda.phylo.LSAUtils.getLSATree(tree).toBracketString(false));
-            }
             // compute preorder numbering of all nodes
             var ordering = new NodeIntArray(tree);
             computePreOrderNumberingRec(tree, tree.getRoot(), new NodeSet(tree), ordering, 0);
             reorderLSAChildren(tree, ordering);
-
-            if (false) {
-                System.err.println("++++++++ Nodes 3:");
-                LSAUtils.preorderTraversalLSA(tree, tree.getRoot(), v -> {
-                    if (v.isLeaf())
-                        System.err.println(v.getId() + " " + tree.getLabel(v));
-                    else {
-                        System.err.println("Node:" + v.getId());
-                        System.err.println("Children:" + StringUtils.toString(v.childrenStream().map(w -> w.getId()).collect(Collectors.toList()), " "));
-                        System.err.println("LSA Chld:" + StringUtils.toString(IteratorUtils.asStream(tree.lsaChildren(v)).map(w -> w.getId()).collect(Collectors.toList()), " "));
-                    }
-                });
-            }
-
-            {
-                if (false) {
-                    var counter = new Counter(0);
-                    System.err.println("Leaves:");
-                    LSAUtils.preorderTraversalLSA(tree, tree.getRoot(), v -> {
-                        if (v.isLeaf())
-                            System.err.println(tree.getLabel(v) + ": " + counter.incrementAndGet());
-                    });
-                }
-            }
-
-            if (true) {
-                System.err.println("network: " + tree.toBracketString(false));
-                System.err.println("LSAtree: " + jloda.phylo.LSAUtils.getLSATree(tree).toBracketString(false));
-
-                var pos = new Counter(0);
-                System.err.println("Traversal:");
-                LSAUtils.preorderTraversalLSA(tree, tree.getRoot(), v -> {
-                    System.err.println("node: " + v.getId() + " (pos: " + pos.incrementAndGet() + ")");
-                    System.err.println("Children: " + StringUtils.toString(v.childrenStream().map(w -> w.getId()).collect(Collectors.toList()), " "));
-                    System.err.println("LSA Chd: " + StringUtils.toString(IteratorUtils.asStream(tree.lsaChildren(v)).map(w -> w.getId()).collect(Collectors.toList()), " "));
-                    if (tree.getLabel(v) != null)
-                        System.err.println("taxon: " + tree.getLabel(v));
-                });
-            }
-
         }
     }
 

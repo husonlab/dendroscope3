@@ -57,10 +57,11 @@ public class Value extends Single<Integer> {
      *
      * @param value
      */
-    public void set(Integer value) {
+    public Integer set(Integer value) {
         synchronized (this) {
             super.set(value);
         }
+        return value;
     }
 
     /**
