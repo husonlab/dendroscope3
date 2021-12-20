@@ -48,9 +48,7 @@ public class LayoutUnoptimized implements ILayoutOptimizer {
 
         //System.err.println("Maintaining current embedding");
 
-        boolean isTransferNetwork = isTransferNetwork(tree);
-
-        if (isTransferNetwork) {
+        if (isAllReticulationsAreTransfers(tree)) {
             tree.getLSAChildrenMap().clear();
             for (Node v = tree.getFirstNode(); v != null; v = tree.getNextNode(v)) {
                 List<Node> children = new LinkedList<Node>();
@@ -148,20 +146,29 @@ public class LayoutUnoptimized implements ILayoutOptimizer {
     }
 
     /**
-     * does network look like a transfer network?
+     * does network only contain transfers?
      *
      * @param tree
-     * @return true, if is transfer network
+     * @return true, if is reticulate network that only contains
      */
-    public static boolean isTransferNetwork(PhyloTree tree) {
-        boolean isTransferNetwork = false;
-        for (Edge e : tree.reticulatedEdges()) {
-            if (tree.getWeight(e) != 0) {
-                isTransferNetwork = true;
-                break;
+    public static boolean isAllReticulationsAreTransfers(PhyloTree tree) {
+        var hasTransferReticulation = false;
+        var hasNonTransferReticulation = false;
+
+        for (var v : tree.nodes()) {
+            if (v.getInDegree() > 1) {
+                var transfer = false;
+                for (var e : v.inEdges()) {
+                    if (tree.getWeight(e) != 0)
+                        transfer = true;
+                }
+                if (!transfer)
+                    hasNonTransferReticulation = true;
+                else
+                    hasTransferReticulation = true;
             }
         }
-        return isTransferNetwork;
+        return hasTransferReticulation && !hasNonTransferReticulation;
     }
 }
 
