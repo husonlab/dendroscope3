@@ -22,7 +22,6 @@ import dendroscope.core.TreeData;
 import jloda.graph.Edge;
 import jloda.graph.Node;
 import jloda.phylo.PhyloTree;
-import jloda.phylo.PhyloTreeNetworkUtils;
 import jloda.swing.graphview.EdgeView;
 import jloda.swing.graphview.GraphView;
 import jloda.swing.graphview.NodeView;
@@ -276,7 +275,7 @@ public class Dendro extends IOBase implements IOFormat {
         Map<Integer, Integer> nodeId2Number = new HashMap<Integer, Integer>();
         Map<Integer, Integer> edgeId2Number = new HashMap<Integer, Integer>();
 
-        if (tree.getNumberSpecialEdges() > 0) {
+        if (tree.getNumberReticulateEdges() > 0) {
             write(tree, w, nodeId2Number, edgeId2Number); // write as nework
         } else {
             w.write("{TREE '" + tree.getName() + "'\n");
@@ -286,17 +285,17 @@ public class Dendro extends IOBase implements IOFormat {
             w.write("}\n");
         }
 
-		if (tree.getNumberSpecialEdges() > 0 && !tree.getLSAChildrenMap().isEmpty()) {
-			w.write("{LSA\n");
-			for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
-				List<Node> order = tree.getLSAChildrenMap().get(v);
-				if (order != null && order.size() > 0) {
-					w.write(nodeId2Number.get(v.getId()) + ":");
-					for (Node u : order) {
-						w.write(" " + nodeId2Number.get(u.getId()));
-					}
-					w.write(";\n");
-				}
+        if (tree.getNumberReticulateEdges() > 0 && !tree.getLSAChildrenMap().isEmpty()) {
+            w.write("{LSA\n");
+            for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
+                List<Node> order = tree.getLSAChildrenMap().get(v);
+                if (order != null && order.size() > 0) {
+                    w.write(nodeId2Number.get(v.getId()) + ":");
+                    for (Node u : order) {
+                        w.write(" " + nodeId2Number.get(u.getId()));
+                    }
+                    w.write(";\n");
+                }
             }
             w.write("}\n");
         }
@@ -423,7 +422,7 @@ public class Dendro extends IOBase implements IOFormat {
             edgeId2Number.put(e.getId(), ++count);
             w.write("" + count + ":" + nodeId2Number.get(e.getSource().getId()) + " " +
                     nodeId2Number.get(e.getTarget().getId()) + " " + tree.getWeight(e));
-            if (tree.isSpecial(e))
+            if (tree.isReticulatedEdge(e))
                 w.write(" s");
             w.write("\n");
         }
@@ -491,7 +490,7 @@ public class Dendro extends IOBase implements IOFormat {
             num2edge.put(eid, e);
             if (np.peekMatchIgnoreCase("s")) {
                 np.matchIgnoreCase("s");
-                tree.setSpecial(e, true);
+                tree.setReticulated(e, true);
             }
         }
 
@@ -539,8 +538,8 @@ public class Dendro extends IOBase implements IOFormat {
                 var edges = nodeNumberEdgeNumber.getSecond() + 1;
                 nodeNumberEdgeNumber.setSecond(edges);
                 num2edge.put(edges, f);
-				if (PhyloTreeNetworkUtils.okToDescendDownThisEdge((PhyloTree) v.getOwner(), f, v))
-					setNum2NodeEdgeArrayRec(f.getOpposite(v), f, nodeNumberEdgeNumber, num2node, num2edge);
+                if (((PhyloTree) v.getOwner()).okToDescendDownThisEdgeInTraversal(f, v))
+                    setNum2NodeEdgeArrayRec(f.getOpposite(v), f, nodeNumberEdgeNumber, num2node, num2edge);
             }
     }
 

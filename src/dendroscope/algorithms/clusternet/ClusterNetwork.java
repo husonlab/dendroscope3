@@ -19,9 +19,9 @@
 package dendroscope.algorithms.clusternet;
 
 import dendroscope.consensus.*;
+import dendroscope.util.RerootingUtils;
 import jloda.graph.*;
 import jloda.phylo.PhyloTree;
-import jloda.phylo.PhyloTreeNetworkUtils;
 import jloda.util.ProgramProperties;
 import jloda.util.StringUtils;
 import jloda.util.Triplet;
@@ -97,7 +97,7 @@ public class ClusterNetwork {
         // computeConfidenceOnReticulate(tree);
 
         for (Edge e = tree.getFirstEdge(); e != null; e = e.getNext()) {
-            if (ProgramProperties.get("scaleconfidence", false) && tree.isSpecial(e)) {
+            if (ProgramProperties.get("scaleconfidence", false) && tree.isReticulatedEdge(e)) {
                 tree.setWeight(e, tree.getConfidence(e));
             }
         }
@@ -287,7 +287,7 @@ public class ClusterNetwork {
                     Node u = e.getSource();
                     Edge f = tree.newEdge(u, w);
                     tree.setWeight(f, 0); // special edges have zero weight
-                    tree.setSpecial(f, true);
+                    tree.setReticulated(f, true);
                     toDelete.add(e);
                 }
                 Edge f = tree.newEdge(w, v);
@@ -316,8 +316,8 @@ public class ClusterNetwork {
             Edge e = root.getFirstAdjacentEdge();
             Edge f = root.getLastAdjacentEdge();
             double weight = 0.5 * (tree.getWeight(e) + tree.getWeight(f));
-            double a = PhyloTreeNetworkUtils.computeAverageDistanceToALeaf(tree, e.getOpposite(root));
-            double b = PhyloTreeNetworkUtils.computeAverageDistanceToALeaf(tree, f.getOpposite(root));
+            double a = RerootingUtils.computeAverageDistanceToALeaf(tree, e.getOpposite(root));
+            double b = RerootingUtils.computeAverageDistanceToALeaf(tree, f.getOpposite(root));
             double na = 0.5 * (b - a + weight);
             if (na >= weight)
                 na = 0.95 * weight;
@@ -404,7 +404,7 @@ public class ClusterNetwork {
         double confidence = 0;
         int count = 0;
         for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
-            if (!tree.isSpecial(e)) {
+            if (!tree.isReticulatedEdge(e)) {
                 confidence += tree.getConfidence(e);
                 count++;
             }
@@ -429,7 +429,7 @@ public class ClusterNetwork {
         double sum = 0;
         int count = 0;
         for (Edge e : edges) {
-            if (!tree.isSpecial(e)) {
+            if (!tree.isReticulatedEdge(e)) {
                 sum += tree.getConfidence(e);
                 count++;
             }

@@ -63,10 +63,10 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
 			}
         }
 
-        if (tree.getRoot() == null || tree.getNumberSpecialEdges() == 0) {
+        if (tree.getRoot() == null || tree.getNumberReticulateEdges() == 0) {
 			tree.getLSAChildrenMap().clear();
-            return;
-        }
+			return;
+		}
         //System.err.println("Computing optimal embedding using circular-ordering algorithm");
         apply(new PhyloTree[]{tree}, progressListener, false, true);
     }

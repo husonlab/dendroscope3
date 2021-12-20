@@ -52,8 +52,8 @@ public class PostProcess {
             copyRec(original, tree.getRoot(), new HashMap<Node, Node>(), allTaxa, showTaxonIds, tree);
             for (Edge e = tree.getFirstEdge(); e != null; e = tree.getNextEdge(e)) {
                 if (e.getTarget().getInDegree() > 1) {
-                    tree.setSpecial(e, true);
-                    tree.setWeight(e, 0);
+                    tree.setReticulated(e, true);
+					tree.setWeight(e, 0);
                 }
             }
             if (treeRoot.getOutDegree() > 1) {

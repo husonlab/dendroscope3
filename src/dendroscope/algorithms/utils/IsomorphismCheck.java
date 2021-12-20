@@ -20,13 +20,9 @@ package dendroscope.algorithms.utils;
 
 import jloda.graph.Node;
 import jloda.phylo.PhyloTree;
-import jloda.phylo.PhyloTreeNetworkUtils;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Hashtable;
-import java.util.Set;
-import java.util.Vector;
+import java.util.*;
 
 /**
  * Given two rooted, bifurcating phylogenetic trees T1 and T2, this function
@@ -36,18 +32,17 @@ import java.util.Vector;
  */
 
 public class IsomorphismCheck {
+	public Boolean run(PhyloTree tree1, PhyloTree tree2) {
 
-    public Boolean run(PhyloTree tree1, PhyloTree tree2) {
+		try {
 
-        try {
+			PhyloTree t1 = new PhyloTree();
+			t1.parseBracketNotation(tree1.toBracketString(), true);
+			PhyloTree t2 = new PhyloTree();
+			t2.parseBracketNotation(tree2.toBracketString(), true);
 
-            PhyloTree t1 = new PhyloTree();
-            t1.parseBracketNotation(tree1.toBracketString(), true);
-            PhyloTree t2 = new PhyloTree();
-            t2.parseBracketNotation(tree2.toBracketString(), true);
-
-            if (!PhyloTreeNetworkUtils.areSingleLabeledTreesWithSameTaxa(t1, t2))
-                return false;
+			if (!areSingleLabeledTreesWithSameTaxa(t1, t2))
+				return false;
 
             var isBifurcatingTree1 = !t1.isReticulated() && t1.isBifurcating();
             var isBifurcatingTree2 = !t2.isReticulated() && t2.isBifurcating();
@@ -134,13 +129,48 @@ public class IsomorphismCheck {
         return s1.equals(s2);
     }
 
-    public String getTreeString(PhyloTree t) {
-        Set<Set<String>> clusters = dendroscope.util.PhyloTreeUtils.collectAllHardwiredClusters(t);
-        Vector<String> treeString = new Vector<>();
-        for (Set<String> o : clusters)
-            treeString.add(o.toString());
-        Collections.sort(treeString);
-        return treeString.toString();
-    }
+	public String getTreeString(PhyloTree t) {
+		Set<Set<String>> clusters = dendroscope.util.PhyloTreeUtils.collectAllHardwiredClusters(t);
+		Vector<String> treeString = new Vector<>();
+		for (Set<String> o : clusters)
+			treeString.add(o.toString());
+		Collections.sort(treeString);
+		return treeString.toString();
+	}
 
+
+	/**
+	 * determines whether the two trees are single-labeled trees on the same
+	 * taxon sets
+	 *
+	 * @return true, if ok
+	 */
+	public static boolean areSingleLabeledTreesWithSameTaxa(PhyloTree tree1, PhyloTree tree2) {
+		var labels1 = new HashSet<String>();
+
+		if (tree1.getNumberReticulateEdges() > 0 || tree2.getNumberReticulateEdges() > 0)
+			return false;
+
+		for (var v : tree1.nodes()) {
+			if (v.getOutDegree() == 0) {
+				if (labels1.contains(tree1.getLabel(v)))
+					return false; // not single labeled
+				else
+					labels1.add(tree1.getLabel(v));
+			}
+		}
+
+		var labels2 = new HashSet<String>();
+		for (var v : tree2.nodes()) {
+			if (v.getOutDegree() == 0) {
+				if (!labels1.contains(tree2.getLabel(v)))
+					return false; // not present in first tree
+				if (labels2.contains(tree2.getLabel(v)))
+					return false; // not single labeled
+				else
+					labels2.add(tree2.getLabel(v));
+			}
+		}
+		return labels1.size() == labels2.size();
+	}
 }

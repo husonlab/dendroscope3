@@ -45,10 +45,10 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
      * @throws Exception
      */
     public void apply(PhyloTree tree, ProgressListener progressListener) {
-        if (tree.getRoot() == null || tree.getNumberSpecialEdges() == 0) {
-            tree.getLSAChildrenMap().clear();
-            return;
-        }
+        if (tree.getRoot() == null || tree.getNumberReticulateEdges() == 0) {
+			tree.getLSAChildrenMap().clear();
+			return;
+		}
         System.err.println("Computing optimal embedding using (Kloepper and Huson, 2008)");
 
         Map<Node, List<Node>> nodes2Orderings = new HashMap<Node, List<Node>>();

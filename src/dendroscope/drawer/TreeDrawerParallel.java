@@ -21,7 +21,6 @@ package dendroscope.drawer;
 import dendroscope.window.TreeViewer;
 import jloda.graph.*;
 import jloda.phylo.PhyloTree;
-import jloda.phylo.PhyloTreeNetworkUtils;
 import jloda.swing.graphview.EdgeView;
 import jloda.swing.graphview.GraphView;
 import jloda.swing.graphview.NodeView;
@@ -115,7 +114,6 @@ public class TreeDrawerParallel extends TreeDrawerBase implements IOptimizedGrap
         viewer.setLocation(root, 0, 0);
 
         NodeDoubleArray yCoord = computeYCoordinates(tree.getRoot());
-
         if (toScale) {
             setCoordinatesPhylogram(root, yCoord);
             addInternalPoints();
@@ -125,7 +123,6 @@ public class TreeDrawerParallel extends TreeDrawerBase implements IOptimizedGrap
             addInternalPoints();
         }
         recomputeOptimization(null);
-
         return true;
     }
 
@@ -153,7 +150,7 @@ public class TreeDrawerParallel extends TreeDrawerBase implements IOptimizedGrap
      */
     private void computeCoordinatesCladogramRec(Node v, NodeDoubleArray yCoord, NodeIntArray levels) {
         viewer.setLocation(v, new Point2D.Double(-levels.get(v), yCoord.get(v)));
-        for (Node w : getLSAChildren(v)) {
+        for (Node w : tree.lsaChildren(v)) {
             computeCoordinatesCladogramRec(w, yCoord, levels);
         }
     }
@@ -173,15 +170,15 @@ public class TreeDrawerParallel extends TreeDrawerBase implements IOptimizedGrap
                 pts.add(new Point2D.Double(vPt.getX(), viewer.getLocation(w).getY()));
                 viewer.setInternalPoints(f, pts);
 
-				if (isReticulateEdge(f))
-					viewer.setShape(f, EdgeView.QUAD_EDGE);
-				else if (tree.isTransferEdge(f))
-					viewer.setShape(f, EdgeView.STRAIGHT_EDGE);
-				else // draw as curved edge
-					viewer.setShape(f, EdgeView.POLY_EDGE);
-				if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(tree, f, v) && !isCollapsed(w)) {
-					stack.push(w);
-				}
+                if (tree.isTransferEdge(f))
+                    viewer.setShape(f, EdgeView.STRAIGHT_EDGE);
+                else if (tree.isReticulatedEdge(f) && tree.getWeight(f) <= 0)
+                    viewer.setShape(f, EdgeView.QUAD_EDGE);
+                else // draw as curved edge
+                    viewer.setShape(f, EdgeView.POLY_EDGE);
+                if (tree.okToDescendDownThisEdgeInTraversal(f, v) && !isCollapsed(w)) {
+                    stack.push(w);
+                }
             }
         }
     }
@@ -201,7 +198,7 @@ public class TreeDrawerParallel extends TreeDrawerBase implements IOptimizedGrap
         if (useWeights) {
             double largestDistance = 0;
             for (Edge e = tree.getFirstEdge(); e != null; e = e.getNext())
-                if (!tree.isSpecial(e))
+                if (!tree.isReticulatedEdge(e))
                     largestDistance = Math.max(largestDistance, tree.getWeight(e));
             smallDistance = (percentOffset / 100.0) * largestDistance;
         }

@@ -344,20 +344,20 @@ public class EmbedderForOrderPrescribedNetwork {
      * @return all children
      */
     private static List<Node> getLSAChildren(Node v) {
-		List<Node> targetNodes = null;
-		if (((PhyloTree) v.getOwner()).getLSAChildrenMap().get(v) != null)
-			targetNodes = ((PhyloTree) v.getOwner()).getLSAChildrenMap().get(v);
-		List<Node> list = new LinkedList<Node>();
+        var tree = (PhyloTree) v.getOwner();
 
-		if (targetNodes == null) {
-			for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
-				if (!v.getOwner().isSpecial(e))
-					list.add(e.getTarget());
-			}
-		} else {
-			for (Node w : targetNodes) {
-				list.add(w);
+        List<Node> targetNodes = null;
+        if (tree.getLSAChildrenMap().get(v) != null)
+            targetNodes = tree.getLSAChildrenMap().get(v);
+        List<Node> list = new LinkedList<Node>();
+
+        if (targetNodes == null) {
+            for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
+                if (!tree.isReticulatedEdge(e))
+                    list.add(e.getTarget());
             }
+        } else {
+            list.addAll(targetNodes);
         }
         return list;
     }

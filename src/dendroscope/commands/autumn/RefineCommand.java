@@ -97,13 +97,13 @@ public class RefineCommand extends CommandBaseMultiViewer implements ICommand {
     }
 
     public boolean isApplicable() {
-        if (multiViewer.getTreeGrid().getNumberSelectedOrAllViewers() != 2)
-            return false;
-        Iterator<TreeViewer> it = multiViewer.getTreeGrid().getSelectedOrAllIterator();
-        // too expensive to check for equal label sets here...
-        return it.next().getPhyloTree().getNumberSpecialEdges() == 0 && it.next().getPhyloTree().getNumberSpecialEdges() == 0
-                && ((MultiViewer) getViewer()).getDir().getDocument().getNumberOfTrees() > 0;
-    }
+		if (multiViewer.getTreeGrid().getNumberSelectedOrAllViewers() != 2)
+			return false;
+		Iterator<TreeViewer> it = multiViewer.getTreeGrid().getSelectedOrAllIterator();
+		// too expensive to check for equal label sets here...
+		return it.next().getPhyloTree().getNumberReticulateEdges() == 0 && it.next().getPhyloTree().getNumberReticulateEdges() == 0
+			   && ((MultiViewer) getViewer()).getDir().getDocument().getNumberOfTrees() > 0;
+	}
 
     /**
      * is this a critical command that can only be executed when no other command is running?

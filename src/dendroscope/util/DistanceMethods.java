@@ -221,17 +221,17 @@ public class DistanceMethods {
         initPathTable(t.getRoot(), new HashSet<Edge>(), t);
 
         for (var e : t.edges()) {
-            if (!t.isSpecial(e) && e.getTarget().getOutDegree() != 0) {
-                Vector<String> setA = new Vector<String>();
-                Vector<String> setB = new Vector<String>();
-                Vector<String> setC = (Vector<String>) taxa.clone();
-                for (String taxon : taxonToPaths.keySet()) {
-                    boolean b = false;
-                    for (HashSet<Edge> path : taxonToPaths.get(taxon)) {
-                        if (path.contains(e)) {
-                            if (setC.contains(taxon)) {
-                                setC.remove(taxon);
-                                setA.add(taxon);
+            if (!t.isReticulatedEdge(e) && e.getTarget().getOutDegree() != 0) {
+				Vector<String> setA = new Vector<String>();
+				Vector<String> setB = new Vector<String>();
+				Vector<String> setC = (Vector<String>) taxa.clone();
+				for (String taxon : taxonToPaths.keySet()) {
+					boolean b = false;
+					for (HashSet<Edge> path : taxonToPaths.get(taxon)) {
+						if (path.contains(e)) {
+							if (setC.contains(taxon)) {
+								setC.remove(taxon);
+								setA.add(taxon);
                             }
                         } else
                             b = true;
@@ -281,8 +281,8 @@ public class DistanceMethods {
         if (v.getOutDegree() != 0) {
             for (Edge e : v.outEdges()) {
                 HashSet<Edge> pathCopy = (HashSet<Edge>) path.clone();
-                if (!t.isSpecial(e) && e.getTarget().getOutDegree() != 0)
-                    pathCopy.add(e);
+				if (!t.isReticulatedEdge(e) && e.getTarget().getOutDegree() != 0)
+					pathCopy.add(e);
                 initPathTable(e.getTarget(), pathCopy, t);
             }
         } else {
@@ -393,8 +393,8 @@ public class DistanceMethods {
                 }
 
                 if (treeEdge != null) {
-                    tCopy.setSpecial(treeEdge, false);
-                    tCopy.setWeight(treeEdge, 1.0);
+					tCopy.setReticulated(treeEdge, false);
+					tCopy.setWeight(treeEdge, 1.0);
                 }
                 int newID = id + 1;
                 computeTrees(newID, tCopy);
@@ -551,8 +551,8 @@ public class DistanceMethods {
                 Node cCopy = nodeToCopy.get(c);
                 subnet.newEdge(vCopy, cCopy);
                 for (Edge e : cCopy.inEdges()) {
-                    subnet.setSpecial(e, true);
-                    subnet.setWeight(e, 0.0);
+					subnet.setReticulated(e, true);
+					subnet.setWeight(e, 0.0);
                 }
             } else {
                 Node cCopy = subnet.newNode(c);

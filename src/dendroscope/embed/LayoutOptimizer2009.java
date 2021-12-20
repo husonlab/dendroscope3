@@ -42,10 +42,10 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
      * @param progressListener
      */
     public void apply(PhyloTree tree, ProgressListener progressListener) {
-        if (tree.getRoot() == null || tree.getNumberSpecialEdges() == 0) {
-            tree.getLSAChildrenMap().clear();
-            return;
-        }
+        if (tree.getRoot() == null || tree.getNumberReticulateEdges() == 0) {
+			tree.getLSAChildrenMap().clear();
+			return;
+		}
         System.err.println("Computing optimal embedding using (Huson, 2009)");
 
         boolean isTransferNetwork = isTransferNetwork(tree);
@@ -57,10 +57,10 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
             for (Node v = tree.getFirstNode(); v != null; v = tree.getNextNode(v)) {
                 List<Node> children = new LinkedList<Node>();
                 for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
-                    if (!tree.isSpecial(e) || tree.getWeight(e) > 0) {
-                        children.add(e.getTarget());
-                        retNode2GuideParent.put(e.getTarget(), e.getSource());
-                    }
+					if (!tree.isReticulatedEdge(e) || tree.getWeight(e) > 0) {
+						children.add(e.getTarget());
+						retNode2GuideParent.put(e.getTarget(), e.getSource());
+					}
 
 				}
 				tree.getLSAChildrenMap().put(v, children);
@@ -76,7 +76,7 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
 		var node2SpecialTarget = new NodeArray<BitSet>(tree);
 		int num = 0;
 		for (var e : tree.edges()) {
-			if (tree.isSpecial(e) && tree.getWeight(e) <= 0) {
+			if (tree.isReticulatedEdge(e) && tree.getWeight(e) <= 0) {
 				num++;
 				var sources = node2SpecialSource.get(e.getSource());
 				if (sources == null) {
@@ -413,7 +413,7 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
      */
     public static boolean isTransferNetwork(PhyloTree tree) {
 		var isTransferNetwork = false;
-		for (Edge e : tree.specialEdges()) {
+		for (Edge e : tree.reticulatedEdges()) {
 			if (tree.getWeight(e) != 0) {
 				isTransferNetwork = true;
 				break;

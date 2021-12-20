@@ -90,8 +90,8 @@ public class ExactNetFromMultree {
                     Node u = t.newNode();
                     t.deleteEdge(toDel);
                     Edge reticulation1 = t.newEdge(source, u);
-                    t.setSpecial(reticulation1, true);
-                    t.setWeight(reticulation1, 0);
+                    t.setReticulated(reticulation1, true);
+					t.setWeight(reticulation1, 0);
 
                     t.newEdge(u, t_max);
                     //now delete the isomorph subtrees and add new edges to the new generated node u.
@@ -99,9 +99,9 @@ public class ExactNetFromMultree {
                         Node w_father = w.getFirstInEdge().getSource();
                         t.deleteSubtree(w);
                         Edge reticulation2;
-                        reticulation2 = t.newEdge(w_father, u);
-                        t.setSpecial(reticulation2, true);
-                        t.setWeight(reticulation2, 0);
+						reticulation2 = t.newEdge(w_father, u);
+						t.setReticulated(reticulation2, true);
+						t.setWeight(reticulation2, 0);
                     }
                     //finally remove T(t_max) and the associated iosomorphs from the heightlist.
                     for (Node isomorph : isomorphs) l_h.remove(isomorph);
@@ -110,8 +110,8 @@ public class ExactNetFromMultree {
             }
         }
         long seconds = (new Date().getTime() - startTime);
-        System.err.println("Algorithm required " + seconds / 1000.0 + " seconds");
-        System.err.println("number of reticulations: " + t.getNumberSpecialEdges() / 2);
+		System.err.println("Algorithm required " + seconds / 1000.0 + " seconds");
+		System.err.println("number of reticulations: " + t.getNumberReticulateEdges() / 2);
         return t;
     }
 }

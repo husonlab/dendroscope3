@@ -101,17 +101,17 @@ public class Utilities {
         int outgroupId = allTaxa.add("__outgroup__");
 
         for (int i = 0; i < trees.length; i++) {
-            if (trees[i].getNumberSpecialEdges() == 0) {
-                tree2taxa[i].set(outgroupId);
-                tree2splits[i] = SplitSystem.getSplitsFromTree(allTaxa, tree2taxa[i], trees[i]);
+            if (trees[i].getNumberReticulateEdges() == 0) {
+				tree2taxa[i].set(outgroupId);
+				tree2splits[i] = SplitSystem.getSplitsFromTree(allTaxa, tree2taxa[i], trees[i]);
 
-                for (Iterator it = tree2splits[i].iterator(); it.hasNext(); ) {
-                    Split split = (Split) it.next();
-                    double weight = split.getWeight();
-                    int p = allSplits.indexOf(split);
-                    if (p == -1) {
-                        allSplits.addSplit(split);
-                    } else
+				for (Iterator it = tree2splits[i].iterator(); it.hasNext(); ) {
+					Split split = (Split) it.next();
+					double weight = split.getWeight();
+					int p = allSplits.indexOf(split);
+					if (p == -1) {
+						allSplits.addSplit(split);
+					} else
                         split = allSplits.getSplit(p);
                     split.addTreeNumber(i);
                     split.addToWeightList(weight);

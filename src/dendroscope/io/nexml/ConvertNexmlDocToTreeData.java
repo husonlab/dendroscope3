@@ -217,7 +217,7 @@ public class ConvertNexmlDocToTreeData {
                 if (edge.getLength() != null)
                     treeData.setWeight(e, edge.getLength().doubleValue());
                 if (getFirstBoolean(edge.getAnnotationValues("special")))
-                    treeData.setSpecial(e, true);
+                    treeData.setReticulated(e, true);
                 if (treeData.hasAdditional()) {
                     String format = (getFirstString(edge.getAnnotationValues("format")));
                     if (format != null) {

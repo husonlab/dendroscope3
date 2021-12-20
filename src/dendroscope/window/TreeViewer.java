@@ -26,7 +26,6 @@ import dendroscope.drawer.TreeDrawerAngled;
 import dendroscope.drawer.TreeDrawerBase;
 import jloda.graph.*;
 import jloda.phylo.PhyloTree;
-import jloda.phylo.PhyloTreeNetworkUtils;
 import jloda.swing.director.IDirector;
 import jloda.swing.find.SearchManager;
 import jloda.swing.graphview.*;
@@ -131,7 +130,7 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
                 if (v.getInDegree() >= 2) // if node now has two in-edges, make both special
                 {
                     for (Edge f = v.getFirstInEdge(); f != null; f = v.getNextInEdge(f)) {
-                        getPhyloTree().setSpecial(f, true);
+                        getPhyloTree().setReticulated(f, true);
                         setColor(f, Color.BLUE);
                         getPhyloTree().setWeight(f, 0);
                     }
@@ -147,7 +146,7 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
                 if (v.getInDegree() <= 2) // if node has two or less in-edges before deleting one, make not-special
                 {
                     for (Edge f = v.getFirstInEdge(); f != null; f = v.getNextInEdge(f)) {
-                        getPhyloTree().setSpecial(f, false);
+                        getPhyloTree().setReticulated(f, false);
                         getPhyloTree().setWeight(f, 1);
                         setColor(f, Color.BLACK);
                     }
@@ -321,15 +320,15 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
 
 		if (!collapsedNodes.contains(v)) {
 			for (Edge f : v.outEdges()) {
-				if (useSpecialEdges || !select || !getPhyloTree().isSpecial(f) || getPhyloTree().getWeight(f) > 0) {
-					if (select && !getSelected(f))
-						selectedEdges.add(f);
-					var w = f.getTarget();
-					if (!select && !getSelected(w) && (getSelected(f) || selectedEdges.contains(f))) {
-						selectedNodes.add(w);
-					}
-					selectSubTreeRec(w, seeds, select, useSpecialEdges, selectedNodes, selectedEdges);
-				}
+                if (useSpecialEdges || !select || !getPhyloTree().isReticulatedEdge(f) || getPhyloTree().getWeight(f) > 0) {
+                    if (select && !getSelected(f))
+                        selectedEdges.add(f);
+                    var w = f.getTarget();
+                    if (!select && !getSelected(w) && (getSelected(f) || selectedEdges.contains(f))) {
+                        selectedNodes.add(w);
+                    }
+                    selectSubTreeRec(w, seeds, select, useSpecialEdges, selectedNodes, selectedEdges);
+                }
 			}
         }
 	}
@@ -348,15 +347,15 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
 
         if (!collapsedNodes.contains(v)) {
 			for (Edge f : v.outEdges()) {
-				if (useSpecialEdges || !select || !getPhyloTree().isSpecial(f) || getPhyloTree().getWeight(f) > 0) {
-					if (select)
-						selectedEdges.add(f);
-					Node w = f.getTarget();
-					if (!select && getSelected(f)) {
-						selectedNodes.add(w);
-					}
-					selectSubTreeRec(w, select, useSpecialEdges);
-				}
+                if (useSpecialEdges || !select || !getPhyloTree().isReticulatedEdge(f) || getPhyloTree().getWeight(f) > 0) {
+                    if (select)
+                        selectedEdges.add(f);
+                    Node w = f.getTarget();
+                    if (!select && getSelected(f)) {
+                        selectedNodes.add(w);
+                    }
+                    selectSubTreeRec(w, select, useSpecialEdges);
+                }
 			}
         }
         fireDoSelect(selectedNodes);
@@ -376,9 +375,9 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
                     if (v.getInDegree() == 1 && v.getOutDegree() == 1)
                         selectedNodes.add(v);
                     for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
-						if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(getPhyloTree(), e, v)) {
-							stack.push(e.getTarget());
-						}
+                        if (getPhyloTree().okToDescendDownThisEdgeInTraversal(e, v)) {
+                            stack.push(e.getTarget());
+                        }
                     }
                 }
             }
@@ -398,11 +397,11 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
                 Node v = stack.pop();
                 if (!getCollapsedNodes().contains(v)) {
                     for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
-						if (getPhyloTree().isSpecial(f) && getPhyloTree().getWeight(f) <= 0)
-							setSelected(f, select);
-						if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(getPhyloTree(), f, v)) {
-							stack.push(f.getTarget());
-						}
+                        if (getPhyloTree().isReticulatedEdge(f) && getPhyloTree().getWeight(f) <= 0)
+                            setSelected(f, select);
+                        if (getPhyloTree().okToDescendDownThisEdgeInTraversal(f, v)) {
+                            stack.push(f.getTarget());
+                        }
                     }
                 }
             }
@@ -424,9 +423,9 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
                     Node w = f.getTarget();
                     if (w.getOutDegree() > 0 && !getCollapsedNodes().contains(w)) {
                         setSelected(f, true);
-						if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(getPhyloTree(), f, v)) {
-							stack.push(w);
-						}
+                        if (getPhyloTree().okToDescendDownThisEdgeInTraversal(f, v)) {
+                            stack.push(w);
+                        }
                     }
                 }
             }
@@ -467,9 +466,9 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
 		}
         if (found < nodes.size()) {
             for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
-				if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(getPhyloTree(), f, v)) {
-					found += swapSubtreeRec(f.getTarget(), found, nodes);
-				}
+                if (getPhyloTree().okToDescendDownThisEdgeInTraversal(f, v)) {
+                    found += swapSubtreeRec(f.getTarget(), found, nodes);
+                }
             }
         }
         return found;
@@ -509,9 +508,9 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
 		}
         if (found < nodes.size()) {
             for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
-				if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(getPhyloTree(), f, v)) {
-					found += rotateSubtreeRec(f.getTarget(), found, nodes);
-				}
+                if (getPhyloTree().okToDescendDownThisEdgeInTraversal(f, v)) {
+                    found += rotateSubtreeRec(f.getTarget(), found, nodes);
+                }
             }
         }
         return found;
@@ -527,7 +526,7 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     public boolean collapseSelectedNodes(boolean collapse, boolean all) {
         boolean changed = false;
         if (getSelectedNodes().size() > 0) {
-            if (collapse && getPhyloTree().getNumberSpecialEdges() > 0) { // check that this is collapsible: no special edges between a node below these nodes and the outside
+            if (collapse && getPhyloTree().getNumberReticulateEdges() > 0) { // check that this is collapsible: no special edges between a node below these nodes and the outside
                 // label all nodes below:
                 Set<Node> visited = new HashSet<Node>();
                 Stack<Node> stack = new Stack<Node>();
@@ -638,9 +637,9 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     private void collapseNodesAtLevelRec(Node v, int i, int level) {
         if (i < level) {
             for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
-				if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(getPhyloTree(), f, v)) {
-					collapseNodesAtLevelRec(f.getTarget(), i + 1, level);
-				}
+                if (getPhyloTree().okToDescendDownThisEdgeInTraversal(f, v)) {
+                    collapseNodesAtLevelRec(f.getTarget(), i + 1, level);
+                }
             }
         } else // must have i==level
             collapseNode(v);
@@ -673,12 +672,12 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
         // for each outedge, determine whether there is a selected node below:
         boolean selectedNodesBelow = false;
         for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
-			if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(getPhyloTree(), f, v)) {
-				if (collapseComplementRec(f.getTarget(), selectedBelow, nodesToCollapse)) {
-					selectedNodesBelow = true;
-					selectedBelow.add(f);
-				}
-			}
+            if (getPhyloTree().okToDescendDownThisEdgeInTraversal(f, v)) {
+                if (collapseComplementRec(f.getTarget(), selectedBelow, nodesToCollapse)) {
+                    selectedNodesBelow = true;
+                    selectedBelow.add(f);
+                }
+            }
         }
         if (selectedNodesBelow == false)  // none selected below
         {
@@ -686,11 +685,11 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
         } else    // have some  selected below. collapse the others
         {
             for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
-				if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(getPhyloTree(), f, v)) {
-					if (!selectedBelow.contains(f)) {
-						nodesToCollapse.add(f.getTarget());
-					}
-				}
+                if (getPhyloTree().okToDescendDownThisEdgeInTraversal(f, v)) {
+                    if (!selectedBelow.contains(f)) {
+                        nodesToCollapse.add(f.getTarget());
+                    }
+                }
             }
             return true;
         }
@@ -716,11 +715,11 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     private void unCollapseNodesSubtreelRec(Node v) {
         collapseNode(v);
         for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
-			if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(getPhyloTree(), f, v)) {
-				Node w = f.getTarget();
-				if (!getSelected(w)) // don't go below selected node, assume it will function as a seed later
-					unCollapseNodesSubtreelRec(f.getTarget());
-			}
+            if (getPhyloTree().okToDescendDownThisEdgeInTraversal(f, v)) {
+                Node w = f.getTarget();
+                if (!getSelected(w)) // don't go below selected node, assume it will function as a seed later
+                    unCollapseNodesSubtreelRec(f.getTarget());
+            }
         }
     }
 
@@ -810,11 +809,11 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
         } else {
             int best = 0;
             for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
-				if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(getPhyloTree(), f, v)) {
-					Node w = f.getTarget();
-					ladderizeRec(w, left, node2height);
-					best = Math.max(best, node2height.get(w));
-				}
+                if (getPhyloTree().okToDescendDownThisEdgeInTraversal(f, v)) {
+                    Node w = f.getTarget();
+                    ladderizeRec(w, left, node2height);
+                    best = Math.max(best, node2height.get(w));
+                }
                 node2height.set(v, best + 1);
             }
             List<Edge> newOrder = orderEdges(v, node2height, left);
@@ -832,9 +831,9 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
         {
         } else {
             for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
-				if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(getPhyloTree(), f, v)) {
-					ladderizeRandomRec(f.getTarget());
-				}
+                if (getPhyloTree().okToDescendDownThisEdgeInTraversal(f, v)) {
+                    ladderizeRandomRec(f.getTarget());
+                }
             }
             List<Edge> newOrder = new LinkedList<Edge>();
 			for (Iterator<Edge> it = IteratorUtils.randomize(v.adjacentEdges().iterator(), v.getId()); it.hasNext(); )
@@ -923,15 +922,15 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     public void resetViewSpecialEdges() {
         PhyloTree tree = getPhyloTree();
         for (Edge e = tree.getFirstEdge(); e != null; e = e.getNext()) {
-            if (tree.isSpecial(e) && tree.getWeight(e) <= 0 && getColor(e) == GraphView.defaultEdgeView.getColor()) {
+            if (tree.isReticulatedEdge(e) && tree.getWeight(e) <= 0 && getColor(e) == GraphView.defaultEdgeView.getColor()) {
                 setColor(e, Color.BLUE);
             }
-            if (tree.isSpecial(e) && tree.getWeight(e) == -1) {
+            if (tree.isReticulatedEdge(e) && tree.getWeight(e) == -1) {
                 setDirection(e, EdgeView.DIRECTED);
             }
-            if (tree.getNumberSpecialEdges() > 0 && ProgramProperties.get("scaleconfidence", false)) {
+            if (tree.getNumberReticulateEdges() > 0 && ProgramProperties.get("scaleconfidence", false)) {
                 //System.err.println("scaleconfidence e="+e+" weight: "+tree.getWeight(e));
-                int width = tree.isSpecial(e) ? ((int) (10 * tree.getWeight(e))) : 10;
+                int width = tree.isReticulatedEdge(e) ? ((int) (10 * tree.getWeight(e))) : 10;
                 setLineWidth(e, width);
                 int value = (int) (255 - 25.5 * width);
                 Color color = new Color(value, value, value);
@@ -1170,9 +1169,9 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
                     setLabelVisible(v, show);
                 if (!collapsedNodes.contains(v)) {
                     for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
-						if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(getPhyloTree(), e, v)) {
-							stack.push(e.getTarget());
-						}
+                        if (getPhyloTree().okToDescendDownThisEdgeInTraversal(e, v)) {
+                            stack.push(e.getTarget());
+                        }
                     }
                 }
             }
@@ -1196,9 +1195,9 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
                         if (edges == null || edges.contains(e))
                             setLabelVisible(e, show);
 
-						if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(getPhyloTree(), e, v)) {
-							stack.push(e.getTarget());
-						}
+                        if (getPhyloTree().okToDescendDownThisEdgeInTraversal(e, v)) {
+                            stack.push(e.getTarget());
+                        }
                     }
                 }
             }
@@ -1237,14 +1236,14 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
                 Node v = stack.pop();
                 if (!collapsedNodes.contains(v)) {
                     for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
-						if (edges == null || edges.contains(e)) {
-							String label = "" + (float) tree.getWeight(e);
-							setLabel(e, label);
-							tree.setLabel(e, label);
-						}
-						if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(tree, e, v)) {
-							stack.push(e.getTarget());
-						}
+                        if (edges == null || edges.contains(e)) {
+                            String label = "" + (float) tree.getWeight(e);
+                            setLabel(e, label);
+                            tree.setLabel(e, label);
+                        }
+                        if (tree.okToDescendDownThisEdgeInTraversal(e, v)) {
+                            stack.push(e.getTarget());
+                        }
                     }
                 }
             }
@@ -1264,13 +1263,13 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
                 || drawerKind.equals(SLANTED_CLADOGRAM) || drawerKind.equals(CIRCULAR_CLADOGRAM)
                 || drawerKind.equals(CIRCULAR_PHYLOGRAM) || drawerKind.equals(INNERCIRCULAR_CLADOGRAM)) {
             PhyloTree tree = getPhyloTree();
-            if (tree.getNumberSpecialEdges() == 0 || getSelectedNodes().size() == 0)
+            if (tree.getNumberReticulateEdges() == 0 || getSelectedNodes().size() == 0)
                 return false;
 
             for (Iterator it = getSelectedNodes().iterator(); it.hasNext(); ) {
                 Node v = (Node) it.next();
                 for (Edge e = v.getFirstAdjacentEdge(); e != null; e = v.getNextAdjacentEdge(e)) {
-                    if (!tree.isSpecial(e) && (!getSelected(e) || !getSelected(e.getOpposite(v))))
+                    if (!tree.isReticulatedEdge(e) && (!getSelected(e) || !getSelected(e.getOpposite(v))))
                         return false;
                 }
             }
@@ -1296,7 +1295,7 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
         if (isUnlockEdgeLengths())
             return true;
         else return getSelectedEdges().size() == 1 &&
-                (super.isAllowMoveInternalEdgePoints() || getPhyloTree().isSpecial(getSelectedEdges().getFirstElement()));
+                    (super.isAllowMoveInternalEdgePoints() || getPhyloTree().isReticulatedEdge(getSelectedEdges().getFirstElement()));
     }
 
     public boolean isAllowInternalEdgePoints() {

@@ -21,7 +21,6 @@ package dendroscope.consensus;
 import dendroscope.window.TreeViewer;
 import jloda.graph.*;
 import jloda.phylo.PhyloTree;
-import jloda.phylo.PhyloTreeNetworkUtils;
 import jloda.swing.graphview.EdgeView;
 import jloda.swing.graphview.Transform;
 import jloda.swing.util.Alert;
@@ -392,7 +391,7 @@ public class TransferVisualization {
             if (label != null && label.length() > 0)
                 labels.add(label);
             for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
-				if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(tree, e, v)) {
+				if (tree.okToDescendDownThisEdgeInTraversal(e, v)) {
 					stack.push(e.getTarget());
 				}
             }

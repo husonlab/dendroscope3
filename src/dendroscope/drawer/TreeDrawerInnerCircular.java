@@ -124,7 +124,7 @@ public class TreeDrawerInnerCircular extends TreeDrawerRadial implements IOptimi
      * @param v Node
      */
     private void computeCoordinatesCladogramRec(Node v, NodeIntArray levels) {
-        for (Node w : getLSAChildren(v)) {
+        for (Node w : tree.lsaChildren(v)) {
             computeCoordinatesCladogramRec(w, levels);
 
             int level = levels.get(w) + 100;

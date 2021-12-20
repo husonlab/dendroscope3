@@ -22,7 +22,6 @@ import dendroscope.util.convexhull.GiftWrap;
 import dendroscope.window.TreeViewer;
 import jloda.graph.*;
 import jloda.phylo.PhyloTree;
-import jloda.phylo.PhyloTreeNetworkUtils;
 import jloda.swing.graphview.EdgeView;
 import jloda.swing.graphview.GraphView;
 import jloda.swing.graphview.NodeView;
@@ -131,7 +130,7 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
         computeYCoordinates(tree.getRoot(), leafOrder, node2AngleOfInEdge);
 
         int leaves = 0;   // number of true leaves
-        if (tree.getNumberSpecialEdges() > 0) {
+        if (tree.getNumberReticulateEdges() > 0) {
             for (Node v : leafOrder) {
                 if (v.getOutDegree() == 0)
                     leaves++;
@@ -169,11 +168,11 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
 		if (v.isLeaf())
 			leaves.add(v);
 		else {
-			for (Node w : getLSAChildren(v)) {
-				{
-					leaves.addAll(computeAnglesRec(w, angle));
-				}
-			}
+            for (Node w : tree.lsaChildren(v)) {
+                {
+                    leaves.addAll(computeAnglesRec(w, angle));
+                }
+            }
 			if (leaves.size() > 0) {
 				double alpha = 0;
 				for (Node u : leaves) {
@@ -268,12 +267,12 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
      * @param v Node
      */
     private void computeCoordinatesCladogramRec(Node v, NodeIntArray nodeHeight, int maxHeight) {
-		for (Node w : getLSAChildren(v)) {
-			computeCoordinatesCladogramRec(w, nodeHeight, maxHeight);
+        for (Node w : tree.lsaChildren(v)) {
+            computeCoordinatesCladogramRec(w, nodeHeight, maxHeight);
 
-			Point2D apt = new Point2D.Double(maxHeight - nodeHeight.get(w), 0);
-			viewer.setLocation(w, Geometry.rotate(apt, node2AngleOfInEdge.get(w)));
-		}
+            Point2D apt = new Point2D.Double(maxHeight - nodeHeight.get(w), 0);
+            viewer.setLocation(w, Geometry.rotate(apt, node2AngleOfInEdge.get(w)));
+        }
     }
 
 
@@ -294,11 +293,11 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
 
         Rectangle2D bbox = new Rectangle2D.Double(0, 0, 0, 0);
         for (Edge f = root.getFirstOutEdge(); f != null; f = root.getNextOutEdge(f)) {
-			if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(tree, f, root)) {
-				Node w = f.getTarget();
-				recomputeOptimizationRec(w);
-				bbox.add(node2bb.get(w));
-			}
+            if (tree.okToDescendDownThisEdgeInTraversal(f, root)) {
+                Node w = f.getTarget();
+                recomputeOptimizationRec(w);
+                bbox.add(node2bb.get(w));
+            }
             node2bb.put(root, bbox);
         }
 
@@ -340,14 +339,14 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
                 }
 
                 // RECURSE:
-				if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(tree, f, v)) {
-					SubTreePoints wSTP = recomputeOptimizationRec(w);
-					leaves += node2NumberLeaves.get(w);
+                if (tree.okToDescendDownThisEdgeInTraversal(f, v)) {
+                    SubTreePoints wSTP = recomputeOptimizationRec(w);
+                    leaves += node2NumberLeaves.get(w);
 
-					bbox.add(node2bb.get(w));
+                    bbox.add(node2bb.get(w));
 
-					vSTP.addAll(wSTP);
-				}
+                    vSTP.addAll(wSTP);
+                }
             }
             vSTP.reduceAndSort();
         } else // node is leaf
@@ -383,25 +382,25 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
             final double vAngle = node2AngleOfInEdge.get(v);
             for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
                 Node w = f.getTarget();
-                if (!tree.isSpecial(f) || tree.getWeight(f) == 1) {
+                if (!tree.isReticulatedEdge(f) || tree.getWeight(f) == 1) {
                     viewer.getEV(f).setShape(EdgeView.ARC_LINE_EDGE);
                     double wAngle = node2AngleOfInEdge.get(w);
                     java.util.List<Point2D> list = new LinkedList<>();
                     list.add(originPt);
                     Point2D aPt = Geometry.rotate(vPt, wAngle - vAngle);
-					list.add(aPt);
-					viewer.setInternalPoints(f, list);
-				} else if (tree.isSpecial(f)) {
-					viewer.getEV(f).setShape(EdgeView.QUAD_EDGE);
-					double wAngle = node2AngleOfInEdge.get(w);
-					java.util.List<Point2D> list = new LinkedList<>();
-					Point2D aPt = Geometry.rotate(vPt, wAngle - vAngle);
-					list.add(aPt);
-					viewer.setInternalPoints(f, list);
-				}
-				if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(tree, f, v)) {
-					stack.push(f.getTarget());
-				}
+                    list.add(aPt);
+                    viewer.setInternalPoints(f, list);
+                } else if (tree.isReticulatedEdge(f)) {
+                    viewer.getEV(f).setShape(EdgeView.QUAD_EDGE);
+                    double wAngle = node2AngleOfInEdge.get(w);
+                    java.util.List<Point2D> list = new LinkedList<>();
+                    Point2D aPt = Geometry.rotate(vPt, wAngle - vAngle);
+                    list.add(aPt);
+                    viewer.setInternalPoints(f, list);
+                }
+                if (tree.okToDescendDownThisEdgeInTraversal(f, v)) {
+                    stack.push(f.getTarget());
+                }
             }
         }
     }
@@ -525,10 +524,10 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
         boolean isLeaf = true;
         if (!collapsedNodes.contains(v)) {
             for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
-				if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(tree, f, v)) {
-					isLeaf = false;
-					resetLabelPositionsRec(f.getOpposite(v), f, resetAll);
-				}
+                if (tree.okToDescendDownThisEdgeInTraversal(f, v)) {
+                    isLeaf = false;
+                    resetLabelPositionsRec(f.getOpposite(v), f, resetAll);
+                }
             }
         }
         NodeView nv = viewer.getNV(v);

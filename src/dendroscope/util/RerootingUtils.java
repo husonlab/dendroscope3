@@ -22,9 +22,9 @@ import dendroscope.window.MultiViewer;
 import dendroscope.window.TreeViewer;
 import jloda.graph.*;
 import jloda.phylo.PhyloTree;
-import jloda.phylo.PhyloTreeNetworkUtils;
 import jloda.swing.graphview.EdgeView;
 import jloda.swing.util.Alert;
+import jloda.util.Pair;
 import jloda.util.Triplet;
 
 import javax.swing.*;
@@ -49,12 +49,12 @@ public class RerootingUtils {
         if ((e.getSource() == tree.getRoot() || e.getTarget() == tree.getRoot()) && tree.getRoot().getDegree() == 2)
             return false; // no need to reroot
 
-        if (tree.getNumberSpecialEdges() > 0) {
-            if (tree.isSpecial(e))
+        if (tree.getNumberReticulateEdges() > 0) {
+            if (tree.isReticulatedEdge(e))
                 return false; // can't root in special edge
             // todo: bugs need fixing
             if (JOptionPane.showConfirmDialog(MultiViewer.getLastActiveFrame(), "Rerooting networks has major bugs, try anyway?", "Warning", JOptionPane.YES_NO_CANCEL_OPTION)
-                    != JOptionPane.YES_OPTION)
+                != JOptionPane.YES_OPTION)
                 return false;
             if (belowSpecialEdge(tree, e.getSource())) {
                 System.err.println("WARNING: Can't reroot below a reticulation");
@@ -79,20 +79,20 @@ public class RerootingUtils {
         Node root = tree.getRoot();
 
         if (root.getDegree() == 2 && tree.getLabel(root) == null) {
-			final Edge ea = root.getFirstAdjacentEdge();
-			final Edge eb = root.getLastAdjacentEdge();
-			final double weight = tree.getWeight(ea) + tree.getWeight(eb);
-			final double a = PhyloTreeNetworkUtils.computeAverageDistanceToALeaf(tree, ea.getOpposite(root));
-			final double b = PhyloTreeNetworkUtils.computeAverageDistanceToALeaf(tree, eb.getOpposite(root));
-			double na = 0.5 * (b - a + weight);
-			if (na >= weight)
-				na = 0.95 * weight;
-			else if (na <= 0)
-				na = 0.05 * weight;
-			final double nb = weight - na;
-			tree.setWeight(ea, na);
-			tree.setWeight(eb, nb);
-		}
+            final Edge ea = root.getFirstAdjacentEdge();
+            final Edge eb = root.getLastAdjacentEdge();
+            final double weight = tree.getWeight(ea) + tree.getWeight(eb);
+            final double a = computeAverageDistanceToALeaf(tree, ea.getOpposite(root));
+            final double b = computeAverageDistanceToALeaf(tree, eb.getOpposite(root));
+            double na = 0.5 * (b - a + weight);
+            if (na >= weight)
+                na = 0.95 * weight;
+            else if (na <= 0)
+                na = 0.05 * weight;
+            final double nb = weight - na;
+            tree.setWeight(ea, na);
+            tree.setWeight(eb, nb);
+        }
 
         if (viewer.getShowEdgeWeights() && tree.getRoot() != null) {
             final Edge f = tree.getRoot().getFirstAdjacentEdge();
@@ -114,15 +114,15 @@ public class RerootingUtils {
         PhyloTree tree = viewer.getPhyloTree();
         if (v == tree.getRoot())
             return false;
-        if (tree.getNumberSpecialEdges() > 0) {
+        if (tree.getNumberReticulateEdges() > 0) {
             // v is source of a special edge, can't use it as root
             for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e))
-                if (tree.isSpecial(e))
+                if (tree.isReticulatedEdge(e))
                     return false;
 
             // todo: bugs need fixing
             if (JOptionPane.showConfirmDialog(MultiViewer.getLastActiveFrame(), "Rerooting networks has major bugs, try anyway?", "Warning", JOptionPane.YES_NO_CANCEL_OPTION)
-                    != JOptionPane.YES_OPTION)
+                != JOptionPane.YES_OPTION)
                 return false;
 
 
@@ -209,7 +209,7 @@ public class RerootingUtils {
         if (tree.getRoot() == null)
             return false;
 
-        if (tree.getNumberSpecialEdges() > 0) {
+        if (tree.getNumberReticulateEdges() > 0) {
             new Alert("Reroot by outgroup: not implemented for network");
             return false;
         }
@@ -524,6 +524,45 @@ public class RerootingUtils {
         }
         for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
             computeMaxTopDownDistanceRec(tree, e.getTarget(), maxDownDistance, maxUpDistance);
+        }
+    }
+
+    /**
+     * gets the average distance from this node to a leaf.
+     *
+     * @param v node
+     * @return average distance to a leaf
+     */
+    public static double computeAverageDistanceToALeaf(PhyloTree tree, Node v) {
+        // assumes that all edges are oriented away from the root
+        var seen = tree.newNodeSet();
+        var pair = new Pair<>(0.0, 0);
+        computeAverageDistanceToLeafRec(tree, v, null, 0, seen, pair);
+        var sum = pair.getFirst();
+        var leaves = pair.getSecond();
+        if (leaves > 0)
+            return sum / leaves;
+        else
+            return 0;
+    }
+
+    /**
+     * recursively does the work
+     */
+    private static void computeAverageDistanceToLeafRec(PhyloTree tree, Node v, Edge e, double distance, NodeSet seen, Pair<Double, Integer> pair) {
+        if (!seen.contains(v)) {
+            seen.add(v);
+
+            if (v.getOutDegree() > 0) {
+                for (var f : v.adjacentEdges()) {
+                    if (f != e) {
+                        computeAverageDistanceToLeafRec(tree, f.getOpposite(v), f, distance + tree.getWeight(f), seen, pair);
+                    }
+                }
+            } else {
+                pair.setFirst(pair.getFirst() + distance);
+                pair.setSecond(pair.getSecond() + 1);
+            }
         }
     }
 }

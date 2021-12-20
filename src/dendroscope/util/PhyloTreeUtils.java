@@ -21,7 +21,6 @@ package dendroscope.util;
 import jloda.graph.*;
 import jloda.graph.algorithms.Dijkstra;
 import jloda.phylo.PhyloTree;
-import jloda.phylo.PhyloTreeNetworkUtils;
 import jloda.swing.graphview.PhyloGraphView;
 
 import java.util.*;
@@ -67,7 +66,7 @@ public class PhyloTreeUtils {
         }
         for (Edge e : newTree.edges()) {
             if (e.getTarget().getInDegree() > 1)
-                newTree.setSpecial(e, true);
+                newTree.setReticulated(e, true);
         }
         return newTree;
     }
@@ -85,7 +84,7 @@ public class PhyloTreeUtils {
         findInducedSubnetworkRec(network.getRoot(), node2NumberInducedChildren, network.newNodeSet(), collapsed, selected);
 
         Node subtreeRoot;
-        if (network.getNumberSpecialEdges() == 0) { //tree
+        if (network.getNumberReticulateEdges() == 0) { //tree
             subtreeRoot = findSubtreeNetworkRec(network, network.getRoot(), node2NumberInducedChildren, selected);
         } else {
             var LSA = new LCA_LSACalculation(network, true);
@@ -112,7 +111,7 @@ public class PhyloTreeUtils {
         }
         for (var e : newTree.edges()) {
             if (e.getTarget().getInDegree() > 1)
-                newTree.setSpecial(e, true);
+                newTree.setReticulated(e, true);
         }
         return newTree;
 
@@ -132,7 +131,7 @@ public class PhyloTreeUtils {
         findInducedSubnetworkRec(network.getRoot(), node2NumberInducedChildren, new NodeSet(network), collapsed, selected);
 
         Node subtreeRoot;
-        if (network.getNumberSpecialEdges() == 0) { //tree
+        if (network.getNumberReticulateEdges() == 0) { //tree
             subtreeRoot = findSubtreeNetworkRec(network, network.getRoot(), node2NumberInducedChildren, selected);
         } else {
             LCA_LSACalculation LSA = new LCA_LSACalculation(network, true);
@@ -169,7 +168,7 @@ public class PhyloTreeUtils {
         var node2NumberInducedChildren = new NodeIntArray(network);
 
         Node subtreeRoot;
-        if (network.getNumberSpecialEdges() == 0) { //tree
+        if (network.getNumberReticulateEdges() == 0) { //tree
             findInducedSubnetworkRec(network.getRoot(), node2NumberInducedChildren, new NodeSet(network), collapsed, selected);
             subtreeRoot = findSubtreeNetworkRec(network, network.getRoot(), node2NumberInducedChildren, selected);
         } else {
@@ -196,7 +195,7 @@ public class PhyloTreeUtils {
         findInducedSubnetworkRec(network.getRoot(), node2NumberInducedChildren, new NodeSet(network), collapsed, selected);
 
         Node subtreeRoot;
-        if (network.getNumberSpecialEdges() == 0) { //tree
+        if (network.getNumberReticulateEdges() == 0) { //tree
             subtreeRoot = findSubtreeNetworkRec(network, network.getRoot(), node2NumberInducedChildren, selected);
         } else {
             var LSA = new LCA_LSACalculation(network, true);
@@ -246,14 +245,14 @@ public class PhyloTreeUtils {
         if (node2NumberInducedChildren.getInt(v) > 1 || selected.contains(v))
             return v;
         for (var f : v.outEdges()) {
-			if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(tree, f, v)) {
-				var w = f.getTarget();
-				if (node2NumberInducedChildren.getInt(w) != 0) {
-					var u = findSubtreeNetworkRec(tree, w, node2NumberInducedChildren, selected);
-					if (u != null)
-						return u;
-				}
-			}
+            if (tree.okToDescendDownThisEdgeInTraversal(f, v)) {
+                var w = f.getTarget();
+                if (node2NumberInducedChildren.getInt(w) != 0) {
+                    var u = findSubtreeNetworkRec(tree, w, node2NumberInducedChildren, selected);
+                    if (u != null)
+                        return u;
+                }
+            }
         }
         return null;
     }
@@ -345,7 +344,7 @@ public class PhyloTreeUtils {
             Node wNew = null;
             var isVisited = false;
 
-            if (oldTree.isSpecial(eOld)) {
+            if (oldTree.isReticulatedEdge(eOld)) {
                 isVisited = visited.contains(wOld);
                 if (isVisited) {
                     for (var temp : visitedNew) {
@@ -368,8 +367,8 @@ public class PhyloTreeUtils {
             }
 
             var eNew = newTree.newEdge(vNew, wNew);
-            if (oldTree.isSpecial(eOld)) {
-                newTree.setSpecial(eNew, true);
+            if (oldTree.isReticulatedEdge(eOld)) {
+                newTree.setReticulated(eNew, true);
                 newTree.setWeight(eNew, 0);
             }
 

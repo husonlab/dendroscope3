@@ -104,17 +104,17 @@ public class TreeData extends PhyloTree {
         targetTree.copy(srcTree, oldNode2NewNode, oldEdge2NewEdge);
 
         // copy lsa information
-        if (srcTree.getNumberSpecialEdges() > 0) {
+        if (srcTree.getNumberReticulateEdges() > 0) {
             setupLSA();
             for (Node v = srcTree.getFirstNode(); v != null; v = v.getNext()) {
                 Node w = oldNode2NewNode.get(v);
                 if (srcTree.getLSAChildrenMap().get(v) != null) {
-					List<Node> children = new LinkedList<Node>();
-					for (Node u : srcTree.getLSAChildrenMap().get(v)) {
-						children.add(oldNode2NewNode.get(u));
-					}
-					targetTree.getLSAChildrenMap().put(w, children);
-				} else
+                    List<Node> children = new LinkedList<Node>();
+                    for (Node u : srcTree.getLSAChildrenMap().get(v)) {
+                        children.add(oldNode2NewNode.get(u));
+                    }
+                    targetTree.getLSAChildrenMap().put(w, children);
+                } else
 					targetTree.getLSAChildrenMap().put(w, null);
             }
         } else
@@ -169,17 +169,17 @@ public class TreeData extends PhyloTree {
         targetTree.copy(srcTree, oldNode2NewNode, oldEdge2NewEdge);
 
         // copy lsa information
-        if (srcTree.getNumberSpecialEdges() > 0) {
+        if (srcTree.getNumberReticulateEdges() > 0) {
             for (Node v = srcTree.getFirstNode(); v != null; v = v.getNext()) {
                 Node w = oldNode2NewNode.get(v);
                 // todo: next line just for testing:
                 //  targetTree.setLabel(w, srcTree.getLabel(v));
 
-				if (srcTree.getLSAChildrenMap().get(v) != null) {
-					List<Node> children = new LinkedList<Node>();
-					for (Node u : srcTree.getLSAChildrenMap().get(v)) {
-						children.add(oldNode2NewNode.get(u));
-					}
+                if (srcTree.getLSAChildrenMap().get(v) != null) {
+                    List<Node> children = new LinkedList<Node>();
+                    for (Node u : srcTree.getLSAChildrenMap().get(v)) {
+                        children.add(oldNode2NewNode.get(u));
+                    }
 					targetTree.getLSAChildrenMap().put(w, children);
 				} else
 					targetTree.getLSAChildrenMap().put(w, null);
@@ -227,7 +227,7 @@ public class TreeData extends PhyloTree {
             }
             for (Edge e = srcTree.getFirstEdge(); e != null; e = e.getNext()) {
                 Edge f = oldEdge2NewEdge.get(e);
-                if (!srcTree.isSpecial(e))
+                if (!srcTree.isReticulatedEdge(e))
                     viewer.setLabel(f, srcTree.getLabel(e));
                 else
                     viewer.setLabelColor(f, null);
@@ -254,17 +254,17 @@ public class TreeData extends PhyloTree {
         target.copy(srcTree, oldNode2NewNode, oldEdge2NewEdge);
 
         // copy lsa information
-		if (srcTree.getNumberSpecialEdges() > 0 && !srcTree.getLSAChildrenMap().isEmpty()) {
-			target.setupLSA();
-			for (Node v = srcTree.getFirstNode(); v != null; v = v.getNext()) {
-				Node w = oldNode2NewNode.get(v);
-				if (srcTree.getLSAChildrenMap().get(v) != null) {
-					List<Node> children = new LinkedList<Node>();
-					for (Node u : srcTree.getLSAChildrenMap().get(v)) {
-						children.add(oldNode2NewNode.get(u));
-					}
-					target.getLSAChildrenMap().put(w, children);
-				} else
+        if (srcTree.getNumberReticulateEdges() > 0 && !srcTree.getLSAChildrenMap().isEmpty()) {
+            target.setupLSA();
+            for (Node v = srcTree.getFirstNode(); v != null; v = v.getNext()) {
+                Node w = oldNode2NewNode.get(v);
+                if (srcTree.getLSAChildrenMap().get(v) != null) {
+                    List<Node> children = new LinkedList<Node>();
+                    for (Node u : srcTree.getLSAChildrenMap().get(v)) {
+                        children.add(oldNode2NewNode.get(u));
+                    }
+                    target.getLSAChildrenMap().put(w, children);
+                } else
 					target.getLSAChildrenMap().put(w, null);
             }
         }

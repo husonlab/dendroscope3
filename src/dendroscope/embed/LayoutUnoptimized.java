@@ -41,7 +41,7 @@ public class LayoutUnoptimized implements ILayoutOptimizer {
      * @param progressListener
      */
     public void apply(PhyloTree tree, ProgressListener progressListener) {
-        if (tree.getRoot() == null || tree.getNumberSpecialEdges() == 0) {
+        if (tree.getRoot() == null || tree.getNumberReticulateEdges() == 0) {
             tree.getLSAChildrenMap().clear();
             return; // if this is a tree, don't need LSA guide tree
         }
@@ -55,7 +55,7 @@ public class LayoutUnoptimized implements ILayoutOptimizer {
             for (Node v = tree.getFirstNode(); v != null; v = tree.getNextNode(v)) {
                 List<Node> children = new LinkedList<Node>();
                 for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
-                    if (!tree.isSpecial(e) || tree.getWeight(e) > 0) {
+                    if (!tree.isReticulatedEdge(e) || tree.getWeight(e) > 0) {
                         children.add(e.getTarget());
                     }
 
@@ -155,7 +155,7 @@ public class LayoutUnoptimized implements ILayoutOptimizer {
      */
     public static boolean isTransferNetwork(PhyloTree tree) {
         boolean isTransferNetwork = false;
-        for (Edge e : tree.specialEdges()) {
+        for (Edge e : tree.reticulatedEdges()) {
             if (tree.getWeight(e) != 0) {
                 isTransferNetwork = true;
                 break;

@@ -45,10 +45,10 @@ public class LayoutOptimizerDist implements ILayoutOptimizer {
      * @param progressListener
      */
     public void apply(PhyloTree tree, ProgressListener progressListener) {
-        if (tree.getRoot() == null || tree.getNumberSpecialEdges() == 0) {
-            tree.getLSAChildrenMap().clear();
-            return;
-        }
+        if (tree.getRoot() == null || tree.getNumberReticulateEdges() == 0) {
+			tree.getLSAChildrenMap().clear();
+			return;
+		}
         System.err.println("Computing optimal embedding using distance-based algorithm");
         apply(new PhyloTree[]{tree});
     }

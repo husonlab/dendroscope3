@@ -127,8 +127,8 @@ public class SimplisticCommand extends CommandBaseMultiViewer implements IComman
         boolean apply = multiViewer.getTreeGrid().getNumberSelectedOrAllViewers() > 1 && getDir().getDocument().getNumberOfTrees() > 0;
         if (apply) {
             for (Iterator<TreeViewer> it = multiViewer.getTreeGrid().getSelectedOrAllIterator(); it.hasNext(); ) {
-                if (it.next().getPhyloTree().getNumberSpecialEdges() > 0)
-                    return false;
+                if (it.next().getPhyloTree().getNumberReticulateEdges() > 0)
+					return false;
             }
         }
         return apply;

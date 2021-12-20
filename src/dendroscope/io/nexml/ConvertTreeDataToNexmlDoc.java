@@ -214,7 +214,7 @@ public class ConvertTreeDataToNexmlDoc {
                 if (label != null)
                     edge.setLabel(label);
                 edge.setLength(treeData.getWeight(e));
-                if (treeData.isSpecial(e)) {
+                if (treeData.isReticulatedEdge(e)) {
                     edge.addAnnotationValue("special", NAMESPACE_URI, true);
                 }
                 if (treeData.hasAdditional())

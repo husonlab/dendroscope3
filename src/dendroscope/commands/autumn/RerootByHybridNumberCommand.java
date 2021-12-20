@@ -122,11 +122,11 @@ public class RerootByHybridNumberCommand extends CommandBaseMultiViewer implemen
     }
 
     public boolean isApplicable() {
-        // too expensive to check for equal label sets here...
-        Iterator<TreeViewer> it = multiViewer.getTreeGrid().getSelectedOrAllIterator();
-        return it.hasNext() && it.next().getPhyloTree().getNumberSpecialEdges() == 0 && it.hasNext() && it.next().getPhyloTree().getNumberSpecialEdges() == 0
-                && ((MultiViewer) getViewer()).getDir().getDocument().getNumberOfTrees() > 0;
-    }
+		// too expensive to check for equal label sets here...
+		Iterator<TreeViewer> it = multiViewer.getTreeGrid().getSelectedOrAllIterator();
+		return it.hasNext() && it.next().getPhyloTree().getNumberReticulateEdges() == 0 && it.hasNext() && it.next().getPhyloTree().getNumberReticulateEdges() == 0
+			   && ((MultiViewer) getViewer()).getDir().getDocument().getNumberOfTrees() > 0;
+	}
 
     /**
      * is this a critical command that can only be executed when no other command is running?

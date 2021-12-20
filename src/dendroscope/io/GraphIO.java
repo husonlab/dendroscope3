@@ -90,10 +90,7 @@ public class GraphIO {
         count = 0;
         for (Edge e : graph.edges()) {
             edgeId2Number.put(e.getId(), ++count);
-            w.write("" + count + ":" + nodeId2Number.get(e.getSource().getId()) + " " +
-                    nodeId2Number.get(e.getTarget().getId()));
-            if (graph.isSpecial(e))
-                w.write(" s");
+            w.write("" + count + ":" + nodeId2Number.get(e.getSource().getId()) + " " + nodeId2Number.get(e.getTarget().getId()));
             w.write("\n");
         }
         w.write("edge.labels\n");
@@ -161,10 +158,6 @@ public class GraphIO {
             Node target = num2node.get(np.getInt(1, nNodes));
             Edge e = graph.newEdge(source, target);
             num2edge.put(eid, e);
-            if (np.peekMatchIgnoreCase("s")) {
-                np.matchIgnoreCase("s");
-                graph.setSpecial(e, true);
-            }
         }
 
         if (np.peekMatchRespectCase("edge.labels")) {

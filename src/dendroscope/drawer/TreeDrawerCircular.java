@@ -23,7 +23,6 @@ import jloda.graph.Edge;
 import jloda.graph.Node;
 import jloda.graph.NodeIntArray;
 import jloda.phylo.PhyloTree;
-import jloda.phylo.PhyloTreeNetworkUtils;
 import jloda.swing.graphview.EdgeView;
 import jloda.swing.graphview.GraphView;
 import jloda.swing.graphview.NodeView;
@@ -188,7 +187,7 @@ public class TreeDrawerCircular extends TreeDrawerRadial implements IOptimizedGr
      * @param v Node
      */
     private void computeCoordinatesCladogramRec(Node v, NodeIntArray levels, int maxLevel) {
-        for (Node w : getLSAChildren(v)) {
+        for (Node w : tree.lsaChildren(v)) {
             computeCoordinatesCladogramRec(w, levels, maxLevel);
 
             int level = maxLevel - levels.get(w);
@@ -227,10 +226,10 @@ public class TreeDrawerCircular extends TreeDrawerRadial implements IOptimizedGr
 
         boolean isLeaf = true;
         for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
-			if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(tree, f, v)) {
-				isLeaf = false;
-				resetLabelPositionsRec(f.getOpposite(v), f, resetAll);
-			}
+            if (tree.okToDescendDownThisEdgeInTraversal(f, v)) {
+                isLeaf = false;
+                resetLabelPositionsRec(f.getOpposite(v), f, resetAll);
+            }
         }
         NodeView nv = viewer.getNV(v);
 

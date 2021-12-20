@@ -94,13 +94,13 @@ public class RerootCommand extends CommandBaseMultiViewer implements ICommand {
             if (treeViewer.getSelectedNodeLabelsNotInternalNumbers().size() > 0) {
                 PhyloTree tree = treeViewer.getPhyloTree();
                 Set selectedLabels = treeViewer.getSelectedNodeLabels();
-                if (tree.getNumberSpecialEdges() > 0) {
-                    if (!warned) {
-                        warned = true;
-                        new Alert(getViewer().getFrame(), "Reroot by outgroup: not implemented for networks");
-                    }
-                } else
-                    changed = RerootingUtils.rerootByOutgroup(treeViewer, selectedLabels);
+                if (tree.getNumberReticulateEdges() > 0) {
+					if (!warned) {
+						warned = true;
+						new Alert(getViewer().getFrame(), "Reroot by outgroup: not implemented for networks");
+					}
+				} else
+					changed = RerootingUtils.rerootByOutgroup(treeViewer, selectedLabels);
             } else {
                 if (treeViewer.getNumberSelectedEdges() == 1)
                     changed = RerootingUtils.rerootByEdge(treeViewer, treeViewer.getSelectedEdges().getFirstElement());

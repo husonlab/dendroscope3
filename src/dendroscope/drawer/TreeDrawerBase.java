@@ -22,7 +22,6 @@ import dendroscope.consensus.TransferVisualization;
 import dendroscope.window.TreeViewer;
 import jloda.graph.*;
 import jloda.phylo.PhyloTree;
-import jloda.phylo.PhyloTreeNetworkUtils;
 import jloda.swing.graphview.*;
 import jloda.swing.util.BasicSwing;
 import jloda.swing.util.Geometry;
@@ -185,9 +184,9 @@ public class TreeDrawerBase {
                         shape.draw(trans, gc, viewer.getColor(v), viewer.getBackgroundColor(v), viewer.getSelected(v));
                 } else {
                     for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
-						if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(tree, e, v)) {
-							stack.push(e.getTarget());
-						}
+						if (tree.okToDescendDownThisEdgeInTraversal(e, v)) {
+                            stack.push(e.getTarget());
+                        }
                     }
                 }
             }
@@ -261,8 +260,8 @@ public class TreeDrawerBase {
                             }
                         }
                         magnifierUtil.removeAddedInternalPoints(f);
-						if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(tree, f, v))
-							paintRec(f.getTarget(), gc);
+                        if (tree.okToDescendDownThisEdgeInTraversal(f, v))
+                            paintRec(f.getTarget(), gc);
 
 
                         if (showLSAEdges && node2LSAChildren.get(v) != null) {
@@ -399,15 +398,15 @@ public class TreeDrawerBase {
             }
             if (!isCollapsed(v) && mustVisitSubTreeBelowNode(v) && hitsBBox(v, 5, 5, x, y)) {
                 for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
-					if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(tree, f, v)) {
-						Node w = f.getOpposite(v);
-						Rectangle bbD = trans.w2d(node2bb.get(w)).getBounds();
-						bbD.grow(10, 10);
-						if ((viewer.getLocation(w) != null && viewer.getNV(w).contains(trans, x, y)) || bbD.contains(x, y)) {
-							if (getHitNodesRectangleRec(w, x, y, moreThanOne) && moreThanOne)
-								return true;
-						}
-					}
+                    if (tree.okToDescendDownThisEdgeInTraversal(f, v)) {
+                        Node w = f.getOpposite(v);
+                        Rectangle bbD = trans.w2d(node2bb.get(w)).getBounds();
+                        bbD.grow(10, 10);
+                        if ((viewer.getLocation(w) != null && viewer.getNV(w).contains(trans, x, y)) || bbD.contains(x, y)) {
+                            if (getHitNodesRectangleRec(w, x, y, moreThanOne) && moreThanOne)
+                                return true;
+                        }
+                    }
                 }
             }
         } catch (Exception ex) {
@@ -435,15 +434,15 @@ public class TreeDrawerBase {
         }
         if (!isCollapsed(v) && mustVisitSubTreeBelowNode(v) && hitsBBox(v, 5, 5, rect)) {
             for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
-				if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(tree, f, v)) {
-					Node next = f.getOpposite(v);
-					Rectangle bbD = trans.w2d(node2bb.get(next)).getBounds();
-					bbD.grow(10, 10);
-					if ((viewer.getLocation(next) != null && viewer.getNV(next).intersects(trans, rect)) || bbD.intersects(rect)) {
-						if (getHitNodesRectangleRec(next, rect, moreThanOne) && moreThanOne)
-							return true;
-					}
-				}
+                if (tree.okToDescendDownThisEdgeInTraversal(f, v)) {
+                    Node next = f.getOpposite(v);
+                    Rectangle bbD = trans.w2d(node2bb.get(next)).getBounds();
+                    bbD.grow(10, 10);
+                    if ((viewer.getLocation(next) != null && viewer.getNV(next).intersects(trans, rect)) || bbD.intersects(rect)) {
+                        if (getHitNodesRectangleRec(next, rect, moreThanOne) && moreThanOne)
+                            return true;
+                    }
+                }
             }
         }
         return false;
@@ -497,9 +496,9 @@ public class TreeDrawerBase {
         }
         if (mustVisitSubTreeBelowNode(v) && hitsBBox(v, 100, 100, x, y)) {
             for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
-				if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(tree, f, v) && !isCollapsed(v)) {
-					getHitNodeLabelsRec(f.getTarget(), x, y);
-				}
+                if (tree.okToDescendDownThisEdgeInTraversal(f, v) && !isCollapsed(v)) {
+                    getHitNodeLabelsRec(f.getTarget(), x, y);
+                }
             }
         }
     }
@@ -559,9 +558,9 @@ public class TreeDrawerBase {
         }
         if (mustVisitSubTreeBelowNode(v) && hitsBBox(v, 100, 100, rect)) {
             for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
-				if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(tree, f, v) && !isCollapsed(v)) {
-					getHitNodeLabelsRectangleRec(f.getTarget(), rect);
-				}
+                if (tree.okToDescendDownThisEdgeInTraversal(f, v) && !isCollapsed(v)) {
+                    getHitNodeLabelsRectangleRec(f.getTarget(), rect);
+                }
             }
         }
     }
@@ -618,11 +617,11 @@ public class TreeDrawerBase {
                 final Point wp = wv.computeConnectPoint(vv.getLocation(), trans);
                 boolean hit = viewer.getEV(f).hitEdge(vp, wp, trans, x, y, 4);
                 magnifierUtil.removeAddedInternalPoints(f);
-				if (hit) {
-					hitEdges.add(f);
-				}
-				if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(tree, f, v) && !isCollapsed(v))
-					getHitEdgesRec(f.getTarget(), x, y, magnifierUtil);
+                if (hit) {
+                    hitEdges.add(f);
+                }
+                if (tree.okToDescendDownThisEdgeInTraversal(f, v) && !isCollapsed(v))
+                    getHitEdgesRec(f.getTarget(), x, y, magnifierUtil);
             }
         }
     }
@@ -661,13 +660,13 @@ public class TreeDrawerBase {
     private void getHitEdgeLabelsRec(Node v, int x, int y) {
         if (mustVisitSubTreeBelowNode(v) && hitsBBox(v, 100, 100, x, y)) {
             for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
-				if (viewer.getLabel(f) != null && viewer.getLabelVisible(f)
-					&& viewer.getLabelRect(f) != null &&
-					viewer.getLabelRect(f).contains(x, y)) {
-					hitEdgeLabels.add(f);
-				}
-				if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(tree, f, v) && !isCollapsed(v))
-					getHitEdgeLabelsRec(f.getTarget(), x, y);
+                if (viewer.getLabel(f) != null && viewer.getLabelVisible(f)
+                    && viewer.getLabelRect(f) != null &&
+                    viewer.getLabelRect(f).contains(x, y)) {
+                    hitEdgeLabels.add(f);
+                }
+                if (tree.okToDescendDownThisEdgeInTraversal(f, v) && !isCollapsed(v))
+                    getHitEdgeLabelsRec(f.getTarget(), x, y);
             }
         }
     }
@@ -703,13 +702,13 @@ public class TreeDrawerBase {
     private void getHitEdgesRectangleRec(Node v, Rectangle rect) {
         if (mustVisitSubTreeBelowNode(v) && hitsBBox(v, 100, 100, rect)) {
             for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
-				if (viewer.getLocation(f.getSource()) != null && viewer.getLocation(f.getTarget()) != null &&
-					rect.contains(trans.w2d(viewer.getLocation(f.getSource())))
-					&& rect.contains(trans.w2d(viewer.getLocation(f.getTarget())))) {
-					hitEdges.add(f);
-				}
-				if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(tree, f, v) && !isCollapsed(v))
-					getHitEdgesRectangleRec(f.getTarget(), rect);
+                if (viewer.getLocation(f.getSource()) != null && viewer.getLocation(f.getTarget()) != null &&
+                    rect.contains(trans.w2d(viewer.getLocation(f.getSource())))
+                    && rect.contains(trans.w2d(viewer.getLocation(f.getTarget())))) {
+                    hitEdges.add(f);
+                }
+                if (tree.okToDescendDownThisEdgeInTraversal(f, v) && !isCollapsed(v))
+                    getHitEdgesRectangleRec(f.getTarget(), rect);
             }
         }
     }
@@ -742,13 +741,13 @@ public class TreeDrawerBase {
     private void getHitEdgeLabelsRectangleRec(Node v, Rectangle rect) {
         if (mustVisitSubTreeBelowNode(v) && hitsBBox(v, 100, 100, rect)) {
             for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
-				if (viewer.getLabel(f) != null && viewer.getLabelVisible(f)
-					&& viewer.getLabelRect(f) != null &&
-					rect.contains(viewer.getLabelRect(f))) {
-					hitEdgeLabels.add(f);
-				}
-				if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(tree, f, v) && !isCollapsed(v))
-					getHitEdgeLabelsRectangleRec(f.getTarget(), rect);
+                if (viewer.getLabel(f) != null && viewer.getLabelVisible(f)
+                    && viewer.getLabelRect(f) != null &&
+                    rect.contains(viewer.getLabelRect(f))) {
+                    hitEdgeLabels.add(f);
+                }
+                if (tree.okToDescendDownThisEdgeInTraversal(f, v) && !isCollapsed(v))
+                    getHitEdgeLabelsRectangleRec(f.getTarget(), rect);
             }
         }
     }
@@ -903,9 +902,9 @@ public class TreeDrawerBase {
         bounds[3] = Math.max(bounds[3], y);
 
         for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
-			if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(tree, f, v)) {
-				computeBBoxRec(f.getTarget(), bounds);
-			}
+            if (tree.okToDescendDownThisEdgeInTraversal(f, v)) {
+                computeBBoxRec(f.getTarget(), bounds);
+            }
         }
     }
 
@@ -937,15 +936,6 @@ public class TreeDrawerBase {
         this.radialLabels = radialLabels;
     }
 
-	/**
-	 * get all children in tree, or LSA children if network
-	 *
-	 * @param v
-	 * @return all children
-	 */
-	protected Iterable<Node> getLSAChildren(Node v) {
-		return ((PhyloTree) v.getOwner()).lsaChildren(v);
-	}
 
     /**
      * compute the y-coordinates for the parallel view
@@ -960,13 +950,103 @@ public class TreeDrawerBase {
 	}
 
     /**
+     * compute the y-coordinates for the parallel view
+     *
+     * @param root
+     * @param leafOrder
+     * @param yCoord
+     */
+    public void computeYCoordinates(Node root, List<Node> leafOrder, NodeDoubleArray yCoord) {
+        computeYCoordinateOfLeavesRec(root, 0, yCoord, leafOrder);
+        if (tree.getNumberReticulateEdges() > 0)
+            fixSpacing(leafOrder, yCoord);
+        computeYCoordinateOfInternalRec(root, yCoord);
+    }
+
+    /**
+     * recursively compute the y coordinate for a parallel or triangular diagram
+     *
+     * @param v
+     * @param leafNumber rank of leaf in vertical ordering
+     * @return index of last leaf
+     */
+    private int computeYCoordinateOfLeavesRec(Node v, int leafNumber, NodeDoubleArray yCoord, List<Node> nodeOrder) {
+        if (v.isLeaf() || tree.isLsaLeaf(v)) {
+            // String taxonName = tree.getLabel(v);
+            yCoord.put(v, (double) ++leafNumber);
+            nodeOrder.add(v);
+        } else {
+            for (Node w : tree.lsaChildren(v)) {
+                leafNumber = computeYCoordinateOfLeavesRec(w, leafNumber, yCoord, nodeOrder);
+            }
+        }
+        return leafNumber;
+    }
+
+
+    /**
+     * recursively compute the y coordinate for the internal nodes of a parallel diagram
+     *
+     * @param v
+     * @param yCoord
+     */
+    private void computeYCoordinateOfInternalRec(Node v, NodeDoubleArray yCoord) {
+        if (v.getOutDegree() > 0) {
+            double first = Double.NEGATIVE_INFINITY;
+            double last = Double.NEGATIVE_INFINITY;
+
+            for (Node w : tree.lsaChildren(v)) {
+                Double y = yCoord.get(w);
+                if (y == null) {
+                    computeYCoordinateOfInternalRec(w, yCoord);
+                    y = yCoord.get(w);
+                }
+                last = y;
+                if (first == Double.NEGATIVE_INFINITY)
+                    first = last;
+            }
+            yCoord.put(v, 0.5 * (last + first));
+        }
+    }
+
+    /**
+     * fix spacing so that space between any two true leaves is 1
+     *
+     * @param leafOrder
+     */
+    private void fixSpacing(List<Node> leafOrder, NodeDoubleArray yCoord) {
+        Node[] nodes = leafOrder.toArray(new Node[0]);
+        double leafPos = 0;
+        for (int lastLeaf = -1; lastLeaf < nodes.length; ) {
+            int nextLeaf = lastLeaf + 1;
+            while (nextLeaf < nodes.length && !(nodes[nextLeaf].getOutDegree() == 0 || isCollapsed(nodes[nextLeaf])))
+                nextLeaf++;
+            // assign fractional positions to intermediate nodes
+            int count = (nextLeaf - lastLeaf) - 1;
+            if (count > 0) {
+                double add = 1.0 / (count + 1); // if odd, use +2 to avoid the middle
+                double value = leafPos;
+                for (int i = lastLeaf + 1; i < nextLeaf; i++) {
+                    value += add;
+                    yCoord.put(nodes[i], value);
+                }
+            }
+            // assign whole positions to actual leaves:
+            if (nextLeaf < nodes.length) {
+                yCoord.put(nodes[nextLeaf], ++leafPos);
+            }
+            lastLeaf = nextLeaf;
+        }
+    }
+
+    /**
      * compute the levels in the tree or network (max number of edges from node to a leaf)
      *
      * @param add
      * @return levels
      */
     protected NodeIntArray computeLevels(int add) {
-		final var levels = tree.newNodeIntArray();
+        final var levels = tree.newNodeIntArray();
         for (var v : tree.nodes()) {
             levels.set(v, -1);
         }
@@ -993,7 +1073,7 @@ public class TreeDrawerBase {
                 computeLevelsRec(w, levels, add, path);
             level = Math.max(level, levels.get(w) + (tree.isTransferEdge(f) ? 0 : add));
         }
-		Collection<Node> lsaChildren = tree.getLSAChildrenMap().get(v);
+        Collection<Node> lsaChildren = tree.getLSAChildrenMap().get(v);
         if (lsaChildren != null) {
             for (Node w : lsaChildren) {
                 if (!below.contains(w) && !path.contains(w)) {
@@ -1009,95 +1089,6 @@ public class TreeDrawerBase {
         return level;
     }
 
-    /**
-     * compute the y-coordinates for the parallel view
-     *
-     * @param root
-     * @param leafOrder
-     * @param yCoord
-     */
-    public void computeYCoordinates(Node root, List<Node> leafOrder, NodeDoubleArray yCoord) {
-        computeYCoordinateOfLeavesRec(root, 0, yCoord, leafOrder);
-        if (tree.getNumberSpecialEdges() > 0)
-            fixSpacing(leafOrder, yCoord);
-        computeYCoordinateOfInternalRec(root, yCoord);
-    }
-
-    /**
-     * recursively compute the y coordinate for a parallel or triangular diagram
-     *
-     * @param v
-     * @param leafNumber rank of leaf in vertical ordering
-     * @return index of last leaf
-     */
-    private int computeYCoordinateOfLeavesRec(Node v, int leafNumber, NodeDoubleArray yCoord, List<Node> nodeOrder) {
-		if (v.isLeaf()) {
-			// String taxonName = tree.getLabel(v);
-			yCoord.put(v, (double) ++leafNumber);
-			nodeOrder.add(v);
-		} else {
-			for (Node w : getLSAChildren(v)) {
-				leafNumber = computeYCoordinateOfLeavesRec(w, leafNumber, yCoord, nodeOrder);
-			}
-		}
-        return leafNumber;
-    }
-
-
-    /**
-     * recursively compute the y coordinate for the internal nodes of a parallel diagram
-     *
-     * @param v
-     * @param yCoord
-     */
-    private void computeYCoordinateOfInternalRec(Node v, NodeDoubleArray yCoord) {
-        if (v.getOutDegree() > 0) {
-            double first = Double.NEGATIVE_INFINITY;
-            double last = Double.NEGATIVE_INFINITY;
-
-            for (Node w : getLSAChildren(v)) {
-                Double y = yCoord.get(w);
-                if (y == null) {
-                    computeYCoordinateOfInternalRec(w, yCoord);
-                    y = yCoord.get(w);
-                }
-                last = y;
-                if (first == Double.NEGATIVE_INFINITY)
-                    first = last;
-            }
-            yCoord.put(v, 0.5 * (last + first));
-        }
-    }
-
-    /**
-     * fix spacing so that space between any two true leaves is 1
-     *
-     * @param leafOrder
-     */
-    private void fixSpacing(List<Node> leafOrder, NodeDoubleArray yCoord) {
-        Node[] nodes = leafOrder.toArray(new Node[leafOrder.size()]);
-        double leafPos = 0;
-        for (int lastLeaf = -1; lastLeaf < nodes.length; ) {
-            int nextLeaf = lastLeaf + 1;
-            while (nextLeaf < nodes.length && !(nodes[nextLeaf].getOutDegree() == 0 || isCollapsed(nodes[nextLeaf])))
-                nextLeaf++;
-            // assign fractional positions to intermediate nodes
-            int count = (nextLeaf - lastLeaf) - 1;
-            if (count > 0) {
-                double add = 1.0 / (count + 1); // if odd, use +2 to avoid the middle
-                double value = leafPos;
-                for (int i = lastLeaf + 1; i < nextLeaf; i++) {
-                    value += add;
-                    yCoord.put(nodes[i], value);
-                }
-            }
-            // assign whole positions to actual leaves:
-            if (nextLeaf < nodes.length) {
-                yCoord.put(nodes[nextLeaf], ++leafPos);
-            }
-            lastLeaf = nextLeaf;
-        }
-    }
 
     public int getAuxilaryParameter() {
         return auxilaryParameter;
@@ -1119,11 +1110,11 @@ public class TreeDrawerBase {
         while (stack.size() > 0) {
             Node v = stack.pop();
             for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
-				if (!tree.isSpecial(f))
-					length = Math.max(length, tree.getWeight(f));
-				if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(tree, f, v)) {
-					stack.push(f.getTarget());
-				}
+                if (!tree.isReticulatedEdge(f))
+                    length = Math.max(length, tree.getWeight(f));
+                if (tree.okToDescendDownThisEdgeInTraversal(f, v)) {
+                    stack.push(f.getTarget());
+                }
             }
         }
         return length;
@@ -1148,16 +1139,6 @@ public class TreeDrawerBase {
     }
 
     /**
-     * any tree edge and any reticulate edge with length 0 will be drawn as a reticulate edge
-     *
-     * @param e
-     * @return
-     */
-    protected boolean isReticulateEdge(Edge e) {
-        return tree.isSpecial(e) && tree.getWeight(e) == 0;
-    }
-
-    /**
      * recursively compute the x and y min and max values for all nodes below v
      *
      * @param v
@@ -1178,9 +1159,9 @@ public class TreeDrawerBase {
                 yMinMax[1] = y;
         } else {
             for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
-				if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(tree, e, v)) {
-					computeMinMaxRec(e.getTarget(), xMinMax, yMinMax);
-				}
+                if (tree.okToDescendDownThisEdgeInTraversal(e, v)) {
+                    computeMinMaxRec(e.getTarget(), xMinMax, yMinMax);
+                }
             }
         }
     }
@@ -1196,9 +1177,9 @@ public class TreeDrawerBase {
             points.add(viewer.getLocation(v));
         } else {
             for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
-				if (PhyloTreeNetworkUtils.okToDescendDownThisEdge(tree, e, v)) {
-					computePointsRec(e.getTarget(), points);
-				}
+                if (tree.okToDescendDownThisEdgeInTraversal(e, v)) {
+                    computePointsRec(e.getTarget(), points);
+                }
             }
         }
     }

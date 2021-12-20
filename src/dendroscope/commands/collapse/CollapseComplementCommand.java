@@ -61,8 +61,8 @@ public class CollapseComplementCommand extends CollapseCommand implements IComma
     public boolean isApplicable() {
         for (Iterator<TreeViewer> it = multiViewer.getTreeGrid().getSelectedOrAllIterator(); it.hasNext(); ) {
             TreeViewer viewer = it.next();
-            if (viewer.getPhyloTree().getNumberSpecialEdges() > 0)
-                return false;
+            if (viewer.getPhyloTree().getNumberReticulateEdges() > 0)
+				return false;
         }
         return multiViewer.getTreeGrid().getSelectedNodesIterator().hasNext() && multiViewer.getDir().getDocument().getNumberOfTrees() > 0;
     }
