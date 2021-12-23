@@ -251,7 +251,7 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
                 }
             }
 
-            if (ok)  // add childern to end of queue:
+            if (ok)  // add children to end of queue:
             {
                 for (Edge e : w.outEdges()) {
                     queue.add(e.getTarget());
