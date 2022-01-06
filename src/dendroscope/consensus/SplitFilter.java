@@ -18,8 +18,8 @@
  */
 package dendroscope.consensus;
 
-import jloda.phylo.Distortion;
 import jloda.phylo.PhyloTree;
+import jloda.phylo.algorithms.Distortion;
 import jloda.util.Basic;
 import jloda.util.CanceledException;
 import jloda.util.progress.ProgressListener;
