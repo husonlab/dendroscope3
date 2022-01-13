@@ -26,10 +26,12 @@ import dendroscope.util.PhyloTreeUtils;
 import jloda.graph.Edge;
 import jloda.graph.Node;
 import jloda.graph.NodeArray;
+import jloda.phylo.LSAUtils;
 import jloda.phylo.PhyloTree;
 import jloda.util.Basic;
 import jloda.util.CanceledException;
 import jloda.util.IteratorUtils;
+import jloda.util.StringUtils;
 import jloda.util.progress.ProgressListener;
 
 import java.util.*;
@@ -86,7 +88,7 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
 			progressListener.setProgress(-1);
 		}
 		//System.err.println("Computing optimal embedding using circular-ordering algorithm");
-		final var taxon2Id = new HashMap<String, Integer>();
+		final var taxon2Id = new TreeMap<String, Integer>();
 		final var id2Taxon = new HashMap<Integer, String>();
 
 		var timeBef = System.currentTimeMillis();
@@ -118,23 +120,33 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
 					count++;
 				}
 			}
-        }
+		}
+
+		if (false) {
+			System.err.println("taxon2Id:");
+			for (var taxon : taxon2Id.keySet()) {
+				System.err.println(taxon + " " + taxon2Id.get(taxon));
+			}
+		}
 
 		final int[] circularOrdering;
-        //if(!useFastAlignmentHeuristic)
-        //    shortestPath =true;
-        if (shortestPath)
-            circularOrdering = computerCircularOrderingShortestPathMatrix(trees, taxon2Id, id2Taxon);
-        else
-            circularOrdering = computerCircularOrderingHardwiredMatrix(trees, taxon2Id, id2Taxon);
+		//if(!useFastAlignmentHeuristic)
+		//    shortestPath =true;
+		if (shortestPath)
+			circularOrdering = computerCircularOrderingShortestPathMatrix(trees, taxon2Id, id2Taxon);
+		else
+			circularOrdering = computerCircularOrderingHardwiredMatrix(trees, taxon2Id, id2Taxon);
 
-        if (DEBUG_time) {
-            timeNeeded = System.currentTimeMillis() - timeBef;
-            timeBef = System.currentTimeMillis();
-            System.err.println(" breakpoint 1:" + timeNeeded);
-        }
+		if (false)
+			System.err.println("circularOrdering: " + StringUtils.toString(circularOrdering, " "));
 
-        if (!useFastAlignmentHeuristic && trees.length == 2) {
+		if (DEBUG_time) {
+			timeNeeded = System.currentTimeMillis() - timeBef;
+			timeBef = System.currentTimeMillis();
+			System.err.println(" breakpoint 1:" + timeNeeded);
+		}
+
+		if (!useFastAlignmentHeuristic && trees.length == 2) {
 			final var bestOrdering = getLinearOrderingId(circularOrdering, idRho);
 
 			if (progressListener != null)
@@ -143,20 +155,20 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
 			var circularOrderingPair = new int[2][];
 			circularOrderingPair[0] = circularOrdering;
 			circularOrderingPair[1] = new int[circularOrdering.length];
-			int lenghtCircOrdering = circularOrdering.length;
+			int lengthCircOrdering = circularOrdering.length;
 
-			for (var i = 1; i < lenghtCircOrdering; i++) {
-				circularOrderingPair[1][i] = circularOrderingPair[0][lenghtCircOrdering - i];
+			for (var i = 1; i < lengthCircOrdering; i++) {
+				circularOrderingPair[1][i] = circularOrderingPair[0][lengthCircOrdering - i];
 			}
 
-            if (DEBUG) {
-                //System.err.println("Best score: " + bestScore);
-                System.err.print("Best bestOrderingFinal: ");
+			if (DEBUG) {
+				//System.err.println("Best score: " + bestScore);
+				System.err.print("Best bestOrderingFinal: ");
 				for (var ii = 1; ii < bestOrdering.length; ii++) {
 					System.err.print(" " + id2Taxon.get(bestOrdering[ii]));
 				}
-                System.err.println();
-            }
+				System.err.println();
+			}
 
 			var forests = (Vector<PhyloTree>[]) new Vector[2];
             forests[0] = new Vector<>();
@@ -165,7 +177,7 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
             tempOrder[0] = new Vector<>();
             tempOrder[1] = new Vector<>();
 
-			var newOrder = (LinkedList<String>[]) new List[2];
+			var newOrder = (LinkedList<String>[]) new LinkedList[2];
 			newOrder[0] = new LinkedList<>();
 			newOrder[1] = new LinkedList<>();
 
@@ -233,7 +245,7 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
 						tempOrder[s].add(tempOrd);
 					}
 
-					var bestOrdForNow = new LinkedList<String>(tempOrder[s].get(0));
+					var bestOrdForNow = new LinkedList<>(tempOrder[s].get(0));
 
 					//System.err.println("tempOrder[s].get(0) " + tempOrder[s].get(0).toString());
 
@@ -403,20 +415,45 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
 				tree.deleteNode(v);
 				tree.setRoot(root);
 			}
-            newOrder[0].remove(0);
-            newOrder[1].remove(0);
+			newOrder[0].remove(0);
+			newOrder[1].remove(0);
 
-            firstOrder = new LinkedList<String>();
-            firstOrder.addAll(newOrder[0]);
+			if (false) {
+				System.err.println("first: " + StringUtils.toString(newOrder[0], " "));
+				System.err.println("second: " + StringUtils.toString(newOrder[1], " "));
+			}
 
-            secondOrder = new LinkedList<String>();
-            secondOrder.addAll(newOrder[1]);
+			firstOrder = new LinkedList<>();
+			firstOrder.addAll(newOrder[0]);
+
+			secondOrder = new LinkedList<>();
+			secondOrder.addAll(newOrder[1]);
 
 			System.err.println("The minimal crossing number found is " + finalScore);
-			System.err.println("Order of the taxa in the trees: ");
-			System.err.println(newOrder[0]);
-			System.err.println(newOrder[1]);
 
+			if (false) {
+				System.err.println("Order of the taxa in the trees: ");
+				System.err.println(firstOrder);
+
+				System.err.println("Tree 1: ");
+				LSAUtils.postorderTraversalLSA(trees[0], trees[0].getRoot(), v -> {
+					if (v.isLeaf()) {
+						var label = trees[0].getLabel(v);
+						System.err.print(", " + (label == null ? "null" : label));
+					}
+				});
+
+
+				System.err.println(secondOrder);
+
+				System.err.println("Tree 2: ");
+				LSAUtils.postorderTraversalLSA(trees[1], trees[1].getRoot(), v -> {
+					if (v.isLeaf()) {
+						var label = trees[1].getLabel(v);
+						System.err.print(" " + (label == null ? "null" : label));
+					}
+				});
+			}
 
             /*firstOrder.addAll(orderEmbeddeding[0]);
             secondOrder.addAll(orderEmbeddeding[1]);
@@ -644,10 +681,9 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
 					for (Iterator<String> it = taxaNotInTrees[java.lang.Math.abs(s - 1)].iterator(); it.hasNext(); ) {
 						String taxon = it.next();
 
-
 						Node toDelete = null;
 						for (Node node : newTrees[s].nodes()) {
-							if (node.getOutDegree() == 0 && newTrees[s].getLabel(node).equals(taxon)) {
+							if (node.getOutDegree() == 0 && newTrees[s].getLabel(node) == taxon) {
 								toDelete = node;
 								break;
 							}
@@ -685,6 +721,15 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
 					var sys = TanglegramUtils.getSplitSystem(clusters, taxon2ID);
 
 					distMat = TanglegramUtils.setMatForDiffSys(distMat, taxon2ID.size(), sys, false);
+					if (false) {
+						for (var taxon1 : taxon2ID.keySet()) {
+							System.err.println(taxon1 + ":");
+							for (var taxon2 : taxon2ID.keySet())
+								System.err.printf(" %.0f", distMat[taxon2ID.get(taxon1)][taxon2ID.get(taxon2)]);
+							System.err.println();
+						}
+					}
+
 				}
             }
 
@@ -702,7 +747,7 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
 
 						int index = 0;
 						for (int i : ordering) {
-							if (!taxaNotInTrees[0].contains(id2Taxon.get(i)) && !taxaNotInTrees[1].contains(id2Taxon.get(i))) {
+							if (i > 0 && !taxaNotInTrees[0].contains(id2Taxon.get(i)) && !taxaNotInTrees[1].contains(id2Taxon.get(i))) {
 								newOrdering[index] = i;
 								index++;
 							}

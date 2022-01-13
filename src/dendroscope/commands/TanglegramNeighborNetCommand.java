@@ -176,10 +176,11 @@ public class TanglegramNeighborNetCommand extends CommandBaseMultiViewer impleme
             System.err.println("Actual number of crossings in the current embedding: " + bestScore);
 
         }
-        System.err.println("Final order of the taxa in the trees (lsa): ");
-        System.err.println(orderFin[0]);
-        System.err.println(orderFin[1]);
-
+        if (false) {
+            System.err.println("Final order of the taxa in the trees (lsa): ");
+            System.err.println(orderFin[0]);
+            System.err.println(orderFin[1]);
+        }
 
         if (timeNeed > 60000) {
             System.err.println("Time needed for computation: " + timeNeed / 60000 + " min.");

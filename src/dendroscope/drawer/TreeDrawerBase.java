@@ -131,6 +131,8 @@ public class TreeDrawerBase {
 
         showLSAEdges = ProgramProperties.get("showlsa", false);
 
+        showLSAEdges = true;
+
         if (false) {
             TransferVisualization.paint(gc, viewer, tree);
         }

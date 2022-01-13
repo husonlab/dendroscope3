@@ -113,14 +113,16 @@ public class TreeDrawerParallel extends TreeDrawerBase implements IOptimizedGrap
 
         viewer.setLocation(root, 0, 0);
 
-        NodeDoubleArray yCoord = computeYCoordinates(tree.getRoot());
-        if (toScale) {
-            setCoordinatesPhylogram(root, yCoord);
-            addInternalPoints();
-        } else {
-            NodeIntArray levels = computeLevels(1);
-            computeCoordinatesCladogramRec(root, yCoord, levels);
-            addInternalPoints();
+        try (NodeDoubleArray yCoord = computeYCoordinates(tree.getRoot())) {
+            if (toScale) {
+                setCoordinatesPhylogram(root, yCoord);
+                addInternalPoints();
+            } else {
+                try (NodeIntArray levels = computeLevels(1)) {
+                    computeCoordinatesCladogramRec(root, yCoord, levels);
+                    addInternalPoints();
+                }
+            }
         }
         recomputeOptimization(null);
         return true;

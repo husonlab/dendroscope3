@@ -26,6 +26,7 @@ import jloda.graph.Edge;
 import jloda.graph.Node;
 import jloda.graph.NodeSet;
 import jloda.phylo.PhyloTree;
+import jloda.util.BitSetUtils;
 
 import java.util.*;
 
@@ -230,33 +231,31 @@ public class TanglegramUtils {
      * @return split system for this tanglegram
      */
     public static SplitSystem getSplitSystem(Set<Set<String>> clusters, Map<String, Integer> taxon2ID) {
-        final SplitSystem splitSys = new SplitSystem();
-        final BitSet activeTaxa = new BitSet();
-        for (String s : taxon2ID.keySet()) {
-            activeTaxa.set(taxon2ID.get(s));
-        }
-        for (Set<String> currCluster : clusters) {
+        var splits = new SplitSystem();
+        final var activeTaxa = BitSetUtils.asBitSet(taxon2ID.values());
+        for (var currCluster : clusters) {
             //System.err.println("currCluster " + currCluster);
 
-            final BitSet siteA = new BitSet();
+            final var sideA = new BitSet();
 
-            for (String aCurrCluster : currCluster) {
-                if (taxon2ID.get(aCurrCluster) != null)
-                    siteA.set(taxon2ID.get(aCurrCluster));
+            for (var taxonLabel : currCluster) {
+                sideA.set(taxon2ID.get(taxonLabel));
             }
 
-            // todo: this is surely a bug:
-            final BitSet complement = (BitSet) activeTaxa.clone();
-            complement.andNot(siteA);
-            final Split split = new Split(siteA, complement);
+            if (sideA.cardinality() > 0) {
+                final var sideB = BitSetUtils.minus(activeTaxa, sideA);
+                if (sideB.cardinality() > 0) {
+                    final var split = new Split(sideA, sideB);
 
-            //System.err.println("split " + split);
+                    //System.err.println("split " + split);
 
-            if (!splitSys.contains(split)) {
-                splitSys.addSplit(split);
+                    if (!splits.contains(split)) {
+                        splits.addSplit(split);
+                    }
+                }
             }
         }
-        return splitSys;
+        return splits;
     }
 
     /**

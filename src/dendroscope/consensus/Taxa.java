@@ -18,10 +18,7 @@
  */
 package dendroscope.consensus;
 
-import java.util.BitSet;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 /**
  * maintains the taxa associated with a tree or network
@@ -37,7 +34,7 @@ public class Taxa {
      * constructor
      */
     public Taxa() {
-        name2index = new HashMap<>();
+        name2index = new TreeMap<>();
         index2name = new HashMap<>();
         bits = new BitSet();
         ntax = 0;
@@ -156,8 +153,8 @@ public class Taxa {
      * @return set of indices
      */
     public void addAll(Taxa taxa) {
-        for (Iterator it = taxa.iterator(); it.hasNext(); ) {
-            String name = (String) it.next();
+        for (Iterator<String> it = taxa.iterator(); it.hasNext(); ) {
+            String name = it.next();
             add(name);
         }
     }
@@ -170,8 +167,8 @@ public class Taxa {
     public String toString() {
         StringBuilder buf = new StringBuilder();
         buf.append("Taxa (").append(size()).append("):\n");
-        for (Iterator it = iterator(); it.hasNext(); ) {
-            String name = (String) it.next();
+        for (Iterator<String> it = iterator(); it.hasNext(); ) {
+            String name = it.next();
             buf.append(name).append("\n");
         }
         return buf.toString();
