@@ -192,19 +192,10 @@ public class TreeDrawerParallel extends TreeDrawerBase implements IOptimizedGrap
      * @param root
      */
     private void setCoordinatesPhylogram(Node root, NodeDoubleArray yCoord) {
-        // todo: these things need to be made user options
-        boolean useWeights = true;
-        int percentOffset = getAuxilaryParameter();
+        var percentOffset = 50; //getAuxilaryParameter();
 
-        double smallDistance = 5.0 / 100.0;
-        if (useWeights) {
-            double largestDistance = 0;
-            for (Edge e = tree.getFirstEdge(); e != null; e = e.getNext())
-                if (!tree.isReticulatedEdge(e))
-                    largestDistance = Math.max(largestDistance, tree.getWeight(e));
-            smallDistance = (percentOffset / 100.0) * largestDistance;
-        }
-
+        var averageWeight = tree.edgeStream().mapToDouble(tree::getWeight).average().orElse(1);
+        var smallOffsetForRecticulateEdge = (percentOffset / 100.0) * averageWeight;
         double rootHeight = yCoord.get(root);
 
         NodeSet assigned = new NodeSet(tree);
@@ -214,7 +205,7 @@ public class TreeDrawerParallel extends TreeDrawerBase implements IOptimizedGrap
         queue.add(root);
         while (queue.size() > 0) // breath-first assignment
         {
-            Node w = queue.remove(0); // pop
+            var w = queue.remove(0); // pop
 
             boolean ok = true;
             if (w.getInDegree() == 1) // has regular in edge
@@ -227,10 +218,9 @@ public class TreeDrawerParallel extends TreeDrawerBase implements IOptimizedGrap
                 {
                     ok = false;
                 } else {
-                    double weight = (useWeights ? tree.getWeight(e) : 1);
                     double height = yCoord.get(e.getTarget());
                     Node u = e.getTarget();
-                    viewer.setLocation(u, location.getX() + weight, height);
+                    viewer.setLocation(u, location.getX() + tree.getWeight(e), height);
                     assigned.add(u);
                     java.util.List<Point2D> internalPoints = new LinkedList<>();
                     internalPoints.add(new Point2D.Double(location.getX(), yCoord.get(w)));
@@ -249,7 +239,7 @@ public class TreeDrawerParallel extends TreeDrawerBase implements IOptimizedGrap
                     }
                 }
                 if (ok && x > Double.NEGATIVE_INFINITY) {
-                    x += smallDistance;
+                    x += smallOffsetForRecticulateEdge;
                     viewer.setLocation(w, x, yCoord.get(w));
                     assigned.add(w);
                     for (Edge f = w.getFirstInEdge(); f != null; f = w.getNextInEdge(f)) {

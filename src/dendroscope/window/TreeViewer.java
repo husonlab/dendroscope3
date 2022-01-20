@@ -71,7 +71,7 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     private boolean hasAdditional = false; // only relevant for multiviewer
     protected int radialAngle = 100;
     protected int innerCircularLength = 50;
-    protected int phylogramPercentOffset = 4;
+    protected int phylogramPercentOffset = 30;
     private final boolean showEdgeWeights = false;
     private boolean unlockEdgeLengths = false;
 
