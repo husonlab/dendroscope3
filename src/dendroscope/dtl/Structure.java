@@ -365,11 +365,7 @@ public class Structure {
                 int costU1X1U2X2 = this.costMatrix[u1Id - 1][x1Id - 1] + this.costMatrix[u2Id - 1][x2Id - 1];
                 int costU1X2U2X1 = this.costMatrix[u1Id - 1][x2Id - 1] + this.costMatrix[u2Id - 1][x1Id - 1];
 
-                if (costU1X1U2X2 < costU1X2U2X1) {
-                    cost = costU1X1U2X2;
-                } else {
-                    cost = costU1X2U2X1;
-                }
+				cost = Math.min(costU1X1U2X2, costU1X2U2X1);
             }
             //duplication
             costD = this.costMatrix[u1Id - 1][xId - 1] + this.costMatrix[u2Id - 1][xId - 1] + this.dupCost;
