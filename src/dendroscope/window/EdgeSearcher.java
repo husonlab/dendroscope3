@@ -39,8 +39,7 @@ class EdgeSearcher implements IObjectSearcher {
     /**
      * constructor
      *
-     * @param multiViewer
-     */
+	 */
     public EdgeSearcher(MultiViewer multiViewer) {
         this.multiViewer = multiViewer;
         updateViewers();
@@ -174,8 +173,7 @@ class EdgeSearcher implements IObjectSearcher {
     /**
      * set selection state of current object
      *
-     * @param select
-     */
+	 */
     public void setCurrentSelected(boolean select) {
         if (isCurrentSet()) {
             viewers[currentViewer].setSelected(currentEdge, select);
@@ -198,8 +196,7 @@ class EdgeSearcher implements IObjectSearcher {
     /**
      * set the label of the current object
      *
-     * @param newLabel
-     */
+	 */
     public void setCurrentLabel(String newLabel) {
         if (isCurrentSet()) {
             TreeViewer viewer = viewers[currentViewer];
@@ -280,8 +277,7 @@ class EdgeSearcher implements IObjectSearcher {
     /**
      * set select state of all objects
      *
-     * @param select
-     */
+	 */
     public void selectAll(boolean select) {
         for (Iterator<TreeViewer> it = multiViewer.getTreeGrid().getSelectedOrAllIterator(); it.hasNext(); ) {
             TreeViewer treeViewer = it.next();

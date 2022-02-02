@@ -90,7 +90,7 @@ public class ComputeDTLReconcilationCommand extends CommandBaseMultiViewer imple
 
 
             if (ProgramProperties.isUseGUI()) {
-                new Message(getViewer().getFrame(), "The  DTL reconciliation cost between the two trees  is " + DTLcost);
+                Message.show(getViewer().getFrame(), "The  DTL reconciliation cost between the two trees  is " + DTLcost);
             }
             System.out.println("The DTL reconciliation cost between the two trees  is " + DTLcost);
 

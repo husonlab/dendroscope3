@@ -51,7 +51,6 @@ public class Nexus extends IOBase implements IOFormat {
     /**
      * does this look like a file of the correct type?
      *
-     * @param file
      * @return true, if correct type of file
      */
     public boolean isCorrectFileType(File file) {
@@ -65,7 +64,6 @@ public class Nexus extends IOBase implements IOFormat {
     /**
      * does this look like the first line of the a file of the correct type?
      *
-     * @param aLine
      * @return true, if correct type of string
      */
     public boolean isCorrectType(String aLine) {
@@ -75,10 +73,8 @@ public class Nexus extends IOBase implements IOFormat {
     /**
      * read trees
      *
-     * @param r0
      * @return trees
-     * @throws java.io.IOException
-     */
+	 */
     public TreeData[] read(Reader r0) throws IOException {
         final List treesList = new LinkedList(); // list of phylotrees
         TreeData[] trees;
@@ -191,7 +187,7 @@ public class Nexus extends IOBase implements IOFormat {
                 */
             }
             np.matchEndBlock();
-            trees = (TreeData[]) treesList.toArray(new TreeData[treesList.size()]);
+            trees = (TreeData[]) treesList.toArray(new TreeData[0]);
         }
         return trees;
     }
@@ -200,9 +196,6 @@ public class Nexus extends IOBase implements IOFormat {
     /**
      * write trees
      *
-     * @param w0
-     * @param trees
-     * @throws java.io.IOException
      */
     public void write(Writer w0, boolean internalNodeLabelsAreEdgeLabels, TreeData[] trees) throws IOException {
         try (BufferedWriter w = new BufferedWriter(w0)) {
@@ -234,7 +227,6 @@ public class Nexus extends IOBase implements IOFormat {
      *
      * @param name      the name of the tree
      * @param tree      the phylogenetic tree
-     * @param treesList
      */
     private void addTree(String name, TreeData tree, List<TreeData> treesList)
             throws IOException, NotOwnerException {
@@ -257,7 +249,6 @@ public class Nexus extends IOBase implements IOFormat {
     /**
      * do we accept this file?
      *
-     * @param file
      * @return true, if correct ending
      */
     public boolean accept(File file) {

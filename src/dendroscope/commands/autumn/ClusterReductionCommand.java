@@ -44,18 +44,15 @@ public class ClusterReductionCommand extends CommandBaseMultiViewer implements I
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase(getSyntax());
 
-        Set<String> selectedLabels = new HashSet<>();
-        Iterator<TreeViewer> it = multiViewer.getTreeGrid().getSelectedOrAllIterator();
-        TreeViewer viewer1 = it.next();
-        selectedLabels.addAll(viewer1.getSelectedNodeLabels());
-        TreeData tree1 = getDir().getDocument().getTree(multiViewer.getTreeGrid().getNumberOfViewerInDocument(viewer1));
+		Iterator<TreeViewer> it = multiViewer.getTreeGrid().getSelectedOrAllIterator();
+		TreeViewer viewer1 = it.next();
+		Set<String> selectedLabels = new HashSet<>(viewer1.getSelectedNodeLabels());
+		TreeData tree1 = getDir().getDocument().getTree(multiViewer.getTreeGrid().getNumberOfViewerInDocument(viewer1));
         TreeViewer viewer2 = it.next();
         selectedLabels.addAll(viewer2.getSelectedNodeLabels());
         TreeData tree2 = getDir().getDocument().getTree(multiViewer.getTreeGrid().getNumberOfViewerInDocument(viewer2));
@@ -63,7 +60,7 @@ public class ClusterReductionCommand extends CommandBaseMultiViewer implements I
         TreeData[] newTrees = ClusterReduction.apply(tree1, tree2, selectedLabels, true);
 
         if (newTrees == null) {
-            new Message(getViewer().getFrame(), "Cluster reduction not possible, no cluster found");
+			Message.show(getViewer().getFrame(), "Cluster reduction not possible, no cluster found");
         } else {
             for (int i = 0; i < newTrees.length; i++)
                 newTrees[i].setName("[" + (i + 1) + "]");

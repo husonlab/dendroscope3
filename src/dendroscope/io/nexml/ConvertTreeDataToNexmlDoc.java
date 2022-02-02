@@ -57,11 +57,8 @@ public class ConvertTreeDataToNexmlDoc {
     /**
      * convert the given tree data to Nexml format
      *
-     * @param treeDataArray
-     * @param connectors
      * @return nexml document
-     * @throws ParserConfigurationException
-     */
+	 */
     public static Document apply(boolean internalNodeLabelsAreEdgeLabels, TreeData[] treeDataArray, Connectors connectors) throws ParserConfigurationException {
         final Document document = DocumentFactory.createDocument();
         final OTUs otus = document.createOTUs();
@@ -185,11 +182,7 @@ public class ConvertTreeDataToNexmlDoc {
     /**
      * recursively copy src to target
      *
-     * @param treeData
-     * @param v
-     * @param network
-     * @param src2tarNode
-     */
+	 */
     private static void copyRec(BiFunction<jloda.graph.Node, String, OTU> getOTU, TreeData treeData, jloda.graph.Node v, Network network, NodeArray<Node> src2tarNode, NodeView defaultNodeView, EdgeView defaultEdgeView) {
         if (src2tarNode.get(v) == null) {
             Node p = network.createNode();

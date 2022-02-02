@@ -42,8 +42,7 @@ public class CollapsedShape {
     /**
      * set the coordinates of the shape
      *
-     * @param pointsWC
-     */
+	 */
     public void setPointsWC(Point2D[] pointsWC) {
         polygonWC = new PolygonDouble(pointsWC.length, pointsWC);
     }
@@ -51,9 +50,7 @@ public class CollapsedShape {
     /**
      * draw the shape
      *
-     * @param trans
-     * @param g
-     */
+	 */
     public void draw(Transform trans, Graphics2D g, Color color, Color backgroundColor, boolean selected) {
         if (polygonWC != null) {
             Polygon polygonDC = trans.w2d(polygonWC);
@@ -75,9 +72,6 @@ public class CollapsedShape {
     /**
      * does shape contain the point with device coordinates y,y?
      *
-     * @param trans
-     * @param x
-     * @param y
      * @return true, if shape contains point
      */
     public boolean hit(Transform trans, int x, int y) {
@@ -91,8 +85,6 @@ public class CollapsedShape {
     /**
      * is shape contained in the given device retangle?
      *
-     * @param trans
-     * @param rect
      * @return true, if contained in rectangle
      */
     public boolean hit(Transform trans, Rectangle2D rect) {

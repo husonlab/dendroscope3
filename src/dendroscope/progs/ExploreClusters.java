@@ -33,10 +33,7 @@ public class ExploreClusters {
     /**
      * explore all combinations
      *
-     * @param n
-     * @param k
-     * @param all
-     */
+	 */
     public void run(int n, int k, boolean all) {
         for (int n1 = (all ? 2 : n); n1 <= n; n1++) {
             System.err.println("====== n=" + n1 + " ========");
@@ -50,9 +47,7 @@ public class ExploreClusters {
     /**
      * explore all posible solutions for n and k
      *
-     * @param n
-     * @param k
-     */
+	 */
     public void run(int n, int k) {
         int count = 0;
         for (int size = 2; size <= n; size++) {
@@ -68,12 +63,6 @@ public class ExploreClusters {
      * recursively generate all sets of k clusters on n taxa.
      * clusters are reduced in that all taxa are separated and all clusters form an incompatibility component
      *
-     * @param targetSize
-     * @param prev
-     * @param cluster
-     * @param clusters
-     * @param n
-     * @param k
      * @return number of solutions found
      */
     private int makeClustersRec(int targetSize, int prev, BitSet cluster, Stack clusters, int n, int k, int count) {
@@ -92,12 +81,12 @@ public class ExploreClusters {
             if (clusters.size() == k) {
                 // check and print
                 if (countUsedTaxa(clusters) == n && allSeparated(clusters, n) && oneComponent(clusters)) {
-                    System.err.println("(" + (++count) + "): ");
-                    for (Iterator it = clusters.iterator(); it.hasNext(); ) {
-                        System.err.println("\t" + it.next());
-                    }
-                    System.err.println(computeH(clusters, n));
-                }
+					System.err.println("(" + (++count) + "): ");
+					for (Object o : clusters) {
+						System.err.println("\t" + o);
+					}
+					System.err.println(computeH(clusters, n));
+				}
             } else // start adding next cluster
             {
                 for (int size = targetSize; size <= n; size++) {
@@ -116,7 +105,7 @@ public class ExploreClusters {
     }
 
     private int computeH(Stack clusters, int n) {
-        BitSet[] array = (BitSet[]) clusters.toArray(new BitSet[clusters.size()]);
+		BitSet[] array = (BitSet[]) clusters.toArray(new BitSet[0]);
 
         List triples = new LinkedList();
 
@@ -130,12 +119,12 @@ public class ExploreClusters {
         }
 
         if (triples.size() > 0) {
-            System.err.println("Triples:");
-            for (Iterator it = triples.iterator(); it.hasNext(); ) {
-                Triple triple = (Triple) it.next();
-                System.err.println(triple);
-            }
-        }
+			System.err.println("Triples:");
+			for (Object o : triples) {
+				Triple triple = (Triple) o;
+				System.err.println(triple);
+			}
+		}
 
         return 0;
     }
@@ -144,89 +133,79 @@ public class ExploreClusters {
     /**
      * reduces the input clusters using a given choice of optional taxa or taxon groups
      *
-     * @param clusters
-     * @param choices
      * @return reduced clusters
      */
     private Cluster[] reduceClusters(BitSet[] clusters, Collection choices) {
-        Map fixed2optional = new HashMap(); // maps fixed cluster parts to their optional ones
+		Map fixed2optional = new HashMap(); // maps fixed cluster parts to their optional ones
 
-        Set result = new HashSet();
+		Set result = new HashSet();
 
-        for (int i = 0; i < clusters.length; i++) {
-            BitSet cluster = clusters[i];
+		for (BitSet cluster : clusters) {
+			Cluster fixed = new Cluster();
+			Cluster optional = new Cluster();
 
-            Cluster fixed = new Cluster();
-            Cluster optional = new Cluster();
+			partition(cluster, choices, fixed, optional);
 
-            partition(cluster, choices, fixed, optional);
+			if (fixed.cardinality() > 0) {
+				BitSet op = (BitSet) fixed2optional.get(fixed);
+				if (op == null) {
+					fixed2optional.put(fixed, optional);
+					System.err.println("Mapped: " + cluster + " fixed: " + fixed + " optional: " + optional + " total optional: " + fixed2optional.get(fixed));
+				} else
+					op.or(optional);
+			}
+			// todo: what to do with clusters that equal optional sets?
+		}
 
-            if (fixed.cardinality() > 0) {
-                BitSet op = (BitSet) fixed2optional.get(fixed);
-                if (op == null) {
-                    fixed2optional.put(fixed, optional);
-                    System.err.println("Mapped: " + cluster + " fixed: " + fixed + " optional: " + optional + " total optional: " + fixed2optional.get(fixed));
-                } else
-                    op.or(optional);
-            }
-            // todo: what to do with clusters that equal optional sets?
-        }
+		for (Object o : fixed2optional.keySet()) {
+			BitSet fixed = (BitSet) o;
+			BitSet optional = (BitSet) fixed2optional.get(fixed);
+			BitSet cluster = Cluster.union(fixed, optional);
+			result.add(new Cluster(cluster, 1));
+		}
+		// add all trivial:
+		for (BitSet cluster : clusters)
+			if (cluster.cardinality() == 1 && !result.contains(cluster))
+				result.add(cluster);
 
-        for (Iterator it = fixed2optional.keySet().iterator(); it.hasNext(); ) {
-            BitSet fixed = (BitSet) it.next();
-            BitSet optional = (BitSet) fixed2optional.get(fixed);
-            BitSet cluster = Cluster.union(fixed, optional);
-            result.add(new Cluster(cluster, 1));
-        }
-        // add all trivial:
-        for (int i = 0; i < clusters.length; i++)
-            if (clusters[i].cardinality() == 1 && !result.contains(clusters[i]))
-                result.add(clusters[i]);
-
-        return (Cluster[]) result.toArray(new Cluster[result.size()]);
-    }
+		return (Cluster[]) result.toArray(new Cluster[0]);
+	}
 
     /**
      * given a cluster and a set of choices of optional taxa or taxon-groups, partitions the cluster
      * into its mandatory and optional parts
      *
-     * @param cluster
-     * @param choices
-     * @param fixed
-     * @param optional
-     */
+	 */
     private void partition(BitSet cluster, Collection choices, BitSet fixed, BitSet optional) {
-        for (Iterator it = choices.iterator(); it.hasNext(); ) {
-            BitSet choice = (BitSet) it.next();
-            if (Cluster.contains(cluster, choice))
-                optional.or(choice);
-        }
-        fixed.or(Cluster.setminus(cluster, optional));
-    }
+		for (Object o : choices) {
+			BitSet choice = (BitSet) o;
+			if (Cluster.contains(cluster, choice))
+				optional.or(choice);
+		}
+		fixed.or(Cluster.setminus(cluster, optional));
+	}
 
     /**
      * count how many different taxa are used by this choice of clusters
      *
-     * @param clusters
      * @return number of used taxa
      */
     private int countUsedTaxa(Stack clusters) {
-        BitSet taxa = new BitSet();
-        for (Iterator it = clusters.iterator(); it.hasNext(); ) {
-            taxa.or((BitSet) it.next());
-        }
-        return taxa.cardinality();
-    }
+		BitSet taxa = new BitSet();
+		for (Object cluster : clusters) {
+			taxa.or((BitSet) cluster);
+		}
+		return taxa.cardinality();
+	}
 
     /**
      * all clusters contained in one incompat. component?
      *
-     * @param clusters
      * @return true, if in one component
      */
     private boolean oneComponent(Stack clusters) {
-        BitSet[] array = (BitSet[]) clusters.toArray(new BitSet[clusters.size()]);
-        boolean[][] incompatible = new boolean[array.length][array.length];
+		BitSet[] array = (BitSet[]) clusters.toArray(new BitSet[0]);
+		boolean[][] incompatible = new boolean[array.length][array.length];
         for (int i = 0; i < array.length; i++) {
             for (int j = i + 1; j < array.length; j++) {
                 incompatible[i][j] = incompatible[j][i] = Cluster.incompatible(array[i], array[j]);
@@ -251,24 +230,22 @@ public class ExploreClusters {
     /**
      * is each pair of taxa separated by some clusters?
      *
-     * @param clusters
-     * @param n
      * @return true, if separated
      */
     private boolean allSeparated(Stack clusters, int n) {
         for (int i = 1; i <= n; i++) {
             for (int j = i + 1; j <= n; j++) {
-                boolean ko = true;
-                for (Iterator it = clusters.iterator(); it.hasNext(); ) {
-                    BitSet cluster = (BitSet) it.next();
-                    if (cluster.get(i) != cluster.get(j)) {
-                        ko = false;
-                        break;
-                    }
-                }
-                if (ko)
-                    return false;
-            }
+				boolean ko = true;
+				for (Object o : clusters) {
+					BitSet cluster = (BitSet) o;
+					if (cluster.get(i) != cluster.get(j)) {
+						ko = false;
+						break;
+					}
+				}
+				if (ko)
+					return false;
+			}
         }
         return true;
     }
@@ -277,9 +254,7 @@ public class ExploreClusters {
     /**
      * run a command-line program
      *
-     * @param args
-     * @throws UsageException
-     */
+	 */
     public static void main(String[] args) throws UsageException {
         CommandLineOptions options = new CommandLineOptions(args);
         options.setDescription("explore-clusters - explore clusters");
@@ -295,8 +270,6 @@ public class ExploreClusters {
     /**
      * computes the intersection triple, if clusters are incompatible, otherwise null
      *
-     * @param cluster1
-     * @param cluster2
      * @return intersection triple or null
      */
     public Triple computeTriple(BitSet cluster1, BitSet cluster2) {
@@ -312,22 +285,21 @@ public class ExploreClusters {
             return null;
     }
 
-    /**
-     * a triple
-     * todo: make triple comparable
-     */
-    class Triple {
-        BitSet A;
-        BitSet B;
-        BitSet C;
+	/**
+	 * a triple
+	 * todo: make triple comparable
+	 */
+	static class Triple {
+		BitSet A;
+		BitSet B;
+		BitSet C;
 
-        /**
-         * is triple hit by H?
-         *
-         * @param H
-         * @return true, if H contains one part of the triple
-         */
-        boolean isHitBy(BitSet H) {
+		/**
+		 * is triple hit by H?
+		 *
+		 * @return true, if H contains one part of the triple
+		 */
+		boolean isHitBy(BitSet H) {
             return H.equals(A) || H.equals(B) || H.equals(C);
         }
 
@@ -339,7 +311,6 @@ public class ExploreClusters {
         /**
          * removes H from all parts of the triple. If one part becomes empty, returns null
          *
-         * @param H
          * @return reduced triple or null
          */
         public Triple reduce(BitSet H) {

@@ -81,8 +81,7 @@ public class LayoutOptimizer2009Command extends LayoutNoOptimizerCommand impleme
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     @Override
     public void actionPerformed(ActionEvent ev) {
         execute("set layouter=" + LayoutOptimizerManager.ALGORITHM2009 + ";");

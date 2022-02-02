@@ -40,12 +40,7 @@ public class Connector {
     /**
      * constuct a connector
      *
-     * @param treeViewer1
-     * @param v1
-     * @param treeViewer2
-     * @param v2
-     * @param color
-     */
+	 */
     public Connector(TreeViewer treeViewer1, Node v1, TreeViewer treeViewer2, Node v2, Color color) {
         this.treeViewer1 = treeViewer1;
         this.treeViewer2 = treeViewer2;
@@ -59,9 +54,7 @@ public class Connector {
     /**
      * paint the connector
      *
-     * @param component
-     * @param g
-     */
+	 */
     void paint(Component component, Graphics2D g) {
         if (v1.getOwner() != null && v2.getOwner() != null && treeViewer1.getLabel(v1) != null && treeViewer2.getLabel(v2) != null && v1.getDegree() > 0 && v2.getDegree() > 0) {
             Point p = treeViewer1.trans.w2d(treeViewer1.getLocation(v1));
@@ -139,9 +132,6 @@ public class Connector {
     /**
      * adjust beginning and end of lines so that they start at labels rather than nodes
      *
-     * @param p0
-     * @param rect
-     * @param q
      * @return new location for p0
      */
     private Point adjust(Point p0, Rectangle rect, Point q) {

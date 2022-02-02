@@ -59,7 +59,7 @@ public class ListDistancesFromRoot extends CommandBaseMultiViewer implements ICo
                         distance += tree.getWeight(e);
                         w = e.getSource();
                     }
-                    System.out.println(String.format("%s: %d %g%s", label, edges, distance, (special ? " (warning: contains reticulation in path)" : "")));
+                    System.out.printf("%s: %d %g%s%n", label, edges, distance, (special ? " (warning: contains reticulation in path)" : ""));
                 }
             }
         }

@@ -23,7 +23,6 @@ import dendroscope.util.DistanceMethods;
 import jloda.graph.Edge;
 import jloda.graph.Node;
 import jloda.phylo.PhyloTree;
-import jloda.util.CanceledException;
 import jloda.util.progress.ProgressListener;
 
 import java.util.*;
@@ -43,12 +42,9 @@ public class CassAlgorithm {
     /**
      * run the algorithm and return all networks obtained for the given set of clusters
      *
-     * @param clusters
      * @param networks         all computed networks are returned here
-     * @param computeOnlyOne
      * @param progressListener @return number of reticulations
-     * @throws CanceledException
-     */
+	 */
     public int apply(Cluster[] clusters, List<PhyloTree> networks, boolean computeOnlyOne, boolean checkTrees, ProgressListener progressListener) throws Exception {
 
         System.err.println("Clusters:");
@@ -97,8 +93,8 @@ public class CassAlgorithm {
 
             if (isNew) {
                 networks.add(tree);
-                System.err.println("Component network:");
-                System.err.println(tree.toString());
+				System.err.println("Component network:");
+				System.err.println(tree);
             }
         }
 
@@ -114,7 +110,6 @@ public class CassAlgorithm {
     /**
      * make a Leo cluster from a cluster
      *
-     * @param cluster
      * @return Leo-cluster
      */
     private Vector makeCluster(Cluster cluster) {
@@ -128,7 +123,6 @@ public class CassAlgorithm {
     /**
      * make a phylo tree from a Leo DiGraph
      *
-     * @param diGraph
      * @return phylo tree
      */
     private PhyloTree makePhyloTree(DiGraph diGraph) {
@@ -157,8 +151,6 @@ public class CassAlgorithm {
     /**
      * copy nodes from DiGraph to PhyloTree
      *
-     * @param diGraphNode
-     * @param tree
      * @param mapDiGraphNode2TreeNode mapping of DiGraph nodes to PhyloTree nodes
      */
     private void processNodes(DiGraph diGraphNode, PhyloTree tree, Map<DiGraph, Node> mapDiGraphNode2TreeNode) {
@@ -186,10 +178,7 @@ public class CassAlgorithm {
     /**
      * copy arcs from DiGraph to PhyloTree
      *
-     * @param diGraphNode
-     * @param tree
-     * @param mapDiGraphNode2TreeNode
-     */
+	 */
     private void processArcs(DiGraph diGraphNode, PhyloTree tree, Map mapDiGraphNode2TreeNode) {
         Stack<DiGraph> stack = new Stack<>();
         Set<DiGraph> seen = new HashSet<>();
@@ -215,9 +204,7 @@ public class CassAlgorithm {
     /**
      * performs some sanity checks on the network
      *
-     * @param taxa
-     * @param tree
-     */
+	 */
     private void check(BitSet taxa, PhyloTree tree) throws Exception {
         BitSet seen = new BitSet();
         StringBuilder buf = new StringBuilder();
@@ -250,7 +237,7 @@ public class CassAlgorithm {
             buf.append("\nAdditional taxa: ").append(Cluster.setminus(seen, taxa));
         }
         if (buf.toString().length() > 0) {
-            String message = "Error(s) in component computed by Cass algorithm:" + buf.toString() + "\n";
+			String message = "Error(s) in component computed by Cass algorithm:" + buf + "\n";
             System.err.println(message);
             throw new Exception(message);
         }

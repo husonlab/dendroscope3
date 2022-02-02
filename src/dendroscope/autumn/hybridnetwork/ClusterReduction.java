@@ -43,9 +43,6 @@ public class ClusterReduction {
     /**
      * cluster-reduce two trees, if possible
      *
-     * @param tree1
-     * @param tree2
-     * @param merge
      * @return subtree-reduced trees followed by all reduced subtrees
      */
     public static TreeData[] apply(TreeData tree1, TreeData tree2, Set<String> selectedLabels, boolean merge) throws IOException {
@@ -80,28 +77,26 @@ public class ClusterReduction {
 
 
             if (merge) {// for debugging purposes, we then merge the common subtrees back into the main tree
-                Root newRoot1 = root1.copySubNetwork();
-                Root newRoot2 = root2.copySubNetwork();
-                List<Root> allMerged = new LinkedList<Root>();
+				Root newRoot1 = root1.copySubNetwork();
+				Root newRoot2 = root2.copySubNetwork();
+				List<Root> allMerged = new LinkedList<Root>();
 
-                List<Root> merged1 = MergeNetworks.apply(Arrays.asList(newRoot1), Arrays.asList(pair.getFirst()));
-                List<Root> merged2 = MergeNetworks.apply(Arrays.asList(newRoot2), Arrays.asList(pair.getSecond()));
-                results.addAll(merged1);
-                results.addAll(merged2);
-            }
+				List<Root> merged1 = MergeNetworks.apply(List.of(newRoot1), List.of(pair.getFirst()));
+				List<Root> merged2 = MergeNetworks.apply(List.of(newRoot2), List.of(pair.getSecond()));
+				results.addAll(merged1);
+				results.addAll(merged2);
+			}
 
-            // convert data-structures to final trees
-            List<TreeData> result = PostProcess.apply(results.toArray(new Root[results.size()]), allTaxa, true);
-            return result.toArray(new TreeData[result.size()]);
-        } else
+			// convert data-structures to final trees
+			List<TreeData> result = PostProcess.apply(results.toArray(new Root[0]), allTaxa, true);
+			return result.toArray(new TreeData[0]);
+		} else
             return null;
     }
 
     /**
      * finds a pair nodes for minimal cluster reduction, if one exists
      *
-     * @param v1
-     * @param v2
      * @return two reduced clusters or null
      */
     public static Pair<Root, Root> apply(Root v1, Root v2, Single<Integer> placeHolder) {
@@ -124,10 +119,6 @@ public class ClusterReduction {
     /**
      * recursively does the work
      *
-     * @param root1
-     * @param root2
-     * @param compared
-     * @param placeHolder
      * @return two reduced clusters or null
      */
     private static Pair<Root, Root> applyRec(BitSet taxa, Root root1, Root root2, Set<Pair<Node, Node>> compared, Single<Integer> placeHolder) {
@@ -379,7 +370,6 @@ public class ClusterReduction {
     /**
      * is this a branching node, i.e. does it have at least two children with unremoved taxa?
      *
-     * @param v
      * @return true, if branching node
      */
     private static boolean isBranchingNode(Root v) {
@@ -398,7 +388,6 @@ public class ClusterReduction {
     /**
      * returns the next branching node
      *
-     * @param v
      * @return next branching node
      */
     private static Root nextBranchingNode(Root v) {
@@ -421,10 +410,7 @@ public class ClusterReduction {
     /**
      * find a pair of separable bunches of subtrees in both trees.
      *
-     * @param v1
-     * @param v2
-     * @return
-     */
+	 */
     private static Pair<Set<Node>, Set<Node>> getPairOfSeparatableConnectedComponents(Node v1, Node v2) {
         // compute intersection graph:
         Graph intersectionGraph = new Graph();
@@ -486,11 +472,7 @@ public class ClusterReduction {
     /**
      * get all tree nodes in a connected component of the  intersection graph
      *
-     * @param a
-     * @param sets1
-     * @param sets2
-     * @return
-     */
+	 */
     private static Pair<Set<Node>, Set<Node>> getNodesInComponent(Node a, Node[] sets1, Node[] sets2) {
         Set<Node> seen = new HashSet<Node>();
         Stack<Node> stack = new Stack<Node>();

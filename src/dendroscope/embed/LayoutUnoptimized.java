@@ -26,7 +26,10 @@ import jloda.graph.NodeSet;
 import jloda.phylo.PhyloTree;
 import jloda.util.progress.ProgressListener;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 
 /**
@@ -37,9 +40,7 @@ public class LayoutUnoptimized implements ILayoutOptimizer {
     /**
      * compute standard embedding
      *
-     * @param tree
-     * @param progressListener
-     */
+	 */
     public void apply(PhyloTree tree, ProgressListener progressListener) {
         if (tree.getRoot() == null || tree.getNumberReticulateEdges() == 0) {
             tree.getLSAChildrenMap().clear();
@@ -74,10 +75,6 @@ public class LayoutUnoptimized implements ILayoutOptimizer {
     /**
      * recursively compute the pre-ordering numbering of all nodes below v
      *
-     * @param v
-     * @param visited
-     * @param ordering
-     * @param number
      * @return last number assigned
      */
     private int computePreOrderNumberingRec(PhyloTree tree, Node v, NodeSet visited, NodeIntArray ordering, int number) {
@@ -104,51 +101,44 @@ public class LayoutUnoptimized implements ILayoutOptimizer {
     /**
      * reorder LSA children of each node to reflect the topological embedding of the network
      *
-     * @param tree
-     * @param ordering
-     */
+	 */
     private void reorderLSAChildren(PhyloTree tree, final NodeIntArray ordering) {
         // System.err.println("------ v="+v);
         for (Node v = tree.getFirstNode(); v != null; v = tree.getNextNode(v)) {
             List<Node> children = tree.getLSAChildrenMap().get(v);
             if (children != null) {
-                if (false) {
-                    System.err.println("LSA children old for v=" + v.getId() + ":");
-                    for (Node u : children) {
-                        System.err.println(" " + u.getId() + " order: " + ordering.get(u));
-                    }
-                }
-                SortedSet<Node> sorted = new TreeSet<Node>(new Comparator<Node>() {
-
-                    public int compare(Node v1, Node v2) {
-                        if (ordering.getInt(v1) < ordering.getInt(v2))
-                            return -1;
-                        else if (ordering.getInt(v1) > ordering.getInt(v2))
-                            return 1;
-                        if (v1.getId() != v2.getId())
-                            System.err.println("ERROR in sort");
-                        // different nodes must have different ordering values!
-                        return 0;
-                    }
-                });
-                sorted.addAll(children);
-                List<Node> list = new LinkedList<Node>();
-                list.addAll(sorted);
-                tree.getLSAChildrenMap().put(v, list);
-                if (false) {
-                    System.err.println("LSA children new for v=" + v.getId() + ":");
-                    for (Node u : children) {
-                        System.err.println(" " + u.getId() + " order: " + ordering.get(u));
-                    }
-                }
-            }
+				if (false) {
+					System.err.println("LSA children old for v=" + v.getId() + ":");
+					for (Node u : children) {
+						System.err.println(" " + u.getId() + " order: " + ordering.get(u));
+					}
+				}
+				SortedSet<Node> sorted = new TreeSet<Node>((v1, v2) -> {
+					if (ordering.getInt(v1) < ordering.getInt(v2))
+						return -1;
+					else if (ordering.getInt(v1) > ordering.getInt(v2))
+						return 1;
+					if (v1.getId() != v2.getId())
+						System.err.println("ERROR in sort");
+					// different nodes must have different ordering values!
+					return 0;
+				});
+				sorted.addAll(children);
+				List<Node> list = new LinkedList<Node>(sorted);
+				tree.getLSAChildrenMap().put(v, list);
+				if (false) {
+					System.err.println("LSA children new for v=" + v.getId() + ":");
+					for (Node u : children) {
+						System.err.println(" " + u.getId() + " order: " + ordering.get(u));
+					}
+				}
+			}
         }
     }
 
     /**
      * does network only contain transfers?
      *
-     * @param tree
      * @return true, if is reticulate network that only contains
      */
     public static boolean isAllReticulationsAreTransfers(PhyloTree tree) {

@@ -84,8 +84,6 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     /**
      * constructor
      *
-     * @param graph
-     * @param computeEmbedding
      */
     public TreeViewer(PhyloTree graph, boolean computeEmbedding, final Director dir) {
         super(graph, computeEmbedding);
@@ -181,47 +179,55 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
      * recomputes the embedding of the graph
      *
      * @param rescale              fit graph to window?
-     * @param recomputeCoordinates
      */
     public void recomputeEmbedding(boolean rescale, boolean recomputeCoordinates) {
-        if (drawerKind.equals(SLANTED_CLADOGRAM)) {
-            setToScale(false);
-            setGraphDrawer(new TreeDrawerAngled(this, getPhyloTree()));
-        } else if (drawerKind.equals(CIRCULAR_PHYLOGRAM)) {
-            setToScale(true);
-            setGraphDrawer(new dendroscope.drawer.TreeDrawerCircular(this, getPhyloTree()));
-            getGraphDrawer().setAuxilaryParameter(phylogramPercentOffset);
-        } else if (drawerKind.equals(CIRCULAR_CLADOGRAM)) {
-            setToScale(false);
-            setGraphDrawer(new dendroscope.drawer.TreeDrawerCircular(this, getPhyloTree()));
-            getGraphDrawer().setAuxilaryParameter(radialAngle);
-        } else if (drawerKind.equals(INNERCIRCULAR_CLADOGRAM)) {
-            setToScale(false);
-            setGraphDrawer(new dendroscope.drawer.TreeDrawerInnerCircular(this, getPhyloTree()));
-            getGraphDrawer().setAuxilaryParameter(innerCircularLength);
-        } else if (drawerKind.equals(RADIAL_PHYLOGRAM)) {
-            setToScale(true);
-            setGraphDrawer(new dendroscope.drawer.TreeDrawerRadial(this, getPhyloTree()));
-            getGraphDrawer().setAuxilaryParameter(radialAngle);
-        } else if (drawerKind.equals(RADIAL_CLADOGRAM)) {
-            setToScale(false);
-            setGraphDrawer(new dendroscope.drawer.TreeDrawerRadial(this, getPhyloTree()));
-            getGraphDrawer().setAuxilaryParameter(radialAngle);
-        } else if (drawerKind.equals(RECTANGULAR_PHYLOGRAM)) {
-            setToScale(true);
-            setGraphDrawer(new dendroscope.drawer.TreeDrawerParallel(this, getPhyloTree()));
-            getGraphDrawer().setAuxilaryParameter(phylogramPercentOffset);
+		switch (drawerKind) {
+			case SLANTED_CLADOGRAM -> {
+				setToScale(false);
+				setGraphDrawer(new TreeDrawerAngled(this, getPhyloTree()));
+			}
+			case CIRCULAR_PHYLOGRAM -> {
+				setToScale(true);
+				setGraphDrawer(new dendroscope.drawer.TreeDrawerCircular(this, getPhyloTree()));
+				getGraphDrawer().setAuxilaryParameter(phylogramPercentOffset);
+			}
+			case CIRCULAR_CLADOGRAM -> {
+				setToScale(false);
+				setGraphDrawer(new dendroscope.drawer.TreeDrawerCircular(this, getPhyloTree()));
+				getGraphDrawer().setAuxilaryParameter(radialAngle);
+			}
+			case INNERCIRCULAR_CLADOGRAM -> {
+				setToScale(false);
+				setGraphDrawer(new dendroscope.drawer.TreeDrawerInnerCircular(this, getPhyloTree()));
+				getGraphDrawer().setAuxilaryParameter(innerCircularLength);
+			}
+			case RADIAL_PHYLOGRAM -> {
+				setToScale(true);
+				setGraphDrawer(new dendroscope.drawer.TreeDrawerRadial(this, getPhyloTree()));
+				getGraphDrawer().setAuxilaryParameter(radialAngle);
+			}
+			case RADIAL_CLADOGRAM -> {
+				setToScale(false);
+				setGraphDrawer(new dendroscope.drawer.TreeDrawerRadial(this, getPhyloTree()));
+				getGraphDrawer().setAuxilaryParameter(radialAngle);
+			}
+			case RECTANGULAR_PHYLOGRAM -> {
+				setToScale(true);
+				setGraphDrawer(new dendroscope.drawer.TreeDrawerParallel(this, getPhyloTree()));
+				getGraphDrawer().setAuxilaryParameter(phylogramPercentOffset);
+			}
+			default -> {
+// if (drawerKind.equals(RECTANGULAR_CLADOGRAM))
 
-        } else // if (drawerKind.equals(RECTANGULAR_CLADOGRAM))
-        {
-            setToScale(false);
-            setGraphDrawer(new dendroscope.drawer.TreeDrawerParallel(this, getPhyloTree()));
-        }
+				setToScale(false);
+				setGraphDrawer(new dendroscope.drawer.TreeDrawerParallel(this, getPhyloTree()));
+			}
+		}
 
-        resetViews();
-        ((TreeDrawerBase) getGraphDrawer()).setTaxonOrder(taxonOrder);
-        getGraphDrawer().getLabelOverlapAvoider().setEnabled(isSparseLabels());
-        getGraphDrawer().setCollapsedNodes(collapsedNodes);
+		resetViews();
+		((TreeDrawerBase) getGraphDrawer()).setTaxonOrder(taxonOrder);
+		getGraphDrawer().getLabelOverlapAvoider().setEnabled(isSparseLabels());
+		getGraphDrawer().setCollapsedNodes(collapsedNodes);
         getGraphDrawer().setRadialLabels(radialLabels);
         getGraphDrawer().getLabelOverlapAvoider().setEnabled(isSparseLabels());
 
@@ -254,7 +260,6 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     /**
      * paint the current tree
      *
-     * @param gc
      */
     public void paint(Graphics gc) {
         if (isShowScaleBar() && (trans.getLockXYScale() || trans.getAngle() == 0 || trans.getAngle() == Math.PI))
@@ -308,9 +313,6 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
 	/**
 	 * recursively does the work
 	 *
-	 * @param v
-	 * @param seeds
-	 * @param select
 	 */
 	private void selectSubTreeRec(Node v, NodeSet seeds, boolean select, boolean useSpecialEdges, NodeSet selectedNodes, EdgeSet selectedEdges) {
 		if (!select && seeds.contains(v))
@@ -336,8 +338,6 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     /**
      * recursively does the work
      *
-     * @param v
-     * @param select
      */
     public void selectSubTreeRec(Node v, boolean select, boolean useSpecialEdges) {
         if (!select)
@@ -387,7 +387,6 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     /**
      * set the selection state of all special edges
      *
-     * @param select
      */
     public void selectAllSpecialEdges(boolean select) {
         if (getPhyloTree().getRoot() != null) {
@@ -436,7 +435,6 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     /**
      * swap subtree below each of the given nodes
      *
-     * @param nodes
      * @return true, if a change was made
      */
     public boolean swapSubtree(NodeSet nodes) {
@@ -452,8 +450,6 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     /**
      * recursively does the work
      *
-     * @param v
-     * @param found
      * @return number of nodes rotated
      */
     private int swapSubtreeRec(Node v, int found, NodeSet nodes) {
@@ -477,7 +473,6 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     /**
      * rotate subtree below each of the given nodes
      *
-     * @param nodes
      * @return true, if a change was made
      */
     public boolean rotateSubtree(NodeSet nodes) {
@@ -493,8 +488,6 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     /**
      * recursively does the work
      *
-     * @param v
-     * @param found
      * @return number of nodes rotated
      */
     private int rotateSubtreeRec(Node v, int found, NodeSet nodes) {
@@ -519,7 +512,6 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     /**
      * collapse or uncollapse all selected nodes
      *
-     * @param collapse
      * @param all      if set, uncollapses all nodes below a node
      * @return true, if change occurs
      */
@@ -597,7 +589,6 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     /**
      * collapse or uncollapse all  nodes
      *
-     * @param collapse
      * @return true, if change occurs
      */
     public boolean collapseAllNodes(boolean collapse) {
@@ -630,9 +621,6 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     /**
      * collapse all nodes at given level from root
      *
-     * @param v
-     * @param i
-     * @param level
      */
     private void collapseNodesAtLevelRec(Node v, int i, int level) {
         if (i < level) {
@@ -665,7 +653,6 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     /**
      * recursively do the work
      *
-     * @param v
      * @return true, if selected node found below v
      */
     private boolean collapseComplementRec(Node v, EdgeSet selectedBelow, NodeSet nodesToCollapse) {
@@ -710,7 +697,6 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     /**
      * collapse all nodes at given level from root
      *
-     * @param v
      */
     private void unCollapseNodesSubtreelRec(Node v) {
         collapseNode(v);
@@ -726,7 +712,6 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     /**
      * collapse a node
      *
-     * @param v
      */
     public boolean collapseNode(Node v) {
         if (v.getInDegree() <= 1 && v.getOutDegree() > 0) // only collapse internal nodes and non-reticulate nodes
@@ -750,7 +735,6 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     /**
      * uncollapse a node
      *
-     * @param v
      */
     public boolean uncollapseNode(Node v) {
         if (collapsedNodes.contains(v)) {
@@ -798,9 +782,6 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     /**
      * recursively does the work
      *
-     * @param v
-     * @param left
-     * @param node2height
      */
     private void ladderizeRec(Node v, boolean left, NodeIntArray node2height) {
         if (collapsedNodes.contains(v) || v.getOutDegree() == 0) // leaf
@@ -824,7 +805,6 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     /**
      * recursively does the work
      *
-     * @param v
      */
     private void ladderizeRandomRec(Node v) {
         if (collapsedNodes.contains(v) || v.getOutDegree() == 1) // leaf
@@ -846,9 +826,6 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     /**
      * order edges to ladderize
      *
-     * @param v
-     * @param node2height
-     * @param left
      * @return ordered edges
      */
     private List<Edge> orderEdges(Node v, NodeIntArray node2height, boolean left) {
@@ -886,7 +863,6 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     /**
      * find all uncollapsed nodes that has one of the given labels
      *
-     * @param labels
      * @return nodes with one of the given labels
      */
     public NodeSet findLabeledNodes(Set labels) {
@@ -944,7 +920,6 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     /**
      * select nodes by labels
      *
-     * @param labels
      * @return true, if any changes made
      */
     public boolean selectNodesByLabels(Set labels, boolean select) {
@@ -1020,7 +995,6 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     /**
      * rotate labels to match direction of edges?
      *
-     * @param radialLabels
      */
     public void setRadialLabels(boolean radialLabels) {
         this.radialLabels = radialLabels;
@@ -1069,17 +1043,15 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
         if (size.getWidth() == 0 || size.getHeight() == 0) {
             try {
 
-                Runnable runnable = new Runnable() {
-                    public void run() {
-                        TreeViewer.this.validate();
-                        getScrollPane().validate();
-                    }
-                };
-                if (SwingUtilities.isEventDispatchThread())
-                    runnable.run(); // already in the swing thread, just run
-                else
-                    SwingUtilities.invokeAndWait(runnable);
-            } catch (InterruptedException e) {
+				Runnable runnable = () -> {
+					TreeViewer.this.validate();
+					getScrollPane().validate();
+				};
+				if (SwingUtilities.isEventDispatchThread())
+					runnable.run(); // already in the swing thread, just run
+				else
+					SwingUtilities.invokeAndWait(runnable);
+			} catch (InterruptedException e) {
                 Basic.caught(e);
             } catch (InvocationTargetException e) {
                 Basic.caught(e);
@@ -1097,7 +1069,6 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     /**
      * tree is dirty
      *
-     * @param dirty
      */
     public void setDirty(boolean dirty) {
         this.dirty = dirty;
@@ -1119,7 +1090,6 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     /**
      * does this tree have additional attributes that were either set by the user or come from a file
      *
-     * @return
      */
     public boolean hasAdditional() {
         return hasAdditional;
@@ -1156,8 +1126,6 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     /**
      * show or hide labels of set of nodes
      *
-     * @param nodes
-     * @param show
      */
     public void showNodeLabels(NodeSet nodes, boolean show) {
         if (getPhyloTree().getRoot() != null) {
@@ -1181,8 +1149,6 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     /**
      * show or hide labels of set of edges
      *
-     * @param edges
-     * @param show
      */
     public void showEdgeLabels(EdgeSet edges, boolean show) {
         if (getPhyloTree().getRoot() != null) {
@@ -1207,7 +1173,6 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     /**
      * gets the collapsed node shape
      *
-     * @param v
      * @return collapsed node shape
      */
     public CollapsedShape getCollapsedShape(Node v) {
@@ -1225,7 +1190,6 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     /**
      * set the label of edges to be the edge weights
      *
-     * @param edges
      */
     public void setLabelsToWeights(EdgeSet edges) {
         final PhyloTree tree = getPhyloTree();
@@ -1262,19 +1226,18 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
         if (drawerKind.equals(RECTANGULAR_PHYLOGRAM) || drawerKind.equals(RECTANGULAR_CLADOGRAM)
                 || drawerKind.equals(SLANTED_CLADOGRAM) || drawerKind.equals(CIRCULAR_CLADOGRAM)
                 || drawerKind.equals(CIRCULAR_PHYLOGRAM) || drawerKind.equals(INNERCIRCULAR_CLADOGRAM)) {
-            PhyloTree tree = getPhyloTree();
-            if (tree.getNumberReticulateEdges() == 0 || getSelectedNodes().size() == 0)
-                return false;
+			PhyloTree tree = getPhyloTree();
+			if (tree.getNumberReticulateEdges() == 0 || getSelectedNodes().size() == 0)
+				return false;
 
-            for (Iterator it = getSelectedNodes().iterator(); it.hasNext(); ) {
-                Node v = (Node) it.next();
-                for (Edge e = v.getFirstAdjacentEdge(); e != null; e = v.getNextAdjacentEdge(e)) {
-                    if (!tree.isReticulatedEdge(e) && (!getSelected(e) || !getSelected(e.getOpposite(v))))
-                        return false;
-                }
-            }
-            return true;
-        } else
+			for (Node v : getSelectedNodes()) {
+				for (Edge e = v.getFirstAdjacentEdge(); e != null; e = v.getNextAdjacentEdge(e)) {
+					if (!tree.isReticulatedEdge(e) && (!getSelected(e) || !getSelected(e.getOpposite(v))))
+						return false;
+				}
+			}
+			return true;
+		} else
             return super.getAllowMoveNodes();
     }
 
@@ -1363,7 +1326,7 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
         }
 
         if (tree.getRoot().getOwner() == null) {
-            tree.setRoot((Node) null);
+			tree.setRoot(null);
             for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
                 if (v.getInDegree() == 0)
                     tree.setRoot(v);
@@ -1389,7 +1352,6 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     /**
      * taxon ordering to be used by embedder
      *
-     * @param taxonOrdering
      */
     public void setTaxonOrdering(List<String> taxonOrdering) {
         this.taxonOrder = taxonOrdering;
@@ -1408,16 +1370,11 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     /**
      * compare relative to location in document
      *
-     * @param treeViewer
      * @return comparison
      */
     public int compareTo(TreeViewer treeViewer) {
         int a = ((MultiViewer) dir.getMainViewer()).getTreeGrid().getNumberOfViewerInDocument(this);
         int b = ((MultiViewer) dir.getMainViewer()).getTreeGrid().getNumberOfViewerInDocument(treeViewer);
-        if (a < b)
-            return -1;
-        else if (a > b)
-            return 1;
-        else return 0;
+		return Integer.compare(a, b);
     }
 }

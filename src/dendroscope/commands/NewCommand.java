@@ -79,9 +79,7 @@ public class NewCommand extends CommandBaseMultiViewer implements ICommand {
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
 
     public void apply(NexusStreamParser np) throws Exception {
     }
@@ -89,8 +87,7 @@ public class NewCommand extends CommandBaseMultiViewer implements ICommand {
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         Director newDir = Director.newProject(1, 1);
         MultiViewer newMultiViewer = (MultiViewer) newDir.getMainViewer();
@@ -108,7 +105,7 @@ public class NewCommand extends CommandBaseMultiViewer implements ICommand {
                 newTree.setDirty(false);
                 trees.add(newTree);
             }
-            newMultiViewer.getDir().getDocument().appendTrees(trees.toArray(new TreeData[trees.size()]));
+			newMultiViewer.getDir().getDocument().appendTrees(trees.toArray(new TreeData[0]));
             BitSet which = new BitSet();
             for (int i = 0; i < trees.size(); i++)
                 which.set(i);

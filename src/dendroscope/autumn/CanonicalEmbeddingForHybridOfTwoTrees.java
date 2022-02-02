@@ -54,9 +54,6 @@ public class CanonicalEmbeddingForHybridOfTwoTrees {
     /**
      * computes a post-order numbering of all nodes, avoiding edges that are only contained in tree2
      *
-     * @param v
-     * @param order
-     * @param postOrderNumber
      * @return taxa below
      */
     private static BitSet computePostOrderNumberingRec(PhyloTree tree, Node v, Taxa allTaxa, final Map<Node, Integer> order, Single<Integer> postOrderNumber) throws IOException {
@@ -65,30 +62,23 @@ public class CanonicalEmbeddingForHybridOfTwoTrees {
         if (v.getOutDegree() == 0) {
             taxaBelow.set(allTaxa.indexOf(tree.getLabel(v)));
         } else {
-            SortedSet<Pair<BitSet, Node>> child2TaxaBelow = new TreeSet<Pair<BitSet, Node>>(new Comparator<Pair<BitSet, Node>>() {
-                public int compare(Pair<BitSet, Node> pair1, Pair<BitSet, Node> pair2) {
-                    int t1 = pair1.getFirst().nextSetBit(0);
-                    int t2 = pair2.getFirst().nextSetBit(0);
-                    if (t1 < t2)
-                        return -1;
-                    else if (t1 > t2)
-                        return 1;
+			SortedSet<Pair<BitSet, Node>> child2TaxaBelow = new TreeSet<Pair<BitSet, Node>>((pair1, pair2) -> {
+				int t1 = pair1.getFirst().nextSetBit(0);
+				int t2 = pair2.getFirst().nextSetBit(0);
+				if (t1 < t2)
+					return -1;
+				else if (t1 > t2)
+					return 1;
 
-                    int id1 = pair1.getSecond().getId();
-                    int id2 = pair2.getSecond().getId();
+				int id1 = pair1.getSecond().getId();
+				int id2 = pair2.getSecond().getId();
 
-                    if (id1 < id2)
-                        return -1;
-                    else if (id1 > id2)
-                        return 1;
-                    else
-                        return 0;
-                }
-            });
+				return Integer.compare(id1, id2);
+			});
 
-            // first visit the children:
-            for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
-                Node w = e.getTarget();
+			// first visit the children:
+			for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
+				Node w = e.getTarget();
                 String treeId = tree.getLabel(e);
                 if (w.getInDegree() > 1 && treeId == null)
                     throw new IOException("Node has two in-edges, one not labeled");
@@ -119,41 +109,38 @@ public class CanonicalEmbeddingForHybridOfTwoTrees {
      * recursively reorders the network using the post-order numbering computed above
      */
     private static void reorderNetworkChildrenRec(PhyloTree tree, Node v, final Map<Node, Integer> order) {
-        List<Edge> children = new LinkedList<Edge>();
+		List<Edge> children = new LinkedList<Edge>();
 
-        for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
-            Node w = e.getTarget();
-            String treeId = tree.getLabel(e);
-            if (w.getInDegree() == 1 || treeId == null || !treeId.equals("2"))
-                reorderNetworkChildrenRec(tree, w, order);
-            children.add(e);
-        }
+		for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
+			Node w = e.getTarget();
+			String treeId = tree.getLabel(e);
+			if (w.getInDegree() == 1 || treeId == null || !treeId.equals("2"))
+				reorderNetworkChildrenRec(tree, w, order);
+			children.add(e);
+		}
 
-        Edge[] array = children.toArray(new Edge[children.size()]);
-        Arrays.sort(array, new Comparator<Edge>() {
-            public int compare(Edge e1, Edge e2) {
-                Integer rank1 = order.get(e1.getTarget());
-                Integer rank2 = order.get(e2.getTarget());
+		Edge[] array = children.toArray(new Edge[0]);
+		Arrays.sort(array, (e1, e2) -> {
+			Integer rank1 = order.get(e1.getTarget());
+			Integer rank2 = order.get(e2.getTarget());
 
-                if (rank1 == null)  // dead node
-                    rank1 = Integer.MAX_VALUE;
-                if (rank2 == null)  // dead node
-                    rank2 = Integer.MAX_VALUE;
+			if (rank1 == null)  // dead node
+				rank1 = Integer.MAX_VALUE;
+			if (rank2 == null)  // dead node
+				rank2 = Integer.MAX_VALUE;
 
-                if (rank1 < rank2)
-                    return -1;
-                else if (rank1 > rank2)
-                    return 1;
-                else if (e1.getId() < e2.getId())
-                    return -1;
-                else if (e1.getId() > e2.getId())
-                    return 1;
-                else
-                    return 0;
-            }
-        });
-        List<Edge> list = new LinkedList<Edge>();
-        list.addAll(Arrays.asList(array));
+			if (rank1 < rank2)
+				return -1;
+			else if (rank1 > rank2)
+				return 1;
+			else if (e1.getId() < e2.getId())
+				return -1;
+			else if (e1.getId() > e2.getId())
+				return 1;
+			else
+				return 0;
+		});
+		List<Edge> list = new LinkedList<Edge>(Arrays.asList(array));
         if (v.getInDegree() > 0)
             list.add(v.getFirstInEdge());
         v.rearrangeAdjacentEdges(list);
@@ -162,8 +149,6 @@ public class CanonicalEmbeddingForHybridOfTwoTrees {
     /**
      * does pairwise comparison of all hybrid networks
      *
-     * @param treeViewers
-     * @throws IOException
      */
     public static void compareAllTrees(TreeViewer[] treeViewers) throws IOException {
         Taxa allTaxa = new Taxa();
@@ -197,7 +182,7 @@ public class CanonicalEmbeddingForHybridOfTwoTrees {
                 System.err.println(treeViewer.getName() + ": has node with multiple reticulate out edges");
         }
 
-        StringBuffer nexus = new StringBuffer();
+		StringBuilder nexus = new StringBuilder();
         nexus.append("#nexus\nbegin taxa;\ndimensions ntax=").append(treeViewers.length).append(";\nend;\n");
         nexus.append("begin distances;\nformat labels triangle=upper no diagonal;\n");
         nexus.append("matrix\n");
@@ -234,6 +219,6 @@ public class CanonicalEmbeddingForHybridOfTwoTrees {
         nexus.append(";\nend;\n");
         System.err.println("Pairs compared: " + count + " (identical: " + countIdentical + ")");
 
-        System.err.println(nexus.toString());
+		System.err.println(nexus);
     }
 }

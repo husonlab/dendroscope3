@@ -36,15 +36,13 @@ import java.util.*;
  * Daniel Huson, 5.2011
  */
 public class SubtreeReduction {
-    public static enum ReturnValue {
-        ISOMORPHIC, REDUCED, IRREDUCIBLE
-    }
+    public enum ReturnValue {
+		ISOMORPHIC, REDUCED, IRREDUCIBLE
+	}
 
     /**
      * sub-tree reduce two trees
      *
-     * @param tree1
-     * @param tree2
      * @param merge merge merged-subtrees back into trees, for debugging purposes
      * @return subtree-reduced trees followed by all reduced subtrees
      */
@@ -98,30 +96,28 @@ public class SubtreeReduction {
         }
 
         if (merge) {// for debugging purposes, we then merge the common subtrees back into the main tree
-            Root newRoot1 = root1.copySubNetwork();
-            Root newRoot2 = root2.copySubNetwork();
-            List<Root> mergedSubtrees = new LinkedList<Root>();
-            for (Pair<Root, Root> pair : subTrees) {
-                mergedSubtrees.add(MergeIsomorphicInducedTrees.apply(pair.getFirst(), pair.getSecond()));
-            }
-            results.addAll(mergedSubtrees);
-            List<Root> merged1 = MergeNetworks.apply(Arrays.asList(newRoot1), mergedSubtrees);
-            List<Root> merged2 = MergeNetworks.apply(Arrays.asList(newRoot2), mergedSubtrees);
-            results.addAll(merged1);
-            results.addAll(merged2);
-        }
+			Root newRoot1 = root1.copySubNetwork();
+			Root newRoot2 = root2.copySubNetwork();
+			List<Root> mergedSubtrees = new LinkedList<Root>();
+			for (Pair<Root, Root> pair : subTrees) {
+				mergedSubtrees.add(MergeIsomorphicInducedTrees.apply(pair.getFirst(), pair.getSecond()));
+			}
+			results.addAll(mergedSubtrees);
+			List<Root> merged1 = MergeNetworks.apply(List.of(newRoot1), mergedSubtrees);
+			List<Root> merged2 = MergeNetworks.apply(List.of(newRoot2), mergedSubtrees);
+			results.addAll(merged1);
+			results.addAll(merged2);
+		}
 
-        // convert data-structures to final trees
-        List<TreeData> result = PostProcess.apply(results.toArray(new Root[results.size()]), allTaxa, true);
-        return result.toArray(new TreeData[result.size()]);
-    }
+		// convert data-structures to final trees
+		List<TreeData> result = PostProcess.apply(results.toArray(new Root[0]), allTaxa, true);
+		return result.toArray(new TreeData[0]);
+	}
 
 
     /**
      * check whether two induced trees are isomorphic or not
      *
-     * @param root1
-     * @param root2
      * @return true iff isomorphic
      */
     public static ReturnValue apply(Root root1, Root root2, List<Pair<Root, Root>> subTrees, Single<Integer> placeHolderTaxon) throws IOException {
@@ -151,12 +147,7 @@ public class SubtreeReduction {
     /**
      * recursively do the work
      *
-     * @param root1
-     * @param root2
-     * @param subTrees
-     * @param isomorphic
-     * @param placeHolderTaxon
-     */
+	 */
     private static void applyRec(Root root1, Root root2, List<Pair<Root, Root>> subTrees, Set<Pair<Root, Root>> isomorphic, Set<Pair<Root, Root>> visited, Set<Root> subTreeBelow1, Set<Root> subTreeBelow2, Single<Integer> placeHolderTaxon) {
         // check whether already visited:
         Pair<Root, Root> pairOfRoots = new Pair<Root, Root>(root1, root2);
@@ -352,7 +343,6 @@ public class SubtreeReduction {
     /**
      * moves down to next branching node
      *
-     * @param root
      * @return root or next branching node
      */
     private static Root nextBranchingNode(Root root) {

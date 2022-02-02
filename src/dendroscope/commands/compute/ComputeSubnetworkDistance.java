@@ -53,8 +53,8 @@ public class ComputeSubnetworkDistance extends
 
         if (trees.size() == 2) {
             double distance = DistanceMethods.computeSubnetworkDistance(trees);
-            new Message(getViewer().getFrame(), "Subnetwork distance: "
-                    + distance);
+            Message.show(getViewer().getFrame(), "Subnetwork distance: "
+												 + distance);
             System.out.println("Subnetwork distance: " + distance);
         } else {
             new Alert(getViewer().getFrame(),

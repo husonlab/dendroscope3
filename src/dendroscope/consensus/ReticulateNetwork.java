@@ -38,7 +38,6 @@ public class ReticulateNetwork {
      * applies the algorithm. Given a set of clusters, computes a minimal set of reduced clusters such that
      * the cluster diagram for the reduced clusters equals a minimal reticulate network for the input clusters
      *
-     * @param clusters
      * @return reduced clusters
      */
     public Cluster[] apply(Cluster[] clusters, List<Edge> additionalEdges) {
@@ -103,7 +102,7 @@ public class ReticulateNetwork {
         if (progressListener != null)
             progressListener.close();
 
-        Cluster[] resultClusters = result.toArray(new Cluster[result.size()]);
+        Cluster[] resultClusters = result.toArray(new Cluster[0]);
         computeWeights(clusters, resultClusters);
 
         System.err.println("Number of choices: " + totalChoices);
@@ -116,7 +115,6 @@ public class ReticulateNetwork {
      * for a given list of choices, determine the predicted number of reticulations needed in the super-soft
      * wired network
      *
-     * @param choices
      * @return predicted number of reticulations
      */
     private int getPredictedNumberReticulations(List choices) {
@@ -131,7 +129,6 @@ public class ReticulateNetwork {
      * applies the algorithm. Given a set of clusters, computes a minimal set of reduced clusters such that
      * the cluster diagram for the reduced clusters equals a minimal reticulate network for the input clusters
      *
-     * @param inputClusters
      * @return reduced clusters
      */
     private Cluster[] apply2component(Cluster[] inputClusters, List AdditionalEdges, List choices) {
@@ -213,8 +210,6 @@ public class ReticulateNetwork {
      * contained only in one chain of nested taxa. (This is an on/off type choice that needs to be attached
      * to the root). Or it can consist of the root and a reticulation node that needs to be made "turn-offable"
      *
-     * @param reducedClusters
-     * @param choices
      * @return additional edges. Each pair consists of a source cluster and a target cluster
      */
     private List computeAdditionalEdges(Cluster[] origClusters, Cluster[] reducedClusters, Collection choices) {
@@ -339,9 +334,6 @@ public class ReticulateNetwork {
      * given an original cluster, determines which reduced cluster it maps to. This is uniquely defined.
      * todo: instead of computing this, we should remember it when computing the reduced clusters
      *
-     * @param reducedClusters
-     * @param choices
-     * @param origCluster
      * @return reduced cluster that orig cluster maps to
      */
     private int getReduced(Cluster[] reducedClusters, Collection choices, Cluster origCluster) {
@@ -369,11 +361,7 @@ public class ReticulateNetwork {
      * gets the coalescent cluster for an optional cluster. This  this the largest cluster oc above c
      * that is directly above two different clusters p and q, both containing c, that are incompatible.
      *
-     * @param contains
-     * @param reducedClusters
-     * @param c
-     * @return
-     */
+	 */
     private int getCoalescent(boolean[][] contains, boolean[][] containsDirect, boolean[][] compatible,
                               Cluster[] reducedClusters, int c) {
         int co = -1;
@@ -396,13 +384,11 @@ public class ReticulateNetwork {
     /**
      * determines incompatibity components
      *
-     * @param incompatible
      * @return all incompatibity components
      */
     private BitSet[] computeComponents(boolean[][] incompatible) {
         int[] componentNumber = new int[incompatible.length];
-        for (int i = 0; i < componentNumber.length; i++)
-            componentNumber[i] = -1;
+		Arrays.fill(componentNumber, -1);
 
         int number = 0;
         for (int i = 0; i < incompatible.length; i++) {
@@ -425,11 +411,7 @@ public class ReticulateNetwork {
     /**
      * recursively does the work
      *
-     * @param incompatible
-     * @param i
-     * @param number
-     * @param componentNumber
-     */
+	 */
     private void computeComponentsRec(boolean[][] incompatible, int i, int number, int[] componentNumber) {
         componentNumber[i] = number;
         for (int j = 0; j < incompatible.length; j++) {
@@ -443,8 +425,6 @@ public class ReticulateNetwork {
     /**
      * reduces the input clusters using a given choice of optional taxa or taxon groups
      *
-     * @param clusters
-     * @param choices
      * @return reduced clusters
      */
     private Cluster[] reduceClusters(Cluster[] clusters, Collection choices) {
@@ -477,19 +457,17 @@ public class ReticulateNetwork {
         }
         // add all trivial:
         for (Cluster cluster : clusters)
-            if (cluster.cardinality() == 1 && !result.contains(cluster))
-                result.add(cluster);
+			if (cluster.cardinality() == 1)
+				result.add(cluster);
 
-        return (Cluster[]) result.toArray(new Cluster[result.size()]);
+		return (Cluster[]) result.toArray(new Cluster[0]);
     }
 
     /**
      * if a cluster lies below a cluster consisting of the cluster plus an optional set of taxa,
      * pushes the optional set into all containing clusters. This removes a superfluous reticulation node from the network
      *
-     * @param clusters
-     * @param choices
-     */
+	 */
     private void pushUpChoices(Cluster[] clusters, Collection choices) {
         BitSet[] containedIn = new BitSet[clusters.length];
         BitSet[] contains = new BitSet[clusters.length];
@@ -524,9 +502,6 @@ public class ReticulateNetwork {
     /**
      * determines a set of optional taxa that separates a cluster from a containing cluster
      *
-     * @param cluster
-     * @param largerCluster
-     * @param choices
      * @return separating cluster or null
      */
     private BitSet determineSeparatingOptionalTaxa(Cluster cluster, Cluster largerCluster, Collection choices) {
@@ -548,9 +523,6 @@ public class ReticulateNetwork {
     /**
      * determine all minimal clusters that contain cluster i
      *
-     * @param i
-     * @param contains
-     * @param containedIn
      * @return all minimal clusters that contain i
      */
     private BitSet minimalContainingClusters(int i, BitSet[] contains, BitSet[] containedIn) {
@@ -562,8 +534,10 @@ public class ReticulateNetwork {
             boolean ok = true;
             for (int d = containedIn[i].nextSetBit(0); ok && d != -1; d = containedIn[i].nextSetBit(d + 1)) // for each clusters d that contain i
             {
-                if (d != c && contains[c].get(d))
-                    ok = false;
+				if (d != c && contains[c].get(d)) {
+					ok = false;
+					break;
+				}
             }
             if (ok)
                 result.set(c);
@@ -574,10 +548,7 @@ public class ReticulateNetwork {
     /**
      * push up optional taxa into all containing clusters
      *
-     * @param clusters
-     * @param containers
-     * @param optionalTaxa
-     */
+	 */
     private void pushUp(Cluster[] clusters, BitSet containers, BitSet optionalTaxa) {
         for (int c = containers.nextSetBit(0); c != -1; c = containers.nextSetBit(c + 1)) {
             {
@@ -590,11 +561,7 @@ public class ReticulateNetwork {
      * given a cluster and a set of choices of optional taxa or taxon-groups, partitions the cluster
      * into its mandatory and optional parts
      *
-     * @param cluster
-     * @param choices
-     * @param fixed
-     * @param optional
-     */
+	 */
     private void partition(Cluster cluster, Collection choices, BitSet fixed, BitSet optional) {
         for (Object choice1 : choices) {
             BitSet choice = (BitSet) choice1;
@@ -607,9 +574,6 @@ public class ReticulateNetwork {
     /**
      * recursively use branch-and-bound to find optimal solution
      *
-     * @param triples
-     * @param remainingChoices
-     * @param currentSolution
      * @return true, if algorithm should be terminated
      */
     private boolean branchAndBoundRec(List triples, Set remainingChoices, Stack currentSolution) {
@@ -663,8 +627,6 @@ public class ReticulateNetwork {
     /**
      * returns all choices in order of decreasing order of triple hits
      *
-     * @param triples
-     * @param choices
      * @return remaining choices in decreasing order of triples hit
      */
     private BitSet[] orderChoices(List triples, Set choices) {
@@ -723,8 +685,6 @@ public class ReticulateNetwork {
     /**
      * computes the intersection triple, if clusters are incompatible, otherwise null
      *
-     * @param cluster1
-     * @param cluster2
      * @return intersection triple or null
      */
     public Triple computeTriple(BitSet cluster1, BitSet cluster2) {
@@ -743,7 +703,6 @@ public class ReticulateNetwork {
     /**
      * compute the is of all possible choices for "hitters"
      *
-     * @param triples
      * @return all choices of hitters
      */
     private Set computeAllChoices(List triples) {
@@ -768,8 +727,6 @@ public class ReticulateNetwork {
     /**
      * remove all triples hit by choice
      *
-     * @param triples
-     * @param choice
      * @return remaining triples
      */
     private List removeHitTriples(List triples, BitSet choice) {
@@ -789,7 +746,6 @@ public class ReticulateNetwork {
     /**
      * compact clusters by identifying no-distinquishable taxa
      *
-     * @param clusters
      * @param mapBack  this is used to uncompact clusters
      */
     private void compactClusters(Cluster[] clusters, Map mapBack) {
@@ -855,9 +811,7 @@ public class ReticulateNetwork {
     /**
      * uncompact clusters
      *
-     * @param clusters
-     * @param mapBack
-     */
+	 */
     private void uncompactClusters(Cluster[] clusters, Map mapBack) {
         for (Cluster cluster : clusters) {
             uncompactCluster(cluster, mapBack);
@@ -867,9 +821,7 @@ public class ReticulateNetwork {
     /**
      * uncompact pairs of clusters
      *
-     * @param pairs
-     * @param mapBack
-     */
+	 */
     private void uncompactPairs(List pairs, Map mapBack) {
         for (Object pair1 : pairs) {
             Pair pair = (Pair) pair1;
@@ -881,9 +833,7 @@ public class ReticulateNetwork {
     /**
      * uncompact pairs of clusters
      *
-     * @param orig
-     * @param mapBack
-     */
+	 */
     private void uncompactCluster(BitSet orig, Map mapBack) {
         BitSet set = new BitSet();
         for (int t = orig.nextSetBit(0); t != -1; t = orig.nextSetBit(t + 1)) {
@@ -898,7 +848,6 @@ public class ReticulateNetwork {
     /**
      * need to add all trivial clusters to a component. These will be removed again before uncompacting
      *
-     * @param clusters
      * @return clusters including all trivial ones
      */
     private Cluster[] addAllTrivial(Cluster[] clusters) {
@@ -915,13 +864,12 @@ public class ReticulateNetwork {
             cluster.set(t);
             result.add(cluster);
         }
-        return (Cluster[]) result.toArray(new Cluster[result.size()]);
+		return (Cluster[]) result.toArray(new Cluster[0]);
     }
 
     /**
      * remove all trivial clusters
      *
-     * @param clusters
      * @return non-trivial clusters
      */
     private Cluster[] removeAllTrivial(Cluster[] clusters) {
@@ -930,15 +878,13 @@ public class ReticulateNetwork {
             if (cluster.cardinality() > 1)
                 result.add(cluster);
         }
-        return (Cluster[]) result.toArray(new Cluster[result.size()]);
+		return (Cluster[]) result.toArray(new Cluster[0]);
     }
 
     /**
      * computes weights for all output clusters from the input clusters
      *
-     * @param iClusters
-     * @param oClusters
-     */
+	 */
     private void computeWeights(Cluster[] iClusters, Cluster[] oClusters) {
         int[] mapIn2Out = new int[iClusters.length]; // maps each input cluster to its output cluster
 
@@ -981,8 +927,7 @@ public class ReticulateNetwork {
     /**
      * prints a set of weighted clusters
      *
-     * @param clusters
-     */
+	 */
     public void printClusters(Cluster[] clusters) {
         for (Cluster cluster : clusters) {
             //System.err.println(clusters[i] + ": " + clusters[i].getWeight());
@@ -991,22 +936,21 @@ public class ReticulateNetwork {
         }
     }
 
-    /**
-     * a triple
-     * todo: make triple comparable
-     */
-    class Triple {
-        BitSet A;
-        BitSet B;
-        BitSet C;
+	/**
+	 * a triple
+	 * todo: make triple comparable
+	 */
+	static class Triple {
+		BitSet A;
+		BitSet B;
+		BitSet C;
 
-        /**
-         * is triple hit by H?
-         *
-         * @param H
-         * @return true, if H contains one part of the triple
-         */
-        boolean isHitBy(BitSet H) {
+		/**
+		 * is triple hit by H?
+		 *
+		 * @return true, if H contains one part of the triple
+		 */
+		boolean isHitBy(BitSet H) {
             return H.equals(A) || H.equals(B) || H.equals(C);
         }
 
@@ -1018,7 +962,6 @@ public class ReticulateNetwork {
         /**
          * removes H from all parts of the triple. If one part becomes empty, returns null
          *
-         * @param H
          * @return reduced triple or null
          */
         public Triple reduce(BitSet H) {

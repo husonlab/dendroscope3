@@ -76,8 +76,7 @@ public class GoPreviousTreeCommand extends GoToTreeCommand implements ICommand {
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         if ((ev.getModifiers() & ActionEvent.SHIFT_MASK) != 0)
             execute("go tree=prevpage;");

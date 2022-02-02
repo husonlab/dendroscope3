@@ -64,7 +64,6 @@ public class NexusTrees {
     /**
      * is the given file a Nexus file?
      *
-     * @param file
      * @return true, if file exists, is readable and is a nexus file
      */
     public static boolean isNexusFile(File file) {
@@ -76,12 +75,12 @@ public class NexusTrees {
             if (aLine != null && aLine.toLowerCase().startsWith("#nexus"))
                 result = true;
 
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         try {
             if (r != null)
                 r.close();
-        } catch (IOException e) {
+        } catch (IOException ignored) {
         }
         return result;
     }
@@ -210,8 +209,6 @@ public class NexusTrees {
     /**
      * sets the i-th tree name
      *
-     * @param i
-     * @param name
      */
     public void setName(int i, String name) {
         ((TreeData) trees.elementAt(i - 1)).setName(name);
@@ -221,7 +218,6 @@ public class NexusTrees {
      * Returns the nexus flag [&R] indicating whether the tree should be considered
      * as rooted
      *
-     * @param i
      * @return String  Returns [&R] if rooted, and "" otherwise.
      */
     public String getFlags(int i) {
@@ -310,9 +306,6 @@ public class NexusTrees {
     /**
      * writes a single tree in nexus format
      *
-     * @param w
-     * @param tree
-     * @throws IOException
      */
     public static void writeNexus(Writer w, PhyloTree tree) throws IOException {
         w.write("#NEXUS\n");
@@ -326,9 +319,6 @@ public class NexusTrees {
     /**
      * writes trees in nexus format
      *
-     * @param w
-     * @param trees
-     * @throws IOException
      */
     public static void writeNexus(Writer w, TreeData[] trees) throws IOException {
         w.write("#NEXUS\n");

@@ -40,9 +40,7 @@ public class ClusterNetwork {
     /**
      * constructor
      *
-     * @param taxa
-     * @param splits
-     */
+	 */
     public ClusterNetwork(Taxa taxa, SplitSystem splits) {
         this.taxa = taxa;
         this.splits = splits;
@@ -124,10 +122,7 @@ public class ClusterNetwork {
      * construct the Hasse diagram for a set of clusters. If any taxa > maxTaxonId are found, these are
      * used to compute the diagram, but are not added as labels to the nodes.
      *
-     * @param root
-     * @param clusters
-     * @param node2weight
-     */
+	 */
     public static void constructHasse(Taxa taxa, PhyloTree tree, Node root, Cluster[] clusters, NodeDoubleArray node2weight,
                                       NodeDoubleArray node2confidence, List<Triplet<Cluster, Cluster, Boolean>> additionalEdges, int maxTaxonId) {
         clusters = Cluster.getClustersSortedByDecreasingCardinality(clusters);
@@ -254,9 +249,6 @@ public class ClusterNetwork {
     /**
      * find node that represents a given cluster, or null
      *
-     * @param cluster
-     * @param clusters
-     * @param nodes
      * @return node or null
      */
     private static Node findNode(Cluster cluster, Cluster[] clusters, Node[] nodes, int maxTaxonId) {
@@ -271,8 +263,7 @@ public class ClusterNetwork {
     /**
      * extend the Hasse diagram to obtain a cluster network
      *
-     * @param node2weight
-     */
+	 */
     public static void convertHasseToClusterNetwork(PhyloTree tree, NodeDoubleArray node2weight) {
         // split every node that has indegree>1 and outdegree!=1
         List<Node> nodes = new LinkedList<>();
@@ -341,8 +332,7 @@ public class ClusterNetwork {
     /**
      * compute confidence of reticulate edges as max confidence on all paths to lsa
      *
-     * @param tree
-     */
+	 */
     private static void computeConfidenceOnReticulate(PhyloTree tree) {
         NodeArray<Node> reticulate2lsa = new NodeArray<>(tree);
         (new LSATree()).computeReticulation2LSA(tree, reticulate2lsa);
@@ -395,11 +385,7 @@ public class ClusterNetwork {
     /**
      * recursively compute the confidence and count below each node
      *
-     * @param tree
-     * @param v
-     * @param confidenceBelow
-     * @param countBelow
-     */
+	 */
     private static void computeConfidenceBelowRec(PhyloTree tree, Node v, NodeDoubleArray confidenceBelow, NodeIntArray countBelow) {
         double confidence = 0;
         int count = 0;
@@ -421,8 +407,6 @@ public class ClusterNetwork {
     /**
      * computes the average confidence of a collection of edges. Uses only non-special edges
      *
-     * @param tree
-     * @param edges
      * @return average confidence
      */
     private static double computeAverageConfidence(PhyloTree tree, Collection<Edge> edges) {
@@ -441,9 +425,6 @@ public class ClusterNetwork {
     /**
      * determines the partitioning of taxa defined by the node v
      *
-     * @param tree
-     * @param taxa
-     * @param v
      * @return partitioning of taxa
      */
     public static Partition getPartitionDefinedByNode(PhyloTree tree, Taxa taxa, Node v) {
@@ -487,9 +468,6 @@ public class ClusterNetwork {
     /**
      * gets the partitioning of taxa defined by an edge in the graph
      *
-     * @param tree
-     * @param taxa
-     * @param e0
      * @return partitioning defined by edge
      */
     public static Partition getPartitionDefinedByEdge(PhyloTree tree, Taxa taxa, Edge e0) {
@@ -559,10 +537,7 @@ public class ClusterNetwork {
     /**
      * recursively do the work
      *
-     * @param v
-     * @param componentNumber
-     * @param node2component
-     */
+	 */
     private static void getTwoConnectedComponentRec(Node v, int componentNumber, NodeIntArray node2component) {
         for (Edge f = v.getFirstAdjacentEdge(); f != null; f = v.getNextAdjacentEdge(f)) {
             Node w = f.getOpposite(v);

@@ -47,8 +47,7 @@ public class Num2EdgeArray {
     /**
      * wrapper constructor
      *
-     * @param array
-     */
+	 */
     public Num2EdgeArray(Edge[] array) {
         this.array = array;
     }
@@ -56,8 +55,7 @@ public class Num2EdgeArray {
     /**
      * sets the wrapped array
      *
-     * @param array
-     */
+	 */
     public void set(Edge[] array) {
         this.array = array;
     }
@@ -65,9 +63,7 @@ public class Num2EdgeArray {
     /**
      * sets the i-th entry. Assumes the wrapped array has already been constructed or set
      *
-     * @param i
-     * @param v
-     */
+	 */
     public void put(int i, Edge v) {
         array[i] = v;
     }
@@ -75,7 +71,6 @@ public class Num2EdgeArray {
     /**
      * gets the -th entry
      *
-     * @param i
      * @return edge at position i of array
      */
     public Edge get(int i) {
@@ -103,8 +98,7 @@ public class Num2EdgeArray {
     /**
      * erase and resize  to hold (0,1,...,n)
      *
-     * @param n
-     */
+	 */
     public void clear(int n) {
         array = new Edge[n + 1];
     }

@@ -74,9 +74,7 @@ public class SelectInducedNetworkCommand extends CommandBaseMultiViewer implemen
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
 
 
     public void apply(NexusStreamParser np) throws Exception {
@@ -98,8 +96,7 @@ public class SelectInducedNetworkCommand extends CommandBaseMultiViewer implemen
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         executeImmediately(getSyntax());
     }

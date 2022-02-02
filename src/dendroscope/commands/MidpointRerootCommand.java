@@ -75,9 +75,7 @@ public class MidpointRerootCommand extends CommandBaseMultiViewer implements ICo
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase(getSyntax());
@@ -115,8 +113,7 @@ public class MidpointRerootCommand extends CommandBaseMultiViewer implements ICo
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         execute(getSyntax());
 

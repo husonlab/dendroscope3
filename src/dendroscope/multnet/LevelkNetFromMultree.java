@@ -41,21 +41,18 @@ public class LevelkNetFromMultree {
     }
 
     public PhyloTree apply() {
-        ProgressListener progressListener = new ProgressDialog("Computing level-k network", "Initializing", MultiViewer.getLastActiveFrame());
-        try {
-            MultilabeledTree mulTree = new MultilabeledTree();
-            mulTree.copy(this.tree);
-            mulTree.addOutgroup();
-            mulTree.adaptLabeling();
-            LevelKNetwork levelKNetwork = new LevelKNetwork(mulTree.getAllTaxa(), mulTree.getSplitSystem());
-            levelKNetwork.setComputeOnlyOne(true);
-            List<PhyloTree> results = levelKNetwork.apply(progressListener);
-            if (results.size() > 0)
-                return results.get(0);
-            else
-                return null;
-        } finally {
-            progressListener.close();
-        }
-    }
+		try (ProgressListener progressListener = new ProgressDialog("Computing level-k network", "Initializing", MultiViewer.getLastActiveFrame())) {
+			MultilabeledTree mulTree = new MultilabeledTree();
+			mulTree.copy(this.tree);
+			mulTree.addOutgroup();
+			mulTree.adaptLabeling();
+			LevelKNetwork levelKNetwork = new LevelKNetwork(mulTree.getAllTaxa(), mulTree.getSplitSystem());
+			levelKNetwork.setComputeOnlyOne(true);
+			List<PhyloTree> results = levelKNetwork.apply(progressListener);
+			if (results.size() > 0)
+				return results.get(0);
+			else
+				return null;
+		}
+	}
 }

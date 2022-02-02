@@ -37,10 +37,7 @@ public class IOManager {
     /**
      * save the document
      *
-     * @param doc
-     * @param formatName
-     * @param file
-     */
+	 */
     public void saveDocument(Document doc, String formatName, File file) {
         IOFormat format = createIOFormatForName(formatName);
 
@@ -67,7 +64,6 @@ public class IOManager {
     /**
      * gets an IOFormat object of the named type
      *
-     * @param name
      * @return IOFormat object
      */
     public static IOFormat createIOFormatForName(String name) {
@@ -84,7 +80,6 @@ public class IOManager {
     /**
      * gets an IOFormat object of file type
      *
-     * @param file
      * @return IOFormat object
      */
     public static IOFormat createIOFormatForFile(File file) throws IOException {
@@ -111,7 +106,6 @@ public class IOManager {
     /**
      * gets an IOFormat object of the correct type
      *
-     * @param aLine
      * @return IOFormat object
      */
     public static IOFormat createIOFormatForFile(String aLine) {
@@ -145,16 +139,12 @@ public class IOManager {
      * @return file name filter
      */
     public static FilenameFilter getFilenameFilter() {
-        return new FilenameFilter() {
-            public boolean accept(File dir, String name) {
-                return (new Dendro()).getFilenameFilter().accept(dir, name)
-                        || (new Newick()).getFilenameFilter().accept(dir, name)
-                        || (new Nexus()).getFilenameFilter().accept(dir, name)
-                        || (new Nexml()).getFilenameFilter().accept(dir, name)
-                        || (new TextFileFilter()).accept(dir, name);
-            }
-        };
-    }
+		return (dir, name) -> (new Dendro()).getFilenameFilter().accept(dir, name)
+							  || (new Newick()).getFilenameFilter().accept(dir, name)
+							  || (new Nexus()).getFilenameFilter().accept(dir, name)
+							  || (new Nexml()).getFilenameFilter().accept(dir, name)
+							  || (new TextFileFilter()).accept(dir, name);
+	}
 
     /**
      * gets a file filter that accepts all supported formats

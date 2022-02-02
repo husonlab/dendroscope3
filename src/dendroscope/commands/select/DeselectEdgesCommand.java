@@ -72,8 +72,7 @@ public class DeselectEdgesCommand extends DeselectAllCommand implements ICommand
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         executeImmediately("deselect edges;");
     }

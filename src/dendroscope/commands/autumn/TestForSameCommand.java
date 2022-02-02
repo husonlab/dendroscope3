@@ -38,9 +38,7 @@ public class TestForSameCommand extends CommandBaseMultiViewer implements IComma
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase(getSyntax());
@@ -53,7 +51,7 @@ public class TestForSameCommand extends CommandBaseMultiViewer implements IComma
                 list.add(viewer);
         }
 
-        CanonicalEmbeddingForHybridOfTwoTrees.compareAllTrees(list.toArray(new TreeViewer[list.size()]));
+		CanonicalEmbeddingForHybridOfTwoTrees.compareAllTrees(list.toArray(new TreeViewer[0]));
 
 
     }

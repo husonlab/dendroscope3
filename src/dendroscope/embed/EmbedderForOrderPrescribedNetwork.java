@@ -39,9 +39,7 @@ public class EmbedderForOrderPrescribedNetwork {
     /**
      * given a mapping of each leaf to a different position, computes an embedding of the network that respects the ordering
      *
-     * @param treeViewer
-     * @param node2pos
-     */
+	 */
     public static void apply(TreeViewer treeViewer, Map<Node, Float> node2pos) throws IOException {
         PhyloTree tree = treeViewer.getPhyloTree();
         if (tree.getRoot() != null) {
@@ -112,10 +110,7 @@ public class EmbedderForOrderPrescribedNetwork {
      * process all nested subtrees (nested means that in the ordering of taxa there is some other subtree with leaves
      * boht before and after the one considered)
      *
-     * @param node2SubTreeId
-     * @param numberOfSubTrees
-     * @param tree
-     */
+	 */
     private static void processNestedSubTrees(NodeArray<Integer> node2SubTreeId, int numberOfSubTrees,
                                               Map<Integer, Node> subTreeId2Root,
                                               Map<Node, Node> node2lsaParent,
@@ -211,11 +206,7 @@ public class EmbedderForOrderPrescribedNetwork {
     /**
      * remove the lsa edge from lsaParent to v and reattach it so as to lead from the lca of leftNode and rightNode to v
      *
-     * @param lsaParent
-     * @param leftNode
-     * @param rightNode
-     * @param v
-     */
+	 */
     private static void moveLSAParentToEnclosingSubTreeNode(Node lsaParent, Node leftNode, Node rightNode, Node v) throws IOException {
         if (v.getInDegree() == 1)
             throw new IOException("Not subtree root");
@@ -255,10 +246,7 @@ public class EmbedderForOrderPrescribedNetwork {
     /**
      * remove the lsa edge from lsaParent to v and reattach it so as to lead from the root to v
      *
-     * @param lsaParent
-     * @param root
-     * @param v
-     */
+	 */
     private static void moveLSAParentToRoot(Node lsaParent, Node root, Node v) throws IOException {
         PhyloTree tree = (PhyloTree) lsaParent.getOwner();
 
@@ -294,8 +282,6 @@ public class EmbedderForOrderPrescribedNetwork {
     /**
      * gets the lca of two nodes
      *
-     * @param a
-     * @param b
      * @return lca(a, b)
      */
     private static Node getLCA(Node a, Node b) throws IOException {
@@ -322,9 +308,7 @@ public class EmbedderForOrderPrescribedNetwork {
     /**
      * extend the node2pos ordering to all nodes of the tree
      *
-     * @param v
-     * @param node2pos
-     */
+	 */
     public static void extendNode2PosRec(Node v, Map<Node, Float> node2pos) {
         if (node2pos.get(v) == null) {
             float pos = Integer.MAX_VALUE;
@@ -340,7 +324,6 @@ public class EmbedderForOrderPrescribedNetwork {
     /**
      * get all children in tree, or LSA tree of network
      *
-     * @param v
      * @return all children
      */
     private static List<Node> getLSAChildren(Node v) {
@@ -365,9 +348,7 @@ public class EmbedderForOrderPrescribedNetwork {
     /**
      * list labeled leafr nodes in order of appearance
      *
-     * @param node2pos
-     * @return
-     */
+	 */
     private static Node[] computeOrderedLabeledLeaves(Map<Node, Float> node2pos) {
         SortedMap<Float, Node> pos2node = new TreeMap<Float, Node>();
         for (Node v : node2pos.keySet()) {
@@ -386,9 +367,7 @@ public class EmbedderForOrderPrescribedNetwork {
     /**
      * recursively number each subtree in the forest obtained by ignoring all reticulate edges
      *
-     * @param v
-     * @param subTreeId
-     */
+	 */
     private static void computeNode2SubTreeIdRec(Node v, int subTreeId, NodeArray<Integer> node2SubTreeId) {
         if (node2SubTreeId.get(v) == null) {
             node2SubTreeId.put(v, subTreeId);
@@ -406,52 +385,46 @@ public class EmbedderForOrderPrescribedNetwork {
     /**
      * reorder the lsa children of a node
      *
-     * @param v
-     * @param node2pos
-     */
+	 */
     private static void reorderChildren(Node v, final Map<Node, Float> node2pos) {
 		List<Node> lsaChildren = ((PhyloTree) v.getOwner()).getLSAChildrenMap().get(v);
         if (lsaChildren != null) {
-            SortedSet<Node> nodes = new TreeSet<Node>(new Comparator<Node>() {
-                public int compare(Node w1, Node w2) {
-                    float pos1 = node2pos.get(w1);
-                    float pos2 = node2pos.get(w2);
-                    if (pos1 < pos2)
-                        return -1;
-                    else if (pos1 > pos2)
-                        return 1;
-                    else if (w1.getId() < w2.getId())
-                        return -1;
-                    else if (w1.getId() > w2.getId())
-                        return 1;
-                    else
-                        return 0;
-                }
-            });
-            nodes.addAll(lsaChildren);
-            lsaChildren.clear();
-            lsaChildren.addAll(nodes);
-        }
+			SortedSet<Node> nodes = new TreeSet<Node>((w1, w2) -> {
+				float pos1 = node2pos.get(w1);
+				float pos2 = node2pos.get(w2);
+				if (pos1 < pos2)
+					return -1;
+				else if (pos1 > pos2)
+					return 1;
+				else if (w1.getId() < w2.getId())
+					return -1;
+				else if (w1.getId() > w2.getId())
+					return 1;
+				else
+					return 0;
+			});
+			nodes.addAll(lsaChildren);
+			lsaChildren.clear();
+			lsaChildren.addAll(nodes);
+		}
 
-        SortedSet<Edge> edges = new TreeSet<Edge>(new Comparator<Edge>() {
-            public int compare(Edge e1, Edge e2) {
-                Node w1 = e1.getTarget();
-                Node w2 = e2.getTarget();
+		SortedSet<Edge> edges = new TreeSet<Edge>((e1, e2) -> {
+			Node w1 = e1.getTarget();
+			Node w2 = e2.getTarget();
 
-                float pos1 = node2pos.get(w1);
-                float pos2 = node2pos.get(w2);
-                if (pos1 < pos2)
-                    return -1;
-                else if (pos1 > pos2)
-                    return 1;
-                else if (w1.getId() < w2.getId())
-                    return -1;
-                else if (w1.getId() > w2.getId())
-                    return 1;
-                else
-                    return 0;
-            }
-        });
+			float pos1 = node2pos.get(w1);
+			float pos2 = node2pos.get(w2);
+			if (pos1 < pos2)
+				return -1;
+			else if (pos1 > pos2)
+				return 1;
+			else if (w1.getId() < w2.getId())
+				return -1;
+			else if (w1.getId() > w2.getId())
+				return 1;
+			else
+				return 0;
+		});
         for (Edge e : v.adjacentEdges()) {
             edges.add(e);
         }
@@ -462,10 +435,8 @@ public class EmbedderForOrderPrescribedNetwork {
     /**
      * compute alphabetical ordering of leaves, for debugging purposes
      *
-     * @param treeViewer
      * @return ordering of leaves
-     * @throws IOException
-     */
+	 */
     public static Map<Node, Float> setupAlphabeticalOrdering(TreeViewer treeViewer) throws IOException {
         Map<String, Node> label2node = new HashMap<String, Node>();
         SortedSet<String> taxLabels = new TreeSet<String>();
@@ -498,8 +469,6 @@ public class EmbedderForOrderPrescribedNetwork {
     /**
      * return ordering of leaves to reflect list of names
      *
-     * @param treeViewer
-     * @param names
      * @return ordering of labeled leaves
      */
     public static Map<Node, Float> setupOrderingFromNames(TreeViewer treeViewer, List<String> names) throws IOException {

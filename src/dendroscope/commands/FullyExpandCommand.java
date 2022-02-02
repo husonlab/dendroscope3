@@ -74,8 +74,7 @@ public class FullyExpandCommand extends ZoomToFitCommand implements ICommand {
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         execute("zoom what=expand;");
     }

@@ -38,10 +38,8 @@ public abstract class IOBase extends javax.swing.filechooser.FileFilter implemen
     /**
      * reads trees from a file
      *
-     * @param file
      * @return trees
-     * @throws java.io.IOException
-     */
+	 */
     public TreeData[] read(File file) throws IOException {
         return read(new FileReader(file));
     }
@@ -49,19 +47,14 @@ public abstract class IOBase extends javax.swing.filechooser.FileFilter implemen
     /**
      * read trees
      *
-     * @param r0
      * @return trees
-     * @throws IOException
-     */
+	 */
     public abstract TreeData[] read(Reader r0) throws IOException;
 
     /**
      * writes trees to a file
      *
-     * @param file
-     * @param trees
-     * @throws java.io.IOException
-     */
+	 */
     public void write(File file, boolean internalNodeLabelsAreEdgeLabels, TreeData[] trees) throws IOException {
         write(new BufferedWriter(new OutputStreamWriter(
                 new FileOutputStream(file), StandardCharsets.UTF_8)), internalNodeLabelsAreEdgeLabels, trees);
@@ -70,10 +63,7 @@ public abstract class IOBase extends javax.swing.filechooser.FileFilter implemen
     /**
      * write trees
      *
-     * @param w0
-     * @param trees
-     * @throws java.io.IOException
-     */
+	 */
     public abstract void write(Writer w0, boolean internalNodeLabelsAreEdgeLabels, TreeData[] trees) throws IOException;
 
     /**

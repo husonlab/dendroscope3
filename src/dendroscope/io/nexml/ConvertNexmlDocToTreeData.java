@@ -173,11 +173,7 @@ public class ConvertNexmlDocToTreeData {
     /**
      * recursively copy src to target
      *
-     * @param network
-     * @param p
-     * @param treeData
-     * @param src2tarNode
-     */
+	 */
     private static void copyRec(Network<Edge> network, Node p, TreeData treeData, Map<String, Pair<jloda.graph.Node, TreeData>> src2tarNode,
                                 NodeView defaultNodeView, EdgeView defaultEdgeView) {
         if (src2tarNode.get(p.getId()) == null) {
@@ -237,7 +233,6 @@ public class ConvertNexmlDocToTreeData {
     /**
      * get the first boolean value found, or false
      *
-     * @param values
      * @return first boolean value found
      */
     public static boolean getFirstBoolean(Set<Object> values) {
@@ -253,7 +248,6 @@ public class ConvertNexmlDocToTreeData {
     /**
      * get the first string found, or null
      *
-     * @param values
      * @return first string found
      */
     public static String getFirstString(Set<Object> values) {

@@ -29,7 +29,6 @@ import jloda.swing.commands.CommandManager;
 import jloda.swing.director.IDirector;
 import jloda.swing.graphview.EdgeActionAdapter;
 import jloda.swing.graphview.NodeActionAdapter;
-import jloda.swing.graphview.PanelActionListener;
 import jloda.swing.util.GraphViewPopupListener;
 import jloda.swing.util.ResourceManager;
 import jloda.util.Basic;
@@ -73,8 +72,7 @@ public class TreeGrid extends JPanel {
     /**
      * construct a 1x1 tree grid
      *
-     * @param viewer0
-     */
+	 */
     public TreeGrid(MultiViewer viewer0) {
         this.multiViewer = viewer0;
         setGridSize(1, 1);
@@ -99,30 +97,28 @@ public class TreeGrid extends JPanel {
                         if (!multiViewer.isAtLast())
                             multiViewer.getDir().execute("go tree=last;", multiViewer.getCommandManager());
                     }
-                } catch (Exception e) {
-                    Basic.caught(e);
-                }
-            }
+				} catch (Exception e) {
+					Basic.caught(e);
+				}
+			}
 
-            public void keyReleased(KeyEvent ke) {
-            }
-        });
+			public void keyReleased(KeyEvent ke) {
+			}
+		});
 
-        mainScrollBar = new JScrollBar(JScrollBar.VERTICAL);
-        mainScrollBar.addAdjustmentListener(new AdjustmentListener() {
-            public void adjustmentValueChanged(AdjustmentEvent adjustmentEvent) {
-                if (!avoidScrollBarBounce) {
-                    if (!multiViewer.isLocked() && adjustmentEvent.getAdjustmentType() == AdjustmentEvent.TRACK
-                            && !adjustmentEvent.getValueIsAdjusting()) {
-                        int n = adjustmentEvent.getValue();
-                        if (currentTrees.cardinality() > 0 && n != currentTrees.nextSetBit(0)) {
-                            multiViewer.getDir().execute("!go tree=" + (n + 1) + ";", multiViewer.getCommandManager());
-                        }
-                    }
-                }
-            }
-        });
-    }
+		mainScrollBar = new JScrollBar(JScrollBar.VERTICAL);
+		mainScrollBar.addAdjustmentListener(adjustmentEvent -> {
+			if (!avoidScrollBarBounce) {
+				if (!multiViewer.isLocked() && adjustmentEvent.getAdjustmentType() == AdjustmentEvent.TRACK
+					&& !adjustmentEvent.getValueIsAdjusting()) {
+					int n = adjustmentEvent.getValue();
+					if (currentTrees.cardinality() > 0 && n != currentTrees.nextSetBit(0)) {
+						multiViewer.getDir().execute("!go tree=" + (n + 1) + ";", multiViewer.getCommandManager());
+					}
+				}
+			}
+		});
+	}
 
     public JScrollBar getMainScrollBar() {
         return mainScrollBar;
@@ -145,9 +141,7 @@ public class TreeGrid extends JPanel {
     /**
      * set the size of the tree grid
      *
-     * @param rows
-     * @param cols
-     */
+	 */
     public void setGridSize(int rows, int cols) {
         if (rows < 1 || cols < 1)
             return;
@@ -190,86 +184,84 @@ public class TreeGrid extends JPanel {
                     public void mouseEntered(MouseEvent e) {
                     }
 
-                    public void mouseExited(MouseEvent e) {
-                    }
-                });
+					public void mouseExited(MouseEvent e) {
+					}
+				});
 
-                treeViewers[i][j] = treeViewer;
-                ((JButton) treeViewer.getScrollPane().getCorner(JScrollPane.LOWER_RIGHT_CORNER)).setIcon(ResourceManager.getIcon("sun/AlignCenter16.gif"));
+				treeViewers[i][j] = treeViewer;
+				((JButton) treeViewer.getScrollPane().getCorner(JScrollPane.LOWER_RIGHT_CORNER)).setIcon(ResourceManager.getIcon("sun/AlignCenter16.gif"));
 
-                if (commandManager != null)
-                    treeViewer.setPopupListener(new GraphViewPopupListener(treeViewer, nodePopupConfig, edgePopupConfig, panelPopupConfig, commandManager));
+				if (commandManager != null)
+					treeViewer.setPopupListener(new GraphViewPopupListener(treeViewer, nodePopupConfig, edgePopupConfig, panelPopupConfig, commandManager));
 
-                treeViewer.addPanelActionListener(new PanelActionListener() {
-                    public void doMouseClicked(MouseEvent mouseEvent) {
-                        if (multiViewer.isLocked())
-                            return;
+				treeViewer.addPanelActionListener(mouseEvent -> {
+					if (multiViewer.isLocked())
+						return;
 
-                        final HashSet<TreeViewer> wasCurrentlySelected = new HashSet<>();
-                        wasCurrentlySelected.addAll(selectedViewers);
+					final HashSet<TreeViewer> wasCurrentlySelected = new HashSet<>();
+					wasCurrentlySelected.addAll(selectedViewers);
 
-                        if (mouseEvent.getClickCount() == 1 || mouseEvent.getClickCount() == 2) {
-                            if (!mouseEvent.isShiftDown()) {
-                                selectAllPanels(false);
-                                setSelected(treeViewer, true);
-                            } else if (!wasCurrentlySelected.contains(treeViewer))
-                                setSelected(treeViewer, true);
+					if (mouseEvent.getClickCount() == 1 || mouseEvent.getClickCount() == 2) {
+						if (!mouseEvent.isShiftDown()) {
+							selectAllPanels(false);
+							setSelected(treeViewer, true);
+						} else if (!wasCurrentlySelected.contains(treeViewer))
+							setSelected(treeViewer, true);
 
-                            if (mouseEvent.getClickCount() == 2) {
-                                boolean changed = false;
-                                if (wasCurrentlySelected.contains(treeViewer)) {
-                                    if (treeViewer.getSelectedNodes().size() < treeViewer.getGraph().getNumberOfNodes()) {
-                                        treeViewer.selectAllNodes(true);
-                                        changed = true;
-                                    }
-                                    if (!changed) {
-                                        if (treeViewer.getSelectedEdges().size() < treeViewer.getGraph().getNumberOfEdges()) {
-                                            treeViewer.selectAllEdges(true);
-                                            changed = true;
-                                        }
-                                    }
-                                    if (changed) {
-                                        treeViewer.repaint();
-                                        multiViewer.updateView(IDirector.ENABLE_STATE);
-                                    }
-                                }
-                                if (!changed && !mouseEvent.isShiftDown()) {
-                                    for (TreeViewer aViewer : treeViewer2TreeId.keySet()) {
-                                        if (aViewer != treeViewer) {
-                                            if (wasCurrentlySelected.contains(aViewer)) {
-                                                setSelected(aViewer, false);
-                                            } else {
-                                                changed = false;
-                                                if (aViewer.getSelectedNodes().size() > 0) {
-                                                    aViewer.selectAllNodes(false);
-                                                    changed = true;
-                                                }
-                                                if (aViewer.getSelectedEdges().size() > 0) {
-                                                    aViewer.selectAllEdges(false);
-                                                    changed = true;
-                                                }
-                                                if (changed) {
-                                                    aViewer.repaint();
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            multiViewer.updateView(IDirector.ENABLE_STATE);
-                        }
-                    }
-                });
-                treeViewer.addNodeActionListener(new NodeActionAdapter() {
-                    public void doSelect(NodeSet nodes) {
-                        if (!isSelected(treeViewer)) {
-                            // setSelected(treeViewer, true);
-                        }
-                        // if (!multiViewer.isLocked())
-                        {
-                            if (!inSelectNodes) // prevent bouncing
-                            {
-                                inSelectNodes = true;
+						if (mouseEvent.getClickCount() == 2) {
+							boolean changed = false;
+							if (wasCurrentlySelected.contains(treeViewer)) {
+								if (treeViewer.getSelectedNodes().size() < treeViewer.getGraph().getNumberOfNodes()) {
+									treeViewer.selectAllNodes(true);
+									changed = true;
+								}
+								if (!changed) {
+									if (treeViewer.getSelectedEdges().size() < treeViewer.getGraph().getNumberOfEdges()) {
+										treeViewer.selectAllEdges(true);
+										changed = true;
+									}
+								}
+								if (changed) {
+									treeViewer.repaint();
+									multiViewer.updateView(IDirector.ENABLE_STATE);
+								}
+							}
+							if (!changed && !mouseEvent.isShiftDown()) {
+								for (TreeViewer aViewer : treeViewer2TreeId.keySet()) {
+									if (aViewer != treeViewer) {
+										if (wasCurrentlySelected.contains(aViewer)) {
+											setSelected(aViewer, false);
+										} else {
+											changed = false;
+											if (aViewer.getSelectedNodes().size() > 0) {
+												aViewer.selectAllNodes(false);
+												changed = true;
+											}
+											if (aViewer.getSelectedEdges().size() > 0) {
+												aViewer.selectAllEdges(false);
+												changed = true;
+											}
+											if (changed) {
+												aViewer.repaint();
+											}
+										}
+									}
+								}
+							}
+						}
+						multiViewer.updateView(IDirector.ENABLE_STATE);
+					}
+				});
+				treeViewer.addNodeActionListener(new NodeActionAdapter() {
+					public void doSelect(NodeSet nodes) {
+						if (!isSelected(treeViewer)) {
+							// setSelected(treeViewer, true);
+						}
+						// if (!multiViewer.isLocked())
+						{
+							if (!inSelectNodes) // prevent bouncing
+							{
+								inSelectNodes = true;
                                 if (getNumberOfSelectedViewers() > 1) {
                                     Set<String> labels = new HashSet<>();
                                     for (Node a : nodes) {
@@ -432,10 +424,7 @@ public class TreeGrid extends JPanel {
     /**
      * get a specific tree viewer
      *
-     * @param row
-     * @param col
-     * @return
-     */
+	 */
     public TreeViewer getTreeViewer(int row, int col) {
         if (row < treeViewers.length && col < treeViewers[row].length)
             return treeViewers[row][col];
@@ -446,9 +435,7 @@ public class TreeGrid extends JPanel {
     /**
      * load trees from document into grid
      *
-     * @param doc
-     * @param which
-     */
+	 */
     public void loadTrees(Document doc, BitSet which) {
         if (mainScrollBar != null && doc != null) {
             multiViewer.getDir().getDocument().setInternalNodeLabelsAreEdgeLabels(doc.isInternalNodeLabelsAreEdgeLabels());
@@ -509,9 +496,9 @@ public class TreeGrid extends JPanel {
             while (it.hasNext()) {
                 TreeViewer treeViewer = it.next();
                 treeViewer.setCanvasColor(Color.WHITE);
-                treeViewer.getGraph().deleteAllNodes();
-                treeViewer.getPhyloTree().setRoot((Node) null);
-                treeViewer.setFoundNode(null);
+				treeViewer.getGraph().deleteAllNodes();
+				treeViewer.getPhyloTree().setRoot(null);
+				treeViewer.setFoundNode(null);
                 treeViewer.getScrollPane().setBorder(BorderFactory.createEmptyBorder());
                 treeViewer.getScrollPane().revalidate();
             }
@@ -524,8 +511,7 @@ public class TreeGrid extends JPanel {
     /**
      * update the name of the tree
      *
-     * @param treeViewer
-     */
+	 */
     public void updateName(TreeViewer treeViewer) {
         if (isShowBorders())
             treeViewer.getScrollPane().setBorder(BorderFactory.createTitledBorder(treeViewer.getName() + (treeViewer.isDirty() ? "*" : "")));
@@ -534,8 +520,7 @@ public class TreeGrid extends JPanel {
     /**
      * show or hide scroll bars
      *
-     * @param showScrollBars
-     */
+	 */
     public void setShowScrollBars(boolean showScrollBars) {
         this.showScrollBars = showScrollBars;
         for (Iterator<TreeViewer> it = getIterator(); it.hasNext(); ) {
@@ -550,8 +535,7 @@ public class TreeGrid extends JPanel {
     /**
      * sync the current viewers to the document
      *
-     * @param doc
-     */
+	 */
     public void syncCurrentViewers2Document(Document doc, boolean alwaysIfHasAdditional) {
 
         // sync current trees to document:
@@ -568,8 +552,7 @@ public class TreeGrid extends JPanel {
     /**
      * show or hide scroll bars
      *
-     * @param showBorders
-     */
+	 */
     public void setShowBorders(boolean showBorders) {
         this.showBorders = showBorders;
 
@@ -591,8 +574,7 @@ public class TreeGrid extends JPanel {
     /**
      * set the selection state of all panels
      *
-     * @param select
-     */
+	 */
     public void selectAllPanels(boolean select) {
         for (Iterator<TreeViewer> it = getIterator(); it.hasNext(); )
             setSelected(it.next(), select);
@@ -611,9 +593,7 @@ public class TreeGrid extends JPanel {
     /**
      * set the selection state of a panel
      *
-     * @param treeViewer
-     * @param select
-     */
+	 */
     public void setSelected(TreeViewer treeViewer, boolean select) {
         if (select != selectedViewers.contains(treeViewer)) {
             if (!select) {
@@ -703,12 +683,7 @@ public class TreeGrid extends JPanel {
     /**
      * add a connector between two nodes in two different treeviewers
      *
-     * @param treeViewer1
-     * @param node1
-     * @param treeViewer2
-     * @param node2
-     * @param color
-     */
+	 */
     public void addConnector(TreeViewer treeViewer1, Node node1, TreeViewer treeViewer2, Node node2, Color color) {
         connectors.add(new Connector(treeViewer1, node1, treeViewer2, node2, color));
     }
@@ -757,7 +732,6 @@ public class TreeGrid extends JPanel {
     /**
      * Determines the rank 0..(nrows-1)*(ncols-1) of the given tree viewer
      *
-     * @param treeViewer
      * @return number of tree viewer, or -1, if not found
      */
     public int getRankOfViewer(TreeViewer treeViewer) {
@@ -775,7 +749,6 @@ public class TreeGrid extends JPanel {
     /**
      * gets the number that this treeViewer has in the document
      *
-     * @param treeViewer
      * @return number   or null
      */
     public Integer getNumberOfViewerInDocument(TreeViewer treeViewer) {
@@ -785,9 +758,7 @@ public class TreeGrid extends JPanel {
     /**
      * connect all nodes with the same label
      *
-     * @param treeViewer1
-     * @param treeViewer2
-     */
+	 */
     public void connectorAllTaxa(TreeViewer treeViewer1, TreeViewer treeViewer2) {
         for (Node node1 = treeViewer1.getGraph().getFirstNode(); node1 != null; node1 = node1.getNext()) {
             if (treeViewer1.getSelectedNodes().size() == 0 || treeViewer1.getSelected(node1)) {
@@ -821,8 +792,7 @@ public class TreeGrid extends JPanel {
     /**
      * get number of selected viewers
      *
-     * @return
-     */
+	 */
     public int getNumberOfSelectedViewers() {
         return selectedViewers.size();
     }
@@ -904,8 +874,7 @@ public class TreeGrid extends JPanel {
     /**
      * get as a JPanel which can be painted in image export
      *
-     * @return
-     */
+	 */
     public JPanel getAsJPanel() {
         JPanel panel = new JPanel() {
             public void paint(Graphics graphics) {

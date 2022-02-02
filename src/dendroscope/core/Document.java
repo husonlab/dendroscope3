@@ -69,8 +69,7 @@ public class Document {
     /**
      * is any tree dirty
      *
-     * @param documentIsDirty
-     */
+	 */
     public void setDocumentIsDirty(boolean documentIsDirty) {
         this.documentIsDirty = documentIsDirty;
     }
@@ -95,9 +94,7 @@ public class Document {
     /**
      * set the task and subtask name
      *
-     * @param task
-     * @param subtask
-     */
+	 */
     public void notifyTasks(String task, String subtask) throws CanceledException {
         progressListener.setTasks(task, subtask);
     }
@@ -105,8 +102,7 @@ public class Document {
     /**
      * set the task and subtask name
      *
-     * @param max
-     */
+	 */
     public void notifySetMaximumProgress(int max) throws CanceledException {
         progressListener.setMaximum(max);
     }
@@ -123,8 +119,7 @@ public class Document {
     /**
      * set the progress listener
      *
-     * @param progressListener
-     */
+	 */
     public void setProgressListener(ProgressListener progressListener) {
         this.progressListener = progressListener;
     }
@@ -141,8 +136,7 @@ public class Document {
     /**
      * set file for this document
      *
-     * @param file
-     */
+	 */
     public void setFile(File file) {
         this.file = file;
         if (file != null) {
@@ -154,9 +148,7 @@ public class Document {
     /**
      * sets the file to the named one, modifying the name to make it unique, if desired
      *
-     * @param name
-     * @param unique
-     */
+	 */
     public void setFile(String name, boolean unique) {
         if (unique) {
             file = FileUtils.getFileWithNewUniqueName(name);
@@ -169,9 +161,7 @@ public class Document {
     /**
      * load a set of trees in Nexus format
      *
-     * @param file
-     * @throws IOException
-     */
+	 */
     public void loadNexus(File file) throws IOException {
         NexusTrees treesBlock = new NexusTrees();
 
@@ -192,23 +182,20 @@ public class Document {
     /**
      * save the current trees to a file
      *
-     * @param file
-     * @throws IOException
-     */
+	 */
     public void save(File file) throws IOException {
-        setTitle(file.getName());
-        BufferedWriter w = new BufferedWriter(new FileWriter(file));
-        for (int i = 0; i < trees.length; i++) {
-            w.write(trees[i].toString() + "\n");
-        }
-        w.close();
-        setDocumentIsDirty(false);
-    }
+		setTitle(file.getName());
+		BufferedWriter w = new BufferedWriter(new FileWriter(file));
+		for (TreeData tree : trees) {
+			w.write(tree.toString() + "\n");
+		}
+		w.close();
+		setDocumentIsDirty(false);
+	}
 
     /**
      * add a tree  to the current file of trees
      *
-     * @param newTree
      * @return index of tree
      */
     public int appendTree(PhyloTree newTree) {
@@ -219,8 +206,6 @@ public class Document {
     /**
      * add a tree to the list after the given position
      *
-     * @param name
-     * @param newTree
      * @return index of tree
      */
     public int appendTree(String name, PhyloTree newTree, int pos) {
@@ -234,8 +219,7 @@ public class Document {
             if (pos > current)
                 pos = current;
             TreeData[] newTrees = new TreeData[trees.length + 1];
-            for (int i = 0; i <= pos; i++)
-                newTrees[i] = trees[i];
+			if (pos + 1 >= 0) System.arraycopy(trees, 0, newTrees, 0, pos + 1);
             newTrees[pos + 1] = new TreeData(name, newTree);
             for (int i = pos + 1; i < trees.length; i++) {
                 newTrees[i + 1] = trees[i];
@@ -249,8 +233,6 @@ public class Document {
     /**
      * add a tree to the list after the given position
      *
-     * @param name
-     * @param newTree
      * @return index of tree
      */
     public int appendTreeWithoutCopy(String name, TreeData newTree, int pos) {
@@ -264,8 +246,7 @@ public class Document {
             if (pos > current)
                 pos = current;
             TreeData[] newTrees = new TreeData[trees.length + 1];
-            for (int i = 0; i <= pos; i++)
-                newTrees[i] = trees[i];
+			if (pos + 1 >= 0) System.arraycopy(trees, 0, newTrees, 0, pos + 1);
             newTrees[pos + 1] = newTree;
             for (int i = pos + 1; i < trees.length; i++) {
                 newTrees[i + 1] = trees[i];
@@ -279,7 +260,6 @@ public class Document {
     /**
      * append a set of trees after the current tree
      *
-     * @param newTrees
      * @return position of first new tree
      */
     public int appendTrees(TreeData[] newTrees) {
@@ -307,25 +287,22 @@ public class Document {
             for (TreeData tree : trees) {
                 if (tree.getName() != null)
                     treeLabels.add(tree.getName());
-            }
-            for (int i = 0; i <= pos; i++) {
-                allTrees[i] = trees[i];
-            }
-            for (int i = 0; i < newTrees.length; i++) {
-                int newIndex = pos + 1 + i;
-                allTrees[newIndex] = newTrees[i];
-                if (newTrees[i].getName() == null || treeLabels.contains(newTrees[i].getName())) {
-                    newTrees[i].setName("[" + (newIndex + 1) + "]");
-                    treeLabels.add(newTrees[i].getName());
-                }
-            }
-            for (int i = pos + 1; i < trees.length; i++) {
-                allTrees[newTrees.length + i] = trees[i];
-            }
+			}
+			if (pos + 1 >= 0) System.arraycopy(trees, 0, allTrees, 0, pos + 1);
+			for (int i = 0; i < newTrees.length; i++) {
+				int newIndex = pos + 1 + i;
+				allTrees[newIndex] = newTrees[i];
+				if (newTrees[i].getName() == null || treeLabels.contains(newTrees[i].getName())) {
+					newTrees[i].setName("[" + (newIndex + 1) + "]");
+					treeLabels.add(newTrees[i].getName());
+				}
+			}
+			if (trees.length - (pos + 1) >= 0)
+				System.arraycopy(trees, pos + 1, allTrees, newTrees.length + pos + 1, trees.length - (pos + 1));
 
-            trees = allTrees;
-            return pos + 1;
-        }
+			trees = allTrees;
+			return pos + 1;
+		}
     }
 
     /**
@@ -358,8 +335,7 @@ public class Document {
     /**
      * sets the documents title
      *
-     * @param title
-     */
+	 */
     public void setTitle(String title) {
         this.title = title;
     }
@@ -399,14 +375,13 @@ public class Document {
     /**
      * remove prefix of form [digits]
      *
-     * @param name
      * @return name without prefix
      */
     private String removePrefix(String name) {
         if (name != null && name.startsWith("[")) {
             for (int pos = 1; pos < name.length(); pos++) {
                 if (name.charAt(pos) == ']')   // has just been [digits], so is a valid prefix that we can remove
-                    return name.substring(pos + 1, name.length());
+					return name.substring(pos + 1);
                 if (!Character.isDigit(name.charAt(pos)))
                     break;
             }
@@ -417,8 +392,7 @@ public class Document {
     /**
      * sets the name of the t-th tree
      *
-     * @param name
-     */
+	 */
     public void setName(String name, int t) {
         if (t >= 0 && trees != null && t < trees.length)
             trees[t].setName(name);
@@ -427,8 +401,7 @@ public class Document {
     /**
      * set the name for the current tree
      *
-     * @param name
-     */
+	 */
     public void setName(String name) {
         setName(name, current);
     }
@@ -436,7 +409,6 @@ public class Document {
     /**
      * gets the t-th tree
      *
-     * @param t
      * @return tree
      */
     public TreeData getTree(int t) {
@@ -482,8 +454,7 @@ public class Document {
     /**
      * sets the trees to the given array
      *
-     * @param newTrees
-     */
+	 */
     public void setTrees(TreeData[] newTrees) {
         if (newTrees == null) {
             trees = new TreeData[0];

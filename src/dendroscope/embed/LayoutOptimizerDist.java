@@ -41,9 +41,7 @@ public class LayoutOptimizerDist implements ILayoutOptimizer {
     /**
      * apply the embedding algorithm to a single tree
      *
-     * @param tree
-     * @param progressListener
-     */
+	 */
     public void apply(PhyloTree tree, ProgressListener progressListener) {
         if (tree.getRoot() == null || tree.getNumberReticulateEdges() == 0) {
 			tree.getLSAChildrenMap().clear();
@@ -56,8 +54,7 @@ public class LayoutOptimizerDist implements ILayoutOptimizer {
     /**
      * apply the embedding algorithm to a whole set of trees
      *
-     * @param trees
-     */
+	 */
     public void apply(PhyloTree[] trees) {
         System.err.println("Computing optimal embedding using circular-ordering algorithm");
         final Map<String, Integer> taxon2Id = new HashMap<String, Integer>();
@@ -69,12 +66,12 @@ public class LayoutOptimizerDist implements ILayoutOptimizer {
                 Taxa tax = TanglegramUtils.getTaxaForTanglegram(tree);
                 for (Iterator<String> taxIt = tax.iterator(); taxIt.hasNext(); ) {
                     String taxName = taxIt.next();
-                    if (!taxon2Id.keySet().contains(taxName)) {
-                        taxon2Id.put(taxName, id);
-                        id2Taxon.put(id, taxName);
-                        id++;
-                        // System.err.print(taxName + " = " + taxon2ID.get(taxName) + " , ");
-                    }
+					if (!taxon2Id.containsKey(taxName)) {
+						taxon2Id.put(taxName, id);
+						id2Taxon.put(id, taxName);
+						id++;
+						// System.err.print(taxName + " = " + taxon2ID.get(taxName) + " , ");
+					}
                 }
             }
         }
@@ -177,10 +174,7 @@ public class LayoutOptimizerDist implements ILayoutOptimizer {
     /**
      * computes a score that measures how different the current layout of the tree is from the given ordering
      *
-     * @param tree
-     * @param ordering
-     * @param taxon2Id
-     */
+	 */
     private int computeSimilarityScore(PhyloTree tree, int[] ordering, Map<String, Integer> taxon2Id,
                                        Map<Integer, String> id2taxon) {
         int[] rank = new int[ordering.length];
@@ -195,12 +189,6 @@ public class LayoutOptimizerDist implements ILayoutOptimizer {
     /**
      * recursively computes the similarity score
      *
-     * @param v
-     * @param tree
-     * @param seen
-     * @param rank
-     * @param taxon2Id
-     * @param leafCount
      * @return score
      */
     private int computeSimilarityScoreRec(Node v, PhyloTree tree, NodeSet seen, int[] rank, Map<String, Integer> taxon2Id, int[] leafCount) {
@@ -225,11 +213,6 @@ public class LayoutOptimizerDist implements ILayoutOptimizer {
     /**
      * given the first taxon, computes an ordering for all the rest
      *
-     * @param ntax
-     * @param firstTaxon
-     * @param trees
-     * @param taxon2Id
-     * @param id2Taxon
      * @return ordering of taxa
      */
     private int[] computeBestOrderingForGivenFirstTaxon(int ntax, Integer firstTaxon, PhyloTree[] trees, Map<String, Integer> taxon2Id, Map<Integer, String> id2Taxon) {
@@ -289,9 +272,6 @@ public class LayoutOptimizerDist implements ILayoutOptimizer {
     /**
      * in a post-order traversal, computes the distance from the first node to all its ancestors
      *
-     * @param v
-     * @param first
-     * @param distFromFirst
      * @return true, if first node is below v
      */
     private boolean computeDistFirst2AncestorRec(Node v, Node first, NodeArray<Pair<Integer, Integer>> distFromFirst) {
@@ -325,9 +305,7 @@ public class LayoutOptimizerDist implements ILayoutOptimizer {
     /**
      * in a pre-order traversal, compute the distance from the best ancestor of first to the given node v
      *
-     * @param v
-     * @param distFromFirst
-     */
+	 */
     private void computeDistBestAncestor2OtherRec(PhyloTree tree, Node v, NodeArray<Pair<Integer, Integer>> distFromFirst) {
         Node bestParent = null;
 
@@ -370,8 +348,6 @@ public class LayoutOptimizerDist implements ILayoutOptimizer {
     /**
      * finds the node for the named taxon
      *
-     * @param tree
-     * @param name
      * @return node or null
      */
     private Node findNode(PhyloTree tree, String name) {
@@ -385,9 +361,6 @@ public class LayoutOptimizerDist implements ILayoutOptimizer {
     /**
      * computes the score of the given embedding
      *
-     * @param v
-     * @param leaf2taxonId
-     * @param leafPos
      * @return score for subtree rooted at v
      */
     private int computeScoreRec(Node v, NodeArray<Integer> leaf2taxonId, NodeSet visited, int[] leafPos) {
@@ -418,9 +391,7 @@ public class LayoutOptimizerDist implements ILayoutOptimizer {
     /**
      * recursively extends the taxa below map from leaves to all nodes
      *
-     * @param v
-     * @param taxaBelow
-     */
+	 */
     private void computeTaxaBelowRec(Node v, NodeArray<BitSet> taxaBelow) {
         if (v.getOutDegree() > 0 && taxaBelow.get(v) == null) {
             BitSet below = new BitSet();
@@ -437,9 +408,7 @@ public class LayoutOptimizerDist implements ILayoutOptimizer {
     /**
      * rotates all out edges so as to sort by the taxa-below sets
      *
-     * @param tree
-     * @param taxaBelow
-     */
+	 */
     private void rotateTreeByTaxaBelow(PhyloTree tree, final NodeArray<BitSet> taxaBelow) {
         for (Node v0 = tree.getFirstNode(); v0 != null; v0 = v0.getNext()) {
             if (v0.getOutDegree() > 0) {
@@ -462,51 +431,48 @@ public class LayoutOptimizerDist implements ILayoutOptimizer {
                 }
                 */
 
-                SortedSet<Edge> adjacentEdges = new TreeSet<Edge>(new Comparator<Edge>() {
-                    public int compare(Edge e, Edge f) {
-                        if (e.getSource() == sourceNode && f.getSource() == sourceNode) // two out edges
-                        {
-                            Node v = e.getTarget();
-                            Node w = f.getTarget();
+				SortedSet<Edge> adjacentEdges = new TreeSet<Edge>((e, f) -> {
+					if (e.getSource() == sourceNode && f.getSource() == sourceNode) // two out edges
+					{
+						Node v = e.getTarget();
+						Node w = f.getTarget();
 
-                            // lexicographically smaller is smaller
-                            BitSet taxaBelowV = taxaBelow.get(v);
-                            BitSet taxaBelowW = taxaBelow.get(w);
+						// lexicographically smaller is smaller
+						BitSet taxaBelowV = taxaBelow.get(v);
+						BitSet taxaBelowW = taxaBelow.get(w);
 
-                            int i = taxaBelowV.nextSetBit(0);
-                            int j = taxaBelowW.nextSetBit(0);
-                            while (i != -1 && j != -1) {
-                                if (i < j)
-                                    return -1;
-                                else if (i > j)
-                                    return 1;
-                                i = taxaBelowV.nextSetBit(i + 1);
-                                j = taxaBelowW.nextSetBit(j + 1);
-                            }
-                            if (i == -1 && j != -1)
-                                return -1;
-                            else if (i != -1 && j == -1)
-                                return 1;
+						int i = taxaBelowV.nextSetBit(0);
+						int j = taxaBelowW.nextSetBit(0);
+						while (i != -1 && j != -1) {
+							if (i < j)
+								return -1;
+							else if (i > j)
+								return 1;
+							i = taxaBelowV.nextSetBit(i + 1);
+							j = taxaBelowW.nextSetBit(j + 1);
+						}
+						if (i == -1 && j != -1)
+							return -1;
+						else if (i != -1 && j == -1)
+							return 1;
 
-                        } else if (e.getTarget() == sourceNode && f.getSource() == sourceNode)
-                            return -1;
-                        else if (e.getSource() == sourceNode && f.getTarget() == sourceNode)
-                            return 1;
-                        // no else here!
-                        if (e.getId() < f.getId())
-                            return -1;
-                        else if (e.getId() > f.getId())
-                            return 1;
-                        else
-                            return 0;
-                    }
-                });
+					} else if (e.getTarget() == sourceNode && f.getSource() == sourceNode)
+						return -1;
+					else if (e.getSource() == sourceNode && f.getTarget() == sourceNode)
+						return 1;
+					// no else here!
+					if (e.getId() < f.getId())
+						return -1;
+					else if (e.getId() > f.getId())
+						return 1;
+					else
+						return 0;
+				});
 
                 for (Edge e = v0.getFirstAdjacentEdge(); e != null; e = v0.getNextAdjacentEdge(e)) {
                     adjacentEdges.add(e);
                 }
-                List<Edge> list = new LinkedList<Edge>();
-                list.addAll(adjacentEdges);
+				List<Edge> list = new LinkedList<Edge>(adjacentEdges);
                 v0.rearrangeAdjacentEdges(list);
 
                 /*

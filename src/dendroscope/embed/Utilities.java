@@ -37,8 +37,6 @@ public class Utilities {
     /**
      * compute the shortest path distances between taxa
      *
-     * @param tree
-     * @param ntax
      * @param taxon2Id numbering assumed to be 1...ntax
      * @return ntax+1 x ntax+1 distance matricx
      */
@@ -65,11 +63,9 @@ public class Utilities {
             computeDistFirst2AncestorRec(tree.getRoot(), vFirst, distFromFirst);
             computeDistBestAncestor2OtherRec(tree, tree.getRoot(), distFromFirst);
 
-            Pair<Integer, Integer>[] taxon2distFirstTree = new Pair[ntax + 1];
             for (Node vOther = tree.getFirstNode(); vOther != null; vOther = tree.getNextNode(vOther)) {
                 if (vOther.getOutDegree() == 0) {
                     Integer id = taxon2Id.get(tree.getLabel(vOther));
-                    taxon2distFirstTree[id] = distFromFirst.get(vOther);
                 }
             }
 
@@ -89,9 +85,6 @@ public class Utilities {
     /**
      * in a post-order traversal, computes the distance from the first node to all its ancestors
      *
-     * @param v
-     * @param first
-     * @param distFromFirst
      * @return true, if first node is below v
      */
     private static boolean computeDistFirst2AncestorRec(Node v, Node first, NodeArray<Pair<Integer, Integer>> distFromFirst) {
@@ -125,9 +118,7 @@ public class Utilities {
     /**
      * in a pre-order traversal, compute the distance from the best ancestor of first to the given node v
      *
-     * @param v
-     * @param distFromFirst
-     */
+	 */
     private static void computeDistBestAncestor2OtherRec(PhyloTree tree, Node v, NodeArray<Pair<Integer, Integer>> distFromFirst) {
         Node bestParent = null;
 
@@ -169,9 +160,7 @@ public class Utilities {
     /**
      * add the first matrix to the second
      *
-     * @param first
-     * @param second
-     */
+	 */
     public static void add(double[][] first, double[][] second) {
         for (int i = 0; i < first.length; i++) {
             for (int j = 0; j < first[i].length; j++)

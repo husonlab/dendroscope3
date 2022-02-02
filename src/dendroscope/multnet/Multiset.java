@@ -48,15 +48,13 @@ public class Multiset extends ArrayList {
     }
 
     public void addSorted(Multiset toAdd) {
-        Comparator<Multiset> comparator = new Comparator<Multiset>() {
-            public int compare(Multiset m1, Multiset m2) {
-                String concatenatedElements1 = m1.getConcatenatedElements();
-                String concatenatedElements2 = m2.getConcatenatedElements();
-                return concatenatedElements1.compareTo(concatenatedElements2);
-            }
-        };
-        int insertionPoint = Collections.binarySearch(this, toAdd, comparator);
-        if (insertionPoint < 0) insertionPoint = -1 * insertionPoint - 1;
-        this.add(insertionPoint, toAdd);
-    }
+		Comparator<Multiset> comparator = (m1, m2) -> {
+			String concatenatedElements1 = m1.getConcatenatedElements();
+			String concatenatedElements2 = m2.getConcatenatedElements();
+			return concatenatedElements1.compareTo(concatenatedElements2);
+		};
+		int insertionPoint = Collections.binarySearch(this, toAdd, comparator);
+		if (insertionPoint < 0) insertionPoint = -1 * insertionPoint - 1;
+		this.add(insertionPoint, toAdd);
+	}
 }

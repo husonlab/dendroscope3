@@ -50,9 +50,7 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
     /**
      * constructor
      *
-     * @param viewer
-     * @param tree
-     */
+	 */
     public TreeDrawerRadial(TreeViewer viewer, PhyloTree tree) {
         super(viewer, tree);
         node2NumberLeaves = new NodeIntArray(tree);
@@ -66,8 +64,7 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
     /**
      * setd up the graphview
      *
-     * @param graphView
-     */
+	 */
     public void setupGraphView(GraphView graphView) {
         graphView.setAllowInternalEdgePoints(false);
         graphView.setMaintainEdgeLengths(true);
@@ -121,7 +118,6 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
     /**
      * compute the angles for all edges
      *
-     * @param root
      * @return number of leaves
      */
     protected int computeAngles(Node root) {
@@ -161,8 +157,7 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
     /**
      * recursively compute the angles for all edges
      *
-     * @param v
-     */
+	 */
     private java.util.List<Node> computeAnglesRec(Node v, NodeDoubleArray angle) {
 		java.util.List<Node> leaves = new LinkedList<>();
 		if (v.isLeaf())
@@ -187,8 +182,7 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
     /**
      * assign equal angle coordinates
      *
-     * @param root
-     */
+	 */
     protected void setCoordinatesPhylogram(Node root) {
         boolean optionUseWeights = true;
 
@@ -279,8 +273,7 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
     /**
      * recompute all datastructures needed for optimized drawing
      *
-     * @param nodes
-     */
+	 */
     public void recomputeOptimization(NodeSet nodes) {
         final Node root = tree.getRoot();
 
@@ -471,7 +464,6 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
     /**
      * must we visit the subtree rooted at this node when drawing or looking for a mouse click?
      *
-     * @param v
      * @return true, if we must look at subtree below v
      */
     protected boolean mustVisitSubTreeBelowNode(Node v) {
@@ -508,10 +500,7 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
     /**
      * recursively do the work
      *
-     * @param v
-     * @param e
-     * @param resetAll
-     */
+	 */
     private void resetLabelPositionsRec(Node v, Edge e, boolean resetAll) {
         if (e != null) {
             EdgeView ev = viewer.getEV(e);
@@ -574,9 +563,7 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
     /**
      * compute the shape used to represent a collapsed subtree
      *
-     * @param v
-     * @return
-     */
+	 */
     public CollapsedShape computeCollapsedShape(Node v) {
         java.util.List<Point2D> points = new LinkedList<>();
         computePointsRec(v, points);

@@ -74,9 +74,7 @@ public class ReorderSubtreesCommand extends CommandBaseMultiViewer implements IC
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
     }
@@ -84,8 +82,7 @@ public class ReorderSubtreesCommand extends CommandBaseMultiViewer implements IC
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         // todo: this is broken!
 
@@ -105,20 +102,20 @@ public class ReorderSubtreesCommand extends CommandBaseMultiViewer implements IC
                     }
 
 
-                    class EdgeListElement {
-                        EdgeListElement(Edge e, String s) {
-                            this.edge = e;
-                            this.label = s;
-                        }
+					class EdgeListElement {
+						EdgeListElement(Edge e, String s) {
+							this.edge = e;
+							this.label = s;
+						}
 
-                        Edge edge;
-                        String label;
+						final Edge edge;
+						final String label;
 
-                        public String toString() {
-                            return label;
-                        }
-                    }
-                    java.util.List<EdgeListElement> original = new LinkedList<>();
+						public String toString() {
+							return label;
+						}
+					}
+					java.util.List<EdgeListElement> original = new LinkedList<>();
 
                     int count = 0;
                     for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {

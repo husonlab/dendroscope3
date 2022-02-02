@@ -72,17 +72,14 @@ public class DecreaseFontCommand extends CommandBase implements ICommand {
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
     public void apply(NexusStreamParser np) throws Exception {
     }
 
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         execute("set fontSize=decrease;");
     }

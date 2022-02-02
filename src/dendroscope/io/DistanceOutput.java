@@ -30,8 +30,6 @@ public class DistanceOutput {
     /**
      * write as nexus block
      *
-     * @param distances
-     * @param names
      * @return nexus distance block
      */
     public static String toNexusString(double[][] distances, String[] names) {
@@ -57,8 +55,6 @@ public class DistanceOutput {
     /**
      * write as simple matrix
      *
-     * @param distances
-     * @param names
      * @return simple matrix
      */
     public static String toSimpleString(double[][] distances, String[] names) {

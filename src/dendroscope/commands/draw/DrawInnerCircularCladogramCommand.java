@@ -95,8 +95,7 @@ public class DrawInnerCircularCladogramCommand extends DrawCommand implements IC
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
 
     public void actionPerformed(ActionEvent ev) {
         execute("set drawer=" + TreeViewer.INNERCIRCULAR_CLADOGRAM + ";");

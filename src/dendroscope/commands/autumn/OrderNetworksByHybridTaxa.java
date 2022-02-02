@@ -47,9 +47,7 @@ public class OrderNetworksByHybridTaxa extends CommandBase implements ICommand {
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("orderNetworks");
@@ -143,7 +141,7 @@ public class OrderNetworksByHybridTaxa extends CommandBase implements ICommand {
             return;
         }
 
-        TreeViewer[] result = list2.toArray(new TreeViewer[list2.size()]);
+		TreeViewer[] result = list2.toArray(new TreeViewer[0]);
 
         Document originalDocument = ((Director) getDir()).getDocument();
         Director theDir;
@@ -193,10 +191,8 @@ public class OrderNetworksByHybridTaxa extends CommandBase implements ICommand {
      * @param noRecentHybrid should not be recent hybrids
      * @param hybrid         should be hybrid
      * @param recentHybrid   should be recent hybrid
-     * @param tree
      * @param order          if true, return value "smaller is better", else return 0 for something violated, 1 for everything ok
-     * @return
-     */
+	 */
     private int computeScore(Set<String> noHybrid, Set<String> noRecentHybrid, Set<String> hybrid, Set<String> recentHybrid, PhyloTree tree, boolean order) {
         int score = 0;
         if (tree.getRoot() == null)
@@ -266,8 +262,7 @@ public class OrderNetworksByHybridTaxa extends CommandBase implements ICommand {
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     @Override
     public void actionPerformed(ActionEvent ev) {
     }

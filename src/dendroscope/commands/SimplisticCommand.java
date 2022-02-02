@@ -46,7 +46,7 @@ public class SimplisticCommand extends CommandBaseMultiViewer implements IComman
             list.add(np.getWordRespectCase());
         }
 
-        String[] param = list.toArray(new String[list.size()]);
+        String[] param = list.toArray(new String[0]);
 
 
         //String param[] = createPanelForInput();
@@ -81,7 +81,7 @@ public class SimplisticCommand extends CommandBaseMultiViewer implements IComman
                 trees.add(new TreeData(tree));
             }
         }
-        Simplistic.apply(getDir(), getDir().getDocument(), trees.toArray(new TreeData[trees.size()]), param);
+		Simplistic.apply(getDir(), getDir().getDocument(), trees.toArray(new TreeData[0]), param);
 
     }
 

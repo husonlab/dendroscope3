@@ -29,95 +29,82 @@ import java.io.*;
  */
 public interface IOFormat {
     /**
-     * does this look like a file of the correct type?
-     *
-     * @param file
-     * @return true, if correct type of file
-     */
-    public boolean isCorrectFileType(File file);
+	 * does this look like a file of the correct type?
+	 *
+	 * @return true, if correct type of file
+	 */
+	boolean isCorrectFileType(File file);
+
+	/**
+	 * does this look like the first line of a file of the correct type
+	 */
+	boolean isCorrectType(String aLine);
 
     /**
-     * does this look like the first line of a file of the correct type
-     *
-     * @param aLine
-     */
-    public boolean isCorrectType(String aLine);
+	 * reads trees from a file
+	 *
+	 * @return trees or null
+	 */
+	TreeData[] read(File file) throws IOException;
 
-    /**
-     * reads trees from a file
-     *
-     * @param file
-     * @return trees or null
-     * @throws IOException
-     */
-    public TreeData[] read(File file) throws IOException;
+	/**
+	 * read trees
+	 *
+	 * @return trees or null
+	 */
+	TreeData[] read(Reader r) throws IOException;
 
-    /**
-     * read trees
-     *
-     * @param r
-     * @return trees or null
-     * @throws IOException
-     */
-    public TreeData[] read(Reader r) throws IOException;
+	/**
+	 * writes trees to a file
+	 *
+	 */
+	void write(File file, boolean internalNodeLabelsAreEdgeLabels, TreeData[] trees) throws IOException;
 
-    /**
-     * writes trees to a file
-     *
-     * @param file
-     * @param trees
-     * @throws IOException
-     */
-    public void write(File file, boolean internalNodeLabelsAreEdgeLabels, TreeData[] trees) throws IOException;
+	/**
+	 * write trees
+	 *
+	 */
+	void write(Writer w, boolean internalNodeLabelsAreEdgeLabels, TreeData[] trees) throws IOException;
 
-    /**
-     * write trees
-     *
-     * @param w
-     * @param trees
-     * @throws IOException
-     */
-    public void write(Writer w, boolean internalNodeLabelsAreEdgeLabels, TreeData[] trees) throws IOException;
+	/**
+	 * gets a description of the file type
+	 *
+	 * @return description
+	 */
+	String getDescription();
 
-    /**
-     * gets a description of the file type
-     *
-     * @return description
-     */
-    public String getDescription();
+	/**
+	 * gets the default file extension of this format
+	 *
+	 * @return extension
+	 */
+	String getExtension();
 
-    /**
-     * gets the default file extension of this format
-     *
-     * @return extension
-     */
-    public String getExtension();
+	/**
+	 * gets the format name
+	 *
+	 * @return name
+	 */
+	String getName();
 
-    /**
-     * gets the format name
-     *
-     * @return name
-     */
-    public String getName();
+	/**
+	 * gets the filename filter
+	 *
+	 * @return file name filter
+	 */
+	FilenameFilter getFilenameFilter();
 
-    /**
-     * gets the filename filter
-     *
-     * @return file name filter
-     */
-    public FilenameFilter getFilenameFilter();
+	/**
+	 * get the file filter
+	 *
+	 * @return file filter
+	 */
+	FileFilter getFileFilter();
 
-    /**
+	/**
      * get the file filter
-     *
-     * @return file filter
-     */
-    public FileFilter getFileFilter();
-
-    /**
-     * get the file filter
-     *
-     * @return file filter
-     */
-    public javax.swing.filechooser.FileFilter getJFileFilter();
+	 *
+	 * @return file filter
+	 */
+	javax.swing.filechooser.FileFilter getJFileFilter();
 }

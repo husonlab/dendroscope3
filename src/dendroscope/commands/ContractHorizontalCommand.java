@@ -73,8 +73,7 @@ public class ContractHorizontalCommand extends ContractVerticalCommand implement
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     @Override
     public void actionPerformed(ActionEvent ev) {
         executeImmediately("contract direction=horizontal;");

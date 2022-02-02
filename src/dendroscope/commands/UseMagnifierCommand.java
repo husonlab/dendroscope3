@@ -83,9 +83,7 @@ public class UseMagnifierCommand extends CommandBaseMultiViewer implements IChec
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("set magnifier=");
@@ -103,8 +101,7 @@ public class UseMagnifierCommand extends CommandBaseMultiViewer implements IChec
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         execute("set magnifier=" + !isSelected() + ";");
     }

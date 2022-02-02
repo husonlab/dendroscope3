@@ -71,9 +71,7 @@ public class SetTreeNameCommand extends CommandBaseMultiViewer implements IComma
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
 
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("set name=");
@@ -123,8 +121,7 @@ public class SetTreeNameCommand extends CommandBaseMultiViewer implements IComma
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         String template = null;
         for (Iterator<TreeViewer> it = multiViewer.getTreeGrid().getSelectedOrAllIterator(); it.hasNext(); ) {

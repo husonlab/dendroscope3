@@ -97,9 +97,7 @@ public class ShowNodeLabelsCommand extends CommandBaseMultiViewer implements ICh
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("show nodelabels=");
         boolean show = np.getBoolean();
@@ -118,8 +116,7 @@ public class ShowNodeLabelsCommand extends CommandBaseMultiViewer implements ICh
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         execute("show nodelabels=" + (!isSelected()) + ";");
     }

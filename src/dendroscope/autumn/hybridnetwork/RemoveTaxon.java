@@ -29,8 +29,6 @@ public class RemoveTaxon {
     /**
      * remove the named taxon. Children are kept lexicographically sorted
      *
-     * @param root
-     * @param treeId
      * @param taxon  @return true, if changed
      */
     public static boolean apply(Root root, int treeId, int taxon) {
@@ -56,7 +54,6 @@ public class RemoveTaxon {
     /**
      * un-remove the named taxon. Children are kept lexicographically sorted
      *
-     * @param root
      * @param taxon @return true, if changed
      */
     public static boolean unapply(Root root, int taxon) {

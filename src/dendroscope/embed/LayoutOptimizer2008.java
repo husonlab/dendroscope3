@@ -40,10 +40,7 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
     /**
      * computes an optimal embedding using tobias' algorithm
      *
-     * @param tree
-     * @param progressListener
-     * @throws Exception
-     */
+	 */
     public void apply(PhyloTree tree, ProgressListener progressListener) {
         if (tree.getRoot() == null || tree.getNumberReticulateEdges() == 0) {
 			tree.getLSAChildrenMap().clear();
@@ -59,48 +56,43 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
             return;
 
         if (debug) {
-            Iterator it2 = tree.nodes().iterator();
-            while (it2.hasNext()) {
-                Node n = (Node) it2.next();
-                System.out.print("Node: " + n + "label: " + tree.getLabel(n) + "\tdecendants: ");
-                Iterator it3 = n.adjacentNodes().iterator();
-                while (it3.hasNext()) {
-                    Node d = (Node) it3.next();
-                    if (n.getCommonEdge(d).getSource().equals(n)) System.out.print(d + "\t");
-                }
-                System.out.println();
-            }
-        }
+			for (Node n : tree.nodes()) {
+				System.out.print("Node: " + n + "label: " + tree.getLabel(n) + "\tdecendants: ");
+				for (Node d : n.adjacentNodes()) {
+					if (n.getCommonEdge(d).getSource().equals(n)) System.out.print(d + "\t");
+				}
+				System.out.println();
+			}
+		}
         // build a dependency graph for the reticulations
         // maps the nodes of the dependency Graph back to the reticulation nodes
-        buildReticulationDependency(tree, rNode2ReticulationNodeData);
-        // each map has a node as key and a BitSet of the size of taxa as a value
-        if (debug) System.out.println("\nstart bottom up:");
-        if (debug) System.out.println("\nstart find auxiliary edges:");
-        // for the auxiliaryEdges we need to know which is the shortrest reticulation cycle for a reticulation and
-        // which node in the cycle is closest to the root. The key is the reticulation edge and the value are two edges.
-        // These edges are the startpoints for the path from source of auxiliary edge to p bzw. q.
-        createAuxiliaryEdges(tree, root, rNode2ReticulationNodeData);
-        // reverse map: each key is a node of the graph and contains as value the set of rNodes for which the auxiliary node connects to.
-        Map<Node, Set<Node>> parent2rNodes = new HashMap<Node, Set<Node>>();
-        Iterator it = rNode2ReticulationNodeData.keySet().iterator();
-        while (it.hasNext()) {
-            Node rNode = (Node) it.next();
-            ReticulationNodeData rNodeData = (ReticulationNodeData) rNode2ReticulationNodeData.get(rNode);
-            Node parent = rNodeData.getParent();
-            if (parent2rNodes.get(parent) == null) parent2rNodes.put(parent, new TreeSet<Node>(new NodeComparator()));
-            parent2rNodes.get(parent).add(rNode);
-        }
-        if (debug) System.out.println("\nstart mapping active RNodes:");
-        // maps those rNodes to a nodes, that have the node in their path to the GMRCA ( either through p or q)
-        Map nodes2rNodes = getActiveRNodesForInEdges(tree, rNode2ReticulationNodeData);
-        // start recursion
-        if (debug) System.out.println("\nstart top down:");
-        recTopDownLabelNodes(root, new HashSet(), parent2rNodes, nodes2rNodes, rNode2ReticulationNodeData, nodes2Orderings);
-        if (debug) {
-            it = tree.nodes().iterator();
-            while (it.hasNext()) {
-                Node n = (Node) it.next();
+		buildReticulationDependency(tree, rNode2ReticulationNodeData);
+		// each map has a node as key and a BitSet of the size of taxa as a value
+		if (debug) System.out.println("\nstart bottom up:");
+		if (debug) System.out.println("\nstart find auxiliary edges:");
+		// for the auxiliaryEdges we need to know which is the shortrest reticulation cycle for a reticulation and
+		// which node in the cycle is closest to the root. The key is the reticulation edge and the value are two edges.
+		// These edges are the startpoints for the path from source of auxiliary edge to p bzw. q.
+		createAuxiliaryEdges(tree, root, rNode2ReticulationNodeData);
+		// reverse map: each key is a node of the graph and contains as value the set of rNodes for which the auxiliary node connects to.
+		Map<Node, Set<Node>> parent2rNodes = new HashMap<Node, Set<Node>>();
+		for (Object o : rNode2ReticulationNodeData.keySet()) {
+			Node rNode = (Node) o;
+			ReticulationNodeData rNodeData = (ReticulationNodeData) rNode2ReticulationNodeData.get(rNode);
+			Node parent = rNodeData.getParent();
+			if (parent2rNodes.get(parent) == null) parent2rNodes.put(parent, new TreeSet<Node>(new NodeComparator()));
+			parent2rNodes.get(parent).add(rNode);
+		}
+		if (debug) System.out.println("\nstart mapping active RNodes:");
+		// maps those rNodes to a nodes, that have the node in their path to the GMRCA ( either through p or q)
+		Map nodes2rNodes = getActiveRNodesForInEdges(tree, rNode2ReticulationNodeData);
+		// start recursion
+		if (debug) System.out.println("\nstart top down:");
+		recTopDownLabelNodes(root, new HashSet(), parent2rNodes, nodes2rNodes, rNode2ReticulationNodeData, nodes2Orderings);
+		if (debug) {
+			Iterator it = tree.nodes().iterator();
+			while (it.hasNext()) {
+				Node n = (Node) it.next();
                 System.out.println("Node: " + n + "\tordered decendants: " + nodes2Orderings.get(n));
             }
         }
@@ -114,8 +106,6 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
     /**
      * calculates the set of active reticulations for the inEdges of all nodes.
      *
-     * @param graph
-     * @param rNode2ReticulationNodeData
      * @return contains as keys nodes and as values Maps which contain the reticulations for which the inEdge is contained
      * in the tree cycle of the reticulations
      */
@@ -169,11 +159,7 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
     /**
      * creates the set of auxiliary edges, the information is stored in the ReticulationNodeData of each reticulation.
      *
-     * @param graph
-     * @param root
-     * @param rNode2ReticulationNodeData
-     * @throws Exception
-     */
+	 */
     private void createAuxiliaryEdges(PhyloSplitsGraph graph, Node root, Map rNode2ReticulationNodeData) {
         Map node2parent = new HashMap();
         Iterator it = graph.nodes().iterator();
@@ -238,13 +224,7 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
 
 
     /**
-     * @param start
-     * @param before
-     * @param parent2rNodes
-     * @param node2ActiverNodes
-     * @param rNode2ReticulationNodeData
-     * @throws Exception
-     */
+	 */
     private void recTopDownLabelNodes(Node start, HashSet before, Map parent2rNodes, Map node2ActiverNodes, Map rNode2ReticulationNodeData, Map nodes2Orderings) {
         ArrayList orderedRNodes = new ArrayList();
         if (parent2rNodes.get(start) != null) {
@@ -255,50 +235,39 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
         if (debug)
             System.out.println("orderedRNodes.size() = " + orderedRNodes.size() + "\tactiveRNodes: " + node2ActiverNodes.get(start));
         if (orderedRNodes.size() == 0 && node2ActiverNodes.get(start) == null) {
-            Iterator itN = start.adjacentNodes().iterator();
-            while (itN.hasNext()) {
-                Node n = (Node) itN.next();
-                if (n.getInDegree() == 1 && n.getCommonEdge(start).getSource().equals(start))
-                    ordList.add(n);
-            }
-        } else {
-            // the list of tree decendants of start
-            TreeSet tmp = new TreeSet(new NodeComparator());
-            Iterator itN = start.adjacentNodes().iterator();
-            while (itN.hasNext()) {
-                Node n = (Node) itN.next();
-                if (n.getInDegree() == 1 && n.getCommonEdge(start).getSource().equals(start))
-                    tmp.add(n);
-            }
-            ArrayList decendants = new ArrayList();
-            decendants.addAll(orderedRNodes);
-            decendants.addAll(tmp);
-            // gives the distances for the scoring function of the ordering we make this once to save time
-            // first are the decendants in order of the ArrayList decendants and last two entries are before and after.
-            int[][] nodes2nConections = makeDistances4Edges(start, before, orderedRNodes, decendants, node2ActiverNodes, rNode2ReticulationNodeData);
-            // place all reticulation nodes in the order given
-            buildOrdListGreedy(orderedRNodes, nodes2nConections, decendants, ordList, rNode2ReticulationNodeData);
-        }
-        nodes2Orderings.put(start, ordList);
-        // recursive downward
-        Iterator it = ordList.iterator();
-        while (it.hasNext()) {
-            Node next = (Node) it.next();
-            recTopDownLabelNodes(next, before, parent2rNodes, node2ActiverNodes, rNode2ReticulationNodeData, nodes2Orderings);
-            before.add(next);// next has been worked on.
-        }
+			for (Node n : start.adjacentNodes()) {
+				if (n.getInDegree() == 1 && n.getCommonEdge(start).getSource().equals(start))
+					ordList.add(n);
+			}
+		} else {
+			// the list of tree decendants of start
+			TreeSet tmp = new TreeSet(new NodeComparator());
+			for (Node n : start.adjacentNodes()) {
+				if (n.getInDegree() == 1 && n.getCommonEdge(start).getSource().equals(start))
+					tmp.add(n);
+			}
+			ArrayList decendants = new ArrayList();
+			decendants.addAll(orderedRNodes);
+			decendants.addAll(tmp);
+			// gives the distances for the scoring function of the ordering we make this once to save time
+			// first are the decendants in order of the ArrayList decendants and last two entries are before and after.
+			int[][] nodes2nConections = makeDistances4Edges(start, before, orderedRNodes, decendants, node2ActiverNodes, rNode2ReticulationNodeData);
+			// place all reticulation nodes in the order given
+			buildOrdListGreedy(orderedRNodes, nodes2nConections, decendants, ordList, rNode2ReticulationNodeData);
+		}
+		nodes2Orderings.put(start, ordList);
+		// recursive downward
+		for (Object o : ordList) {
+			Node next = (Node) o;
+			recTopDownLabelNodes(next, before, parent2rNodes, node2ActiverNodes, rNode2ReticulationNodeData, nodes2Orderings);
+			before.add(next);// next has been worked on.
+		}
 
-    }
+	}
 
 
     /**
-     * @param orderedRNodes
-     * @param nodes2nConections
-     * @param decendants
-     * @param ordList
-     * @param rNode2ReticulationNodeData
-     * @return
-     */
+	 */
     private int buildOrdListGreedy(ArrayList orderedRNodes, int[][] nodes2nConections, ArrayList decendants, ArrayList ordList, Map rNode2ReticulationNodeData) {
         Iterator it = orderedRNodes.iterator();
         // crossings is the last number we got as crossing score so it is the overall score we return it for the greedy approach
@@ -312,35 +281,35 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
             if (debug)
                 System.out.println("\nnode: " + rNode + "\tnode2Pathp: " + node2Pathp + "\tnode2Pathq: " + node2Pathq);
             // add p and q to the ordering
-            if (!node2Pathp.equals(rNodeData.getParent()) && ordList.indexOf(node2Pathp) == -1) {
-                if (debug) System.out.println("adding node: " + node2Pathp);
-                int minPosition = 0;
-                int minScore = Integer.MAX_VALUE;
-                for (int i = 0; i <= ordList.size() && minScore > 0; i++) {
-                    ordList.add(i, node2Pathp);
-                    int score = getCrossingScore(nodes2nConections, node2Pathp, decendants, ordList, i, rNode2ReticulationNodeData);
-                    if (minScore > score) {
-                        minScore = score;
-                        minPosition = i;
-                        crossings = minScore;
-                    }
-                    ordList.remove(i);
-                }
-                ordList.add(minPosition, node2Pathp);
-                if (debug)
-                    System.out.println("minScore: " + minScore + "\tminPosition: " + minPosition + "\tordList: " + ordList);
-            }
-            if (!node2Pathq.equals(rNodeData.getParent()) && ordList.indexOf(node2Pathq) == -1) {
-                if (debug) System.out.println("adding  node: " + node2Pathq);
-                int minPosition = 0;
-                int minScore = Integer.MAX_VALUE;
-                for (int i = 0; i <= ordList.size() && minScore > 0; i++) {
-                    ordList.add(i, node2Pathq);
-                    int score = getCrossingScore(nodes2nConections, node2Pathq, decendants, ordList, i, rNode2ReticulationNodeData);
-                    if (minScore > score) {
-                        minScore = score;
-                        minPosition = i;
-                        crossings = minScore;
+			if (!node2Pathp.equals(rNodeData.getParent()) && !ordList.contains(node2Pathp)) {
+				if (debug) System.out.println("adding node: " + node2Pathp);
+				int minPosition = 0;
+				int minScore = Integer.MAX_VALUE;
+				for (int i = 0; i <= ordList.size() && minScore > 0; i++) {
+					ordList.add(i, node2Pathp);
+					int score = getCrossingScore(nodes2nConections, node2Pathp, decendants, ordList, i, rNode2ReticulationNodeData);
+					if (minScore > score) {
+						minScore = score;
+						minPosition = i;
+						crossings = minScore;
+					}
+					ordList.remove(i);
+				}
+				ordList.add(minPosition, node2Pathp);
+				if (debug)
+					System.out.println("minScore: " + minScore + "\tminPosition: " + minPosition + "\tordList: " + ordList);
+			}
+			if (!node2Pathq.equals(rNodeData.getParent()) && !ordList.contains(node2Pathq)) {
+				if (debug) System.out.println("adding  node: " + node2Pathq);
+				int minPosition = 0;
+				int minScore = Integer.MAX_VALUE;
+				for (int i = 0; i <= ordList.size() && minScore > 0; i++) {
+					ordList.add(i, node2Pathq);
+					int score = getCrossingScore(nodes2nConections, node2Pathq, decendants, ordList, i, rNode2ReticulationNodeData);
+					if (minScore > score) {
+						minScore = score;
+						minPosition = i;
+						crossings = minScore;
                     }
                     ordList.remove(i);
                 }
@@ -383,18 +352,18 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
         it = decendants.iterator();
         while (it.hasNext()) {
             Node n = (Node) it.next();
-            if (debug) System.out.println("n: " + n + "\tordList: " + ordList);
-            if (ordList.indexOf(n) == -1 && n.getInDegree() == 1) {
-                int minPosition = 0;
-                int minScore = Integer.MAX_VALUE;
-                if (debug) System.out.println("adding edge: Node " + n);
-                for (int i = 0; i <= ordList.size() && minScore > 0; i++) {
-                    ordList.add(i, n);
-                    int score = getCrossingScore(nodes2nConections, n, decendants, ordList, i, rNode2ReticulationNodeData);
-                    if (minScore > score) {
-                        minScore = score;
-                        minPosition = i;
-                        crossings = minScore;
+			if (debug) System.out.println("n: " + n + "\tordList: " + ordList);
+			if (!ordList.contains(n) && n.getInDegree() == 1) {
+				int minPosition = 0;
+				int minScore = Integer.MAX_VALUE;
+				if (debug) System.out.println("adding edge: Node " + n);
+				for (int i = 0; i <= ordList.size() && minScore > 0; i++) {
+					ordList.add(i, n);
+					int score = getCrossingScore(nodes2nConections, n, decendants, ordList, i, rNode2ReticulationNodeData);
+					if (minScore > score) {
+						minScore = score;
+						minPosition = i;
+						crossings = minScore;
                     }
                     ordList.remove(i);
                 }
@@ -410,14 +379,7 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
     /**
      * calculates the score for the plasement of 'node' given the scoring matrix nodes2nConnections
      *
-     * @param nodes2Connections
-     * @param node
-     * @param decendants
-     * @param ordList
-     * @param position
-     * @param rNode2ReticulationNodeData
-     * @return
-     */
+	 */
     private int getCrossingScore(int[][] nodes2Connections, Node node, ArrayList decendants, ArrayList ordList, int position, Map rNode2ReticulationNodeData) {
         int score = 0;
         int indexP = -1;
@@ -459,14 +421,7 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
     /**
      * creates a scoring matrix which contains as values the weight of the connections between the subnetworks of two nodes. This is calculated one to save time
      *
-     * @param start
-     * @param before
-     * @param orderedRNodes
-     * @param decendants
-     * @param nodes2ActiverNodes
-     * @param rNode2ReticulationNodeData
-     * @return
-     */
+	 */
     private int[][] makeDistances4Edges(Node start, HashSet before, ArrayList orderedRNodes, ArrayList decendants, Map nodes2ActiverNodes, Map rNode2ReticulationNodeData) {
         // last two are the scores for before and after
         int[][] distances = new int[decendants.size() + 2][decendants.size() + 2];
@@ -492,29 +447,24 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
         HashSet startActiveRNodes = (HashSet) nodes2ActiverNodes.get(start);
         it = startActiveRNodes.iterator();
         while (it.hasNext()) {
-            Node r = (Node) it.next();
-            Iterator it2 = decendants.iterator();
-            while (it2.hasNext()) {
-                Node dec = (Node) it2.next();
-                HashSet decActiveRNodes = (HashSet) nodes2ActiverNodes.get(dec);
-                // is the node in the active set of the decendant and already placed?
-                if (decActiveRNodes.contains(r) && before.contains(r))
-                    distances[decendants.indexOf(dec)][distances.length - 2]++;
-                else if (decActiveRNodes.contains(r))
-                    distances[decendants.indexOf(dec)][distances.length - 1]++;
-            }
-        }
+			Node r = (Node) it.next();
+			for (Object decendant : decendants) {
+				Node dec = (Node) decendant;
+				HashSet decActiveRNodes = (HashSet) nodes2ActiverNodes.get(dec);
+				// is the node in the active set of the decendant and already placed?
+				if (decActiveRNodes.contains(r) && before.contains(r))
+					distances[decendants.indexOf(dec)][distances.length - 2]++;
+				else if (decActiveRNodes.contains(r))
+					distances[decendants.indexOf(dec)][distances.length - 1]++;
+			}
+		}
         return distances;
     }
 
     /**
      * find the shortest path from a decendant to an ancestor with respect to the auxiliary edges.
      *
-     * @param decendant
-     * @param ancestor
-     * @param rNode2ReticulationNodeData
-     * @return
-     */
+	 */
     private LinkedList findMinPath2Ancestor(Node decendant, Node ancestor, Map rNode2ReticulationNodeData) {
         LinkedList path = new LinkedList();
         recFindPath2Ancestor(decendant, ancestor, path, rNode2ReticulationNodeData);
@@ -524,11 +474,7 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
     /**
      * rec find the shortest path from a decendant to an ancestor with respect to the auxiliary edges.
      *
-     * @param decendant
-     * @param ancestor
-     * @param path
-     * @param rNode2ReticulationNodeData
-     */
+	 */
     private void recFindPath2Ancestor(Node decendant, Node ancestor, LinkedList path, Map rNode2ReticulationNodeData) {
         // check if this is a recombination node
         if (decendant.equals(ancestor))
@@ -549,12 +495,7 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
     /**
      * Calculates all pathes from the decendant to the ancestor in a network the result is saved in 'pathes'
      *
-     * @param decendant
-     * @param ancestor
-     * @param visitedNodes
-     * @param pathes
-     * @param rNode2ReticulationNodeData
-     */
+	 */
     private void recFindPathesInOrgGraph2Ancestor(Node decendant, Node ancestor, LinkedList visitedNodes, HashSet pathes, Map rNode2ReticulationNodeData) {
         Iterator it = decendant.adjacentNodes().iterator();
         visitedNodes.add(decendant);
@@ -591,10 +532,7 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
     /**
      * Gives back a linked List of the reticulation beeing childs of start. the list is ordered in the sequence the nodes must be added to start
      *
-     * @param rNodes
-     * @param rNode2ReticulationNodeData
-     * @return
-     */
+	 */
     private ArrayList buildLocalWorkFlow(Set rNodes, Map rNode2ReticulationNodeData) {
         PhyloSplitsGraph ordGraph = new PhyloSplitsGraph();
         Iterator it = rNodes.iterator();
@@ -608,17 +546,16 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
         }
         it = rNodes.iterator();
         while (it.hasNext()) {
-            Node rNode = (Node) it.next();
-            ReticulationNodeData rNodeData = (ReticulationNodeData) rNode2ReticulationNodeData.get(rNode);
-            HashSet dependentRNodes = rNodeData.getDependentRNodes();
-            Iterator itDep = dependentRNodes.iterator();
-            while (itDep.hasNext()) {
-                Node depRNode = (Node) itDep.next();
-                if (rNodes.contains(depRNode)) {
-                    ordGraph.newEdge((Node) rNode2ordNode.get(rNode), (Node) rNode2ordNode.get(depRNode));
-                }
-            }
-        }
+			Node rNode = (Node) it.next();
+			ReticulationNodeData rNodeData = (ReticulationNodeData) rNode2ReticulationNodeData.get(rNode);
+			HashSet dependentRNodes = rNodeData.getDependentRNodes();
+			for (Object dependentRNode : dependentRNodes) {
+				Node depRNode = (Node) dependentRNode;
+				if (rNodes.contains(depRNode)) {
+					ordGraph.newEdge((Node) rNode2ordNode.get(rNode), (Node) rNode2ordNode.get(depRNode));
+				}
+			}
+		}
         LinkedList sortedOrdNodes = DFS(ordGraph, true, true);
         ArrayList sortedNodes = new ArrayList();
         it = sortedOrdNodes.iterator();
@@ -631,9 +568,7 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
      * Constructs a graph with nodes are indications of reticulation nodes and an edge between two nodes if the movement of one node has an influence on the edge of a
      * reticulation edge of the other. The information is stored in the ReticulationNodeData objects.
      *
-     * @param graph
-     * @param rNode2ReticulationNodeData
-     */
+	 */
     private void buildReticulationDependency(PhyloSplitsGraph graph, Map rNode2ReticulationNodeData) {
         Map rNode2DepRetNode = new HashMap();
         PhyloSplitsGraph depRet = new PhyloSplitsGraph();
@@ -651,57 +586,55 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
         }
         it = rNode2ReticulationNodeData.keySet().iterator();
         while (it.hasNext()) {
-            Node retN = (Node) it.next();
-            HashSet dependentTreeNodes = ((ReticulationNodeData) rNode2ReticulationNodeData.get(retN)).getDependentTreeNodes();
-            HashSet dependentRetNodes = ((ReticulationNodeData) rNode2ReticulationNodeData.get(retN)).getDependentRNodes();
-            HashSet seenNodes = new HashSet();
-            seenNodes.add(retN);
-            // init toWork
-            Vector nodes2Work = new Vector();
-            Iterator it2 = retN.adjacentNodes().iterator();
-            while (it2.hasNext()) {
-                Node n = (Node) it2.next();
-                if (n.getCommonEdge(retN).getSource().equals(retN))
-                    nodes2Work.add(n);
-            }
-            while (nodes2Work.size() > 0) {
-                Node next = (Node) nodes2Work.remove(0);
-                if (!seenNodes.contains(next) && next.getInDegree() == 1) {
-                    dependentTreeNodes.add(next);
-                    it2 = next.adjacentNodes().iterator();
-                    while (it2.hasNext()) {
-                        Node toAdd = (Node) it2.next();
-                        if (next.getCommonEdge(toAdd).getSource().equals(next)) {
-                            nodes2Work.add(toAdd);
-                        }
+			Node retN = (Node) it.next();
+			HashSet dependentTreeNodes = ((ReticulationNodeData) rNode2ReticulationNodeData.get(retN)).getDependentTreeNodes();
+			HashSet dependentRetNodes = ((ReticulationNodeData) rNode2ReticulationNodeData.get(retN)).getDependentRNodes();
+			HashSet seenNodes = new HashSet();
+			seenNodes.add(retN);
+			// init toWork
+			Vector nodes2Work = new Vector();
+			for (Node n : retN.adjacentNodes()) {
+				if (n.getCommonEdge(retN).getSource().equals(retN))
+					nodes2Work.add(n);
+			}
+			while (nodes2Work.size() > 0) {
+				Node next = (Node) nodes2Work.remove(0);
+				if (!seenNodes.contains(next) && next.getInDegree() == 1) {
+					dependentTreeNodes.add(next);
+					Iterator it2 = next.adjacentNodes().iterator();
+					while (it2.hasNext()) {
+						Node toAdd = (Node) it2.next();
+						if (next.getCommonEdge(toAdd).getSource().equals(next)) {
+							nodes2Work.add(toAdd);
+						}
                     }
                 } else if (!seenNodes.contains(next) && next.getInDegree() == 2) {
                     dependentRetNodes.add(next);
                     depRet.newEdge((Node) rNode2DepRetNode.get(retN), (Node) rNode2DepRetNode.get(next));
                 }
-                seenNodes.add(next);
-            }
-        }
-    }
+				seenNodes.add(next);
+			}
+		}
+	}
 
 
-    /**
-     * Graph stuff *
-     */
+	/**
+	 * Graph stuff *
+	 */
 
-    private final Integer white = (int) (0);
-    private final Integer gray = (int) (1);
-    private final Integer black = (int) (2);
-    private int time = -1;
+	private final Integer white = 0;
+	private final Integer gray = 1;
+	private final Integer black = 2;
+	private int time = -1;
 
-    private LinkedList DFS(PhyloSplitsGraph graph, boolean breakCycles, boolean removeForwardEdges) {
-        Map node2Color = new HashMap();
-        Map node2Predecessor = new HashMap();
-        Map node2time = new HashMap();
-        LinkedList sortedNodes = new LinkedList();
-        Iterator it = graph.nodes().iterator();
-        while (it.hasNext()) {
-            Node n = (Node) it.next();
+	private LinkedList DFS(PhyloSplitsGraph graph, boolean breakCycles, boolean removeForwardEdges) {
+		Map node2Color = new HashMap();
+		Map node2Predecessor = new HashMap();
+		Map node2time = new HashMap();
+		LinkedList sortedNodes = new LinkedList();
+		Iterator it = graph.nodes().iterator();
+		while (it.hasNext()) {
+			Node n = (Node) it.next();
             node2Color.put(n, white);
             node2Predecessor.put(n, null);
             // first is discovery, second is finishing time
@@ -752,23 +685,23 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
         return sorted;
     }
 
-    class NodeComparator implements Comparator<Node> {
+	static class NodeComparator implements Comparator<Node> {
 
-        public int compare(Node n1, Node n2) {
-            return n1.getId() - n2.getId();
-        }
-    }
+		public int compare(Node n1, Node n2) {
+			return n1.getId() - n2.getId();
+		}
+	}
 
-    class ReticulationNodeData {
+	static class ReticulationNodeData {
 
-        Node rNode;
-        Node parent;
-        Edge p;
-        Edge q;
-        Node node2p;
-        Node node2q;
-        LinkedList pathParent2P;
-        LinkedList pathParent2Q;
+		Node rNode;
+		Node parent;
+		Edge p;
+		Edge q;
+		Node node2p;
+		Node node2q;
+		LinkedList pathParent2P;
+		LinkedList pathParent2Q;
 
         HashSet dependentTreeNodes;
         HashSet dependentRNodes;
@@ -887,9 +820,7 @@ public class LayoutOptimizer2008 implements ILayoutOptimizer {
     /**
      * compute a naive ordering
      *
-     * @param tree
-     * @param node2ChildrenInNetwork
-     */
+	 */
     public void applyNaiveOrdering(PhyloTree tree, NodeArray node2ChildrenInNetwork) {
         List list = new LinkedList();
         NodeSet seen = new NodeSet(tree);

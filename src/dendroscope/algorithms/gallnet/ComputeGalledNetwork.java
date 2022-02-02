@@ -49,9 +49,7 @@ public class ComputeGalledNetwork {
     /**
      * constructor
      *
-     * @param taxa
-     * @param splits
-     */
+	 */
     public ComputeGalledNetwork(Taxa taxa, SplitSystem splits) {
         this.taxa = taxa;
         this.splits = splits;
@@ -101,7 +99,7 @@ public class ComputeGalledNetwork {
             if (A.cardinality() < taxa.size() - 1)
                 list.add(new Cluster(A, split.getWeight()));
         }
-        Cluster[] clusters = (Cluster[]) list.toArray(new Cluster[list.size()]);
+		Cluster[] clusters = (Cluster[]) list.toArray(new Cluster[0]);
 
         System.err.println("Number of clusters: " + clusters.length);
 
@@ -169,9 +167,6 @@ public class ComputeGalledNetwork {
     /**
      * compute one part of partitioning below root
      *
-     * @param progressListener
-     * @param clusters
-     * @param additionalEdges
      * @return extended clusters below root
      */
     private Cluster[] applyToPartition(ProgressListener progressListener, Cluster[] clusters, List additionalEdges, int maxTaxonId,
@@ -300,7 +295,7 @@ public class ComputeGalledNetwork {
             result.add(new Cluster(Cluster.union(allTaxaInComponent[n], additionalTaxa[n])));
         }
 
-        Cluster[] resultClusters = (Cluster[]) result.toArray(new Cluster[result.size()]);
+		Cluster[] resultClusters = (Cluster[]) result.toArray(new Cluster[0]);
 
         // System.err.println("Clusters before adding markers:");  Cluster.print(clusters);
 
@@ -360,9 +355,7 @@ public class ComputeGalledNetwork {
     /**
      * computes weights for all output clusters from the input clusters
      *
-     * @param iClusters
-     * @param oClusters
-     */
+	 */
     private void computeWeights(Cluster[] iClusters, Cluster[] oClusters) {
         int[] mapIn2Out = new int[iClusters.length]; // maps each input cluster to its output cluster
 
@@ -404,13 +397,11 @@ public class ComputeGalledNetwork {
     /**
      * determines incompatibity components
      *
-     * @param incompatible
      * @return all incompatibity components
      */
     private static BitSet[] computeComponents(boolean[][] incompatible) {
         int[] componentNumber = new int[incompatible.length];
-        for (int i = 0; i < componentNumber.length; i++)
-            componentNumber[i] = -1;
+		Arrays.fill(componentNumber, -1);
 
         int number = 0;
         for (int i = 0; i < incompatible.length; i++) {
@@ -431,11 +422,7 @@ public class ComputeGalledNetwork {
     /**
      * recursively does the work
      *
-     * @param incompatible
-     * @param i
-     * @param number
-     * @param componentNumber
-     */
+	 */
     private static void computeComponentsRec(boolean[][] incompatible, int i, int number, int[] componentNumber) {
         componentNumber[i] = number;
         for (int j = 0; j < incompatible.length; j++) {

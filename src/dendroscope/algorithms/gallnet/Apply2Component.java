@@ -46,9 +46,6 @@ public class Apply2Component {
     /**
      * apply the algorithm to a single incompatibility compontent of separated taxa
      *
-     * @param clusters
-     * @param additionalEdges
-     * @param reticulate
      * @return extended set of clusters whose Hasse network is a minimal  softwired network for the set of input clusters
      */
     public Cluster[] apply(ProgressListener progressListener, Cluster[] clusters, List<Triplet> additionalEdges,
@@ -73,7 +70,7 @@ public class Apply2Component {
             return clusters;
 
         // sort triples so that ones with largest sets come first
-        Triple[] array = triples.toArray(new Triple[triples.size()]);
+        Triple[] array = triples.toArray(new Triple[0]);
         Arrays.sort(array, Triple.getComparator());
         triples = Arrays.asList(array);
 
@@ -161,18 +158,16 @@ public class Apply2Component {
         determineAdditionalEdges(reticulate, backbone, clusters, backboneNodes2Clusters, additionalEdges);
 
         if (DEBUG) {
-            System.err.println("Clusters after adding maximal optional to modified backbone:");
-            Cluster.print(result.toArray(new Cluster[result.size()]));
+			System.err.println("Clusters after adding maximal optional to modified backbone:");
+			Cluster.print(result.toArray(new Cluster[0]));
         }
 
-        return result.toArray(new Cluster[result.size()]);
+		return result.toArray(new Cluster[0]);
     }
 
     /**
      * verifies that set of reticulate taxa    actually resolves all incompatibilities
      *
-     * @param reticulate
-     * @param clusters
      * @return true, if no problems found
      */
     private boolean verifyReticulateTaxa(BitSet reticulate, Cluster[] clusters) {
@@ -207,8 +202,6 @@ public class Apply2Component {
     /**
      * computes the mapping from nodes in the backbone tree to original clusters
      *
-     * @param backbone
-     * @param backbone2clusters
      * @return mapping from nodes to bits indicating original clusters
      */
     private NodeArray<BitSet> computeBackboneNodes2Clusters(PhyloTree backbone, Map backbone2clusters) {
@@ -224,12 +217,7 @@ public class Apply2Component {
     /**
      * determines the set of additional edges that are needed
      *
-     * @param reticulateTaxa
-     * @param backbone
-     * @param clusters
-     * @param backboneNodes2OriginalClusters
-     * @param additionalEdges
-     */
+	 */
     private void determineAdditionalEdges(BitSet reticulateTaxa, PhyloTree backbone, Cluster[] clusters,
                                           NodeArray backboneNodes2OriginalClusters, List<Triplet> additionalEdges) {
         if (backbone.getRoot() == null)
@@ -297,8 +285,10 @@ public class Apply2Component {
 
                                 for (int c = oClusters.nextSetBit(0); c != -1; c = oClusters.nextSetBit(c + 1)) {
 
-                                    if (!clusters[c].get(t))
-                                        okToDescend = false;   // not all clusters  contain t, don't descend
+									if (!clusters[c].get(t)) {
+										okToDescend = false;   // not all clusters  contain t, don't descend
+										break;
+									}
                                 }
                             } else
                                 okToDescend = false; // v has more than one child with t below,don't descend
@@ -325,10 +315,6 @@ public class Apply2Component {
     /**
      * determine attachment position for maximal optional clusters
      *
-     * @param backbone
-     * @param attachmentNodes
-     * @param usedAttachmentNodes
-     * @param maximalOptionalClusters
      * @return the best assignment
      */
     private Node[] solveMinimalAttachmentProblem(PhyloTree backbone, NodeSet[] attachmentNodes, NodeSet[] usedAttachmentNodes, Cluster[] maximalOptionalClusters) {
@@ -360,15 +346,7 @@ public class Apply2Component {
     /**
      * use branch and bound to compute optimal attachment nodes for all maximal optional clusters
      *
-     * @param topTree
-     * @param attachmentNodes
-     * @param usedAttachmentNodes
-     * @param maximalOptionalClusters
-     * @param i
-     * @param currentAssignment
-     * @param currentScore
-     * @param bestAssignment
-     */
+	 */
     private void computeAttachmentForMaximalOptionalClustersRec(PhyloTree topTree, NodeSet[] attachmentNodes, NodeSet[] usedAttachmentNodes,
                                                                 Cluster[] maximalOptionalClusters, int i, Node[] currentAssignment,
                                                                 int currentScore, Node[] bestAssignment, IntegerVariable bestScore) throws CanceledException {
@@ -414,7 +392,6 @@ public class Apply2Component {
     /**
      * computes the loss associated with attaching the given optional cluster to the node v in the tree
      *
-     * @param v
      * @param taxId2attachmentNode maps taxid to node used
      * @return loss
      */
@@ -441,9 +418,7 @@ public class Apply2Component {
     /**
      * push up maximal optional cluster.  Also push up new taxon Id to make sure that cluster only gets one connection
      *
-     * @param maximalOptionalClusters
-     * @param maximalOptionalCluster2AttachmentNode
-     */
+	 */
     private void pushMaximalClustersUp(Cluster[] maximalOptionalClusters, Node[] maximalOptionalCluster2AttachmentNode,
                                        BitSet additionalTaxa, IntegerVariable additionaTaxonId) {
         for (int i = 0; i < maximalOptionalClusters.length; i++) {
@@ -467,12 +442,7 @@ public class Apply2Component {
     /**
      * greedily find a minimal reticulate set
      *
-     * @param tripleClusters
-     * @param current
-     * @param level
-     * @param hide
-     * @return
-     */
+	 */
     private BitSet greedyMinimalHittingSet(BitSet[] tripleClusters, BitSet current, int level, boolean hide) {
         progressListener.setCancelable(false);
         while (level < tripleClusters.length / 3) {
@@ -519,89 +489,84 @@ public class Apply2Component {
     /**
      * use an FPT algorithm to find sets of reticulate taxa of minimum size
      *
-     * @param triples
-     */
+	 */
     private void findMinimalHittingSet(Collection<Triple> triples, Cluster[] clusters) {
-        SortedSet<Pair<BitSet, Integer>> candidates = new TreeSet<>(new Comparator<Pair<BitSet, Integer>>() {
-            public int compare(Pair<BitSet, Integer> p1, Pair<BitSet, Integer> p2) {
-                BitSet s1 = p1.getFirst();
-                BitSet s2 = p2.getFirst();
-                if (s1.cardinality() < s2.cardinality())
-                    return -1;
-                else if (s1.cardinality() > s2.cardinality())
-                    return 1;
-                else if (p1.getSecond() > p2.getSecond())
-                    return -1;
-                else if (p1.getSecond() < p2.getSecond())
-                    return 1;
-                else if (s1.equals(s2)) {
-                    return 0;
-                } else {
-                    int b1 = s1.nextSetBit(0);
-                    int b2 = s2.nextSetBit(0);
-                    while (b1 == b2) {
-                        b1 = s1.nextSetBit(b1 + 1);
-                        b2 = s2.nextSetBit(b2 + 1);
-                    }
-                    if (b1 < b2)
-                        return 1;
-                    else
-                        return -1;
-                }
-            }
-        });//Candidates found so far
+		SortedSet<Pair<BitSet, Integer>> candidates = new TreeSet<>((p1, p2) -> {
+			BitSet s1 = p1.getFirst();
+			BitSet s2 = p2.getFirst();
+			if (s1.cardinality() < s2.cardinality())
+				return -1;
+			else if (s1.cardinality() > s2.cardinality())
+				return 1;
+			else if (p1.getSecond() > p2.getSecond())
+				return -1;
+			else if (p1.getSecond() < p2.getSecond())
+				return 1;
+			else if (s1.equals(s2)) {
+				return 0;
+			} else {
+				int b1 = s1.nextSetBit(0);
+				int b2 = s2.nextSetBit(0);
+				while (b1 == b2) {
+					b1 = s1.nextSetBit(b1 + 1);
+					b2 = s2.nextSetBit(b2 + 1);
+				}
+				if (b1 < b2)
+					return 1;
+				else
+					return -1;
+			}
+		});//Candidates found so far
 
-        //Those SortedSets contain candidate sets of reticulate taxa
-        //sorted by increasing size, then decreasing "level"
-        // (i.e. nb of incompatibilities they solve).
+		//Those SortedSets contain candidate sets of reticulate taxa
+		//sorted by increasing size, then decreasing "level"
+		// (i.e. nb of incompatibilities they solve).
 
-        if (DEBUG)
-            System.err.println("Triples:");
-        BitSet[] tripleClusters = new BitSet[3 * triples.size()];
-        int maxLevel = triples.size();
-        int solutionSize = maxLevel;
-        int nbtriple = 0;
-        for (Triple currentTriple : triples) {
-            if (DEBUG)
-                System.err.println(currentTriple);
-            tripleClusters[3 * nbtriple] = currentTriple.getA();
-            tripleClusters[3 * nbtriple + 1] = currentTriple.getB();
-            tripleClusters[3 * nbtriple + 2] = currentTriple.getC();
-            nbtriple++;
-        }
+		if (DEBUG)
+			System.err.println("Triples:");
+		BitSet[] tripleClusters = new BitSet[3 * triples.size()];
+		int maxLevel = triples.size();
+		int solutionSize = maxLevel;
+		int nbtriple = 0;
+		for (Triple currentTriple : triples) {
+			if (DEBUG)
+				System.err.println(currentTriple);
+			tripleClusters[3 * nbtriple] = currentTriple.getA();
+			tripleClusters[3 * nbtriple + 1] = currentTriple.getB();
+			tripleClusters[3 * nbtriple + 2] = currentTriple.getC();
+			nbtriple++;
+		}
 
-        SortedSet<BitSet> solutions = new TreeSet<>(new Comparator<BitSet>() {
-            public int compare(BitSet set1, BitSet set2) {
-                if (set1.cardinality() < set2.cardinality())
-                    return -1;
-                else if (set1.cardinality() > set2.cardinality())
-                    return 1;
-                else {
-                    int i1 = set1.nextSetBit(0);
-                    int i2 = set2.nextSetBit(0);
-                    while (i1 != -1) {
-                        if (i1 < i2)
-                            return -1;
-                        else if (i1 > i2)
-                            return 1;
-                        i1 = set1.nextSetBit(i1 + 1);
-                        i2 = set2.nextSetBit(i2 + 1);
-                    }
-                    return 0;
-                }
-            }
-        });
-        candidates.add(new Pair<>(new BitSet(), 0));
+		SortedSet<BitSet> solutions = new TreeSet<>((set1, set2) -> {
+			if (set1.cardinality() < set2.cardinality())
+				return -1;
+			else if (set1.cardinality() > set2.cardinality())
+				return 1;
+			else {
+				int i1 = set1.nextSetBit(0);
+				int i2 = set2.nextSetBit(0);
+				while (i1 != -1) {
+					if (i1 < i2)
+						return -1;
+					else if (i1 > i2)
+						return 1;
+					i1 = set1.nextSetBit(i1 + 1);
+					i2 = set2.nextSetBit(i2 + 1);
+				}
+				return 0;
+			}
+		});
+		candidates.add(new Pair<>(new BitSet(), 0));
 
-        BitSet greedySolution = greedyMinimalHittingSet(tripleClusters, new BitSet(), 0, false);
-        try {
-            progressListener.setCancelable(true);
-            progressListener.setMaximum(greedySolution.cardinality());
-            progressListener.setProgress(0);
-            progressListener.setTasks("Searching for minimum reticulate set", "(step 0/" + greedySolution.cardinality() + ")");
-        } catch (CanceledException e) {
+		BitSet greedySolution = greedyMinimalHittingSet(tripleClusters, new BitSet(), 0, false);
+		try {
+			progressListener.setCancelable(true);
+			progressListener.setMaximum(greedySolution.cardinality());
+			progressListener.setProgress(0);
+			progressListener.setTasks("Searching for minimum reticulate set", "(step 0/" + greedySolution.cardinality() + ")");
+		} catch (CanceledException ignored) {
 
-        }
+		}
         int currentMaxLevel;
         int previousMinSize;
         int minSize = 0;
@@ -734,8 +699,6 @@ public class Apply2Component {
     /**
      * compute the set of maximal optional clusters
      *
-     * @param clusters
-     * @param reticulate
      * @return all maximal fully optional clusters
      */
     private Cluster[] computeMaximalOptionalClusters(Cluster[] clusters, BitSet reticulate) {
@@ -747,8 +710,8 @@ public class Apply2Component {
             }
         }
 
-        Cluster[] optional = list.toArray(new Cluster[list.size()]);
-        BitSet isContained = new BitSet();
+		Cluster[] optional = list.toArray(new Cluster[0]);
+		BitSet isContained = new BitSet();
         for (int i = 0; i < optional.length; i++) {
             for (int j = 0; j < optional.length; j++)
                 if (i != j) {
@@ -767,8 +730,6 @@ public class Apply2Component {
     /**
      * computes the backbone Hasse diagram
      *
-     * @param clusters
-     * @param reticulate
      * @param backbone2clusters this gets set to the backbone to clusters map
      * @return backbone Hasse diagram
      */
@@ -785,15 +746,14 @@ public class Apply2Component {
                 preimage.set(i);
             }
         }
-        Cluster[] backbone = backbone2clusters.keySet().toArray(new Cluster[backbone2clusters.keySet().size()]);
+		Cluster[] backbone = backbone2clusters.keySet().toArray(new Cluster[0]);
         return constructHasse(backbone);
     }
 
     /**
      * construct the Hasse diagram for a set of clusters
      *
-     * @param clusters0
-     */
+	 */
     public PhyloTree constructHasse(Cluster[] clusters0) {
         BitSet taxa = Cluster.extractTaxa(clusters0);
         Cluster[] clusters = Cluster.getClustersSortedByDecreasingCardinality(clusters0);
@@ -845,7 +805,6 @@ public class Apply2Component {
     /**
      * add elements of all clusters to the backbone clusters that represent them, pushing up all elements, too
      *
-     * @param backbone
      * @param backbone2clusters maps each cluster in the backbone tree or the bitset of original clusters
      */
     private void addReticulateToBackboneAndPushUp(PhyloTree backbone, Cluster[] clusters, Map backbone2clusters) {
@@ -869,7 +828,6 @@ public class Apply2Component {
     /**
      * extract all clusters from the backbone
      *
-     * @param backbone
      * @return clusters
      */
     private Set<Cluster> extractClusters(PhyloTree backbone) {
@@ -892,8 +850,7 @@ public class Apply2Component {
     /**
      * recursively push up all taxa so that we have that any parent contains all the taxa of its children
      *
-     * @param v
-     */
+	 */
     private void pushupRec(Node v) {
         BitSet vSet = (BitSet) v.getInfo();
         for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
@@ -908,10 +865,7 @@ public class Apply2Component {
     /**
      * determines all minimal attachment nodes in backbone for taxon t
      *
-     * @param backbone
-     * @param t
-     * @return minimal attachment nodes
-     */
+	 */
     private void computeAttachmentNodes(PhyloTree backbone, int t, NodeSet attachmentNodes) {
         Stack<Node> stack = new Stack<>();
         stack.push(backbone.getRoot());
@@ -938,8 +892,7 @@ public class Apply2Component {
     /**
      * print the backbone network:
      *
-     * @param backbone
-     */
+	 */
     private void print(PhyloTree backbone) {
         Node root = backbone.getRoot();
         List<Node> list = new LinkedList<>();

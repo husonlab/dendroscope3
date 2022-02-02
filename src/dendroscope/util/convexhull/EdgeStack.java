@@ -16,11 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package dendroscope.util.convexhull; /**
- * author: Tim Lambert, UNSW, 2000
- */
+package dendroscope.util.convexhull;
 
-import java.util.Enumeration;
 import java.util.Stack;
 
 /**
@@ -65,13 +62,12 @@ public class EdgeStack {
     }
 
     public void dump() {
-        Enumeration e = data.elements();
-        System.out.println(data.size());
-        while (e.hasMoreElements()) {
-            System.out.println(e.nextElement());
-        }
-        System.out.println();
-    }
+		System.out.println(data.size());
+		for (Object datum : data) {
+			System.out.println(datum);
+		}
+		System.out.println();
+	}
 
 }
 

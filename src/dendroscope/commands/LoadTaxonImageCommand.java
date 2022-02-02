@@ -29,7 +29,6 @@ import jloda.util.parse.NexusStreamParser;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
-import java.io.FilenameFilter;
 import java.util.Iterator;
 
 /**
@@ -75,9 +74,7 @@ public class LoadTaxonImageCommand extends CommandBaseMultiViewer implements ICo
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("load imagedir=");
@@ -95,8 +92,7 @@ public class LoadTaxonImageCommand extends CommandBaseMultiViewer implements ICo
     /**
      * action to be performed
      *
-     * @param event
-     */
+	 */
     public void actionPerformed(ActionEvent event) {
         File lastOpenFile = ProgramProperties.getFile(DendroscopeProperties.IMAGE_DIRECTORY);
 
@@ -106,11 +102,7 @@ public class LoadTaxonImageCommand extends CommandBaseMultiViewer implements ICo
         if (ProgramProperties.isMacOS() && (event != null && (event.getModifiers() & ActionEvent.SHIFT_MASK) == 0)) {
             //Use native file dialog on mac
             java.awt.FileDialog dialog = new java.awt.FileDialog(getViewer().getFrame(), "Open image directory", java.awt.FileDialog.LOAD);
-            dialog.setFilenameFilter(new FilenameFilter() {
-                public boolean accept(File dir, String name) {
-                    return true;
-                }
-            });
+			dialog.setFilenameFilter((dir, name) -> true);
             if (lastOpenFile != null) {
                 dialog.setDirectory(lastOpenFile.getPath());
                 //dialog.setFile(fileName);

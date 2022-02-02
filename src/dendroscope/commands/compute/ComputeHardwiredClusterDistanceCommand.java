@@ -55,14 +55,14 @@ public class ComputeHardwiredClusterDistanceCommand extends CommandBaseMultiView
 
         if (trees.size() == 2) {
             double distance = DistanceMethods.computeHardwiredClusterDistance(trees)[0][1];
-            new Message(getViewer().getFrame(), "Hardwired cluster distance: " + distance);
-            System.out.println("Hardwired cluster distance: " + distance);
+            Message.show(getViewer().getFrame(), "Hardwired cluster distance: " + distance);
+			System.out.println("Hardwired cluster distance: " + distance);
         } else if (trees.size() > 2) {
-            String[] namesArray = names.toArray(new String[names.size()]);
-            double[][] distances = DistanceMethods.computeHardwiredClusterDistance(trees);
+			String[] namesArray = names.toArray(new String[0]);
+			double[][] distances = DistanceMethods.computeHardwiredClusterDistance(trees);
             System.out.println("[You can paste the following lines straight into SplitsTree]");
-            System.out.print(DistanceOutput.toNexusString(distances, namesArray));
-            new Message(getViewer().getFrame(), "Hardwired cluster distances:\n" + DistanceOutput.toSimpleString(distances, namesArray));
+			System.out.print(DistanceOutput.toNexusString(distances, namesArray));
+			Message.show(getViewer().getFrame(), "Hardwired cluster distances:\n" + DistanceOutput.toSimpleString(distances, namesArray));
 
         } else {
             new Alert(getViewer().getFrame(), "Distance calculation requires two trees or networks\n");

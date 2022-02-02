@@ -72,8 +72,7 @@ public class ExpandHorizontalCommand extends ExpandVerticalCommand implements IC
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     @Override
     public void actionPerformed(ActionEvent ev) {
         executeImmediately("expand direction=horizontal;");

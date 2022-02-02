@@ -81,9 +81,7 @@ public class ContractEdgeBySupportValueCommand extends CommandBase implements IC
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("contractEdges minSupport=");
@@ -120,7 +118,7 @@ public class ContractEdgeBySupportValueCommand extends CommandBase implements IC
                 doc.getTree(multiViewer.getTreeGrid().getNumberOfViewerInDocument(treeViewer)).syncViewer2Data(treeViewer, treeViewer.isDirty());
 
                 if (count > 0) {
-                    new Message(multiViewer.getFrame(), "Number of edges contracted: " + count);
+					Message.show(multiViewer.getFrame(), "Number of edges contracted: " + count);
                 }
             }
         }
@@ -130,8 +128,7 @@ public class ContractEdgeBySupportValueCommand extends CommandBase implements IC
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         final MultiViewer viewer = (MultiViewer) getViewer();
         double minSupport = ProgramProperties.get("CollapseEdgeThreshold", 75.0);

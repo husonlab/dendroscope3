@@ -42,8 +42,7 @@ public class NodeImageManager {
     /**
      * constructor
      *
-     * @param viewer
-     */
+	 */
     public NodeImageManager(TreeViewer viewer) {
         this.viewer = viewer;
         name2image = new HashMap<String, NodeImage>();
@@ -52,7 +51,6 @@ public class NodeImageManager {
     /**
      * load images from directory
      *
-     * @param dir
      * @return number of images loaded
      */
     public int loadImagesFromDirectory(File dir) {
@@ -84,28 +82,27 @@ public class NodeImageManager {
     /**
      * returns an image for the named taxon, or null
      *
-     * @param name
      * @return image or null
      */
     public NodeImage getImage(String name) {
-        if (name2image.keySet().contains(name))
-            return name2image.get(name);
-        else {
-            double bestScore = 0;
-            String bestName = null;
-            for (String fileName : name2image.keySet()) {
-                double score = getAlignmentScore(name.toLowerCase(), fileName.toLowerCase());
-                int threshold = Math.min(name.length(), fileName.length());
-                threshold = 0;
-                if (score > threshold && score > bestScore) {
-                    bestScore = score;
+		if (name2image.containsKey(name))
+			return name2image.get(name);
+		else {
+			double bestScore = 0;
+			String bestName = null;
+			for (String fileName : name2image.keySet()) {
+				double score = getAlignmentScore(name.toLowerCase(), fileName.toLowerCase());
+				int threshold = Math.min(name.length(), fileName.length());
+				threshold = 0;
+				if (score > threshold && score > bestScore) {
+					bestScore = score;
                     bestName = fileName;
                 }
             }
             if (bestName != null) {
                 System.err.println("Taxon '" + name + "' mapped to image '" + bestName + "', score: " + bestScore);
-                if (!name2image.keySet().contains(name))
-                    name2image.put(name, name2image.get(bestName)); // cache tbis
+				if (!name2image.containsKey(name))
+					name2image.put(name, name2image.get(bestName)); // cache tbis
 
                 return name2image.get(bestName);
             } else {
@@ -119,8 +116,6 @@ public class NodeImageManager {
     /**
      * computes max alignment score of two strings. Linear gap penalty of -1, mismatch -1, match 2
      *
-     * @param name1
-     * @param name2
      * @return best score
      */
     private double getAlignmentScore(String name1, String name2) {
@@ -171,8 +166,7 @@ public class NodeImageManager {
     /**
      * sets the image height
      *
-     * @param defaultImageHeight
-     */
+	 */
     public void setDefaultImageHeight(int defaultImageHeight) {
         for (Node v = viewer.getPhyloTree().getFirstNode(); v != null; v = v.getNext()) {
             if ((viewer.getSelectedNodes().size() == 0 || viewer.getSelected(v)) && viewer.getNV(v).getImage() != null) {
@@ -184,8 +178,7 @@ public class NodeImageManager {
     /**
      * sets the image layout to north south east or west
      *
-     * @param layout
-     */
+	 */
     public void setDefaultImageLayout(String layout) {
         byte imageLayout;
         if (layout.equalsIgnoreCase("radial"))

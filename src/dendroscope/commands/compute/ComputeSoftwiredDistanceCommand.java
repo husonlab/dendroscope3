@@ -53,8 +53,8 @@ public class ComputeSoftwiredDistanceCommand extends
 
         if (trees.size() == 2) {
             double distance = DistanceMethods.computeSoftwiredDistance(trees);
-            new Message(getViewer().getFrame(), "Softwired distance: "
-                    + distance);
+            Message.show(getViewer().getFrame(), "Softwired distance: "
+												 + distance);
             System.out.println("Softwired cluster distance: " + distance);
         } else {
             new Alert(getViewer().getFrame(),

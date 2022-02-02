@@ -75,9 +75,7 @@ public class GoToTreeCommand extends CommandBaseMultiViewer implements ICommand 
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
 
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("go tree=");
@@ -120,8 +118,7 @@ public class GoToTreeCommand extends CommandBaseMultiViewer implements ICommand 
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         String current = "" + multiViewer.getTreeGrid().getNumberOfViewerInDocument(multiViewer.getTreeGrid().getViewerByRank(0));
         current = JOptionPane.showInputDialog(multiViewer.getFrame(), "Specify tree (first,next,prev,last or number)", current);

@@ -53,8 +53,8 @@ public class ComputeDisplayedTreesDistance extends
 
         if (trees.size() == 2) {
             double distance = DistanceMethods.computeDisplayedTreesDistance(trees);
-            new Message(getViewer().getFrame(), "Displayed trees distance: "
-                    + distance);
+            Message.show(getViewer().getFrame(), "Displayed trees distance: "
+												 + distance);
             System.out.println("Displayed trees distance: " + distance);
         } else {
             new Alert(getViewer().getFrame(),

@@ -40,17 +40,17 @@ import java.util.List;
  */
 public class AhoBasedMethods {
 
-    public static void applyAho(Director dir, Document doc, PhyloTree tempTrees[], String param[]) throws Exception {
+    public static void applyAho(Director dir, Document doc, PhyloTree[] tempTrees, String[] param) throws Exception {
 
-        //ToDo: [Celine] Can we avoid to copy the trees?
+		//ToDo: [Celine] Can we avoid to copy the trees?
 
-        PhyloTreeTri[] trees = new PhyloTreeTri[tempTrees.length];
-        for (int n = 0; n < tempTrees.length; n++) {
-            PhyloTreeTri tempTree = new PhyloTreeTri(tempTrees[n]);
-            trees[n] = tempTree;
-        }
+		PhyloTreeTri[] trees = new PhyloTreeTri[tempTrees.length];
+		for (int n = 0; n < tempTrees.length; n++) {
+			PhyloTreeTri tempTree = new PhyloTreeTri(tempTrees[n]);
+			trees[n] = tempTree;
+		}
 
-        Taxa allTaxa = trees[0].getAllTaxa();
+		Taxa allTaxa = trees[0].getAllTaxa();
         for (int m = 1; m < trees.length; m++) {
             allTaxa.addAll(trees[1].getAllTaxa());
         }
@@ -86,8 +86,8 @@ public class AhoBasedMethods {
         if (treeFound) { // If at least one network is found, then we draw it
 
             Director newDir = Director.newProject(1, 1);
-            newDir.getDocument().appendTrees(ahoTree.toArray(new TreeData[ahoTree.size()]));
-            newDir.getDocument().setTitle(doc.getTitle() + "-aho");
+			newDir.getDocument().appendTrees(ahoTree.toArray(new TreeData[0]));
+			newDir.getDocument().setTitle(doc.getTitle() + "-aho");
             MultiViewer newMultiViewer = (MultiViewer) newDir.getMainViewer();
             newMultiViewer.chooseGridSize();
             newMultiViewer.loadTrees(null);

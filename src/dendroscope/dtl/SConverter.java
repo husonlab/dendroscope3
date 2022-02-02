@@ -43,15 +43,13 @@ public class SConverter {
                 InputStreamReader inS = new InputStreamReader(fstreamS);
                 STree.read(inS, true);
 
-            } catch (Exception e) {
+            } catch (Exception ignored) {
 
             }
 
             System.out.println(STree.getLabel(STree.getRoot()));
             NodeSet leaves = STree.computeSetOfLeaves();
-            Iterator<Node> it = leaves.iterator();
-            while (it.hasNext()) {
-                Node current = it.next();
+            for (Node current : leaves) {
                 String label = STree.getLabel(current);
                 Node root = STree.getRoot();
                 if (label.matches("LABEL")) {
@@ -68,7 +66,7 @@ public class SConverter {
 
             try {
                 File file = new File("/home/wojtek/firstTests/STREE_" + (i + 1)
-                        + ".txt");
+                                     + ".txt");
                 boolean success = file.createNewFile();
                 if (success) { // File did not exist and was created
                     FileWriter fstream = new FileWriter(file);
@@ -78,7 +76,7 @@ public class SConverter {
                 } else { // File already exists
                     System.out.println("not happy!!!");
                 }
-            } catch (Exception e) {
+            } catch (Exception ignored) {
 
             }
 

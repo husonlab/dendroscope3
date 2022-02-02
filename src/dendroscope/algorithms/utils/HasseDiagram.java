@@ -35,14 +35,13 @@ public class HasseDiagram {
     /**
      * construct the Hasse diagram for a set of clusters
      *
-     * @param clusters
-     */
+	 */
     public static PhyloTree constructHasse(Cluster[] clusters) {
         // make clusters unique:
         Set<Cluster> set = new HashSet<>();
         Collections.addAll(set, clusters);
         // sort
-        clusters = Cluster.getClustersSortedByDecreasingCardinality(set.toArray(new Cluster[set.size()]));
+		clusters = Cluster.getClustersSortedByDecreasingCardinality(set.toArray(new Cluster[0]));
 
         PhyloTree tree = new PhyloTree();
 

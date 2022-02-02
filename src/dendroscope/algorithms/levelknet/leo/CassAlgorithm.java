@@ -46,8 +46,7 @@ public class CassAlgorithm {
     /**
      * stand alone program
      *
-     * @param args
-     */
+	 */
     public static void main(String[] args) throws Exception {
         boolean printClusters = false; // label each edge by the cluster its represents
         boolean colourEdges = false; // colour reticulation edges red
@@ -411,11 +410,11 @@ public class CassAlgorithm {
         // find the maximal clusters
         Vector maxClusters = new Vector(0);
         for (int i = 0; i < CS.clusterVec.size(); i++) {
-            Vector cluster1 = (Vector) CS.clusterVec.elementAt(i);
-            boolean max = true;
+			Vector cluster1 = CS.clusterVec.elementAt(i);
+			boolean max = true;
             for (int j = 0; j < CS.clusterVec.size(); j++) {
-                Vector cluster2 = (Vector) CS.clusterVec.elementAt(j);
-                int rel = ClusterSet.getRelation(cluster1, cluster2);
+				Vector cluster2 = CS.clusterVec.elementAt(j);
+				int rel = ClusterSet.getRelation(cluster1, cluster2);
                 if (rel == 3) {
                     max = false;
                 }

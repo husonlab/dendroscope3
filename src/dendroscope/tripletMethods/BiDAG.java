@@ -121,17 +121,17 @@ class BiDAG {
         return this.biconVisit(time);
     }
 
-    private boolean biconVisit(int time[]) {
-        //! System.out.println("Inside node "+this);
-        //! if( secondParent != null ) System.out.println("I am recombination node.");
+    private boolean biconVisit(int[] time) {
+		//! System.out.println("Inside node "+this);
+		//! if( secondParent != null ) System.out.println("I am recombination node.");
 
-        this.buildAdjacency();
+		this.buildAdjacency();
 
-        time[0]++;
-        colour = GREY;
+		time[0]++;
+		colour = GREY;
 
-        discovery = time[0];
-        low = time[0];
+		discovery = time[0];
+		low = time[0];
 
         //! System.out.println("I am discovered at time "+discovery);
 
@@ -198,17 +198,17 @@ class BiDAG {
         if (child2 != null) child2.resetFixLeaves();
     }
 
-    public void dagFixLeaves(int map[]) {
-        if (fixVisit) return;
-        fixVisit = true;
+	public void dagFixLeaves(int[] map) {
+		if (fixVisit) return;
+		fixVisit = true;
 
-        if (this.isLeafNode()) {
-            data = map[data];
-        } else {
-            if (child1 != null) child1.dagFixLeaves(map);
-            if (child2 != null) child2.dagFixLeaves(map);
-        }
-    }
+		if (this.isLeafNode()) {
+			data = map[data];
+		} else {
+			if (child1 != null) child1.dagFixLeaves(map);
+			if (child2 != null) child2.dagFixLeaves(map);
+		}
+	}
 
 //! We assume that dagMap has indexing space for 1...l where l
 //! is the number of leaves. ALSO ASSUMES THAT 'VISITED' is UNUSED/RESET
@@ -226,17 +226,17 @@ class BiDAG {
     }
 
 
-    public void treeFixLeaves(int map[]) {
-        //! Changes the leaf numberings from l to map[l];
-        //! Note that we assume that l>=1;
+	public void treeFixLeaves(int[] map) {
+		//! Changes the leaf numberings from l to map[l];
+		//! Note that we assume that l>=1;
 
-        if (data != 0) {
-            if ((child1 != null) || (child2 != null)) {
-                System.out.println("Error 4");
-            }
-            data = map[data];
-        } else {
-            child1.treeFixLeaves(map);
+		if (data != 0) {
+			if ((child1 != null) || (child2 != null)) {
+				System.out.println("Error 4");
+			}
+			data = map[data];
+		} else {
+			child1.treeFixLeaves(map);
             child2.treeFixLeaves(map);
         }
 
@@ -354,17 +354,17 @@ class BiDAG {
 
 //! ---------------------------------------------------
 
-    public void numberRecombNodes(int counter[]) {
-        if (newickRecVisit == true) return;
+	public void numberRecombNodes(int[] counter) {
+		if (newickRecVisit == true) return;
 
-        newickRecVisit = true;
+		newickRecVisit = true;
 
-        if (child1 != null) {
-            child1.numberRecombNodes(counter);
-        }
+		if (child1 != null) {
+			child1.numberRecombNodes(counter);
+		}
 
-        if (child2 != null) {
-            child2.numberRecombNodes(counter);
+		if (child2 != null) {
+			child2.numberRecombNodes(counter);
         }
 
         if ((parent != null) && (secondParent != null)) {

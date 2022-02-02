@@ -40,8 +40,7 @@ public class GalledNetworkChecker {
     /**
      * constructors a new galled network checker for the given tree
      *
-     * @param tree
-     */
+	 */
     public GalledNetworkChecker(PhyloTree tree) {
         this.tree = tree;
         edge2TaxonSets = null;
@@ -54,7 +53,6 @@ public class GalledNetworkChecker {
      * on or completely off. All sets have pairwise empty intersections
      * represents a given cluster
      *
-     * @param tree
      * @return the edge to taxon sets mapping
      */
     private EdgeArray computeEdge2TaxonSets(PhyloTree tree) {
@@ -103,7 +101,6 @@ public class GalledNetworkChecker {
     /**
      * recursively compute the required node maps
      *
-     * @param v
      * @param node2AllTaxaBelow  all taxa on or below v
      * @param node2AllNodesBelow all nodes on or below v
      * @param node2leaves        leaves on or below v reachable by a path of tree edges
@@ -166,13 +163,7 @@ public class GalledNetworkChecker {
     /**
      * for a node v, compute the set of taxa that are always on and compute all sets of optional taxa
      *
-     * @param v
-     * @param node2taxaBelow
-     * @param node2leaves
-     * @param node2reticulate
-     * @param alwaysOn
-     * @param optional
-     */
+	 */
     private void computeAlwaysOnAndOptional(Node v, NodeArray node2taxaBelow, NodeArray node2nodesBelow, NodeArray node2leaves, NodeArray node2reticulate, BitSet alwaysOn, Set optional) {
 
         NodeSet leaves = (NodeSet) node2leaves.get(v);
@@ -217,11 +208,7 @@ public class GalledNetworkChecker {
     /**
      * recursively does the work in a pre-order fashion
      *
-     * @param v
-     * @param e
-     * @param maxComponentNumber
-     * @param node2component
-     */
+	 */
     private void labelNodesByTreeComponentsRec(Node v, Edge e, IntegerVariable maxComponentNumber, NodeIntArray node2component) {
 		if (e == null || tree.isReticulatedEdge(e))        // either root or reticulate node, start a new component
 			node2component.set(v, maxComponentNumber.increment());
@@ -265,7 +252,6 @@ public class GalledNetworkChecker {
     /**
      * does network contain all clusters
      *
-     * @param clusters
      * @return true, if contains all
      */
     public boolean containsAll(Cluster[] clusters) {
@@ -281,7 +267,6 @@ public class GalledNetworkChecker {
     /**
      * is the cluster contained in the network?
      *
-     * @param cluster
      * @return true, if contained
      */
     public boolean contains(BitSet cluster) {
@@ -295,8 +280,6 @@ public class GalledNetworkChecker {
     /**
      * does the given edge represent or "contain" the given cluster
      *
-     * @param e
-     * @param cluster
      * @return true, if e represents the cluster
      */
     public boolean contains(Edge e, BitSet cluster) {
@@ -338,7 +321,6 @@ public class GalledNetworkChecker {
     /**
      * check that galled network contains all splits
      *
-     * @param splits
      * @return number found
      */
     public int containsAll(SplitSystem splits, Taxa taxa) {

@@ -57,8 +57,7 @@ public class NewickInputDialog extends JDialog implements DocumentListener, Care
     /**
      * constructor
      *
-     * @param parent
-     */
+	 */
     public NewickInputDialog(JFrame parent, String programName, String defaultValue, boolean edgeLengths) {
         super(parent);
         this.setSize(400, 155);
@@ -150,7 +149,7 @@ public class NewickInputDialog extends JDialog implements DocumentListener, Care
                     }
                 }
             }
-        } catch (BadLocationException e) {
+        } catch (BadLocationException ignored) {
         }
     }
 
@@ -182,7 +181,7 @@ public class NewickInputDialog extends JDialog implements DocumentListener, Care
                     return;
                 }
                 if (name.charAt(1) == '#') {
-                    name = name.substring(1, name.length());
+                    name = name.substring(1);
                 }
                 int lastpos = 0;
                 int startpos = 0;
@@ -205,7 +204,7 @@ public class NewickInputDialog extends JDialog implements DocumentListener, Care
                     if (hglt) {
                         try {
                             highlighter.addHighlight(startpos, endpos, painterMatch);
-                        } catch (BadLocationException e) {
+                        } catch (BadLocationException ignored) {
                         }
                     }
                     lastpos = endpos;
@@ -217,21 +216,21 @@ public class NewickInputDialog extends JDialog implements DocumentListener, Care
     private void highlightErrorPosition() {
         try {
             highlighter.addHighlight(errorPosition, errorPosition + 1, painterError);
-        } catch (BadLocationException e) {
+        } catch (BadLocationException ignored) {
         }
     }
 
     private void updateHighlighter() {
         Highlighter.Highlight[] highlights = highlighter.getHighlights();
         // remove old highlights
-        for (int i = 0; i < highlights.length; i++) {
-            highlighter.removeHighlight(highlights[i]);
+        for (Highlighter.Highlight highlight : highlights) {
+            highlighter.removeHighlight(highlight);
         }
         String s = "";
         try {
             Document doc = inputField.getDocument();
             s = doc.getText(0, doc.getLength());
-        } catch (BadLocationException e) {
+        } catch (BadLocationException ignored) {
         }
         if (s.length() == 0) {
             return;
@@ -411,7 +410,7 @@ public class NewickInputDialog extends JDialog implements DocumentListener, Care
                             continue;
                         }
                     }
-                    StringBuffer sn = new StringBuffer("#" + s.charAt(i + 1));
+                    StringBuilder sn = new StringBuilder("#" + s.charAt(i + 1));
                     for (int j = i + 2; j < s.length(); j++) {
                         if (Character.isDigit(s.charAt(j))) {
                             sn.append(s.charAt(j));
@@ -446,7 +445,7 @@ public class NewickInputDialog extends JDialog implements DocumentListener, Care
             if (s.charAt(i) == '#') {
                 if (s.charAt(i + 1) == '#' &&
                         (s.charAt(i + 2) == 'H' || s.charAt(i + 2) == 'L')) {
-                    StringBuffer sn = new StringBuffer("##" + s.charAt(i + 2));
+                    StringBuilder sn = new StringBuilder("##" + s.charAt(i + 2));
                     for (int j = i + 3; j < s.length(); j++) {
                         if (Character.isDigit(s.charAt(j))) {
                             sn.append(s.charAt(j));
@@ -538,7 +537,7 @@ public class NewickInputDialog extends JDialog implements DocumentListener, Care
             }
             startpos = endpos + 1;
         }
-        if (containsSingleRNodeHnLn(s.substring(startpos, s.length()))) {
+        if (containsSingleRNodeHnLn(s.substring(startpos))) {
             errorPosition = errorPosition + startpos;
             return true;
         } else
@@ -555,7 +554,7 @@ public class NewickInputDialog extends JDialog implements DocumentListener, Care
             }
             startpos = endpos + 1;
         }
-        if (containsMultiDoubleRNodeHnLn(s.substring(startpos, s.length()))) {
+        if (containsMultiDoubleRNodeHnLn(s.substring(startpos))) {
             errorPosition = errorPosition + startpos;
             return true;
         } else
@@ -601,11 +600,7 @@ public class NewickInputDialog extends JDialog implements DocumentListener, Care
         if (containsMultiDoubleRNodeHnLn_ml(s)) {
             return false;
         }
-        if (!isTerminatedBySemicolon(s)) {
-            return false;
-        }
-
-        return true;
+        return isTerminatedBySemicolon(s);
     }
 
     public void changedUpdate(DocumentEvent e) {
@@ -635,7 +630,7 @@ public class NewickInputDialog extends JDialog implements DocumentListener, Care
         }
     }
 
-    class MyHighlightPainter extends DefaultHighlighter.DefaultHighlightPainter {
+    static class MyHighlightPainter extends DefaultHighlighter.DefaultHighlightPainter {
         public MyHighlightPainter(Color color) {
             super(color);
         }
@@ -688,7 +683,6 @@ public class NewickInputDialog extends JDialog implements DocumentListener, Care
     /**
      * test program
      *
-     * @param args
      */
     public static void main(String[] args) {
         NewickInputDialog parser = new NewickInputDialog(null, "Dendroscope", null, false);

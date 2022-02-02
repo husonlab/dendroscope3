@@ -72,9 +72,7 @@ public class ContractVerticalCommand extends CommandBaseMultiViewer implements I
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("contract direction=");
@@ -133,8 +131,7 @@ public class ContractVerticalCommand extends CommandBaseMultiViewer implements I
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     @Override
     public void actionPerformed(ActionEvent ev) {
         executeImmediately("contract direction=vertical;");

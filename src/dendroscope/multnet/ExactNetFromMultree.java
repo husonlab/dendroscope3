@@ -25,7 +25,6 @@ import jloda.phylo.PhyloTree;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 
 /**
  * constructs an exact network for a given multi-labeled tree.
@@ -59,30 +58,29 @@ public class ExactNetFromMultree {
         for (int i = rootHeight; i >= 0; i--) {
             HeightList l_h = h_max.get(i);
             while (!l_h.isEmpty()) {
-                //take the first tree T(t_max) of the current heightlist and add all children of height j (j < i) to
-                //the map h_max for later iterations.
-                Node t_max = (Node) l_h.get(0);
-                Iterator<Edge> outEdgesIt = t_max.outEdges().iterator();
-                while (outEdgesIt.hasNext()) {
-                    Node target = ((Edge) outEdgesIt.next()).getTarget();
-                    int targetHeight = t.getHeight(target);
-                    HeightList targetList = h_max.get(targetHeight);
-                    if (targetList == null) {
-                        targetList = new HeightList();
-                        h_max.put(targetHeight, targetList);
-                    }
-                    targetList.addSorted(target, t.getMultiset(target));
-                }
-                //now check if the current heightlist contains isomorphs to T(t_max).
-                ArrayList<Node> isomorphs = new ArrayList<>();
-                for (int j = 1; j < l_h.size(); j++) {
-                    Node w = (Node) l_h.get(j);
-                    //found isomorph subtrees
-                    if (t.getMultiset(t_max).equals(t.getMultiset(w))) {
-                        isomorphs.add(w);
-                    } else break;
-                }
-                //found one or more isomorph subtree(s) to T(t_max).
+				//take the first tree T(t_max) of the current heightlist and add all children of height j (j < i) to
+				//the map h_max for later iterations.
+				Node t_max = (Node) l_h.get(0);
+				for (Edge edge : t_max.outEdges()) {
+					Node target = edge.getTarget();
+					int targetHeight = t.getHeight(target);
+					HeightList targetList = h_max.get(targetHeight);
+					if (targetList == null) {
+						targetList = new HeightList();
+						h_max.put(targetHeight, targetList);
+					}
+					targetList.addSorted(target, t.getMultiset(target));
+				}
+				//now check if the current heightlist contains isomorphs to T(t_max).
+				ArrayList<Node> isomorphs = new ArrayList<>();
+				for (int j = 1; j < l_h.size(); j++) {
+					Node w = (Node) l_h.get(j);
+					//found isomorph subtrees
+					if (t.getMultiset(t_max).equals(t.getMultiset(w))) {
+						isomorphs.add(w);
+					} else break;
+				}
+				//found one or more isomorph subtree(s) to T(t_max).
                 if (!isomorphs.isEmpty()) {
                     //insert in the incoming edge of T(t_max) a new node u.
                     Edge toDel = t_max.getFirstInEdge();

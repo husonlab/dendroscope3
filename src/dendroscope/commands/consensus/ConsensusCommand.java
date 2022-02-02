@@ -40,42 +40,40 @@ import java.util.Vector;
 
 public class ConsensusCommand extends CommandBaseMultiViewer implements ICommand {
     public void apply(NexusStreamParser np) throws Exception {
-        np.matchIgnoreCase("compute");
-        np.matchIgnoreCase("consensus method=");
-        String which = np.getWordMatchesIgnoringCase(StrictConsensus.NAME + " " + LooseConsensus.NAME + " " + MajorityConsensus.NAME + " "
-                + ComputeNetworkConsensus.LEVEL_K_NETWORK + " " + ComputeNetworkConsensus.CLUSTER_NETWORK + " " + ComputeNetworkConsensus.GALLED_NETWORK + " "
-                + Distortion1Consensus.NAME + " " + LSATree.NAME + " " + PrimordialConsensus.NAME);
-        // System.err.println("which: " + which);
-        IConsensusTreeMethod consensusMethod;
-        float threshold;
+		np.matchIgnoreCase("compute");
+		np.matchIgnoreCase("consensus method=");
+		String which = np.getWordMatchesIgnoringCase(StrictConsensus.NAME + " " + LooseConsensus.NAME + " " + MajorityConsensus.NAME + " "
+													 + ComputeNetworkConsensus.LEVEL_K_NETWORK + " " + ComputeNetworkConsensus.CLUSTER_NETWORK + " " + ComputeNetworkConsensus.GALLED_NETWORK + " "
+													 + Distortion1Consensus.NAME + " " + LSATree.NAME + " " + PrimordialConsensus.NAME);
+		// System.err.println("which: " + which);
+		IConsensusTreeMethod consensusMethod;
+		float threshold;
 
-        if (which.equals(MajorityConsensus.NAME)) {
-            consensusMethod = new MajorityConsensus();
-        } else if (which.equals(LooseConsensus.NAME)) {
-            consensusMethod = new LooseConsensus();
-        } else if (which.equals(Distortion1Consensus.NAME)) {
-            consensusMethod = new Distortion1Consensus();
-        } else if (which.equals(PrimordialConsensus.NAME)) {
-            consensusMethod = new PrimordialConsensus();
-        } else if (which.equals(LSATree.NAME)) {
-            consensusMethod = new LSATree();
-        } else if (which.equals(ComputeNetworkConsensus.LEVEL_K_NETWORK) || which.equals(ComputeNetworkConsensus.CLUSTER_NETWORK)
-                || which.equals(ComputeNetworkConsensus.GALLED_NETWORK)) {
-            np.matchIgnoreCase("threshold=");
-            threshold = (float) np.getDouble(0, 100);
-            consensusMethod = new ComputeNetworkConsensus(which, threshold);
-        } else    // strict consensus is default:
-            consensusMethod = new StrictConsensus();
+		switch (which) {
+			case MajorityConsensus.NAME -> consensusMethod = new MajorityConsensus();
+			case LooseConsensus.NAME -> consensusMethod = new LooseConsensus();
+			case Distortion1Consensus.NAME -> consensusMethod = new Distortion1Consensus();
+			case PrimordialConsensus.NAME -> consensusMethod = new PrimordialConsensus();
+			case LSATree.NAME -> consensusMethod = new LSATree();
+			case ComputeNetworkConsensus.LEVEL_K_NETWORK, ComputeNetworkConsensus.CLUSTER_NETWORK, ComputeNetworkConsensus.GALLED_NETWORK -> {
+				np.matchIgnoreCase("threshold=");
+				threshold = (float) np.getDouble(0, 100);
+				consensusMethod = new ComputeNetworkConsensus(which, threshold);
+			}
+			default ->
+// strict consensus is default:
+					consensusMethod = new StrictConsensus();
+		}
 
-        boolean computeOnlyOne = false;
-        if (np.peekMatchIgnoreCase("one-only=")) {
-            np.matchIgnoreCase("one-only=");
-            computeOnlyOne = np.getBoolean();
-        }
+		boolean computeOnlyOne = false;
+		if (np.peekMatchIgnoreCase("one-only=")) {
+			np.matchIgnoreCase("one-only=");
+			computeOnlyOne = np.getBoolean();
+		}
 
-        boolean checkTrees = false;
-        if (np.peekMatchIgnoreCase("check-trees=")) {
-            np.matchIgnoreCase("check-trees=");
+		boolean checkTrees = false;
+		if (np.peekMatchIgnoreCase("check-trees=")) {
+			np.matchIgnoreCase("check-trees=");
             checkTrees = np.getBoolean();
         }
 
@@ -97,9 +95,9 @@ public class ConsensusCommand extends CommandBaseMultiViewer implements ICommand
         List<PhyloTree> result = new LinkedList<>();
 
         if (consensusMethod instanceof ComputeNetworkConsensus)
-            result.addAll(((ComputeNetworkConsensus) consensusMethod).applyAll(getDir().getDocument(), trees.toArray(new TreeData[trees.size()])));
+			result.addAll(((ComputeNetworkConsensus) consensusMethod).applyAll(getDir().getDocument(), trees.toArray(new TreeData[0])));
         else
-            result.add(consensusMethod.apply(getDir().getDocument(), trees.toArray(new TreeData[trees.size()])));
+			result.add(consensusMethod.apply(getDir().getDocument(), trees.toArray(new TreeData[0])));
 
         Director theDir;
         MultiViewer theMultiViewer;

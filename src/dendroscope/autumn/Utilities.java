@@ -41,20 +41,16 @@ public class Utilities {
     /**
      * get the number of reticulations in a cluster network
      *
-     * @param tree1
-     * @param tree2
-     * @param progressListner
      * @return number of reticulate nodes
-     * @throws CanceledException
-     */
+	 */
     public static int getNumberOfReticulationsInClusterNetwork(PhyloTree tree1, PhyloTree tree2, ProgressListener progressListner) throws CanceledException, IOException {
 
         Taxa allTaxa = new Taxa();
         dendroscope.consensus.Utilities.extractTaxa(1, tree1, allTaxa);
         dendroscope.consensus.Utilities.extractTaxa(2, tree2, allTaxa);
 
-        Set<Cluster> clusters = extractClusters(allTaxa, tree1, tree2);
-        PhyloTree hasseDiagram = HasseDiagram.constructHasse(clusters.toArray(new Cluster[clusters.size()]));
+		Set<Cluster> clusters = extractClusters(allTaxa, tree1, tree2);
+		PhyloTree hasseDiagram = HasseDiagram.constructHasse(clusters.toArray(new Cluster[0]));
 
         int count = 0;
         for (Node v = hasseDiagram.getFirstNode(); v != null; v = v.getNext()) {
@@ -67,8 +63,6 @@ public class Utilities {
     /**
      * extract the set of clusters from the two given trees
      *
-     * @param allTaxa
-     * @param tree1
      * @return set of clusters, each cluster a BitSet
      */
     static public Set<Cluster> extractClusters(Taxa allTaxa, PhyloTree tree1, PhyloTree tree2) {
@@ -84,10 +78,6 @@ public class Utilities {
     /**
      * recursively find all clusters in a tree
      *
-     * @param tree
-     * @param v
-     * @param taxa
-     * @param clusters
      * @return all taxa on or below v
      */
     private static Cluster extractClustersRec(PhyloTree tree, Node v, Taxa taxa, Set<Cluster> clusters) {

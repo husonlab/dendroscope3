@@ -80,9 +80,7 @@ public class SaveCommand extends CommandBaseMultiViewer implements ICommand {
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
         try {
@@ -170,8 +168,7 @@ public class SaveCommand extends CommandBaseMultiViewer implements ICommand {
     /**
      * action to be performed
      *
-     * @param event
-     */
+	 */
     @Override
     public void actionPerformed(ActionEvent event) {
         Document doc = getDir().getDocument();

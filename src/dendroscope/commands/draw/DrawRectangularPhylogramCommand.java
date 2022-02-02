@@ -59,8 +59,7 @@ public class DrawRectangularPhylogramCommand extends DrawCommand implements IChe
     /**
      * set the selected status of this command
      *
-     * @param selected
-     */
+	 */
     public void setSelected(boolean selected) {
     }
 
@@ -108,8 +107,7 @@ public class DrawRectangularPhylogramCommand extends DrawCommand implements IChe
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
 
     public void actionPerformed(ActionEvent ev) {
         execute("set drawer=" + TreeViewer.RECTANGULAR_PHYLOGRAM + ";");

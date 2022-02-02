@@ -96,8 +96,7 @@ public class DrawRadialPhylogramCommand extends DrawCommand implements ICheckBox
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
 
     public void actionPerformed(ActionEvent ev) {
         execute("set drawer=" + TreeViewer.RADIAL_PHYLOGRAM + ";");

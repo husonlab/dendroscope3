@@ -70,7 +70,6 @@ public class ZClosure {
     /**
      * applies Z-closure to a collection of trees.
      *
-     * @param progressListener
      * @param trees            @return full splits obtained by Z-closure
      */
     public SplitSystem apply(ProgressListener progressListener, PhyloTree[] trees) throws CanceledException {
@@ -103,30 +102,28 @@ public class ZClosure {
                 final ProgressCmdLine progress = new ProgressCmdLine();
 
                 for (int i = 1; i <= numberOfThreads; i++) {
-                    executor.execute(new Runnable() {
-                        public void run() {
-                            while (true) {
-                                try {
-                                    int i = queue.take(); // ignore the value
+					executor.execute(() -> {
+						while (true) {
+							try {
+								int i1 = queue.take(); // ignore the value
 
-                                    List<Split> splitsInRandomOrder = inputSplits.asList();
-                                    Collections.shuffle(splitsInRandomOrder, rand);
-                                    SplitSystem result = null;
-                                    try {
-                                        result = computeClosure(progress, splitsInRandomOrder);
-                                    } catch (CanceledException e) {
-                                    }
-                                    synchronized (finalSplits) {
-                                        finalSplits.addAll(result);
-                                    }
-                                } catch (InterruptedException e) {
-                                    return;
-                                } finally {
-                                    countDownLatch.countDown();
-                                }
-                            }
-                        }
-                    });
+								List<Split> splitsInRandomOrder = inputSplits.asList();
+								Collections.shuffle(splitsInRandomOrder, rand);
+								SplitSystem result = null;
+								try {
+									result = computeClosure(progress, splitsInRandomOrder);
+								} catch (CanceledException ignored) {
+								}
+								synchronized (finalSplits) {
+									finalSplits.addAll(result);
+								}
+							} catch (InterruptedException e) {
+								return;
+							} finally {
+								countDownLatch.countDown();
+							}
+						}
+					});
                 }
 
                 for (int i = 1; i <= this.optionNumberOfRuns; i++) {
@@ -212,8 +209,7 @@ public class ZClosure {
      * computes the "in place" Z-closure
      *
      * @param progressListener the progressListenerument
-     * @param inputSplits
-     */
+	 */
     private SplitSystem computeClosure(ProgressListener progressListener, Collection<Split> inputSplits) throws CanceledException {
         Set<Integer> seniorSplits = new HashSet<>();
         Set<Integer> activeSplits = new HashSet<>();
@@ -338,8 +334,6 @@ public class ZClosure {
     /**
      * gets the union of two bit sets
      *
-     * @param a
-     * @param b
      * @return union
      */
     public static BitSet getUnion(BitSet a, BitSet b) {
@@ -409,12 +403,7 @@ public class ZClosure {
      * sets the weight of a split in the network as the average relative length of the edge
      * in the input trees
      *
-     * @param progressListener
-     * @param tree2splits
-     * @param tree2taxa
-     * @param splits
-     * @throws CanceledException
-     */
+	 */
     private void setWeightAverageReleativeLength(ProgressListener progressListener, BitSet[] tree2taxa,
                                                  SplitSystem[] tree2splits, SplitSystem splits) throws
             CanceledException {
@@ -473,7 +462,6 @@ public class ZClosure {
     /**
      * return the possible choices for optionEdgeWeights
      *
-     * @param progressListener
      * @return list of choices
      */
     public List<String> selectionOptionEdgeWeights(ProgressListener progressListener) {
@@ -499,7 +487,6 @@ public class ZClosure {
     /**
      * return the possible choices for optionEdgeWeights
      *
-     * @param progressListener
      * @return list of choices
      */
     public List<String> selectionOptionFilter(ProgressListener progressListener) {

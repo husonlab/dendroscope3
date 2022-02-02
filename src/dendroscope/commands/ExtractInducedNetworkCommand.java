@@ -83,9 +83,7 @@ public class ExtractInducedNetworkCommand extends CommandBaseMultiViewer impleme
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
 
 
     public void apply(NexusStreamParser np) throws Exception {
@@ -131,8 +129,7 @@ public class ExtractInducedNetworkCommand extends CommandBaseMultiViewer impleme
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         executeImmediately(getSyntax());
     }

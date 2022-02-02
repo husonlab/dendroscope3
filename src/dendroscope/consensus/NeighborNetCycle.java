@@ -34,7 +34,6 @@ public class NeighborNetCycle {
      * A scaled down version of NeighborNet that only returns the ordering, and does not
      * access the ProgressListener or progress bar.
      *
-     * @param taxa
      * @return ordering
      */
     static public int[] getNeighborNetOrdering(ProgressListener progressListener, Taxa taxa, SplitSystem splits) throws CanceledException {
@@ -54,9 +53,9 @@ public class NeighborNetCycle {
 
             double[][] D = setupMatrix(ntax, splits);
             try {
-                ordering = getNeighborNetOrdering(progressListener, taxa.size(), D);
-            } catch (CanceledException e) {
-            }
+				ordering = getNeighborNetOrdering(progressListener, taxa.size(), D);
+			} catch (CanceledException ignored) {
+			}
         }
         return ordering;
     }
@@ -64,7 +63,6 @@ public class NeighborNetCycle {
     /**
      * Sets up the working matrix
      *
-     * @param splits
      * @return a working matrix of appropriate cardinality
      */
     static double[][] setupMatrix(int ntax, SplitSystem splits) {
@@ -123,18 +121,18 @@ public class NeighborNetCycle {
         return ordering;
     }
 
-    /**
-     * Agglomerates the nodes
-     */
-    static private int agglomNodes(ProgressListener progresslistener, Stack amalgs, double D[][], NetNode netNodes, int num_nodes) throws CanceledException {
-        NetNode p, q, Cx, Cy, x, y;
-        double Qpq, best;
-        int num_active = num_nodes;
-        int num_clusters = num_nodes;
-        int m;
-        double Dpq;
+	/**
+	 * Agglomerates the nodes
+	 */
+	static private int agglomNodes(ProgressListener progresslistener, Stack amalgs, double[][] D, NetNode netNodes, int num_nodes) throws CanceledException {
+		NetNode p, q, Cx, Cy, x, y;
+		double Qpq, best;
+		int num_active = num_nodes;
+		int num_clusters = num_nodes;
+		int m;
+		double Dpq;
 
-        while (num_active > 3) {
+		while (num_active > 3) {
 
             /* Special case
             If we let this one go then we get a divide by zero when computing Qpq */

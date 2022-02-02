@@ -73,11 +73,7 @@ public class TanglegramUtils {
     /**
      * compute the crossings in case of many-to-many connections and/or different taxon sets
      *
-     * @param v1
-     * @param v2
-     * @param taxCon
-     * @return
-     */
+	 */
 
     public static int compCrossingsMany2Many(List<String> v1, List<String> v2, Map<String, List<String>> taxCon) {
         int crossingNum = 0;
@@ -119,11 +115,7 @@ public class TanglegramUtils {
     /**
      * get the order of taxa concerning the lsa tree
      *
-     * @param tree
-     * @param v
-     * @param leavesList
-     * @return
-     */
+	 */
 
     public static void getLsaOrderRec(PhyloTree tree, Node v, List<String> leavesList) {
         if (tree.computeSetOfLeaves().contains(v)) {
@@ -261,9 +253,6 @@ public class TanglegramUtils {
     /**
      * initialize new matrix in first call, after that only add distances when called with new split system
      *
-     * @param D
-     * @param ntax
-     * @param splits
      * @return new distance matrix
      */
     public static double[][] setMatForDiffSys(double[][] D, int ntax, SplitSystem splits, boolean firstTree) {
@@ -314,11 +303,7 @@ public class TanglegramUtils {
     /**
      * recursively does the work
      *
-     * @param oldTree
-     * @param newTree
-     * @param vOld
-     * @param vNew
-     */
+	 */
     private static void getSubTreeRec(PhyloTree oldTree, PhyloTree newTree, Node vOld, Node vNew) {
         newTree.setLabel(vNew, oldTree.getLabel(vOld));
         newTree.setInfo(vNew, oldTree.getInfo(vOld));
@@ -367,9 +352,7 @@ public class TanglegramUtils {
             Node w = f.getTarget();
             nodes.add(w);
             NodeSet tmpSet = getDescendingNodesRec(tree, w, nodes);
-            for (Node aTmpSet : tmpSet) {
-                nodes.add(aTmpSet);
-            }
+			nodes.addAll(tmpSet);
         }
         return nodes;
     }
@@ -377,9 +360,7 @@ public class TanglegramUtils {
     /**
      * get the taxon set of a tree/network plus fake taxa for DC
      *
-     * @param tree
-     * @return
-     */
+	 */
     public static Taxa getTaxaForTanglegram(PhyloTree tree) {
         Taxa taxa = new Taxa();
         for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
@@ -395,12 +376,7 @@ public class TanglegramUtils {
     /**
      * optimizes layout along the LSA tree
      *
-     * @param tree
-     * @param otherOrder
-     * @param treeNum
-     * @param taxConMap1
-     * @param taxConMap2
-     */
+	 */
     public static void lsaOptimization(PhyloTree tree, List<String> otherOrder, int treeNum, Map<String, List<String>> taxConMap1, Map<String, List<String>> taxConMap2) {
         final Map<Node, List<String>> node2LsaLeavesBelow = new HashMap<>();
         final List<String> lsaOrderInLastOpti = new LinkedList<>();
@@ -410,13 +386,8 @@ public class TanglegramUtils {
     /**
      * does swaps along the lsa tree (but only adapts order when doing a swap to reduce time consumption)
      *
-     * @param tree
-     * @param v
-     * @param otherOrder
-     * @param treeNum
      * @param taxConMap1 can be simply assigned null, only important for host parasite
-     * @param taxConMap2
-     */
+	 */
 
 
     private static void lsaOptimizationRec(PhyloTree tree, Node v, List<String> otherOrder, int treeNum, Map<String, List<String>> taxConMap1,

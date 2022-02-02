@@ -56,17 +56,15 @@ public class AntiCluster {
     }
 
     private void addSorted(ArrayList<String> taxa, String taxon) {
-        Comparator comparator = new Comparator() {
-            public int compare(Object o1, Object o2) {
-                String taxon1 = (String) o1;
-                String taxon2 = (String) o2;
-                return taxon1.compareTo(taxon2);
-            }
-        };
-        int insertionPoint = Collections.binarySearch(taxa, taxon, comparator);
-        if (insertionPoint < 0) insertionPoint = -1 * insertionPoint - 1;
-        taxa.add(insertionPoint, taxon);
-    }
+		Comparator comparator = (o1, o2) -> {
+			String taxon1 = (String) o1;
+			String taxon2 = (String) o2;
+			return taxon1.compareTo(taxon2);
+		};
+		int insertionPoint = Collections.binarySearch(taxa, taxon, comparator);
+		if (insertionPoint < 0) insertionPoint = -1 * insertionPoint - 1;
+		taxa.add(insertionPoint, taxon);
+	}
 
     public void setConcatenatedTaxa() {
 

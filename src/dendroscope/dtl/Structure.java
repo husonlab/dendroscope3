@@ -24,10 +24,7 @@ import jloda.graph.NodeSet;
 import jloda.phylo.PhyloTree;
 
 import java.io.StringReader;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Vector;
+import java.util.*;
 
 public class Structure {
     final PhyloTree geneTree;
@@ -54,7 +51,6 @@ public class Structure {
 
     //associate Leaves from genetree and speciestree
     //the association are stored in a Hashmap, called leavesAs
-    @SuppressWarnings("unchecked")
     public void assoTrees() {
         NodeSet sLeaves = this.subdivision.computeSetOfLeaves();
         Iterator<Node> sL = sLeaves.iterator();
@@ -67,30 +63,26 @@ public class Structure {
         }
 
         NodeSet gLeaves = this.geneTree.computeSetOfLeaves();
-        Iterator<Node> gL = gLeaves.iterator();
-        while (gL.hasNext()) {
-            Node current = gL.next();
-            String label = this.geneTree.getLabel(current);
-            int sId = tempS.get(label);
-            int gId = current.getId();
-            leavesAs.put(gId, sId);
-        }
+		for (Node current : gLeaves) {
+			String label = this.geneTree.getLabel(current);
+			int sId = tempS.get(label);
+			int gId = current.getId();
+			leavesAs.put(gId, sId);
+		}
     }
 
 
     private void convertSimToSub() {
         NodeSet leaves = this.speciesTree.computeSetOfLeaves();
-        Iterator<Node> it = leaves.iterator();
-        while (it.hasNext()) {
-            Node current = it.next();
-            String label = this.speciesTree.getLabel(current);
-            if (label.contains("LABEL")) {
-                Edge temp = current.getFirstInEdge();
-                // delete the leave
-                this.speciesTree.deleteEdge(temp);
-                this.speciesTree.deleteNode(current);
-            }
-        }
+		for (Node current : leaves) {
+			String label = this.speciesTree.getLabel(current);
+			if (label.contains("LABEL")) {
+				Edge temp = current.getFirstInEdge();
+				// delete the leave
+				this.speciesTree.deleteEdge(temp);
+				this.speciesTree.deleteNode(current);
+			}
+		}
         StringReader sT = new StringReader(this.speciesTree.toBracketString());
         try {
             this.subdivision = new PhyloTree();
@@ -98,8 +90,8 @@ public class Structure {
         } catch (Exception e) {
             System.out.println("read problem");
             e.printStackTrace();
-            System.err.println(e);
-            System.out.println(e.toString());
+			System.err.println(e);
+			System.out.println(e);
         }
         this.createSubLayers();
     }
@@ -116,12 +108,12 @@ public class Structure {
             Iterator<Node> it = currentLayer.iterator();
             Vector<Node> nextLayer = new Vector<Node>();
             while (it.hasNext()) {
-                Node current = it.next();
-                LinkedList<Node> sons = this.getChildren(current);
-                for (int i = 0; i < sons.size(); i++) {
-                    nextLayer.add(sons.get(i));
-                }
-            }
+				Node current = it.next();
+				LinkedList<Node> sons = this.getChildren(current);
+				for (Node son : sons) {
+					nextLayer.add(son);
+				}
+			}
             this.subLayers.add(0, currentLayer);
             currentLayer = nextLayer;
         }
@@ -139,7 +131,6 @@ public class Structure {
     }
 
     //convert speciecTree
-    @SuppressWarnings("unchecked")
     private void convertToSubdivision() {
         subdivision = (PhyloTree) speciesTree.clone();
         //System.out.println(subdivision.toBracketString());
@@ -188,8 +179,7 @@ public class Structure {
             //creating new edges and adding them to the next node list, also adding nodes to subLayer
             for (int i = 0; i < nextEdgeList.size(); i++) {
                 Edge newEdge = addSubNode(nextEdgeList.get(i), subLayer);
-                nextEdgeList.remove(i);
-                nextEdgeList.add(i, newEdge);
+				nextEdgeList.set(i, newEdge);
             }
 
             this.subLayers.add(subLayer);
@@ -246,9 +236,7 @@ public class Structure {
         //init cost Matrix
         this.costMatrix = new int[genSize][subSize];
         for (int i = 0; i < this.costMatrix.length; i++) {
-            for (int j = 0; j < this.costMatrix[i].length; j++) {
-                this.costMatrix[i][j] = 999999999;
-            }
+			Arrays.fill(this.costMatrix[i], 999999999);
         }
         //this.eventMatrix = new Event[genSize][subSize];
 
@@ -264,12 +252,12 @@ public class Structure {
     private void traversal(Node geneNode) {
         Iterator<Edge> it = geneNode.outEdges().iterator();
         if (it.hasNext()) {
-            Edge first = (Edge) it.next();
+			Edge first = it.next();
             traversal(first.getTarget());
             recon(first.getTarget());
         }
         if (it.hasNext()) {
-            Edge second = (Edge) it.next();
+			Edge second = it.next();
             traversal(second.getTarget());
             recon(second.getTarget());
         }
@@ -281,20 +269,18 @@ public class Structure {
         int uId = current.getId();
         int degree = current.getOutDegree();
 
-        Iterator<Vector<Node>> it = this.subLayers.iterator();
         // going over generated timeLayers
-        while (it.hasNext()) {
-            Vector<Node> subLayer = it.next();
-            if (subLayer.size() > 1) {
-                // bestreceiver
-                int[] bestReceiver1 = new int[2];
-                int[] bestReceiver2 = new int[2];
-                if (degree == 2) {
-                    LinkedList<Node> children = getChildren(current);
-                    int u1Id = children.getFirst().getId();
-                    int u2Id = children.getLast().getId();
-                    // TODO: für 2 kinder
-                    int[] temp = this.bestReceiverT(subLayer, u1Id, u2Id);
+		for (Vector<Node> subLayer : this.subLayers) {
+			if (subLayer.size() > 1) {
+				// bestreceiver
+				int[] bestReceiver1 = new int[2];
+				int[] bestReceiver2 = new int[2];
+				if (degree == 2) {
+					LinkedList<Node> children = getChildren(current);
+					int u1Id = children.getFirst().getId();
+					int u2Id = children.getLast().getId();
+					// TODO: für 2 kinder
+					int[] temp = this.bestReceiverT(subLayer, u1Id, u2Id);
                     bestReceiver1[0] = temp[0];
                     bestReceiver1[1] = temp[1];
                     bestReceiver2[0] = temp[2];
@@ -344,11 +330,9 @@ public class Structure {
                     }
                 }
             } else {
-                Iterator<Node> it2 = subLayer.iterator();
-                while (it2.hasNext()) {
-                    Node speciesNode = it2.next();
-                    this.computeCostForEdges(current, speciesNode, new int[1], new int[1], false);
-                }
+				for (Node speciesNode : subLayer) {
+					this.computeCostForEdges(current, speciesNode, new int[1], new int[1], false);
+				}
             }
         }
     }
@@ -538,13 +522,13 @@ public class Structure {
 
     //system.out.pr..... matrix
     private void showMatrix() {
-        for (int i = 0; i < this.costMatrix.length; i++) {
-            System.out.println();
-            for (int j = 0; j < this.costMatrix[i].length; j++) {
-                System.out.print(this.costMatrix[i][j] + " ");
-            }
-        }
-    }
+		for (int[] matrix : this.costMatrix) {
+			System.out.println();
+			for (int j = 0; j < matrix.length; j++) {
+				System.out.print(matrix[j] + " ");
+			}
+		}
+	}
 
     private void showMatrixRow(int i) {
         for (int j = 0; j < this.costMatrix[i].length; j++)

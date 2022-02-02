@@ -45,9 +45,7 @@ public class ComputeHybridizationNetworksCommand extends CommandBaseMultiViewer 
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase(getSyntax());
@@ -87,8 +85,8 @@ public class ComputeHybridizationNetworksCommand extends CommandBaseMultiViewer 
             theDir.getDocument().setDocumentIsDirty(true);
             theMultiViewer.updateView(IDirector.ALL);
             // theMultiViewer.getCommandManager().execute("select edges;set labelcolor=null;deselect edges;");
-            theMultiViewer.getFrame().toFront();
-            new Message(theMultiViewer.getFrame(), "Hybridization number: " + hybridizationNumber.get() + "\nNumber of networks: " + trees.length);
+			theMultiViewer.getFrame().toFront();
+			Message.show(theMultiViewer.getFrame(), "Hybridization number: " + hybridizationNumber.get() + "\nNumber of networks: " + trees.length);
         }
     }
 

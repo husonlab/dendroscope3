@@ -103,10 +103,7 @@ public class DiGraph {
         }
         visited = true;
         // outgoing edges are cherry-edges if there are at least 2 and all of them are leaf-edges
-        boolean cher = true;
-        if (outdeg < 2) {
-            cher = false;
-        }
+        boolean cher = outdeg >= 2;
         for (int c = 0; c < outdeg; c++) {
             if (children.elementAt(c).outdeg != 0) {
                 cher = false;
@@ -185,7 +182,7 @@ public class DiGraph {
             }
             boolean suppress = true;
             for (int i = 0; i < clusters[c].size(); i++) {
-                Vector cluster = (Vector) clusters[c].elementAt(i);
+				Vector cluster = clusters[c].elementAt(i);
                 if (cluster.size() > 1) {
                     suppress = false;
                 }
@@ -308,7 +305,7 @@ public class DiGraph {
         cleanDiGraph();
         // check if all clusters are displayed
         for (int c = 0; c < CS.clusterVec.size(); c++) {
-            Vector cluster = (Vector) CS.clusterVec.elementAt(c);
+			Vector cluster = CS.clusterVec.elementAt(c);
             if (!clusterDisplayed(cluster)) {
                 disp = false;
             }
@@ -417,13 +414,13 @@ public class DiGraph {
 
     public boolean displaysClustersTree(ClusterSet CS, int tree) {
         for (int c = 0; c < CS.clusterVec.size(); c++) {
-            Vector cluster = (Vector) CS.clusterVec.elementAt(c);
+			Vector cluster = CS.clusterVec.elementAt(c);
 
             // singletons are always displayed
             if (cluster.size() < 2) continue;
 
             // only check clusters that come from the given tree
-            Vector treeNums = (Vector) CS.treeNumberVec.elementAt(c);
+			Vector treeNums = CS.treeNumberVec.elementAt(c);
             if (!treeNums.contains(tree)) continue;
 
             boolean cd = clusterDisplayed(cluster);
@@ -590,17 +587,17 @@ public class DiGraph {
         this.cleanDiGraph();
     }
 
-    public void printNode(int num[]) {
-        if (number != 0) {
-            return; // already visited
-        }
-        if (label != 0) {
-            // this is a leaf
-            number = label;
-            String taxon = (String) CassAlgorithm.stringTaxa.elementAt(number - 1);
-            System.out.println(number + " [shape=" + CassAlgorithm.leafShape + ", width=0.3, label=" + taxon + "];");
-        } else {
-            // this is an internal vertex
+	public void printNode(int[] num) {
+		if (number != 0) {
+			return; // already visited
+		}
+		if (label != 0) {
+			// this is a leaf
+			number = label;
+			String taxon = (String) CassAlgorithm.stringTaxa.elementAt(number - 1);
+			System.out.println(number + " [shape=" + CassAlgorithm.leafShape + ", width=0.3, label=" + taxon + "];");
+		} else {
+			// this is an internal vertex
             if (CassAlgorithm.PRINT_EXTRA_INFO) {
                 number = num[0];
                 System.out.println(number + " [shape=circle, label=\"" + indeg + "," + outdeg + "\"];");
@@ -625,7 +622,7 @@ public class DiGraph {
             String edgeLabel = "";
             boolean notEmpty = false;
             for (int j = 0; j < clusters[c].size(); j++) {
-                Vector cluster = (Vector) clusters[c].elementAt(j);
+				Vector cluster = clusters[c].elementAt(j);
                 if (cluster.size() > 1) {
                     if (notEmpty) {
                         edgeLabel = edgeLabel + ", ";

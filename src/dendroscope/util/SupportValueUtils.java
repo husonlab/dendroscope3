@@ -32,7 +32,6 @@ public class SupportValueUtils {
     /**
      * does this tree have internal node labels
      *
-     * @param tree
      * @return true, if some internal nodes have labels
      */
     public static String getInternalNodeLabelIfPresent(PhyloTree tree) {
@@ -49,8 +48,7 @@ public class SupportValueUtils {
     /**
      * delete all internal node labels
      *
-     * @param trees
-     */
+	 */
     public static void deleteAllInternalNodeLabels(TreeData[] trees) {
         for (PhyloTree tree : trees) {
             for (Node v = tree.getFirstNode(); v != null; v = tree.getNextNode(v)) {
@@ -64,7 +62,6 @@ public class SupportValueUtils {
     /**
      * set edge labels from internal node labels
      *
-     * @param tree
      * @return edge labels
      */
     public static EdgeArray<String> setEgeLabelsFromInternalNodeLabels(PhyloTree tree) {
@@ -80,8 +77,7 @@ public class SupportValueUtils {
     /**
      * set internal node labels from edge labels
      *
-     * @param tree
-     */
+	 */
     public static void setInternalNodeLabelsFromEdgeLabels(PhyloTree tree, EdgeArray<String> edgeLabels) {
         for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
             if (v.getInDegree() == 1 && v.getOutDegree() > 0) {

@@ -87,8 +87,7 @@ public class OpenFileCommand extends CommandBaseMultiViewer implements ICommand 
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         File lastOpenFile = ProgramProperties.getFile(ProgramProperties.OPENFILE);
 
@@ -129,9 +128,7 @@ public class OpenFileCommand extends CommandBaseMultiViewer implements ICommand 
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
 
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("open file=");
@@ -163,26 +160,24 @@ public class OpenFileCommand extends CommandBaseMultiViewer implements ICommand 
                     final String choice = (String) JOptionPane.showInputDialog(getViewer().getFrame(), "Internal nodes have labels (example: '" + internalLabel + "'),\nhow should they be interpreted?",
                             "How to interpret internal node numbers", JOptionPane.QUESTION_MESSAGE, ProgramProperties.getProgramIcon(), choices, choices[0]);
                     if (choice == null) {
-                        System.err.println("USER CANCELED");
-                        if (ProjectManager.getNumberOfProjects() > 1) {
-                            ProjectManager.removeProject(multiViewer.getDir());
-                            multiViewer.getDir().close();
-                        } else {
-                            doc.setFile("Untitled", true);
-                            doc.setTrees(new TreeData[0]);
-                        }
-                        return;
-                    }
-                    if (choice.equals(choices[1])) { // interpret as support values
-                        doc.setInternalNodeLabelsAreEdgeLabels(true);
-                    } else
-                        doc.setInternalNodeLabelsAreEdgeLabels(false);
+						System.err.println("USER CANCELED");
+						if (ProjectManager.getNumberOfProjects() > 1) {
+							ProjectManager.removeProject(multiViewer.getDir());
+							multiViewer.getDir().close();
+						} else {
+							doc.setFile("Untitled", true);
+							doc.setTrees(new TreeData[0]);
+						}
+						return;
+					}
+					// interpret as support values
+					doc.setInternalNodeLabelsAreEdgeLabels(choice.equals(choices[1]));
 
-                    if (choice.equals(choices[2])) { // delete
-                        SupportValueUtils.deleteAllInternalNodeLabels(doc.getTrees());
-                        doc.setDocumentIsDirty(true);
-                    }
-                }
+					if (choice.equals(choices[2])) { // delete
+						SupportValueUtils.deleteAllInternalNodeLabels(doc.getTrees());
+						doc.setDocumentIsDirty(true);
+					}
+				}
             }
             System.err.println("Trees loaded: " + doc.getTrees().length);
             multiViewer.chooseGridSize();

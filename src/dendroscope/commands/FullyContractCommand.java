@@ -73,8 +73,7 @@ public class FullyContractCommand extends ZoomToFitCommand implements ICommand {
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         execute("zoom what=contract;");
     }

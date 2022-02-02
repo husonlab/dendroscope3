@@ -86,8 +86,7 @@ public class RotateRightCommand extends RotateLeftCommand implements ICommand {
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     @Override
     public void actionPerformed(ActionEvent ev) {
         boolean lockXY = false;

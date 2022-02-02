@@ -77,17 +77,17 @@ class dagExplore {
 //! changeLabels is a backmap that adjusts the labels (to make room for the ctbr that will be inserted)
 
 
-    public BiDAG[] clonebiDAG(int changeLabels[]) {
-        BiDAG[] newNodes = new BiDAG[num_nodes];
+    public BiDAG[] clonebiDAG(int[] changeLabels) {
+		BiDAG[] newNodes = new BiDAG[num_nodes];
 
-        if (root.nodeNum != 0) {
-            System.out.println("I expected the root to have number 0...");
-            System.exit(0);
-        }
+		if (root.nodeNum != 0) {
+			System.out.println("I expected the root to have number 0...");
+			System.exit(0);
+		}
 
-        for (int x = 0; x < num_nodes; x++) {
-            newNodes[x] = new BiDAG();
-        }
+		for (int x = 0; x < num_nodes; x++) {
+			newNodes[x] = new BiDAG();
+		}
 
         for (int x = 0; x < num_nodes; x++) {
             BiDAG oldGuy = nodearray[x];

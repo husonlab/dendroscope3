@@ -85,8 +85,7 @@ public class MultiViewer implements IDirectableViewer, IViewerWithFindToolBar, I
     /**
      * construct a new multiviewer
      *
-     * @param dir
-     */
+	 */
     public MultiViewer(final Director dir, int rows, int cols) {
         this.dir = dir;
         dir.setMainViewer(this);
@@ -512,8 +511,7 @@ public class MultiViewer implements IDirectableViewer, IViewerWithFindToolBar, I
     /**
      * set uptodate state
      *
-     * @param flag
-     */
+	 */
     public void setUptoDate(boolean flag) {
         uptodate = flag;
     }
@@ -596,7 +594,6 @@ public class MultiViewer implements IDirectableViewer, IViewerWithFindToolBar, I
     /**
      * gets the last element in a bit set
      *
-     * @param set
      * @return last
      */
     public int getLast(BitSet set) {
@@ -611,8 +608,7 @@ public class MultiViewer implements IDirectableViewer, IViewerWithFindToolBar, I
     /**
      * load the specified trees from the document into the viewer
      *
-     * @param which
-     */
+	 */
     public void loadTrees(BitSet which) {
         getTreeGrid().loadTrees(this.doc, which);
     }
@@ -620,8 +616,7 @@ public class MultiViewer implements IDirectableViewer, IViewerWithFindToolBar, I
     /**
      * load the specified trees, or all, if which==null, from a foreign document
      *
-     * @param srcDoc
-     */
+	 */
     public void loadTreesFromDocument(Document srcDoc) {
         for (int i = 0; i < srcDoc.getNumberOfTrees(); i++) {
             doc.setCurrent(doc.appendTree(srcDoc.getName(i), (TreeData) srcDoc.getTree(i).clone(), Integer.MAX_VALUE));
@@ -633,8 +628,7 @@ public class MultiViewer implements IDirectableViewer, IViewerWithFindToolBar, I
     /**
      * add a set of trees to the document and multiviewer
      *
-     * @param trees
-     */
+	 */
     public void addTrees(TreeData[] trees) {
         if (trees.length > 0) {
             int current = doc.getCurrent();
@@ -647,7 +641,7 @@ public class MultiViewer implements IDirectableViewer, IViewerWithFindToolBar, I
             doc.setCurrent(which);
             doc.appendTrees(trees, doc.getCurrent());
             if (trees.length > 1) {
-                new Message(getFrame(), "Number of trees added: " + trees.length);
+				Message.show(getFrame(), "Number of trees added: " + trees.length);
             }
             doc.setCurrent(current);
 
@@ -700,8 +694,7 @@ public class MultiViewer implements IDirectableViewer, IViewerWithFindToolBar, I
     /**
      * are we currently showing the last tree?
      *
-     * @return
-     */
+	 */
     public boolean isAtLast() {
         return doc.getNumberOfTrees() == 0 || getTreeGrid().getCurrentTrees().cardinality() == 0
                 || getLast(getTreeGrid().getCurrentTrees()) == doc.getNumberOfTrees() - 1;
@@ -759,8 +752,7 @@ public class MultiViewer implements IDirectableViewer, IViewerWithFindToolBar, I
     /**
      * returns true, if all selected networks are trees
      *
-     * @return
-     */
+	 */
     public boolean isAllSelectedAreTrees() {
         for (Iterator<TreeViewer> it = treeGrid.getSelectedIterator(); it.hasNext(); ) {
             TreeViewer treeViewer = it.next();
@@ -808,8 +800,7 @@ public class MultiViewer implements IDirectableViewer, IViewerWithFindToolBar, I
     /**
      * schedule to recompute embedding on next update
      *
-     * @param mustRecomputeEmbedding
-     */
+	 */
     public void setMustRecomputeEmbedding(boolean mustRecomputeEmbedding) {
         this.mustRecomputeEmbedding = mustRecomputeEmbedding;
     }
@@ -833,8 +824,7 @@ public class MultiViewer implements IDirectableViewer, IViewerWithFindToolBar, I
     /**
      * sets the cursor
      *
-     * @param cursor
-     */
+	 */
     public void setCursor(Cursor cursor) {
         if (!isLocked()) {
             treeGrid.setCursor(cursor);
@@ -863,8 +853,7 @@ public class MultiViewer implements IDirectableViewer, IViewerWithFindToolBar, I
     /**
      * set the last active frame
      *
-     * @param frame
-     */
+	 */
     public static void setLastActiveFrame(JFrame frame) {
         lastActiveFrame = frame;
     }

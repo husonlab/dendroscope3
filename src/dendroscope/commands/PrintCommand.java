@@ -78,9 +78,7 @@ public class PrintCommand extends CommandBase implements ICommand {
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
 
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("print;");
@@ -92,8 +90,7 @@ public class PrintCommand extends CommandBase implements ICommand {
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         MultiViewer viewer = (MultiViewer) getViewer();
         PageFormat pageFormat = ProgramProperties.getPageFormat();

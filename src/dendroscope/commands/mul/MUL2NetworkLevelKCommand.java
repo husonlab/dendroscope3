@@ -72,8 +72,7 @@ public class MUL2NetworkLevelKCommand extends MUL2NetworkCommand implements ICom
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         execute("compute mult2net method=levelk;");
 

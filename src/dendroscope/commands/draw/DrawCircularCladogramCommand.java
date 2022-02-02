@@ -55,8 +55,7 @@ public class DrawCircularCladogramCommand extends DrawCommand implements ICheckB
     /**
      * set the selected status of this command
      *
-     * @param selected
-     */
+	 */
     public void setSelected(boolean selected) {
     }
 
@@ -104,8 +103,7 @@ public class DrawCircularCladogramCommand extends DrawCommand implements ICheckB
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
 
     public void actionPerformed(ActionEvent ev) {
         execute("set drawer=" + TreeViewer.CIRCULAR_CLADOGRAM + ";");

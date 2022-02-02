@@ -60,8 +60,7 @@ public class ComputeHybridNumber {
     /**
      * constructor
      *
-     * @param progressListener
-     */
+	 */
     ComputeHybridNumber(ProgressListener progressListener) {
         this.progressListener = progressListener;
 
@@ -72,9 +71,6 @@ public class ComputeHybridNumber {
     /**
      * computes the hybrid number for two multi-furcating trees
      *
-     * @param tree1
-     * @param tree2
-     * @param progressListener
      * @return hybrid number
      */
     public static int apply(PhyloTree tree1, PhyloTree tree2, ProgressListener progressListener) throws IOException, CanceledException {
@@ -87,10 +83,6 @@ public class ComputeHybridNumber {
     /**
      * computes the hybrid number for two multifurcating trees
      *
-     * @param tree1
-     * @param tree2
-     * @param progressListener
-     * @param bestScore
      * @return hybrid number
      */
     public static int apply(PhyloTree tree1, PhyloTree tree2, ProgressListener progressListener, int bestScore) throws IOException, CanceledException {
@@ -103,8 +95,6 @@ public class ComputeHybridNumber {
     /**
      * run the algorithm. This can be reentered by rerootings of the same two trees
      *
-     * @param tree1
-     * @param tree2
      * @return reduced trees
      */
     int run(PhyloTree tree1, PhyloTree tree2, Taxa allTaxa) throws IOException, CanceledException {
@@ -211,14 +201,8 @@ public class ComputeHybridNumber {
     /**
      * recursively compute the hybrid number
      *
-     * @param root1
-     * @param root2
      * @param isReduced       @return hybrid number
-     * @param retry
-     * @param topLevel
-     * @param scoreAbove
-     * @param additionalAbove
-     */
+	 */
     private int computeHybridNumberRec(final Root root1, final Root root2, boolean isReduced, Integer previousHybrid, BitSet retry, final boolean topLevel, final int scoreAbove, final ValuesList additionalAbove) throws IOException, CanceledException {
         if (System.currentTimeMillis() > nextTime) {
             synchronized (progressListener) {

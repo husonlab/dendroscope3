@@ -38,8 +38,6 @@ public class SplitFilter {
     /**
      * filter away all non-compatible splits in a greedy fashion
      *
-     * @param progressListener
-     * @param splits
      * @return compatible splits
      */
     public static SplitSystem applyGreedyCompatibleFilter(ProgressListener progressListener, SplitSystem splits) throws CanceledException {
@@ -69,9 +67,6 @@ public class SplitFilter {
     /**
      * filter away all partial splits
      *
-     * @param progressListener
-     * @param taxa
-     * @param splits
      * @return all full splits
      */
     public static SplitSystem applyRemovePartialFilter(ProgressListener progressListener, Taxa taxa, SplitSystem splits) throws CanceledException {
@@ -90,12 +85,6 @@ public class SplitFilter {
      * todo: needs testing
      * filter the splits by total score. All splits are removed whose total distortion score exceeds the value of maxDistortion
      *
-     * @param progressListener
-     * @param taxa
-     * @param tree2taxa
-     * @param trees
-     * @param splits
-     * @param maxDistortion
      * @return filtered splits
      */
     public static SplitSystem filterByTotalScore(ProgressListener progressListener, Taxa taxa, BitSet[] tree2taxa, PhyloTree[] trees, SplitSystem splits, int maxDistortion) throws CanceledException {
@@ -142,17 +131,8 @@ public class SplitFilter {
      * filters splits by distortion, allowing a split to pass only if there exists minNumberTrees for which
      * the distortion of the split is at most maxDistortion
      *
-     * @param progressListener
-     * @param taxa
-     * @param tree2taxa
-     * @param trees
-     * @param splits
-     * @param maxDistortion
-     * @param minNumberTrees
-     * @param allTrivial
      * @return filtered splits
-     * @throws CanceledException
-     */
+	 */
     public static SplitSystem filterByDistortion(ProgressListener progressListener, Taxa taxa, BitSet[] tree2taxa, PhyloTree[] trees, SplitSystem splits, int maxDistortion,
                                                  int minNumberTrees, boolean allTrivial) throws CanceledException {
         progressListener.setTasks("Filter by distortion", "Processing splits");
@@ -215,10 +195,6 @@ public class SplitFilter {
      * Filters splits by the majority rule. Keeps only those splits that appear in more than 50% of the relevant trees.
      * If the input are partial trees, then there is no guarantee that the splits will be compatible
      *
-     * @param progressListener
-     * @param tree2taxa
-     * @param tree2splits
-     * @param splits
      * @return majority splits
      */
     public static SplitSystem filterByMajority(ProgressListener progressListener, BitSet[] tree2taxa, SplitSystem[] tree2splits, SplitSystem splits) throws CanceledException {
@@ -251,10 +227,6 @@ public class SplitFilter {
      * Filters splits by the majority rule. Keeps only those splits that appear in all the relevant trees.
      * If the input are partial trees, then there is no guarantee that the splits will be compatible
      *
-     * @param progressListener
-     * @param tree2taxa
-     * @param tree2splits
-     * @param splits
      * @return strict majority splits
      */
     public static SplitSystem filterByStrict(ProgressListener progressListener, BitSet[] tree2taxa, SplitSystem[] tree2splits, SplitSystem splits) throws CanceledException {
@@ -286,13 +258,8 @@ public class SplitFilter {
     /**
      * filter by loose consensus
      *
-     * @param progressListener
-     * @param tree2taxa
-     * @param tree2splits
-     * @param splits
      * @return loose consensus splis
-     * @throws CanceledException
-     */
+	 */
     public static SplitSystem filterByLoose(ProgressListener progressListener, BitSet[] tree2taxa, SplitSystem[] tree2splits, SplitSystem splits) throws CanceledException {
         progressListener.setTasks("Filter by loose consensus", "Processing splits");
         progressListener.setMaximum(splits.size());
@@ -325,10 +292,6 @@ public class SplitFilter {
      * Filters splits by the majority rule. Keeps only those splits that appear in more than 50% of the relevant trees.
      * If the input are partial trees, then there is no guarantee that the splits will be compatible
      *
-     * @param progressListener
-     * @param tree2taxa
-     * @param tree2splits
-     * @param splits
      * @return majority splits
      */
     public static SplitSystem filterByPrecentThreshold(ProgressListener progressListener, BitSet[] tree2taxa, SplitSystem[] tree2splits, SplitSystem splits, double percentThreshold) throws CanceledException {

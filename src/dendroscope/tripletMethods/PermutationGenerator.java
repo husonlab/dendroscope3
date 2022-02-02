@@ -29,9 +29,9 @@ import java.math.BigInteger;
  */
 class PermutationGenerator {
 
-    private int[] a;
-    private BigInteger numLeft;
-    private BigInteger total;
+    private final int[] a;
+	private BigInteger numLeft;
+	private final BigInteger total;
 
     //-----------------------------------------------------------
     // Constructor. WARNING: Don't make n too large.

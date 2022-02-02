@@ -33,13 +33,10 @@ public class MAAFUtils {
     /**
      * if there is more than one network for the same MAAF, removes all but one of them
      *
-     * @param networks
-     * @param verbose
      * @return number of networks removed
      */
     public static int removeDuplicateMAAFs(Set<Root> networks, boolean verbose) {
-        LinkedList<Root> input = new LinkedList<Root>();
-        input.addAll(networks);
+		LinkedList<Root> input = new LinkedList<Root>(networks);
 
         Set<Root> maafs = new TreeSet<Root>(new NetworkComparator());
 
@@ -72,12 +69,10 @@ public class MAAFUtils {
     /**
      * computes all maafs as trees
      *
-     * @param networks
      * @return MAAFs  (each as a tree in which an auxiliary root is connected to all subtrees)
      */
     public static Collection<Root> computeAllMAAFs(Set<Root> networks) {
-        LinkedList<Root> input = new LinkedList<Root>();
-        input.addAll(networks);
+		LinkedList<Root> input = new LinkedList<Root>(networks);
 
         LinkedList<Root> maafs = new LinkedList<Root>();
 
@@ -92,7 +87,6 @@ public class MAAFUtils {
     /**
      * computes the MAAF for the given network. Note that all components of the MAAF are attached below an auxiliary root node
      *
-     * @param network
      * @param extendedMAAF if true, compute extended MAAF in which all unlabeled nodes of outdegree 0 are kept
      * @return MAAF
      */
@@ -138,7 +132,6 @@ public class MAAFUtils {
         while (toDelete.size() > 0);
 
         // remove all divertices:
-        toDelete.clear();
         for (Node v = graph.getFirstNode(); v != null; v = v.getNext()) {
             if (v.getInDegree() == 1 && v.getOutDegree() == 1)
                 toDelete.add(v);

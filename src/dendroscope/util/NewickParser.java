@@ -67,23 +67,23 @@ public class NewickParser extends JPanel implements ActionListener, DocumentList
 
 
     public void checkHighlight(JTextComponent comp) {
-        Highlighter highlighter = comp.getHighlighter();
-        Highlighter.Highlight[] highlights = highlighter.getHighlights();
-        MyHighlightPainter painter = new MyHighlightPainter(Color.red);
-        // remove old highlights
-        for (int i = 0; i < highlights.length; i++) {
-            highlighter.removeHighlight(highlights[i]);
-        }
-        String s = "";
-        try {
-            Document doc = comp.getDocument();
-            s = doc.getText(0, doc.getLength());
-            if (s.length() == 0) {
-                return;
-            }
-            int pos = comp.getCaretPosition();
-            if (pos - 1 < 0) {
-                System.out.println("pos-1 < 0");
+		Highlighter highlighter = comp.getHighlighter();
+		Highlighter.Highlight[] highlights = highlighter.getHighlights();
+		MyHighlightPainter painter = new MyHighlightPainter(Color.red);
+		// remove old highlights
+		for (Highlighter.Highlight highlight : highlights) {
+			highlighter.removeHighlight(highlight);
+		}
+		String s = "";
+		try {
+			Document doc = comp.getDocument();
+			s = doc.getText(0, doc.getLength());
+			if (s.length() == 0) {
+				return;
+			}
+			int pos = comp.getCaretPosition();
+			if (pos - 1 < 0) {
+				System.out.println("pos-1 < 0");
                 return;
             }
             System.out.println(pos);
@@ -153,8 +153,8 @@ public class NewickParser extends JPanel implements ActionListener, DocumentList
 //
 //
 //			}
-        } catch (BadLocationException e) {
-        }
+		} catch (BadLocationException ignored) {
+		}
     }
 
 
@@ -238,12 +238,12 @@ public class NewickParser extends JPanel implements ActionListener, DocumentList
         checkHighlight(tf);
     }
 
-    class MyHighlightPainter extends DefaultHighlighter.DefaultHighlightPainter {
-        public MyHighlightPainter(Color color) {
-            super(color);
-        }
+	static class MyHighlightPainter extends DefaultHighlighter.DefaultHighlightPainter {
+		public MyHighlightPainter(Color color) {
+			super(color);
+		}
 
-    }
+	}
 
 
 }

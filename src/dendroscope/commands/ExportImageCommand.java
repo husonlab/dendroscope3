@@ -79,8 +79,7 @@ public class ExportImageCommand extends CommandBase implements ICommand {
     /**
      * parses the given command and executes it
      *
-     * @param np
-     */
+	 */
     public void apply(NexusStreamParser np) throws Exception {
         final MultiViewer multiViewer = (MultiViewer) getViewer();
 
@@ -148,8 +147,7 @@ public class ExportImageCommand extends CommandBase implements ICommand {
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         final MultiViewer viewer = (MultiViewer) getViewer();
         final Document doc = viewer.getDir().getDocument();

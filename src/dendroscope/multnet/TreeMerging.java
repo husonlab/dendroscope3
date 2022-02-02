@@ -22,8 +22,6 @@ import dendroscope.core.TreeData;
 import jloda.graph.Node;
 import jloda.phylo.PhyloTree;
 
-import java.util.Iterator;
-
 /**
  * merges the actual inputed trees to a single one. for this purpose, a new root node will be generated.
  * this node is connected with the roots of all trees we want to merge.
@@ -37,21 +35,19 @@ public class TreeMerging {
     }
 
     public PhyloTree apply() {
-        PhyloTree t = new PhyloTree();
-        Node root = t.newNode();
-        t.setRoot(root);
-        //add all trees to a single graph.
-        for (TreeData tmpTree : this.trees) {
-            t.add(tmpTree);
-        }
-        //now connect the old roots with the new one.
-        Iterator<Node> nodesIt = t.nodes().iterator();
-        while (nodesIt.hasNext()) {
-            Node n = nodesIt.next();
-            if (n.getInDegree() == 0 && !n.equals(root)) {
-                t.newEdge(root, n);
-            }
-        }
-        return t;
-    }
+		PhyloTree t = new PhyloTree();
+		Node root = t.newNode();
+		t.setRoot(root);
+		//add all trees to a single graph.
+		for (TreeData tmpTree : this.trees) {
+			t.add(tmpTree);
+		}
+		//now connect the old roots with the new one.
+		for (Node n : t.nodes()) {
+			if (n.getInDegree() == 0 && !n.equals(root)) {
+				t.newEdge(root, n);
+			}
+		}
+		return t;
+	}
 }

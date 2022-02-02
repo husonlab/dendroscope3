@@ -33,8 +33,7 @@ public abstract class CommandBaseMultiViewer extends CommandBase {
     /**
      * set the director
      *
-     * @param dir
-     */
+	 */
 
     public void setDir(IDirector dir) {
         super.setDir(dir);
@@ -47,8 +46,7 @@ public abstract class CommandBaseMultiViewer extends CommandBase {
     /**
      * get the director
      *
-     * @return
-     */
+	 */
     public Director getDir() {
         return (Director) super.getDir();
     }

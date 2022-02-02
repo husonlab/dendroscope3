@@ -38,7 +38,6 @@ public class Compact {
     /**
      * compact clusters by identifying non-distinquishable taxa
      *
-     * @param clusters
      * @return a map that can be used to uncompact clusters
      */
     public static Map compactClusters(Cluster[] clusters) {
@@ -104,9 +103,7 @@ public class Compact {
     /**
      * uncompact reticulations
      *
-     * @param set
-     * @param mapBack
-     */
+	 */
     public static void uncompactReticulations(BitSet set, Map mapBack, Taxa taxa, int maxTaxonId) {
         BitSet newTaxa = new BitSet();
         for (int t = set.nextSetBit(0); t != -1 && t <= maxTaxonId; t = set.nextSetBit((t + 1))) {
@@ -127,9 +124,7 @@ public class Compact {
     /**
      * uncompact clusters
      *
-     * @param clusters
-     * @param mapBack
-     */
+	 */
     public static void uncompactClusters(Cluster[] clusters, Map mapBack, int maxTaxonId) {
         for (Cluster cluster : clusters) {
             uncompactCluster(cluster, mapBack, maxTaxonId);
@@ -139,9 +134,7 @@ public class Compact {
     /**
      * uncompact pairs of bit sets
      *
-     * @param pairs
-     * @param mapBack
-     */
+	 */
     public static void uncompactPairs(List pairs, Map mapBack, int maxTaxonId) {
         for (Object pair1 : pairs) {
             Pair pair = (Pair) pair1;
@@ -153,9 +146,7 @@ public class Compact {
     /**
      * uncompact triplets of clusters
      *
-     * @param triplets
-     * @param mapBack
-     */
+	 */
     public static void uncompactTriplets(List triplets, Map mapBack, int maxTaxonId) {
         for (Object triplet1 : triplets) {
             Triplet triplet = (Triplet) triplet1;
@@ -185,9 +176,7 @@ public class Compact {
     /**
      * uncompact a clusters
      *
-     * @param orig
-     * @param mapBack
-     */
+	 */
     public static void uncompactCluster(BitSet orig, Map mapBack, int maxTaxonId) {
         if (orig != null) {
             BitSet set = new BitSet();

@@ -75,9 +75,7 @@ public class CopyNodeLabelCommand extends CommandBaseMultiViewer implements ICom
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase(getSyntax());
@@ -138,8 +136,7 @@ public class CopyNodeLabelCommand extends CommandBaseMultiViewer implements ICom
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     @Override
     public void actionPerformed(ActionEvent ev) {
         executeImmediately(getSyntax());

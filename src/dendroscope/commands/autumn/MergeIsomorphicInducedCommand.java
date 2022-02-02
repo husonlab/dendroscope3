@@ -49,19 +49,15 @@ public class MergeIsomorphicInducedCommand extends CommandBaseMultiViewer implem
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase(getSyntax());
 
-        Set<String> selectedLabels = new HashSet<>();
-
         Iterator<TreeViewer> it = multiViewer.getTreeGrid().getSelectedOrAllIterator();
-        TreeViewer viewer1 = it.next();
-        selectedLabels.addAll(viewer1.getSelectedNodeLabels());
-        TreeData tree1 = getDir().getDocument().getTree(multiViewer.getTreeGrid().getNumberOfViewerInDocument(viewer1));
+		TreeViewer viewer1 = it.next();
+		Set<String> selectedLabels = new HashSet<>(viewer1.getSelectedNodeLabels());
+		TreeData tree1 = getDir().getDocument().getTree(multiViewer.getTreeGrid().getNumberOfViewerInDocument(viewer1));
         TreeViewer viewer2 = it.next();
         selectedLabels.addAll(viewer2.getSelectedNodeLabels());
         TreeData tree2 = getDir().getDocument().getTree(multiViewer.getTreeGrid().getNumberOfViewerInDocument(viewer2));
@@ -92,8 +88,7 @@ public class MergeIsomorphicInducedCommand extends CommandBaseMultiViewer implem
             List<Root> list = new LinkedList<>();
             list.add(result);
 
-            List<TreeData> resultTrees = new LinkedList<>();
-            resultTrees.addAll(PostProcess.apply(new Root[]{result}, allTaxa, false));
+			List<TreeData> resultTrees = new LinkedList<>(PostProcess.apply(new Root[]{result}, allTaxa, false));
 
             for (int t = selectedTaxa.nextSetBit(0); t != -1; t = selectedTaxa.nextSetBit(t + 1)) {
                 AddHybridNode.apply(list, t);
@@ -135,7 +130,7 @@ public class MergeIsomorphicInducedCommand extends CommandBaseMultiViewer implem
 
                 if (resultTrees.get(0).getNumberOfNodes() > 0) {
                     Director newDir = Director.newProject(1, 1);
-					newDir.getDocument().appendTrees(resultTrees.toArray(new TreeData[resultTrees.size()]));
+					newDir.getDocument().appendTrees(resultTrees.toArray(new TreeData[0]));
 					newDir.getDocument().setTitle(FileUtils.replaceFileSuffix(getDir().getDocument().getTitle(), "-merged"));
                     MultiViewer newMultiViewer = (MultiViewer) newDir.getMainViewer();
                     newMultiViewer.chooseGridSize();
@@ -147,7 +142,7 @@ public class MergeIsomorphicInducedCommand extends CommandBaseMultiViewer implem
                 }
             }
         } else
-            new Message(getViewer().getFrame(), "Trees not reduced-isomorphic");
+			Message.show(getViewer().getFrame(), "Trees not reduced-isomorphic");
     }
 
     public void actionPerformed(ActionEvent ev) {

@@ -72,8 +72,7 @@ public class DecrementDrawingAuxiliaryCommand extends IncrementDrawingAuxiliaryC
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     @Override
     public void actionPerformed(ActionEvent ev) {
         executeImmediately("auxiliaryparameter change=decrement;");

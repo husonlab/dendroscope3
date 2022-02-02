@@ -51,10 +51,10 @@ public class ComputeTopologicalConstraints extends CommandBaseMultiViewer
         if (trees.size() == 1) {
             Object[] definitions = DistanceMethods.computeTreeDefinitions(trees
                     .get(0));
-            new Message(getViewer().getFrame(), "Galled Tree: "
-                    + definitions[0] + "\n" + "Galled Network: "
-                    + definitions[1] + "\n" + "Network-Level: "
-                    + definitions[2]);
+            Message.show(getViewer().getFrame(), "Galled Tree: "
+												 + definitions[0] + "\n" + "Galled Network: "
+												 + definitions[1] + "\n" + "Network-Level: "
+												 + definitions[2]);
             System.out.println("Galled Tree: " + definitions[0] + "\n"
                     + "GalledNetwork: " + definitions[1] + "\n" + "Level: "
                     + definitions[2]);

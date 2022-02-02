@@ -87,8 +87,7 @@ public class IncrementDrawingAuxiliaryCommand extends CommandBase implements ICo
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     @Override
     public void actionPerformed(ActionEvent ev) {
         executeImmediately("auxiliaryparameter change=increment;");
@@ -97,9 +96,7 @@ public class IncrementDrawingAuxiliaryCommand extends CommandBase implements ICo
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("auxiliaryparameter change=");

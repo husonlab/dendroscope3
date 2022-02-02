@@ -75,9 +75,7 @@ public class CopyImageCommand extends CommandBaseMultiViewer implements ICommand
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase(getSyntax());
@@ -124,8 +122,7 @@ public class CopyImageCommand extends CommandBaseMultiViewer implements ICommand
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     @Override
     public void actionPerformed(ActionEvent ev) {
         execute(getSyntax());

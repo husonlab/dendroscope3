@@ -53,8 +53,7 @@ public class DendroscopeProperties {
     /**
      * sets the program properties
      *
-     * @param propertiesFile
-     */
+	 */
     public static void initializeProperties(String propertiesFile) {
         ProgramProperties.setProgramIcons(ResourceManager.getIcons("Dendroscope16.png", "Dendroscope32.png", "Dendroscope48.png", "Dendroscope128.png"));
         ProgramProperties.setProgramVersion(Version.SHORT_DESCRIPTION);
@@ -90,8 +89,7 @@ public class DendroscopeProperties {
     /**
      * add a file to the recent files list
      *
-     * @param file
-     */
+	 */
     public static void addRecentFile(File file) {
         int maxRecentFiles = ProgramProperties.get(ProgramProperties.MAXRECENTFILES, 20);
         StringTokenizer st = new StringTokenizer(ProgramProperties.get(ProgramProperties.RECENTFILES, ""), ";");
@@ -146,8 +144,7 @@ public class DendroscopeProperties {
     /**
      * add recent file listener
      *
-     * @param listener
-     */
+	 */
     public static void addPropertiesListListener(PropertiesListListener listener) {
         if (propertieslistListeners.contains(listener) == false)
             propertieslistListeners.add(listener);
@@ -156,8 +153,7 @@ public class DendroscopeProperties {
     /**
      * remove recent file listener
      *
-     * @param listener
-     */
+	 */
     public static void removePropertiesListListener(PropertiesListListener listener) {
         propertieslistListeners.remove(listener);
     }

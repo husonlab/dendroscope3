@@ -60,8 +60,7 @@ public class Director implements IDirectableViewer, IDirector {
     /**
      * create a new director
      *
-     * @param doc
-     */
+	 */
     public Director(Document doc) {
         this.doc = doc;
     }
@@ -69,8 +68,7 @@ public class Director implements IDirectableViewer, IDirector {
     /**
      * add a viewer to this doc
      *
-     * @param viewer
-     */
+	 */
     public IDirectableViewer addViewer(IDirectableViewer viewer) {
         if (viewer instanceof IMainViewer)
             this.viewer = (IMainViewer) viewer;
@@ -86,7 +84,6 @@ public class Director implements IDirectableViewer, IDirector {
     /**
      * does this director (still) contain the named viewer
      *
-     * @param viewer
      * @return true, if director has this viewer
      */
     public boolean containsViewer(IDirectableViewer viewer) {
@@ -96,8 +93,7 @@ public class Director implements IDirectableViewer, IDirector {
     /**
      * remove a viewer from this doc
      *
-     * @param viewer
-     */
+	 */
     public void removeViewer(IDirectableViewer viewer) {
         viewers.remove(viewer);
         synchronized (directorEventListeners) {
@@ -124,10 +120,10 @@ public class Director implements IDirectableViewer, IDirector {
     public void WaitUntilAllViewersAreUptoDate() {
 
         while (!isAllViewersUptodate()) {
-            try {
-                Thread.sleep(10);
-            } catch (Exception e) {
-            }
+			try {
+				Thread.sleep(10);
+			} catch (Exception ignored) {
+			}
         }
     }
 
@@ -160,20 +156,18 @@ public class Director implements IDirectableViewer, IDirector {
                 final IDirectorListener d = directorEventListener;
 
                 try {
-                    // Put the update into the swing event queue
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            try {
-                                d.setUptoDate(false);
-                                d.updateView(what);
-                                d.setUptoDate(true);
-                            } catch (Exception ex) {
-                                Basic.caught(ex);
-                                d.setUptoDate(true);
-                            }
-                        }
-                    });
-                } catch (Exception ex) {
+					// Put the update into the swing event queue
+					SwingUtilities.invokeLater(() -> {
+						try {
+							d.setUptoDate(false);
+							d.updateView(what);
+							d.setUptoDate(true);
+						} catch (Exception ex) {
+							Basic.caught(ex);
+							d.setUptoDate(true);
+						}
+					});
+				} catch (Exception ex) {
                     Basic.caught(ex);
                     d.setUptoDate(true);
                 }
@@ -234,8 +228,7 @@ public class Director implements IDirectableViewer, IDirector {
     /**
      * execute a command within the swing thread
      *
-     * @param command
-     */
+	 */
     public boolean executeImmediately(final String command) {
         return executeImmediately(command, null);
     }
@@ -243,8 +236,7 @@ public class Director implements IDirectableViewer, IDirector {
     /**
      * execute a command in a separate thread
      *
-     * @param command
-     */
+	 */
     public void execute(final String command) {
         execute(command, null);
     }
@@ -252,8 +244,7 @@ public class Director implements IDirectableViewer, IDirector {
     /**
      * execute a command within the swing thread
      *
-     * @param command
-     */
+	 */
     public boolean executeImmediately(final String command, CommandManager commandManager) {
         //System.err.println("executing " + command);
         try {
@@ -280,8 +271,7 @@ public class Director implements IDirectableViewer, IDirector {
     /**
      * execute a command. Lock all viewer input, then request to doc to execute command
      *
-     * @param command
-     */
+	 */
     public void execute(final String command, final CommandManager commandManager) {
         Component parentComponent;
         Object parent = commandManager.getParent();
@@ -297,8 +287,7 @@ public class Director implements IDirectableViewer, IDirector {
     /**
      * execute a command. Lock all viewer input, then request to doc to execute command
      *
-     * @param command0
-     */
+	 */
     public void execute(String command0, final CommandManager commandManager, final Component parent) {
         final String command;
         if (command0.startsWith("!"))
@@ -314,36 +303,34 @@ public class Director implements IDirectableViewer, IDirector {
 
         for (int countTries = 0; countTries < 2; countTries++) {
             try {
-                future = executorService.submit(new Runnable() {
-                    public void run() {
-                        docInUpdate = true;
-                        ProgressDialog progressDialog = new ProgressDialog("", "", parent);
-                        progressDialog.setDebug(Basic.getDebugMode());
-                        progressDialog.setCloseOnCancel(false);
-                        doc.setProgressListener(progressDialog);
+				future = executorService.submit(() -> {
+					docInUpdate = true;
+					ProgressDialog progressDialog = new ProgressDialog("", "", parent);
+					progressDialog.setDebug(Basic.getDebugMode());
+					progressDialog.setCloseOnCancel(false);
+					doc.setProgressListener(progressDialog);
 
-                        try {
-                            if (commandManager != null)
-                                commandManager.execute(command);
-                        } catch (CanceledException ex) {
-                            System.err.println("USER CANCELED EXECUTE");
-                        } catch (Exception ex) {
-                            // Basic.caught(ex);
-                            new Alert(getParent(), "Execute failed: " + ex.getMessage());
-                        }
+					try {
+						if (commandManager != null)
+							commandManager.execute(command);
+					} catch (CanceledException ex) {
+						System.err.println("USER CANCELED EXECUTE");
+					} catch (Exception ex) {
+						// Basic.caught(ex);
+						new Alert(getParent(), "Execute failed: " + ex.getMessage());
+					}
 
-                        notifyUpdateViewer(Director.ALL);
-                        WaitUntilAllViewersAreUptoDate();
-                        try {
-                            notifyUnlockInput();
-                        } catch (Exception ex) {
-                            // Basic.caught(ex);
-                        }
-                        doc.getProgressListener().close();
-                        doc.setProgressListener(null);
-                        docInUpdate = false;
-                    }
-                });
+					notifyUpdateViewer(Director.ALL);
+					WaitUntilAllViewersAreUptoDate();
+					try {
+						notifyUnlockInput();
+					} catch (Exception ex) {
+						// Basic.caught(ex);
+					}
+					doc.getProgressListener().close();
+					doc.setProgressListener(null);
+					docInUpdate = false;
+				});
                 break;
             } catch (RejectedExecutionException ex) {
                 //Basic.caught(ex);
@@ -365,7 +352,6 @@ public class Director implements IDirectableViewer, IDirector {
     /**
      * returns a viewer of the given class
      *
-     * @param aClass
      * @return viewer of the given class, or null
      */
     public IDirectableViewer getViewerByClass(Class aClass) {
@@ -431,8 +417,7 @@ public class Director implements IDirectableViewer, IDirector {
     /**
      * set uptodate state
      *
-     * @param flag
-     */
+	 */
     public void setUptoDate(boolean flag) {
     }
 
@@ -483,8 +468,7 @@ public class Director implements IDirectableViewer, IDirector {
     /**
      * set the dirty flag and update all window titles to show astrix
      *
-     * @param dirty
-     */
+	 */
     public void setDirty(boolean dirty) {
         if (viewer instanceof MultiViewer) {
             if (dirty && !doc.isDocumentIsDirty()) {

@@ -44,15 +44,16 @@ public class IsomorphismCheck {
             var isBifurcatingTree1 = !t1.isReticulated() && t1.isBifurcating();
             var isBifurcatingTree2 = !t2.isReticulated() && t2.isBifurcating();
 
-            if (isBifurcatingTree1 != !isBifurcatingTree2)
-                return false;
+            if (isBifurcatingTree1 != isBifurcatingTree2)
+				return false;
 
             if (t1.getNumberOfNodes() != t2.getNumberOfNodes())
                 return false;
 
-            if (isBifurcatingTree1 == isBifurcatingTree2)
-                return treeIsomorphism(t1, t2);
-            return (networkIsomorphism(t1, t2));
+			if (isBifurcatingTree1)
+				return treeIsomorphism(t1, t2);
+			else
+				return (networkIsomorphism(t1, t2));
 
 		} catch (IOException e) {
             // TODO Auto-generated catch block

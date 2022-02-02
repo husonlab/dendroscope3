@@ -44,8 +44,7 @@ public abstract class DrawCommand extends CommandBaseMultiViewer {
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         String[] drawers = new String[]{TreeViewer.RECTANGULAR_PHYLOGRAM,
                 TreeViewer.RECTANGULAR_CLADOGRAM,
@@ -83,9 +82,7 @@ public abstract class DrawCommand extends CommandBaseMultiViewer {
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("set drawer=");
         String drawerKind = np.getWordMatchesIgnoringCase

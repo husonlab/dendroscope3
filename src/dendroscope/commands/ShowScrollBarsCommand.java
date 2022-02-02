@@ -44,8 +44,7 @@ public class ShowScrollBarsCommand extends CommandBaseMultiViewer implements ICh
     /**
      * set the selected status of this command
      *
-     * @param selected
-     */
+	 */
     public void setSelected(boolean selected) {
     }
 
@@ -88,9 +87,7 @@ public class ShowScrollBarsCommand extends CommandBaseMultiViewer implements ICh
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
 
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("show scrollbars=");
@@ -103,8 +100,7 @@ public class ShowScrollBarsCommand extends CommandBaseMultiViewer implements ICh
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         execute("show scrollbars=" + (!isSelected()) + ";");
     }

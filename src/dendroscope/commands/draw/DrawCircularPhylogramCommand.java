@@ -95,8 +95,7 @@ public class DrawCircularPhylogramCommand extends DrawCommand implements ICheckB
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
 
     public void actionPerformed(ActionEvent ev) {
         execute("set drawer=" + TreeViewer.CIRCULAR_PHYLOGRAM + ";");

@@ -44,10 +44,7 @@ public class Triple {
     /**
      * constructs a new ordered triple consisting of sets A, B, C
      *
-     * @param A
-     * @param B
-     * @param C
-     */
+	 */
     public Triple(BitSet A, BitSet B, BitSet C) {
         setTriple(A, B, C);
     }
@@ -55,8 +52,6 @@ public class Triple {
     /**
      * computes the intersection triple, if clusters are incompatible, otherwise null
      *
-     * @param cluster1
-     * @param cluster2
      * @return intersection triple or null
      */
     public static Triple computeIncompatibilityTriple(BitSet cluster1, BitSet cluster2) {
@@ -72,10 +67,7 @@ public class Triple {
     /**
      * sets the triple
      *
-     * @param A
-     * @param B
-     * @param C
-     */
+	 */
     public void setTriple(BitSet A, BitSet B, BitSet C) {
         int a = A.nextSetBit(0);
         int b = B.nextSetBit(0);
@@ -120,27 +112,25 @@ public class Triple {
      * @return comparator
      */
     public static Comparator<Triple> getComparator() {
-        return new Comparator<Triple>() {
-            public int compare(Triple o1, Triple o2) {
+		return (o1, o2) -> {
 
-                int min1 = Math.min(o1.getA().cardinality(), Math.min(o1.getB().cardinality(), o1.getC().cardinality()));
-                int min2 = Math.min(o2.getA().cardinality(), Math.min(o2.getB().cardinality(), o2.getC().cardinality()));
-                if (min1 > min2)
-                    return -1;
-                else if (min2 > 1)
-                    return 1;
+			int min1 = Math.min(o1.getA().cardinality(), Math.min(o1.getB().cardinality(), o1.getC().cardinality()));
+			int min2 = Math.min(o2.getA().cardinality(), Math.min(o2.getB().cardinality(), o2.getC().cardinality()));
+			if (min1 > min2)
+				return -1;
+			else if (min2 > 1)
+				return 1;
 
 
-                int c = Cluster.compare(o1.getA(), o2.getA());
-                if (c != 0)
-                    return c;
-                c = Cluster.compare(o1.getB(), o2.getB());
-                if (c != 0)
-                    return c;
-                c = Cluster.compare(o1.getC(), o2.getC());
-                return c;
-            }
-        };
+			int c = Cluster.compare(o1.getA(), o2.getA());
+			if (c != 0)
+				return c;
+			c = Cluster.compare(o1.getB(), o2.getB());
+			if (c != 0)
+				return c;
+			c = Cluster.compare(o1.getC(), o2.getC());
+			return c;
+		};
     }
 
     public BitSet getA() {

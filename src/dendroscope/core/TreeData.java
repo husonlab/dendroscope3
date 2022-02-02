@@ -63,8 +63,7 @@ public class TreeData extends PhyloTree {
     /**
      * constructor
      *
-     * @param tree
-     */
+	 */
     public TreeData(PhyloTree tree) {
         this();
         setName(tree.getName());
@@ -74,9 +73,7 @@ public class TreeData extends PhyloTree {
     /**
      * constructor for given name and tree
      *
-     * @param name
-     * @param tree
-     */
+	 */
     public TreeData(String name, PhyloTree tree) {
         this(tree);
         setName(name);
@@ -86,9 +83,7 @@ public class TreeData extends PhyloTree {
     /**
      * copy all properties of tree in main viewer to this tree
      *
-     * @param treeViewer
-     * @param currentViewDirty
-     */
+	 */
     public void syncViewer2Data(TreeViewer treeViewer, boolean currentViewDirty) {
         if (treeViewer.getPhyloTree().getNumberOfNodes() > 0 && currentViewDirty)
             dirty = true; // once dirty, can't become un-dirty
@@ -153,8 +148,7 @@ public class TreeData extends PhyloTree {
     /**
      * copy all properties of this tree to main viewer
      *
-     * @param viewer
-     */
+	 */
     public void
 
     syncData2Viewer(Document doc, TreeViewer viewer) {
@@ -362,8 +356,7 @@ public class TreeData extends PhyloTree {
     /**
      * set the name of the tree
      *
-     * @param name
-     */
+	 */
     public void setName(String name) {
         this.name = name;
     }
@@ -384,7 +377,6 @@ public class TreeData extends PhyloTree {
     /**
      * get a node view
      *
-     * @param v
      * @return node view
      */
     public NodeView getNV(Node v) {
@@ -394,9 +386,7 @@ public class TreeData extends PhyloTree {
     /**
      * set a node view
      *
-     * @param v
-     * @param nv
-     */
+	 */
     public void setNV(Node v, NodeView nv) {
         node2NodeView.put(v, nv);
 
@@ -405,7 +395,6 @@ public class TreeData extends PhyloTree {
     /**
      * get an edge view
      *
-     * @param e
      * @return edge view
      */
     public EdgeView getEV(Edge e) {
@@ -415,9 +404,7 @@ public class TreeData extends PhyloTree {
     /**
      * set an edge view
      *
-     * @param e
-     * @param ev
-     */
+	 */
     public void setEV(Edge e, EdgeView ev) {
         edge2EdgeView.put(e, ev);
     }
@@ -434,8 +421,7 @@ public class TreeData extends PhyloTree {
     /**
      * set the drawer kind
      *
-     * @param drawerKind
-     */
+	 */
     public void setDrawerKind(String drawerKind) {
         this.drawerKind = drawerKind;
     }
@@ -452,8 +438,7 @@ public class TreeData extends PhyloTree {
     /**
      * set the to scale mode
      *
-     * @param toScale
-     */
+	 */
     public void setToScale(boolean toScale) {
         this.toScale = toScale;
     }
@@ -470,8 +455,7 @@ public class TreeData extends PhyloTree {
     /**
      * set the rotate mode
      *
-     * @param radialLabels
-     */
+	 */
     public void setRadialLabels(boolean radialLabels) {
         this.radialLabels = radialLabels;
     }
@@ -496,8 +480,7 @@ public class TreeData extends PhyloTree {
     /**
      * set the collapsed nodes
      *
-     * @param collapsedNodes
-     */
+	 */
     public void setCollapsedNodes(NodeSet collapsedNodes) {
         this.collapsedNodes = collapsedNodes;
     }
@@ -514,8 +497,7 @@ public class TreeData extends PhyloTree {
     /**
      * sets the transform
      *
-     * @param trans
-     */
+	 */
     public void setTrans(Transform trans) {
         this.trans.copy(trans);
     }
@@ -545,8 +527,7 @@ public class TreeData extends PhyloTree {
     /**
      * sets the disabled state
      *
-     * @param disabled
-     */
+	 */
     public void setDisabled(boolean disabled) {
         this.disabled = disabled;
     }
@@ -555,10 +536,8 @@ public class TreeData extends PhyloTree {
     /**
      * parse a tree in Newick format, as a rooted tree, if desired.
      *
-     * @param str
      * @param rooted maintain root, even if it has degree 2
-     * @throws java.io.IOException
-     */
+	 */
     public void parseBracketNotation(String str, boolean rooted, boolean doClear) throws IOException {
         super.parseBracketNotation(str, rooted, doClear);
         // clean all single quotes from taxon labels:

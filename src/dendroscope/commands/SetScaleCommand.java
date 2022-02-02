@@ -71,8 +71,7 @@ public class SetScaleCommand extends CommandBaseMultiViewer implements ICommand 
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         String label = "100";
         Iterator<TreeViewer> it = multiViewer.getTreeGrid().getSelectedOrAllIterator();
@@ -107,9 +106,7 @@ public class SetScaleCommand extends CommandBaseMultiViewer implements ICommand 
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("set scale=");

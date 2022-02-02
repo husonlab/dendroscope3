@@ -48,15 +48,15 @@ public class Simplistic {
     public static boolean stopAtThisKIfSuccess = false;
 
 
-    public static void apply(Director dir, Document doc, PhyloTree tempTrees[], String param[]) throws Exception {
+    public static void apply(Director dir, Document doc, PhyloTree[] tempTrees, String[] param) throws Exception {
 
 
-        SIMPLE = Boolean.parseBoolean(param[0]);
-        BUILD_ALL = Boolean.parseBoolean(param[1]);
-        stopAtThisKIfSuccess = Boolean.parseBoolean(param[2]);
-        BEGIN_LEV = Integer.parseInt(param[3]);
-        SN_TO_SPLIT = Integer.parseInt(param[4]);
-        MAXLEV = Integer.parseInt(param[5]);
+		SIMPLE = Boolean.parseBoolean(param[0]);
+		BUILD_ALL = Boolean.parseBoolean(param[1]);
+		stopAtThisKIfSuccess = Boolean.parseBoolean(param[2]);
+		BEGIN_LEV = Integer.parseInt(param[3]);
+		SN_TO_SPLIT = Integer.parseInt(param[4]);
+		MAXLEV = Integer.parseInt(param[5]);
 
 
         /*System.out.println(BUILD_ALL);
@@ -218,8 +218,8 @@ public class Simplistic {
             if (networkFound) { // If at least one network is found, then we draw it
 
                 Director newDir = Director.newProject(1, 1);
-                newDir.getDocument().appendTrees(simplisticNetwork.toArray(new TreeData[simplisticNetwork.size()]));
-                newDir.getDocument().setTitle(doc.getTitle() + "-simplistic");
+				newDir.getDocument().appendTrees(simplisticNetwork.toArray(new TreeData[0]));
+				newDir.getDocument().setTitle(doc.getTitle() + "-simplistic");
                 MultiViewer newMultiViewer = (MultiViewer) newDir.getMainViewer();
                 newMultiViewer.chooseGridSize();
                 newMultiViewer.loadTrees(null);

@@ -76,9 +76,7 @@ public class DeselectAllCommand extends CommandBaseMultiViewer implements IComma
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("deselect");
         String what = np.getWordMatchesIgnoringCase("all nodes edges");
@@ -100,8 +98,7 @@ public class DeselectAllCommand extends CommandBaseMultiViewer implements IComma
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         executeImmediately("deselect all;");
     }

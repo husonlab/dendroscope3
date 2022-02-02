@@ -41,9 +41,7 @@ public class TreeDrawerInnerCircular extends TreeDrawerRadial implements IOptimi
     /**
      * constructor
      *
-     * @param viewer
-     * @param tree
-     */
+	 */
     public TreeDrawerInnerCircular(TreeViewer viewer, PhyloTree tree) {
         super(viewer, tree);
         setupGraphView(viewer);
@@ -53,8 +51,7 @@ public class TreeDrawerInnerCircular extends TreeDrawerRadial implements IOptimi
     /**
      * setd up the graphview
      *
-     * @param graphView
-     */
+	 */
     public void setupGraphView(GraphView graphView) {
         graphView.setAllowInternalEdgePoints(false);
         graphView.setMaintainEdgeLengths(false);
@@ -147,10 +144,7 @@ public class TreeDrawerInnerCircular extends TreeDrawerRadial implements IOptimi
     /**
      * recursively do the work
      *
-     * @param v
-     * @param e
-     * @param resetAll
-     */
+	 */
     private void resetLabelPositionsRec(Node v, Edge e, boolean resetAll) {
         if (e != null) {
             EdgeView ev = viewer.getEV(e);

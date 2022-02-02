@@ -53,9 +53,7 @@ public class LevelKNetwork {
     /**
      * constructor
      *
-     * @param taxa
-     * @param splits
-     */
+	 */
     public LevelKNetwork(Taxa taxa, SplitSystem splits) {
         this.taxa = taxa;
         this.splits = splits;
@@ -101,7 +99,7 @@ public class LevelKNetwork {
             if (A.cardinality() < taxa.size() - 1)
                 list.add(new Cluster(A, split.getWeight(), split.getConfidence(), i, split.getTreeNumbers()));
         }
-        Cluster[] clusters = list.toArray(new Cluster[list.size()]);
+		Cluster[] clusters = list.toArray(new Cluster[0]);
 
         System.err.println("Clusters: " + clusters.length);
 
@@ -165,8 +163,8 @@ public class LevelKNetwork {
         }
 
         // process all non-trivial components
-        progressListener.setMaximum(5 * (component2clusters.length + 1));
-        progressListener.setCancelable(false);
+		progressListener.setMaximum(5L * (component2clusters.length + 1));
+		progressListener.setCancelable(false);
         if (progressListener instanceof ProgressDialog) {
             ((ProgressDialog) progressListener).setCancelButtonText("Skip");
         }
@@ -178,8 +176,8 @@ public class LevelKNetwork {
             if (component2clusters[n].length > 1) {
                 nontrivialComponentNumber++;
                 try {
-                    progressListener.setProgress(5 * n);
-                    progressListener.setTasks("Minimal network", "Processing component " + nontrivialComponentNumber);
+					progressListener.setProgress(5L * n);
+					progressListener.setTasks("Minimal network", "Processing component " + nontrivialComponentNumber);
                     List<PhyloTree> result = processComponent(component2taxa[n], component2clusters[n], progressListener, nontrivialComponentNumber);
                     component2networks.put(n, result);
                 } catch (Exception e) {
@@ -246,7 +244,6 @@ public class LevelKNetwork {
     /**
      * determines incompatibility components
      *
-     * @param incompatible
      * @return all incompatibity components
      */
     public static BitSet[] computeComponents(boolean[][] incompatible) {
@@ -272,11 +269,7 @@ public class LevelKNetwork {
     /**
      * recursively does the work
      *
-     * @param incompatible
-     * @param i
-     * @param number
-     * @param componentNumber
-     */
+	 */
     private static void computeComponentsRec(boolean[][] incompatible, int i, int number, int[] componentNumber) {
         componentNumber[i] = number;
         for (int j = 0; j < incompatible.length; j++) {
@@ -290,10 +283,7 @@ public class LevelKNetwork {
     /**
      * process an individual component in the incompatibility graph
      *
-     * @param taxa
-     * @param clusters
-     * @param progressListener
-     */
+	 */
     private List<PhyloTree> processComponent(BitSet taxa, Cluster[] clusters, ProgressListener progressListener, int componentNumber) throws Exception {
         System.err.println("Processing incompatibility component on " + taxa.cardinality() + " taxa and " + clusters.length + "  clusters");
 
@@ -318,8 +308,7 @@ public class LevelKNetwork {
 
         if (componentNetworks.size() == 0) // solve component using level-k network failed, construct cluster network
         {
-            Set<Cluster> set = new HashSet<>();
-            set.addAll(Arrays.asList(clusters));
+			Set<Cluster> set = new HashSet<>(Arrays.asList(clusters));
             // add all trivial clusters:
             BitSet compactTaxa = Cluster.extractTaxa(clusters);
 
@@ -328,7 +317,7 @@ public class LevelKNetwork {
                 cluster.set(t);
                 set.add(cluster);
             }
-            componentNetworks.add(HasseDiagram.constructHasse(set.toArray(new Cluster[set.size()])));
+			componentNetworks.add(HasseDiagram.constructHasse(set.toArray(new Cluster[0])));
         }
         return componentNetworks;
     }
@@ -336,13 +325,8 @@ public class LevelKNetwork {
     /**
      * plant the networks for components into all backbone networks
      *
-     * @param taxa
-     * @param clusters
-     * @param componentNetworks
-     * @param backboneNetworks
      * @return all new backbone networks
-     * @throws Exception
-     */
+	 */
     private List<PhyloTree> plantComponents(BitSet taxa, Cluster[] clusters, List<PhyloTree> componentNetworks, List<PhyloTree> backboneNetworks) {
         List<PhyloTree> result = new LinkedList<>();
 
@@ -405,14 +389,10 @@ public class LevelKNetwork {
                     if (topSet == null)
                         throw new RuntimeException("Unlabeled leaf encountered: " + u);
                     for (int t = topSet.nextSetBit(0); t != -1; t = topSet.nextSetBit(t + 1)) {
-                        seen.set(t);
-                        Set<Node> topNodes = taxon2top.get(t);
-                        if (topNodes == null) {
-                            topNodes = new HashSet<>();
-                            taxon2top.put(t, topNodes);
-                        }
-                        topNodes.add(u);
-                    }
+						seen.set(t);
+						Set<Node> topNodes = taxon2top.computeIfAbsent(t, k -> new HashSet<>());
+						topNodes.add(u);
+					}
                 }
                 if (!seen.equals(taxa))
                     throw new RuntimeException("Leaves of component do not mention all taxa, missing: " + Cluster.setminus(taxa, seen));
@@ -448,10 +428,7 @@ public class LevelKNetwork {
     /**
      * get the node that corresponds to the givent taxon set in the backbone network
      *
-     * @param backboneNetwork
-     * @param taxa
-     * @return
-     */
+	 */
     private Node getNodeInBackboneNetwork(PhyloTree backboneNetwork, BitSet taxa) {
         for (Node v = backboneNetwork.getFirstNode(); v != null; v = v.getNext()) {
             Cluster cluster = (Cluster) backboneNetwork.getInfo(v);
@@ -465,7 +442,6 @@ public class LevelKNetwork {
     /**
      * gets all leaves below the given node
      *
-     * @param v
      * @return all leaves below v
      */
     private Node[] getAllLeavesBelow(Node v) {
@@ -483,7 +459,7 @@ public class LevelKNetwork {
                     stack.add(w);
             }
         }
-        return list.toArray(new Node[list.size()]);
+		return list.toArray(new Node[0]);
     }
 
     public boolean isComputeOnlyOne() {

@@ -46,9 +46,7 @@ public class TreeDrawerAngled extends TreeDrawerBase implements IOptimizedGraphD
     /**
      * constructor
      *
-     * @param treeView
-     * @param tree
-     */
+	 */
     public TreeDrawerAngled(TreeViewer treeView, PhyloTree tree) {
         super(treeView, tree);
         setupGraphView(treeView);
@@ -57,8 +55,7 @@ public class TreeDrawerAngled extends TreeDrawerBase implements IOptimizedGraphD
     /**
      * set up the graphview
      *
-     * @param graphView
-     */
+	 */
     public void setupGraphView(GraphView graphView) {
         graphView.setAllowInternalEdgePoints(false);
         graphView.setMaintainEdgeLengths(false);
@@ -103,8 +100,7 @@ public class TreeDrawerAngled extends TreeDrawerBase implements IOptimizedGraphD
     /**
      * recursively compute the embedding
      *
-     * @param v
-     */
+	 */
     private void computeEmbeddingRec(Node v, NodeDoubleArray yCoord, NodeDoubleArray yMin, NodeDoubleArray yMax, NodeSet visited) {
 
         if (!warnedSlantedCladogram && tree.getNumberReticulateEdges() > 0) {
@@ -180,7 +176,6 @@ public class TreeDrawerAngled extends TreeDrawerBase implements IOptimizedGraphD
     /**
      * recursively computes the optimization datastructures
      *
-     * @param v
      * @return index of last leaf
      */
     private int recomputeOptimizationRec(Node v, int leaves, NodeSet visited) {
@@ -226,8 +221,7 @@ public class TreeDrawerAngled extends TreeDrawerBase implements IOptimizedGraphD
     /**
      * set the default label positions for nodes and edges
      *
-     * @param resetAll
-     */
+	 */
     public void resetLabelPositions(boolean resetAll) {
         byte leafOr;
         byte rootOr;
@@ -288,7 +282,6 @@ public class TreeDrawerAngled extends TreeDrawerBase implements IOptimizedGraphD
     /**
      * must we visit the subtree rooted at this node when drawing or looking for a mouse click?
      *
-     * @param v
      * @return true, if we must look at subtree below v
      */
     protected boolean mustVisitSubTreeBelowNode(Node v) {
@@ -312,9 +305,7 @@ public class TreeDrawerAngled extends TreeDrawerBase implements IOptimizedGraphD
     /**
      * compute the shape used to represent a collapsed subtree
      *
-     * @param v
-     * @return
-     */
+	 */
     public CollapsedShape computeCollapsedShape(Node v) {
         double[] xMinMax = new double[]{Double.MAX_VALUE, Double.NEGATIVE_INFINITY};
         double[] yMinMax = new double[]{Double.MAX_VALUE, Double.NEGATIVE_INFINITY};

@@ -47,8 +47,7 @@ public class Num2NodeArray {
     /**
      * wrapper constructor
      *
-     * @param array
-     */
+	 */
     public Num2NodeArray(Node[] array) {
         this.array = array;
     }
@@ -56,8 +55,7 @@ public class Num2NodeArray {
     /**
      * sets the wrapped array
      *
-     * @param array
-     */
+	 */
     public void set(Node[] array) {
         this.array = array;
     }
@@ -65,9 +63,7 @@ public class Num2NodeArray {
     /**
      * sets the i-th entry. Assumes the wrapped array has already been constructed or set
      *
-     * @param i
-     * @param v
-     */
+	 */
     public void put(int i, Node v) {
         array[i] = v;
     }
@@ -75,7 +71,6 @@ public class Num2NodeArray {
     /**
      * gets the -th entry
      *
-     * @param i
      * @return node at position i of array
      */
     public Node get(int i) {
@@ -103,8 +98,7 @@ public class Num2NodeArray {
     /**
      * erase and resize  to hold (0,1,...,n)
      *
-     * @param n
-     */
+	 */
     public void clear(int n) {
         array = new Node[n + 1];
     }

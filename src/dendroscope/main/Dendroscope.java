@@ -43,9 +43,7 @@ public class Dendroscope {
     /**
      * launches Dendroscope
      *
-     * @param args
-     * @throws Exception
-     */
+	 */
     public static void main(String[] args) throws Exception {
         ResourceManager.getClassLoadersAndRoots().add(new Pair<>(Dendroscope.class, "dendroscope.resources"));
 
@@ -60,8 +58,8 @@ public class Dendroscope {
 
         } catch (Throwable th) {
             //catch any exceptions and the like that propagate up to the top level
-            System.err.println("Dendroscope fatal error:" + "\n" + th.toString());
-            Basic.caught(th);
+			System.err.println("Dendroscope fatal error:" + "\n" + th);
+			Basic.caught(th);
         }
     }
 
@@ -69,9 +67,7 @@ public class Dendroscope {
     /**
      * parse commandline arguments
      *
-     * @param args
-     * @throws Exception
-     */
+	 */
     public void parseArguments(String[] args) throws Exception {
         ResourceManager.insertResourceRoot(Dendroscope.class);
         Basic.startCollectionStdErr();
@@ -120,30 +116,28 @@ public class Dendroscope {
         DendroscopeProperties.initializeProperties(propertiesFile);
 
         if (ProgramProperties.isUseGUI())  // run in GUI mode
-        {
-            System.setProperty("user.dir", System.getProperty("user.home"));
-            if (showSplash)
-                About.getAbout().showAbout();
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    try {
-                        final Director dir = Director.newProject(1, 1);
-                        final MultiViewer multiViewer = (MultiViewer) dir.getViewerByClass(MultiViewer.class);
+		{
+			System.setProperty("user.dir", System.getProperty("user.home"));
+			if (showSplash)
+				About.getAbout().showAbout();
+			SwingUtilities.invokeLater(() -> {
+				try {
+					final Director dir = Director.newProject(1, 1);
+					final MultiViewer multiViewer = (MultiViewer) dir.getViewerByClass(MultiViewer.class);
 
-                        if (showMessageWindow)
-                            multiViewer.getCommandManager().execute("show messageWindow;");
-                        else
-                            System.err.println(Basic.stopCollectingStdErr());
+					if (showMessageWindow)
+						multiViewer.getCommandManager().execute("show messageWindow;");
+					else
+						System.err.println(Basic.stopCollectingStdErr());
 
-                        DendroscopeProperties.notifyListChange(ProgramProperties.RECENTFILES);
-                        dir.getMainViewer().updateView(Director.ALL);
-                        if (initCommand != null && initCommand.length() > 0)
-                            dir.execute(initCommand + ";", dir.getMainViewer().getCommandManager());
-                    } catch (Exception e) {
-                        Basic.caught(e);
-                    }
-                }
-            });
+					DendroscopeProperties.notifyListChange(ProgramProperties.RECENTFILES);
+					dir.getMainViewer().updateView(Director.ALL);
+					if (initCommand != null && initCommand.length() > 0)
+						dir.execute(initCommand + ";", dir.getMainViewer().getCommandManager());
+				} catch (Exception e) {
+					Basic.caught(e);
+				}
+			});
         } else // non-gui mode
         {
             System.err.println(Basic.stopCollectingStdErr());
@@ -204,12 +198,8 @@ public class Dendroscope {
                         command += aline;
                     if (!inMultiLineMode && command.length() > 0) {
                         final String finalCommand = command;
-                        SwingUtilities.invokeAndWait(new Runnable() {
-                            public void run() {
-                                dir.executeImmediately(finalCommand + ";", multiViewer.getCommandManager());
-                            }
-                        });
-                        System.out.flush();
+						SwingUtilities.invokeAndWait(() -> dir.executeImmediately(finalCommand + ";", multiViewer.getCommandManager()));
+						System.out.flush();
                         System.err.flush();
                         command = "";
                     }

@@ -51,8 +51,7 @@ public class TransferVisualization {
     /**
      * constructor
      *
-     * @param consensusTree
-     */
+	 */
     public TransferVisualization(PhyloTree consensusTree) {
         this.consensusTree = consensusTree;
         // setup id2node and taxa:
@@ -72,10 +71,7 @@ public class TransferVisualization {
     /**
      * constructor
      *
-     * @param consensusTree
-     * @param cladeANames
-     * @param cladeBNames
-     */
+	 */
     public TransferVisualization(PhyloTree consensusTree, Collection cladeANames, Collection cladeBNames) throws Exception {
         this(consensusTree);
         setCladesAandB(cladeANames, cladeBNames);
@@ -84,11 +80,7 @@ public class TransferVisualization {
     /**
      * constructor
      *
-     * @param consensusTree
-     * @param cladeANames
-     * @param cladeBNames
-     * @param threshold
-     */
+	 */
     public TransferVisualization(PhyloTree consensusTree, Collection cladeANames, Collection cladeBNames, double threshold) throws Exception {
         this(consensusTree, cladeANames, cladeBNames);
         setThreshold(threshold);
@@ -97,8 +89,6 @@ public class TransferVisualization {
     /**
      * process a gene tree, name is applied to horizontal edge found
      *
-     * @param geneTree
-     * @param name
      * @return number of transfer edges identified
      */
     public int applyToTree(PhyloTree geneTree, String name) throws Exception {
@@ -140,13 +130,6 @@ public class TransferVisualization {
     /**
      * look for maximal subset C of B such that C is clade with LSA(C) >= LSA(A), in gene tree
      *
-     * @param geneTree
-     * @param taxa
-     * @param v
-     * @param cladeA
-     * @param cladeB
-     * @param cladeC
-     * @param siblingCladeInAOfC
      * @return all taxa on or below v
      */
     private BitSet findTransferCladeCRec(PhyloTree geneTree, Taxa taxa, Node v, BitSet cladeA, BitSet cladeB, BitSet cladeC,
@@ -196,9 +179,6 @@ public class TransferVisualization {
     /**
      * are two nodes comparable in the given tree?
      *
-     * @param tree
-     * @param a
-     * @param b
      * @return true, if one is ancestor of the other
      */
     private boolean areComparable(PhyloTree tree, Node a, Node b) {
@@ -303,8 +283,7 @@ public class TransferVisualization {
     /**
      * set the treshold
      *
-     * @param threshold
-     */
+	 */
     public void setThreshold(double threshold) {
         this.threshold = threshold;
     }
@@ -312,9 +291,7 @@ public class TransferVisualization {
     /**
      * set clades A and B from lists of taxon names. These two sets must be clades in the consensus tree
      *
-     * @param cladeANames
-     * @param cladeBNames
-     */
+	 */
     public void setCladesAandB(Collection cladeANames, Collection cladeBNames) throws Exception {
         cladeA.clear();
         for (Object cladeAName : cladeANames) {
@@ -361,8 +338,7 @@ public class TransferVisualization {
     /**
      * if the root has out-degree two, use it to define the two clades A and B
      *
-     * @throws Exception
-     */
+	 */
     public void setCladesAandBViaRoot() throws Exception {
         if (consensusTree.getRoot() != null && consensusTree.getRoot().getOutDegree() == 2) {
             Set cladeANames = new HashSet();
@@ -378,10 +354,7 @@ public class TransferVisualization {
     /**
      * find all labels that can be found on or below the given node
      *
-     * @param tree
-     * @param v
-     * @param labels
-     */
+	 */
     private void findLabelsBelow(PhyloTree tree, Node v, Set labels) {
         Stack stack = new Stack();
         stack.push(v);
@@ -401,8 +374,6 @@ public class TransferVisualization {
     /**
      * determines whether the given set of taxa is a clade with the given root
      *
-     * @param root
-     * @param setOfTaxa
      * @return true, if clade with root
      */
     private boolean isClade(Node root, BitSet setOfTaxa) {
@@ -432,9 +403,6 @@ public class TransferVisualization {
     /**
      * sets the set of nodes labeled by the given set of taxa
      *
-     * @param tree
-     * @param id2node
-     * @param taxa
      * @return nodes
      */
     static public NodeSet getNodesForTaxa(PhyloTree tree, Vector id2node, BitSet taxa) {
@@ -449,8 +417,6 @@ public class TransferVisualization {
     /**
      * gets the lowest single ancestor of a set of nodes in a tree
      *
-     * @param tree
-     * @param nodes
      * @return LSA of taxa
      */
     static public Node findLSA(PhyloTree tree, NodeSet nodes) {
@@ -481,9 +447,6 @@ public class TransferVisualization {
     /**
      * find the LSA for a set of taxa
      *
-     * @param tree
-     * @param id2nodeInGeneTree
-     * @param set
      * @return LSA or null
      */
     private Node findLSA(PhyloTree tree, Vector id2nodeInGeneTree, BitSet set) {
@@ -498,24 +461,18 @@ public class TransferVisualization {
     /**
      * find all nodes in tree that are above elements of the given set only, maximally
      *
-     * @param tree
-     * @param setC
      * @return nodes above setC
      */
     private Node[] findTargetNodes(PhyloTree tree, BitSet setC) {
         Set nodes = new HashSet();
 
         findTargetNodesRec(tree, tree.getRoot(), setC, nodes);
-        return (Node[]) nodes.toArray(new Node[nodes.size()]);
+		return (Node[]) nodes.toArray(new Node[0]);
     }
 
     /**
      * recursively does the work
      *
-     * @param tree
-     * @param v
-     * @param setC
-     * @param targets
      * @return true, if all labels below like in the given set
      */
     private boolean findTargetNodesRec(PhyloTree tree, Node v, BitSet setC, Set targets) {
@@ -545,9 +502,7 @@ public class TransferVisualization {
     /**
      * compute the set of all edges on a path from the root to some node in the given set of nodes
      *
-     * @param v
-     * @param edges
-     */
+	 */
     private static void markPathEdgesRec(Node v, EdgeSet edges) {
         for (Edge edge = v.getFirstInEdge(); edge != null; edge = v.getNextInEdge(edge)) {
             if (edges.contains(edge))
@@ -562,8 +517,6 @@ public class TransferVisualization {
     /**
      * compute the taxon-id to node mapping for a tree
      *
-     * @param tree
-     * @param taxa
      * @return mapping
      */
     private Vector<Node> computeId2Node(PhyloTree tree, Taxa taxa) {
@@ -580,10 +533,7 @@ public class TransferVisualization {
     /**
      * this is used to draw the transfer
      *
-     * @param gc
-     * @param viewer
-     * @param tree
-     */
+	 */
     public static void paint(Graphics2D gc, TreeViewer viewer, PhyloTree tree) {
         Transform trans = viewer.trans;
 
@@ -668,7 +618,6 @@ public class TransferVisualization {
     /**
      * extracts all the transfer source labels in a node label
      *
-     * @param string
      * @return list of labels
      */
     private static List getTransferSources(String string) {
@@ -697,7 +646,6 @@ public class TransferVisualization {
     /**
      * extracts all the transfer target labels in a node label
      *
-     * @param string
      * @return list of labels
      */
     private static List getTransferTargets(String string) {

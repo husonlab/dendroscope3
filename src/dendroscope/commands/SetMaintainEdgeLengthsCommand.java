@@ -83,9 +83,7 @@ public class SetMaintainEdgeLengthsCommand extends CommandBaseMultiViewer implem
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("set maintainedgelengths=");
@@ -128,8 +126,7 @@ public class SetMaintainEdgeLengthsCommand extends CommandBaseMultiViewer implem
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     @Override
     public void actionPerformed(ActionEvent ev) {
         execute("set maintainedgelengths=" + (!isSelected() + ";"));

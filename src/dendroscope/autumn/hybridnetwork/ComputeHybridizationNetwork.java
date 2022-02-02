@@ -55,9 +55,6 @@ public class ComputeHybridizationNetwork {
     /**
      * computes the hybrid number for two multifurcating trees
      *
-     * @param tree1
-     * @param tree2
-     * @param hybridizationNumber
      * @return reduced trees
      */
     public static TreeData[] apply(TreeData tree1, TreeData tree2, ProgressListener progressListener, Single<Integer> hybridizationNumber) throws IOException, CanceledException {
@@ -71,9 +68,6 @@ public class ComputeHybridizationNetwork {
     /**
      * run the algorithm
      *
-     * @param tree1
-     * @param tree2
-     * @param hybridizationNumber
      * @return reduced trees
      */
     private TreeData[] run(TreeData tree1, TreeData tree2, int upperBound, Single<Integer> hybridizationNumber) throws IOException, CanceledException {
@@ -196,17 +190,8 @@ public class ComputeHybridizationNetwork {
     /**
      * this is called between recursive calls of the algorithm to cache networks already computed
      *
-     * @param root1
-     * @param root2
-     * @param isReduced
-     * @param candidateHybrids
-     * @param k
-     * @param totalResults
-     * @param depth
      * @return cached networks or newly computed networks
-     * @throws java.io.IOException
-     * @throws jloda.util.CanceledException
-     */
+	 */
     private int cacheComputeRec(Root root1, Root root2, boolean isReduced, BitSet candidateHybrids, int k, Collection<Root> totalResults, String depth) throws IOException, CanceledException {
         if (true) // use caching
         {
@@ -239,12 +224,8 @@ public class ComputeHybridizationNetwork {
     /**
      * recursively compute the hybrid number
      *
-     * @param root1
-     * @param root2
      * @param isReduced    @return hybrid number
-     * @param k
-     * @param totalResults
-     */
+	 */
     private int computeRec(Root root1, Root root2, boolean isReduced, BitSet candidateHybridsOriginal, int k, Collection<Root> totalResults, String depth) throws IOException, CanceledException {
         if (verbose) {
             System.err.println(depth + "---------- ComputeRec:");
@@ -343,7 +324,7 @@ public class ComputeHybridizationNetwork {
                     Set<Root> currentResults = new TreeSet<Root>(new NetworkComparator());
 
                     for (Root r : resultBottomPair) {
-                        currentResults.addAll(MergeNetworks.apply(resultTopPair, Arrays.asList(r)));
+						currentResults.addAll(MergeNetworks.apply(resultTopPair, List.of(r)));
                     }
                     if (verbose) {
                         System.err.println(depth + "Cluster reduction applied::");
@@ -459,7 +440,6 @@ public class ComputeHybridizationNetwork {
     /**
      * get all alive leaves below the given root
      *
-     * @param root
      * @return leaves
      */
     private List<Root> getAllAliveLeaves(Root root) {
@@ -490,11 +470,8 @@ public class ComputeHybridizationNetwork {
     /**
      * gets all alive taxa. Checks that both trees have the same set of alive taxa
      *
-     * @param root1
-     * @param root2
      * @return all alive taxa
-     * @throws IOException
-     */
+	 */
     public BitSet getAllAliveTaxa(Root root1, Root root2) throws IOException {
 		if (!root1.getTaxa().equals(root2.getTaxa()))
 			throw new IOException("Trees have different sets of alive taxa: " + StringUtils.toString(root1.getTaxa()) + " vs "
@@ -505,8 +482,7 @@ public class ComputeHybridizationNetwork {
     /**
      * reorder the children in all networks
      *
-     * @param networks
-     */
+	 */
     private Collection<Root> fixOrdering(Collection<Root> networks) {
         for (Root root : networks) {
             // if (verbose)

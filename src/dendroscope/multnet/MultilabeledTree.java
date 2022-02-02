@@ -79,8 +79,8 @@ public class MultilabeledTree extends PhyloTree {
                     }
                 }
                 //the node  was not multi-labeled.
-                catch (Exception e) {
-                }
+                catch (Exception ignored) {
+				}
             }
         }
     }
@@ -109,11 +109,7 @@ public class MultilabeledTree extends PhyloTree {
             return cluster;
         }
 
-        /**
-         * check if the current node v is only accessible through special edges and has just one outgoing
-         * edge. in this case ignore this node.
-         */
-        boolean hasNormalEdge = false;
+		boolean hasNormalEdge = false;
         for (Edge e : v.inEdges()) {
             if (!this.isReticulatedEdge(e)) {
 				hasNormalEdge = true;

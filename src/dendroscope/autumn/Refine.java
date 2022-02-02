@@ -37,8 +37,6 @@ public class Refine {
     /**
      * refine two trees
      *
-     * @param tree1
-     * @param tree2
      * @return refined trees
      */
     public static TreeData[] apply(TreeData tree1, TreeData tree2) throws IOException {
@@ -55,16 +53,14 @@ public class Refine {
 
         // convert data-structures to final trees
         List<TreeData> result = PostProcess.apply(new Root[]{v1, v2}, allTaxa, false);
-        return result.toArray(new TreeData[result.size()]);
+        return result.toArray(new TreeData[0]);
 
     }
 
     /**
      * recursively does the work
      *
-     * @param root1
-     * @param root2
-     */
+	 */
     public static void apply(Root root1, Root root2) {
         applyRec(root1, root2, new HashSet<Pair<Root, Root>>());
         if (!root1.getTaxa().equals(root2.getTaxa()))
@@ -74,9 +70,7 @@ public class Refine {
     /**
      * refines two rooted trees with respect to each other
      *
-     * @param v1
-     * @param v2
-     */
+	 */
     private static void applyRec(Root v1, Root v2, Set<Pair<Root, Root>> compared) {
         Pair<Root, Root> pair = new Pair<Root, Root>(v1, v2);
 

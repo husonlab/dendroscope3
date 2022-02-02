@@ -72,8 +72,7 @@ public class MUL2NetworkClusterCommand extends MUL2NetworkCommand implements ICo
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         execute("compute mult2net method=cluster;");
 

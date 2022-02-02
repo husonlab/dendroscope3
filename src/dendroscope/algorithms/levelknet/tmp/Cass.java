@@ -254,7 +254,7 @@ class ClusterSet {
     public static final int FASE1 = 0;
     public static final int FASE2 = 1;
 
-    class StackObject {
+    static class StackObject {
         // the StackObject is a snapshot of the data in either fase 1 (collapse, remove leaf steps)
         //                                              or fase 2 (hang leaf back, decollapse steps)
 
@@ -405,16 +405,16 @@ class ClusterSet {
                 // loop through each pair of edges
                 for (int e1 = 0; e1 < e; e1++) {
                     // skip this edge if it is not a cherry-edge and there are two cherries
-                    if (cherries.size() == 2 && !cherry1.contains((int) (e1)) && !cherry2.contains((int) (e1)) && xint[0] != Cass.DUMMY_NUMBER) {
+                    if (cherries.size() == 2 && !cherry1.contains(e1) && !cherry2.contains(e1) && xint[0] != Cass.DUMMY_NUMBER) {
                         continue;
                     }
                     for (int e2 = e1; e2 < e; e2++) {
                         // if there is a cherry we have to hit it
-                        if (cherries.size() > 0 && !cherry1.contains((int) (e1)) && !cherry1.contains((int) (e2)) && xint[0] != Cass.DUMMY_NUMBER) {
+                        if (cherries.size() > 0 && !cherry1.contains(e1) && !cherry1.contains(e2) && xint[0] != Cass.DUMMY_NUMBER) {
                             continue;
                         }
                         // if there are two cherries we have to hit both of them
-                        if (cherries.size() == 2 && !cherry2.contains((int) (e1)) && !cherry2.contains((int) (e2)) && xint[0] != Cass.DUMMY_NUMBER) {
+                        if (cherries.size() == 2 && !cherry2.contains(e1) && !cherry2.contains(e2) && xint[0] != Cass.DUMMY_NUMBER) {
                             continue;
                         }
                         // if e1 = e2 we subdivide this edge twice
@@ -620,13 +620,13 @@ class ClusterSet {
         this.addCluster(intcluster);
     }
 
-    public void addCluster(int cluster[]) {
+    public void addCluster(int[] cluster) {
         Vector vecCluster = new Vector();
         for (int aCluster : cluster) {
             vecCluster.add(aCluster);
             Vector singleton = new Vector(0);
             singleton.add(aCluster);
-            if (!taxa.contains((int) (aCluster))) {
+            if (!taxa.contains(aCluster)) {
                 clusterVec.add(singleton);
                 taxa.add(aCluster);
                 taxaInTaxa.add(singleton);
@@ -701,7 +701,7 @@ class DiGraph {
         visited = false;
     }
 
-    public DiGraph(int l[]) {
+    public DiGraph(int[] l) {
         children = new DiGraph[0];
         outdeg = 0;
         indeg = 0;
@@ -754,13 +754,11 @@ class DiGraph {
 //        } else {
 
         // outgoing edges are cherry-edges if there are at least 2 and all of them are leaf-edges
-        boolean cher = true;
-        if (outdeg < 2) {
-            cher = false;
-        }
+        boolean cher = outdeg >= 2;
         for (int c = 0; c < outdeg; c++) {
             if (children[c].outdeg != 0) {
                 cher = false;
+                break;
             }
         }
         if (cher) {
@@ -1133,7 +1131,7 @@ class DiGraph {
         this.cleanDiGraph();
     }
 
-    public void printNode(int num[]) {
+    public void printNode(int[] num) {
         if (number != 0) {
             return; // already visited
         }

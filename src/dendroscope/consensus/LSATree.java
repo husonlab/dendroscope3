@@ -28,11 +28,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * computes the LSA tree from a reticulate network
- * Daniel Huson, 12.2007
- */
-
-/**
  * Computes the lsa consensus
  * Daniel Huson, 7.2007
  */
@@ -70,7 +65,6 @@ public class LSATree implements IConsensusTreeMethod {
     /**
      * given a reticulate network, returns the LSA tree
      *
-     * @param network
      * @return LSA tree
      */
     public static PhyloTree computeLSA(PhyloTree network) {
@@ -161,7 +155,6 @@ public class LSATree implements IConsensusTreeMethod {
     /**
      * given a reticulate network, returns the LSA tree
      *
-     * @param network
      * @return LSA tree
      */
     public static PhyloTree computeLSATreeKeeping(PhyloTree network) {
@@ -250,7 +243,6 @@ public class LSATree implements IConsensusTreeMethod {
 	/**
 	 * computes the node-to-guide-tree children map
 	 *
-	 * @param tree
 	 */
 	public static void computeNodeLSAChildrenMap(PhyloTree tree) {
 		try (NodeArray<Node> reticulation2LSA = tree.newNodeArray()) {
@@ -261,7 +253,6 @@ public class LSATree implements IConsensusTreeMethod {
 	/**
 	 * given a reticulate network, returns a mapping of each node to a list of its children in the LSA tree
 	 *
-	 * @param tree
 	 * @param reticulation2LSA is returned here
 	 */
 	public static void computeNodeLSAChildrenMap(PhyloTree tree, NodeArray<Node> reticulation2LSA) {
@@ -289,8 +280,6 @@ public class LSATree implements IConsensusTreeMethod {
 	/**
 	 * recursively determine the number of edges between a reticulation and its lsa
 	 *
-	 * @param tree
-	 * @param reticulation2LSA
 	 * @return number of edges between a reticulation and its lsa
 	 */
 	private static NodeIntArray computeReticulationSize(PhyloTree tree, NodeArray<Node> reticulation2LSA) {
@@ -312,10 +301,7 @@ public class LSATree implements IConsensusTreeMethod {
     /**
      * recursively count edges from r upto lsa
      *
-     * @param r
-     * @param lsa
-     * @param visited
-     */
+	 */
     private static void computeReticulationSizeRec(Node r, Node lsa, EdgeSet visited) {
         for (Edge e = r.getFirstInEdge(); e != null; e = r.getNextInEdge(e)) {
             if (!visited.contains(e) && e.getSource() != lsa) {
@@ -334,9 +320,7 @@ public class LSATree implements IConsensusTreeMethod {
     /**
      * compute the reticulate node to lsa node mapping
      *
-     * @param network
-     * @param reticulation2LSA
-     */
+	 */
     public void computeReticulation2LSA(PhyloTree network, NodeArray<Node> reticulation2LSA) {
         reticulation2LSA.clear();
         ret2PathSet = new NodeArray<>(network);
@@ -350,9 +334,7 @@ public class LSATree implements IConsensusTreeMethod {
     /**
      * recursively compute the mapping of reticulate nodes to their lsa nodes
      *
-     * @param tree
-     * @param v
-     */
+	 */
     private void computeReticulation2LSARec(PhyloTree tree, Node v) {
         if (v.getInDegree() > 1) // this is a reticulate node, add paths to node and incoming edges
         {
@@ -393,7 +375,7 @@ public class LSATree implements IConsensusTreeMethod {
 			var edge2PathSet = ret2Edge2PathSet.get(r);
 			var paths = new BitSet();
 			for (var f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
-				BitSet eSet = (BitSet) edge2PathSet.get(f);
+				BitSet eSet = edge2PathSet.get(f);
 				if (eSet != null)
 					paths.or(eSet);
 
@@ -449,7 +431,6 @@ public class LSATree implements IConsensusTreeMethod {
     /**
      * computes the reticulation 2 lsa edge length map, after running the lsa computation
      *
-     * @param tree
      * @return mapping from reticulation nodes to the edge lengths
      */
     private NodeDoubleArray computeReticulation2LSAEdgeLength(PhyloTree tree) {
@@ -469,10 +450,7 @@ public class LSATree implements IConsensusTreeMethod {
     /**
      * recursively does the work
      *
-     * @param tree
-     * @param v
-     * @param visited
-     */
+	 */
     private void computeReticulation2LSAEdgeLengthRec(PhyloTree tree, Node v, NodeSet visited) {
         if (!visited.contains(v)) {
             visited.add(v);

@@ -35,9 +35,7 @@ public class LayoutOptimizerManager {
     /**
      * applies the indicated embedding algorithm
      *
-     * @param algorithmName
-     * @param tree
-     */
+	 */
     public static void apply(String algorithmName, PhyloTree tree) throws CanceledException {
         ILayoutOptimizer embedder;
 

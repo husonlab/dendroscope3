@@ -53,8 +53,8 @@ public class ComputePathMultiplicityDistanceCommand extends
 
         if (trees.size() == 2) {
             double distance = DistanceMethods.computePathMultiplicityDistance(trees);
-            new Message(getViewer().getFrame(), "Path multiplicity distance: "
-                    + distance);
+            Message.show(getViewer().getFrame(), "Path multiplicity distance: "
+												 + distance);
             System.out.println("Path multiplicity distance: " + distance);
         } else {
             new Alert(getViewer().getFrame(),

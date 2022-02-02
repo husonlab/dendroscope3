@@ -41,8 +41,8 @@ public class DistanceMethods {
     // **********************************************************************************
 
     public static double[][] computeHardwiredClusterDistance(List<PhyloTree> trees) {
-        PhyloTree[] array = trees.toArray(new PhyloTree[trees.size()]);
-        Set<Set<String>>[] clusters = (Set<Set<String>>[]) new HashSet[trees.size()];
+        PhyloTree[] array = trees.toArray(new PhyloTree[0]);
+		Set<Set<String>>[] clusters = (Set<Set<String>>[]) new HashSet[trees.size()];
         for (int i = 0; i < array.length; i++) {
             clusters[i] = PhyloTreeUtils.collectAllHardwiredClusters(array[i]);
         }
@@ -152,8 +152,7 @@ public class DistanceMethods {
         computeNestedLabels(t.getRoot());
 
         HashSet<String> multiSet = new HashSet<String>();
-        for (String s : nodeToLabel.values())
-            multiSet.add(s);
+		multiSet.addAll(nodeToLabel.values());
 
         return multiSet;
     }
@@ -294,10 +293,9 @@ public class DistanceMethods {
             } else {
                 HashSet<HashSet<Edge>> set = (HashSet<HashSet<Edge>>) taxonToPaths
                         .get(taxon).clone();
-                taxonToPaths.remove(taxon);
-                if (!set.contains(path))
-                    set.add(path);
-                taxonToPaths.put(taxon, set);
+				taxonToPaths.remove(taxon);
+				set.add(path);
+				taxonToPaths.put(taxon, set);
             }
         }
     }
@@ -710,8 +708,10 @@ public class DistanceMethods {
             if (v.getOutDegree() != 0) {
                 boolean hasProp = false;
                 for (Node c : v.children()) {
-                    if (c.getInDegree() == 1)
-                        hasProp = true;
+					if (c.getInDegree() == 1) {
+						hasProp = true;
+						break;
+					}
                 }
                 if (!hasProp) {
                     hasTreeChildProp = false;
@@ -799,26 +799,24 @@ public class DistanceMethods {
 
     private static boolean hasDirectedCycle(Graph g) {
 
-        levelToNode = new Hashtable<Integer, Node>();
-        nodeToLevel = new Hashtable<Node, Integer>();
+		levelToNode = new Hashtable<Integer, Node>();
+		nodeToLevel = new Hashtable<Node, Integer>();
 
-        Node start = g.newNode();
-        Iterator<Node> itNodes = g.nodes().iterator();
-        while (itNodes.hasNext()) {
-            Node v = itNodes.next();
-            if (!v.equals(start))
-                g.newEdge(start, v);
-        }
+		Node start = g.newNode();
+		for (Node v : g.nodes()) {
+			if (!v.equals(start))
+				g.newEdge(start, v);
+		}
 
-        initLevels(start, 0, new Vector<Node>());
+		initLevels(start, 0, new Vector<Node>());
 
-        for (int i = g.getNumberOfNodes() - 1; i >= 0; i--) {
-            Node v = levelToNode.get(i);
-            for (Node w : v.parents()) {
-                if (nodeToLevel.get(w) <= i)
-                    return true;
-            }
-        }
+		for (int i = g.getNumberOfNodes() - 1; i >= 0; i--) {
+			Node v = levelToNode.get(i);
+			for (Node w : v.parents()) {
+				if (nodeToLevel.get(w) <= i)
+					return true;
+			}
+		}
 
         return false;
     }
@@ -882,24 +880,22 @@ public class DistanceMethods {
     private static void collectRetSet(Node v, Vector<Node> reticulations,
                                       HashSet<Node> reticulationSet) {
         if (v.getInDegree() > 1) {
-            reticulations.remove(v);
-            reticulationSet.add(v);
-            Iterator<Edge> it = v.inEdges().iterator();
-            while (it.hasNext()) {
-                Node p = it.next().getSource();
-                reticulationSet.add(p);
-                collectRetSet(p, reticulations, reticulationSet);
-                Iterator<Edge> pIt = p.outEdges().iterator();
-                while (pIt.hasNext()) {
-                    Node c = pIt.next().getTarget();
-                    if (!c.equals(v))
-                        collectRetSet(c, reticulations, reticulationSet);
-                }
-            }
-            for (Node c : v.children()) {
-                collectRetSet(c, reticulations, reticulationSet);
-            }
-        }
+			reticulations.remove(v);
+			reticulationSet.add(v);
+			for (Edge value : v.inEdges()) {
+				Node p = value.getSource();
+				reticulationSet.add(p);
+				collectRetSet(p, reticulations, reticulationSet);
+				for (Edge edge : p.outEdges()) {
+					Node c = edge.getTarget();
+					if (!c.equals(v))
+						collectRetSet(c, reticulations, reticulationSet);
+				}
+			}
+			for (Node c : v.children()) {
+				collectRetSet(c, reticulations, reticulationSet);
+			}
+		}
     }
 
 }

@@ -16,9 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package dendroscope.util.convexhull; /**
- * author: Tim Lambert, UNSW, 2000
- */
+package dendroscope.util.convexhull;
 
 /*
  *@(#)Matrix3D.java
@@ -256,42 +254,42 @@ class Matrix3D {
         zz = 1;
     }
 
-    /**
-     * Transform nvert points from v into tv.  v contains the input
-     * coordinates in doubleing point.  Three successive entries in
-     * the array constitute a point.  tv ends up holding the transformed
-     * points as integers; three successive entries per point
-     */
-    void transform(double v[], int tv[], int nvert) {
-        double lxx = xx, lxy = xy, lxz = xz, lxo = xo;
-        double lyx = yx, lyy = yy, lyz = yz, lyo = yo;
-        double lzx = zx, lzy = zy, lzz = zz, lzo = zo;
-        for (int i = nvert * 3; (i -= 3) >= 0; ) {
-            double x = v[i];
-            double y = v[i + 1];
-            double z = v[i + 2];
-            tv[i] = (int) (x * lxx + y * lxy + z * lxz + lxo);
-            tv[i + 1] = (int) (x * lyx + y * lyy + z * lyz + lyo);
-            tv[i + 2] = (int) (x * lzx + y * lzy + z * lzz + lzo);
+	/**
+	 * Transform nvert points from v into tv.  v contains the input
+	 * coordinates in doubleing point.  Three successive entries in
+	 * the array constitute a point.  tv ends up holding the transformed
+	 * points as integers; three successive entries per point
+	 */
+	void transform(double[] v, int[] tv, int nvert) {
+		double lxx = xx, lxy = xy, lxz = xz, lxo = xo;
+		double lyx = yx, lyy = yy, lyz = yz, lyo = yo;
+		double lzx = zx, lzy = zy, lzz = zz, lzo = zo;
+		for (int i = nvert * 3; (i -= 3) >= 0; ) {
+			double x = v[i];
+			double y = v[i + 1];
+			double z = v[i + 2];
+			tv[i] = (int) (x * lxx + y * lxy + z * lxz + lxo);
+			tv[i + 1] = (int) (x * lyx + y * lyy + z * lyz + lyo);
+			tv[i + 2] = (int) (x * lzx + y * lzy + z * lzz + lzo);
         }
     }
 
-    /**
-     * Apply transformation to an array of points
-     */
-    void transform(Point3d v[]) {
-        double lxx = xx, lxy = xy, lxz = xz, lxo = xo;
-        double lyx = yx, lyy = yy, lyz = yz, lyo = yo;
-        double lzx = zx, lzy = zy, lzz = zz, lzo = zo;
-        for (int i = 0; i < v.length; i++) {
-            double x = v[i].v[0];
-            double y = v[i].v[1];
-            double z = v[i].v[2];
-            v[i].v[0] = (x * lxx + y * lxy + z * lxz + lxo);
-            v[i].v[1] = (x * lyx + y * lyy + z * lyz + lyo);
-            v[i].v[2] = (x * lzx + y * lzy + z * lzz + lzo);
-        }
-    }
+	/**
+	 * Apply transformation to an array of points
+	 */
+	void transform(Point3d[] v) {
+		double lxx = xx, lxy = xy, lxz = xz, lxo = xo;
+		double lyx = yx, lyy = yy, lyz = yz, lyo = yo;
+		double lzx = zx, lzy = zy, lzz = zz, lzo = zo;
+		for (Point3d point3d : v) {
+			double x = point3d.v[0];
+			double y = point3d.v[1];
+			double z = point3d.v[2];
+			point3d.v[0] = (x * lxx + y * lxy + z * lxz + lxo);
+			point3d.v[1] = (x * lyx + y * lyy + z * lyz + lyo);
+			point3d.v[2] = (x * lzx + y * lzy + z * lzz + lzo);
+		}
+	}
 
     /**
      * Apply transformation to a  points

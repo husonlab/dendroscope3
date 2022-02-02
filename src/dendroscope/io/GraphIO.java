@@ -34,9 +34,7 @@ public class GraphIO {
     /**
      * writes a graph in jloda format
      *
-     * @param w
-     * @throws IOException
-     */
+	 */
     public static void write(Writer w, Graph graph) throws IOException {
         Map<Integer, Integer> nodeId2Count = new HashMap<>();
         Map<Integer, Integer> edgeId2Count = new HashMap<>();
@@ -46,11 +44,9 @@ public class GraphIO {
     /**
      * writes a graph in jloda format.  Node-id to node-number and edge-id to edge-number maps are set.
      *
-     * @param w
      * @param nodeId2Number after write, maps node-ids to numbers 1..numberOfNodes
      * @param edgeId2Number after write, maps edge-ids to numbers 1..numberOfEdge
-     * @throws IOException
-     */
+	 */
     public static void write(Writer w, Graph graph, Map<Integer, Integer> nodeId2Number, Map<Integer, Integer> edgeId2Number) throws IOException {
         w.write("{GRAPH\n");
         w.write("nnodes=" + graph.getNumberOfNodes() + " nedges=" + graph.getNumberOfEdges() + "\n");
@@ -60,7 +56,7 @@ public class GraphIO {
             nodeId2Number.put(v.getId(), ++count);
             Object info = v.getInfo();
             if (info != null) {
-                w.write("" + count + ":'" + info.toString() + "'");
+				w.write("" + count + ":'" + info + "'");
                 if (!(info instanceof String))
                     w.write(" [" + info.getClass().getName() + "]");
                 w.write("\n");
@@ -77,7 +73,7 @@ public class GraphIO {
         for (Edge e : graph.edges()) {
             Object info = e.getInfo();
             if (info != null) {
-                w.write("" + edgeId2Number.get(e.getId()) + ":'" + info.toString() + "'");
+				w.write("" + edgeId2Number.get(e.getId()) + ":'" + info + "'");
                 if (!(info instanceof String))
                     w.write(" [" + info.getClass().getName() + "]");
                 w.write("\n");
@@ -89,9 +85,7 @@ public class GraphIO {
     /**
      * reads a graph in jloda format
      *
-     * @param r
-     * @throws IOException
-     */
+	 */
     public static void read(Reader r, Graph graph) throws IOException {
         read(r, graph, new Num2NodeArray(), new Num2EdgeArray());
     }
@@ -99,11 +93,9 @@ public class GraphIO {
     /**
      * reads a graph in jloda format. Sets node-num to node map and edge-num edge map
      *
-     * @param r
      * @param num2node after read, contains mapping of numbers used in file to nodes created in Graph
      * @param num2edge after read, contains mapping of numbers used in file to adjacentEdges created in Graph
-     * @throws IOException
-     */
+	 */
     public static void read(Reader r, Graph graph, Num2NodeArray num2node, Num2EdgeArray num2edge) throws IOException {
         graph.clear();
 

@@ -51,7 +51,6 @@ public class Dendro extends IOBase implements IOFormat {
     /**
      * does this look like a file of the correct type?
      *
-     * @param file
      * @return true, if correct type of file
      */
     public boolean isCorrectFileType(File file) {
@@ -65,7 +64,6 @@ public class Dendro extends IOBase implements IOFormat {
     /**
      * does this look like the first line of the a file of the correct type?
      *
-     * @param aLine
      * @return true, if correct type of string
      */
     public boolean isCorrectType(String aLine) {
@@ -75,7 +73,6 @@ public class Dendro extends IOBase implements IOFormat {
     /**
      * read trees
      *
-     * @param r
      * @return trees
      */
     public TreeData[] read(Reader r) throws IOException {
@@ -92,13 +89,12 @@ public class Dendro extends IOBase implements IOFormat {
             if (r != null)
                 r.close();
         }
-        return trees.toArray(new TreeData[trees.size()]);
+        return trees.toArray(new TreeData[0]);
     }
 
     /**
      * read a single tree
      *
-     * @param np
      * @return tree
      */
     private TreeData read(NexusStreamParser np) throws IOException {
@@ -250,9 +246,7 @@ public class Dendro extends IOBase implements IOFormat {
     /**
      * write trees
      *
-     * @param w0
-     * @param trees
-     */
+	 */
     public void write(Writer w0, boolean internalNodeLabelsAreEdgeLabels, TreeData[] trees) throws IOException {
 
         if (trees != null) {
@@ -268,9 +262,7 @@ public class Dendro extends IOBase implements IOFormat {
     /**
      * write a single tree
      *
-     * @param w
-     * @param tree
-     */
+	 */
     private void write(BufferedWriter w, TreeData tree) throws IOException {
         Map<Integer, Integer> nodeId2Number = new HashMap<Integer, Integer>();
         Map<Integer, Integer> edgeId2Number = new HashMap<Integer, Integer>();
@@ -342,7 +334,6 @@ public class Dendro extends IOBase implements IOFormat {
     /**
      * do we accept this file?
      *
-     * @param file
      * @return true, if correct ending
      */
     public boolean accept(File file) {
@@ -392,7 +383,6 @@ public class Dendro extends IOBase implements IOFormat {
     /**
      * writes a graph in jloda format.  Node-id to node-number and edge-id to edge-number maps are set.
      *
-     * @param w
      * @param nodeId2Number after write, maps node-ids to numbers 1..numberOfNodes
      * @param edgeId2Number after write, maps edge-ids to numbers 1..numberOfEdge
      */
@@ -448,7 +438,6 @@ public class Dendro extends IOBase implements IOFormat {
     /**
      * reads a graph in jloda format. Sets node-num to node map and edge-num edge map
      *
-     * @param np
      * @param num2node after read, contains mapping of numbers used in file to nodes created in Graph
      * @param num2edge after read, contains mapping of numbers used in file to edges created in Graph
      */
@@ -511,9 +500,7 @@ public class Dendro extends IOBase implements IOFormat {
     /**
      * sets the number 2 node and number 2 edge maps
      *
-     * @param num2node
-     * @param num2edge
-     */
+	 */
     private static void setNum2NodeEdgeArray(Node root, Num2NodeArray num2node, Num2EdgeArray num2edge) {
         num2node.clear(root.getOwner().getNumberOfNodes());
         num2edge.clear(root.getOwner().getNumberOfEdges());
@@ -523,12 +510,7 @@ public class Dendro extends IOBase implements IOFormat {
     /**
      * recursively do the work
      *
-     * @param v
-     * @param e
-     * @param nodeNumberEdgeNumber
-     * @param num2node
-     * @param num2edge
-     */
+	 */
     private static void setNum2NodeEdgeArrayRec(Node v, Edge e, Pair<Integer, Integer> nodeNumberEdgeNumber, Num2NodeArray num2node, Num2EdgeArray num2edge) {
         var nodes = nodeNumberEdgeNumber.getFirst() + 1;
         nodeNumberEdgeNumber.setFirst(nodes);

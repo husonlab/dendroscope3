@@ -56,8 +56,7 @@ public class InputDialog extends JFrame implements IDirectableViewer {
     /**
      * constructor
      *
-     * @param dir
-     */
+	 */
     public InputDialog(Director dir) {
         this.dir = dir;
         commandManager = dir.getCommandManager();
@@ -108,7 +107,7 @@ public class InputDialog extends JFrame implements IDirectableViewer {
                     if (!command.startsWith("!"))
                         getDir().executeImmediately("show messagewindow;", getCommandManager());
                     else
-                        command = command.substring(1, command.length());
+						command = command.substring(1);
                     if (!command.endsWith(";"))
                         command += ";";
                     command = command.trim();
@@ -131,7 +130,7 @@ public class InputDialog extends JFrame implements IDirectableViewer {
                     if (!command.startsWith("!"))
                         getDir().executeImmediately("show messagewindow;", getCommandManager());
                     else
-                        command = command.substring(1, command.length());
+						command = command.substring(1);
                     if (!command.endsWith(";"))
                         command += ";";
                     command = command.trim();

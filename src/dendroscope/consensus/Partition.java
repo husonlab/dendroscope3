@@ -54,8 +54,7 @@ public class Partition {
     /**
      * add a new block to the partition
      *
-     * @param block
-     */
+	 */
     public void addBlock(BitSet block) {
         BitSet[] newblocks = new BitSet[blocks.length + 1];
         System.arraycopy(blocks, 0, newblocks, 0, blocks.length);
@@ -93,8 +92,7 @@ public class Partition {
     /**
      * set the weight
      *
-     * @param weight
-     */
+	 */
     public void setWeight(int weight) {
         this.weight = weight;
     }
@@ -127,26 +125,24 @@ public class Partition {
      * @return bit set comparator
      */
     private static Comparator<BitSet> getBitSetComparator() {
-        return new Comparator<BitSet>() {
-            public int compare(BitSet b1, BitSet b2) {
-                int i1 = b1.nextSetBit(0);
-                int i2 = b2.nextSetBit(0);
-                while (i1 != -1 && i2 != -1) {
-                    if (i1 < i2)
-                        return -1;
-                    else if (i1 > i2)
-                        return 1;
-                    i1 = b1.nextSetBit(i1 + 1);
-                    i2 = b2.nextSetBit(i2 + 1);
-                }
-                if (i1 < i2)
-                    return -1;
-                else if (i1 > i2)
-                    return 1;
-                else return 0;
-            }
-        };
-    }
+		return (b1, b2) -> {
+			int i1 = b1.nextSetBit(0);
+			int i2 = b2.nextSetBit(0);
+			while (i1 != -1 && i2 != -1) {
+				if (i1 < i2)
+					return -1;
+				else if (i1 > i2)
+					return 1;
+				i1 = b1.nextSetBit(i1 + 1);
+				i2 = b2.nextSetBit(i2 + 1);
+			}
+			if (i1 < i2)
+				return -1;
+			else if (i1 > i2)
+				return 1;
+			else return 0;
+		};
+	}
 
     /**
      * comparator by descending weight
@@ -154,32 +150,29 @@ public class Partition {
      * @return comparator
      */
     public static Comparator<Partition> getComparatorByDescendingWeight() {
-        return new Comparator<Partition>() {
-            public int compare(Partition b1, Partition b2) {
+		return (b1, b2) -> {
 
-                if (b1.getWeight() > b2.getWeight())
-                    return -1;
-                else if (b1.getWeight() < b2.getWeight())
-                    return 1;
-                else {
-                    int top = Math.min(b1.blocks.length, b2.blocks.length);
+			if (b1.getWeight() > b2.getWeight())
+				return -1;
+			else if (b1.getWeight() < b2.getWeight())
+				return 1;
+			else {
+				int top = Math.min(b1.blocks.length, b2.blocks.length);
 
-                    for (int i = 0; i < top; i++) {
-                        int c = getBitSetComparator().compare(b1.blocks[i], b2.blocks[i]);
-                        if (c != 0)
-                            return c;
-                    }
-                    if (b1.blocks.length < b2.blocks.length)
-                        return -1;
-                    else if (b1.blocks.length > b2.blocks.length)
-                        return 1;
-                    else
-                        return 0;
-                }
+				for (int i = 0; i < top; i++) {
+					int c = getBitSetComparator().compare(b1.blocks[i], b2.blocks[i]);
+					if (c != 0)
+						return c;
+				}
+				if (b1.blocks.length < b2.blocks.length)
+					return -1;
+				else if (b1.blocks.length > b2.blocks.length)
+					return 1;
+				else
+					return 0;
+			}
 
-            }
-
-        };
+		};
     }
 
     /**
@@ -188,29 +181,26 @@ public class Partition {
      * @return comparator
      */
     public static Comparator<Partition> getComparatorByBlocks() {
-        return new Comparator<Partition>() {
-            public int compare(Partition b1, Partition b2) {
-                int top = Math.min(b1.blocks.length, b2.blocks.length);
+		return (b1, b2) -> {
+			int top = Math.min(b1.blocks.length, b2.blocks.length);
 
-                for (int i = 0; i < top; i++) {
-                    int c = getBitSetComparator().compare(b1.blocks[i], b2.blocks[i]);
-                    if (c != 0)
-                        return c;
-                }
-                if (b1.blocks.length < b2.blocks.length)
-                    return -1;
-                else if (b1.blocks.length > b2.blocks.length)
-                    return 1;
-                else
-                    return 0;
-            }
-        };
+			for (int i = 0; i < top; i++) {
+				int c = getBitSetComparator().compare(b1.blocks[i], b2.blocks[i]);
+				if (c != 0)
+					return c;
+			}
+			if (b1.blocks.length < b2.blocks.length)
+				return -1;
+			else if (b1.blocks.length > b2.blocks.length)
+				return 1;
+			else
+				return 0;
+		};
     }
 
     /**
      * are two partitions equal ignoring weights
      *
-     * @param part
      * @return true, if equal
      */
     public boolean equals(Partition part) {
@@ -237,7 +227,6 @@ public class Partition {
      * determines whether partition is compatible will all given splits. This means that one part of each split
      * is contained in one of the partition parts
      *
-     * @param splits
      * @return true, if compatible with all splits
      */
     public boolean compatibleWithAllSplits(SplitSystem splits) {
@@ -252,7 +241,6 @@ public class Partition {
     /**
      * is partition compatible with this split, i.e. does one of the parts contain one of the split parts?
      *
-     * @param split
      * @return true, if compatible
      */
     private boolean compatibleWith(Split split) {
@@ -277,7 +265,6 @@ public class Partition {
     /**
      * gets a copy of block p
      *
-     * @param p
      * @return copy of block p
      */
     public BitSet getBlock(int p) {
@@ -287,7 +274,6 @@ public class Partition {
     /**
      * returns the split partition contained in the partition, or null
      *
-     * @param split
      * @return split part or null
      */
     public BitSet[] getSplitPartsContainedInPartition(Split split) {

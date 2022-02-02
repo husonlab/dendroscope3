@@ -73,7 +73,7 @@ public class ClusterSet {
     public void print() {
         System.err.println("Cluster Set:");
         for (int c = 0; c < clusterVec.size(); c++) {
-            Vector cluster = (Vector) clusterVec.elementAt(c);
+            Vector cluster = clusterVec.elementAt(c);
             System.err.println(cluster.toString());
         }
     }
@@ -137,8 +137,8 @@ public class ClusterSet {
     public ClusterSet remLeaf(Integer x) {
         ClusterSet CS = new ClusterSet();
         for (int c = 0; c < clusterVec.size(); c++) {
-            Vector cluster = (Vector) clusterVec.elementAt(c);
-            Vector cluster2 = new Vector(0);
+			Vector cluster = clusterVec.elementAt(c);
+			Vector cluster2 = new Vector(0);
             for (int i = 0; i < cluster.size(); i++) {
                 Integer y = (Integer) cluster.elementAt(i);
                 if (!y.equals(x)) {
@@ -161,8 +161,8 @@ public class ClusterSet {
         if (!clusterVec.contains(cluster)) {
             return false;
         }
-        int index = clusterVec.indexOf(cluster);
-        Vector treeNumbers = (Vector) treeNumberVec.elementAt(index);
+		int index = clusterVec.indexOf(cluster);
+		Vector treeNumbers = treeNumberVec.elementAt(index);
         return treeNumbers.contains(tree);
     }
 
@@ -220,10 +220,10 @@ public class ClusterSet {
                     }
                     // collapse x and y
                     suc = true;
-                    Vector z1 = (Vector) CS.taxaInTaxa.elementAt(i);
-                    Vector z2 = (Vector) z1.clone();
-                    Vector z3 = (Vector) CS.taxaInTaxa.elementAt(j);
-                    Collection z4 = (Collection) z3.clone();
+					Vector z1 = CS.taxaInTaxa.elementAt(i);
+					Vector z2 = (Vector) z1.clone();
+					Vector z3 = CS.taxaInTaxa.elementAt(j);
+					Collection z4 = (Collection) z3.clone();
                     z2.addAll(z4);
                     CS.taxaInTaxa.set(i, z2);
                     CS.taxa.removeElementAt(j);
@@ -231,7 +231,7 @@ public class ClusterSet {
                     // remove y from each cluster
                     int c = 0;
                     while (c < CS.clusterVec.size()) {
-                        Vector cluster = (Vector) CS.clusterVec.elementAt(c);
+						Vector cluster = CS.clusterVec.elementAt(c);
                         if (cluster.contains(y)) {
                             // remove y from cluster
                             Vector cluster2 = (Vector) cluster.clone();
@@ -266,7 +266,7 @@ public class ClusterSet {
     public boolean separated(Integer x, Integer y) {
         boolean sep = false;
         for (int c = 0; c < clusterVec.size(); c++) {
-            Vector cluster = (Vector) clusterVec.elementAt(c);
+			Vector cluster = clusterVec.elementAt(c);
             if (cluster.size() == 1) {
                 continue;
             }
@@ -282,7 +282,7 @@ public class ClusterSet {
     public ClusterSet restrict(Vector cluster) {
         ClusterSet C = new ClusterSet();
         for (int c = 0; c < clusterVec.size(); c++) {
-            Vector cluster2 = (Vector) clusterVec.elementAt(c);
+			Vector cluster2 = clusterVec.elementAt(c);
             if (ClusterSet.getRelation(cluster, cluster2) == 4) {
                 C.addCluster(cluster2, (Vector) treeNumberVec.elementAt(c));
             }
@@ -340,8 +340,8 @@ public class ClusterSet {
             treeNumberVec.add(numVec);
         } else {
             // only add the tree numbers of the new cluster to the existing cluster
-            int index = clusterVec.indexOf(cluster);
-            Vector treenums = (Vector) treeNumberVec.elementAt(index);
+			int index = clusterVec.indexOf(cluster);
+			Vector treenums = treeNumberVec.elementAt(index);
             for (int i = 0; i < numVec.size(); i++) {
                 Integer treenum = (Integer) numVec.elementAt(i);
                 if (!treenums.contains(treenum)) {

@@ -160,10 +160,7 @@ public class PhyloTreeUtils {
     /**
      * selects the subnetwork rooted at the LSA of the given selection of nodes
      *
-     * @param viewer
-     * @param network
-     * @param selected
-     */
+	 */
     public static Node selectLSAInducedSubNetwork(PhyloGraphView viewer, PhyloTree network, NodeSet selected, NodeSet collapsed) {
         var node2NumberInducedChildren = new NodeIntArray(network);
 
@@ -186,10 +183,7 @@ public class PhyloTreeUtils {
     /**
      * selects the subnetwork induced by the given selection of nodes
      *
-     * @param viewer
-     * @param network
-     * @param selected
-     */
+	 */
     public static void selectInducedSubNetwork(PhyloGraphView viewer, PhyloTree network, NodeSet selected, NodeSet collapsed) {
         var node2NumberInducedChildren = new NodeIntArray(network);
         findInducedSubnetworkRec(network.getRoot(), node2NumberInducedChildren, new NodeSet(network), collapsed, selected);
@@ -213,9 +207,7 @@ public class PhyloTreeUtils {
     /**
      * find the subnetwork induced by a set of selected nodes
      *
-     * @param v
-     * @param node2NumberInducedChildren
-     */
+	 */
     private static void findInducedSubnetworkRec(Node v, NodeIntArray node2NumberInducedChildren, NodeSet visited, NodeSet collapsed, NodeSet selected) {
         int count = 0;
         if (collapsed == null || !collapsed.contains(v)) {
@@ -237,8 +229,6 @@ public class PhyloTreeUtils {
     /**
      * find root of induced subtree. this is first node that has two or more induced children
      *
-     * @param v
-     * @param node2NumberInducedChildren
      * @return root
      */
     private static Node findSubtreeNetworkRec(PhyloTree tree, Node v, NodeIntArray node2NumberInducedChildren, NodeSet selected) {
@@ -260,9 +250,7 @@ public class PhyloTreeUtils {
     /**
      * select the induced subtree
      *
-     * @param v
-     * @param tree
-     */
+	 */
     private static void selectInducedSubnetworkRec(PhyloGraphView viewer, Node v, PhyloTree tree, NodeSet visited, NodeIntArray node2NumberInducedChildren) {
         for (var f : v.outEdges()) {
             var w = f.getTarget();
@@ -281,12 +269,7 @@ public class PhyloTreeUtils {
     /**
      * create the induced subtree
      *
-     * @param v
-     * @param newV
-     * @param tree
-     * @param newTree
-     * @param old2new
-     */
+	 */
     private static void createInducedSubnetworkRec(Node v, Node newV, PhyloTree tree, NodeSet visited, PhyloTree newTree, NodeArray<Node> old2new,
                                                    NodeIntArray node2NumberInducedChildren) {
         for (var f : v.outEdges()) {
@@ -331,11 +314,7 @@ public class PhyloTreeUtils {
     /**
      * recursively does the work
      *
-     * @param oldTree
-     * @param newTree
-     * @param vOld
-     * @param vNew
-     */
+	 */
     private static void getSubnetworkRec(PhyloTree oldTree, PhyloTree newTree, Node vOld, Node vNew, List<Node> visited, List<Node> visitedNew) {
         newTree.setLabel(vNew, oldTree.getLabel(vOld));
         newTree.setInfo(vNew, oldTree.getInfo(vOld));
@@ -413,9 +392,7 @@ public class PhyloTreeUtils {
     /**
      * compute the number of nodes present in the shortest path for each pair of leaves, considering the graph undirected
      *
-     * @param graph
-     * @return dist of shortest paths for each pairs of leaves
-     */
+	 */
     public static void computeNumberNodesInTheShortestPath(final PhyloTree graph, Map<String, Integer> taxon2ID, double[][] distMatrix) {
         var leaves = graph.computeSetOfLeaves();
         var distMatrixTemp = new int[graph.getNumberOfNodes()][graph.getNumberOfNodes()];   // temp matrix

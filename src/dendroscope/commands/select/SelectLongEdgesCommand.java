@@ -74,23 +74,20 @@ public class SelectLongEdgesCommand extends CommandBase implements ICommand {
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
     public void apply(NexusStreamParser np) throws Exception {
     }
 
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         float threshold = (float) ProgramProperties.get("LongEdgeThreshold", 0.1);
         String result = JOptionPane.showInputDialog(getViewer().getFrame(), "Enter minimum edge length to select:", "" + threshold);
         if (result != null && NumberUtils.isFloat(result)) {
-            ProgramProperties.put("LongEdgeThreshold", (double) threshold);
-            executeImmediately("select edges=long threshold=" + result + ";");
+			ProgramProperties.put("LongEdgeThreshold", threshold);
+			executeImmediately("select edges=long threshold=" + result + ";");
         }
     }
 

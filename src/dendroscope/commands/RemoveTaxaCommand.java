@@ -79,9 +79,7 @@ public class RemoveTaxaCommand extends CommandBaseMultiViewer implements IComman
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("remove taxa=");
@@ -126,8 +124,7 @@ public class RemoveTaxaCommand extends CommandBaseMultiViewer implements IComman
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         executeImmediately("remove taxa=selected;");
     }

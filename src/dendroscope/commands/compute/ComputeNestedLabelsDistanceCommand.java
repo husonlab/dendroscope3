@@ -53,8 +53,8 @@ public class ComputeNestedLabelsDistanceCommand extends
 
         if (trees.size() == 2) {
             double distance = DistanceMethods.computeNestedLabelsDistance(trees);
-            new Message(getViewer().getFrame(), "Nested labels distance: "
-                    + distance);
+            Message.show(getViewer().getFrame(), "Nested labels distance: "
+												 + distance);
             System.out.println("Nested labels distance: " + distance);
         } else {
             new Alert(getViewer().getFrame(),

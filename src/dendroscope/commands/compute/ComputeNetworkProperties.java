@@ -49,10 +49,10 @@ public class ComputeNetworkProperties extends CommandBaseMultiViewer
         }
 
         if (trees.size() == 1) {
-            new Message(getViewer().getFrame(), "Tree-child property: "
-                    + DistanceMethods.hasTreeChildProperty(trees.get(0)) + "\n" + "Tree-sibling property: "
-                    + DistanceMethods.hasTreeSiblingProperty(trees.get(0)) + "\n" + "Time-consistent property: "
-                    + DistanceMethods.hasTimeConsistentProperty(trees.get(0)));
+            Message.show(getViewer().getFrame(), "Tree-child property: "
+												 + DistanceMethods.hasTreeChildProperty(trees.get(0)) + "\n" + "Tree-sibling property: "
+												 + DistanceMethods.hasTreeSiblingProperty(trees.get(0)) + "\n" + "Time-consistent property: "
+												 + DistanceMethods.hasTimeConsistentProperty(trees.get(0)));
             System.out.println("Tree-child property: "
                     + DistanceMethods.hasTreeChildProperty(trees.get(0)) + "\n" + "Tree-sibling property: "
                     + DistanceMethods.hasTreeSiblingProperty(trees.get(0)) + "\n" + "Time-consistent property: "

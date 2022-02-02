@@ -90,8 +90,7 @@ public class DrawRectangularCladogramCommand extends DrawCommand implements IChe
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
 
     public void actionPerformed(ActionEvent ev) {
         execute("set drawer=" + TreeViewer.RECTANGULAR_CLADOGRAM + ";");

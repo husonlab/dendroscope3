@@ -78,8 +78,7 @@ public class LadderizeRightCommand extends LadderizeLeftCommand implements IComm
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         execute("ladderize=right;");
     }

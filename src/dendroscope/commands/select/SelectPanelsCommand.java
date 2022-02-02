@@ -71,9 +71,7 @@ public class SelectPanelsCommand extends CommandBaseMultiViewer implements IComm
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
 
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("select panels");
@@ -105,8 +103,7 @@ public class SelectPanelsCommand extends CommandBaseMultiViewer implements IComm
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         String choice = (String) JOptionPane.showInputDialog(multiViewer.getFrame(), "Select", "Selection", JOptionPane.QUESTION_MESSAGE, ProgramProperties.getProgramIcon(), new String[]{"All", "None", "Invert"}, "All");
         if (choice != null) {

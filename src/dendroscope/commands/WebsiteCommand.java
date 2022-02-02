@@ -73,9 +73,7 @@ public class WebsiteCommand extends CommandBase implements ICommand {
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("website;");
         System.out.println("http://www-ab.informatik.uni-tuebingen.de/software/dendroscope/welcome.html");
@@ -84,8 +82,7 @@ public class WebsiteCommand extends CommandBase implements ICommand {
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         try {
             BasicSwing.openWebPage(new URL("http://www-ab.informatik.uni-tuebingen.de/software/dendroscope/welcome.html"));

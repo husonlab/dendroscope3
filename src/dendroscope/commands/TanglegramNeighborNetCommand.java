@@ -119,8 +119,7 @@ public class TanglegramNeighborNetCommand extends CommandBaseMultiViewer impleme
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     @Override
     public void actionPerformed(ActionEvent ev) {
         execute(getSyntax());
@@ -130,9 +129,7 @@ public class TanglegramNeighborNetCommand extends CommandBaseMultiViewer impleme
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
 
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase(getSyntax());
@@ -162,9 +159,7 @@ public class TanglegramNeighborNetCommand extends CommandBaseMultiViewer impleme
         timeAfter = System.currentTimeMillis();
         long timeNeed = timeAfter - timeBef;
 
-        List<String>[] orderFin = new LinkedList[2];
-        orderFin[0] = new LinkedList<>();
-        orderFin[1] = new LinkedList<>();
+		List<String>[] orderFin = new LinkedList[]{new LinkedList<>(), new LinkedList<>()};
 
         //todo: check these changes
         orderFin[0] = optimizer.getFirstOrder();

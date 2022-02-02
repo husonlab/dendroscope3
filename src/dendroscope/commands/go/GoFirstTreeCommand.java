@@ -74,8 +74,7 @@ public class GoFirstTreeCommand extends GoToTreeCommand implements ICommand {
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         execute("go tree=first;");
     }

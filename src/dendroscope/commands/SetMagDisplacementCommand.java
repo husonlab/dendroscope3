@@ -69,9 +69,7 @@ public class SetMagDisplacementCommand extends CommandBaseMultiViewer implements
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("set magdisplacement=");
@@ -120,8 +118,7 @@ public class SetMagDisplacementCommand extends CommandBaseMultiViewer implements
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     @Override
     public void actionPerformed(ActionEvent ev) {
         System.err.println("Please enter on command-line");

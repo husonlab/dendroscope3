@@ -43,9 +43,7 @@ public class TreeDrawerCircular extends TreeDrawerRadial implements IOptimizedGr
     /**
      * constructor
      *
-     * @param viewer
-     * @param tree
-     */
+	 */
     public TreeDrawerCircular(TreeViewer viewer, PhyloTree tree) {
         super(viewer, tree);
         setupGraphView(viewer);
@@ -55,8 +53,7 @@ public class TreeDrawerCircular extends TreeDrawerRadial implements IOptimizedGr
     /**
      * setd up the graphview
      *
-     * @param graphView
-     */
+	 */
     public void setupGraphView(GraphView graphView) {
         graphView.setAllowInternalEdgePoints(false);
         graphView.setMaintainEdgeLengths(false);
@@ -112,8 +109,7 @@ public class TreeDrawerCircular extends TreeDrawerRadial implements IOptimizedGr
     /**
      * assign equal angle coordinates
      *
-     * @param root
-     */
+	 */
     protected void setCoordinatesPhylogram(Node root) {
         boolean optionUseWeights = true;
 
@@ -172,11 +168,11 @@ public class TreeDrawerCircular extends TreeDrawerRadial implements IOptimizedGr
             }
 
             if (ok)  // add childern to end of queue:
-            {
-                for (Iterator it = w.outEdges().iterator(); it.hasNext(); ) {
-                    queue.add(((Edge) it.next()).getTarget());
-                }
-            } else  // process this node again later
+			{
+				for (Edge edge : w.outEdges()) {
+					queue.add(edge.getTarget());
+				}
+			} else  // process this node again later
                 queue.add(w);
         }
     }
@@ -211,10 +207,7 @@ public class TreeDrawerCircular extends TreeDrawerRadial implements IOptimizedGr
     /**
      * recursively do the work
      *
-     * @param v
-     * @param e
-     * @param resetAll
-     */
+	 */
     private void resetLabelPositionsRec(Node v, Edge e, boolean resetAll) {
         if (e != null) {
             EdgeView ev = viewer.getEV(e);

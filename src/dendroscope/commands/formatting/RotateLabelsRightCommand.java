@@ -60,8 +60,7 @@ public class RotateLabelsRightCommand extends RotateLabelsLeftCommand implements
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         executeImmediately("rotatelabels percent= -2;");
     }

@@ -73,9 +73,7 @@ public class InterpretInternalNodeLabelsAsEdgeLabelsCommand extends CommandBaseM
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("set interpretInternalNodeLabelsAsEdgeLabels=");
@@ -87,8 +85,7 @@ public class InterpretInternalNodeLabelsAsEdgeLabelsCommand extends CommandBaseM
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         executeImmediately("set interpretInternalNodeLabelsAsEdgeLabels=" + !isSelected() + ";");
 

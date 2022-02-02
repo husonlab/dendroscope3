@@ -22,19 +22,19 @@ import java.math.BigInteger;
 
 class CombinationGenerator {
 
-    private int[] a;
-    private int n;
-    private int r;
-    private BigInteger numLeft;
-    private BigInteger total;
+	private final int[] a;
+	private final int n;
+	private final int r;
+	private BigInteger numLeft;
+	private final BigInteger total;
 
-    //------------
-    // Constructor
-    //------------
+	//------------
+	// Constructor
+	//------------
 
-    public CombinationGenerator(int n, int r) {
-        if (r > n) {
-            throw new IllegalArgumentException();
+	public CombinationGenerator(int n, int r) {
+		if (r > n) {
+			throw new IllegalArgumentException();
         }
         if (n < 1) {
             throw new IllegalArgumentException();

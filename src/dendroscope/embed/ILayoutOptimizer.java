@@ -28,12 +28,10 @@ import jloda.util.progress.ProgressListener;
  */
 public interface ILayoutOptimizer {
     /**
-     * * apply the embeddder to the given tree
-     * *
-     * * @param tree
-     *
-     * @param progressListener
-     */
-    public void apply(PhyloTree tree, ProgressListener progressListener) throws CanceledException;
+	 * * apply the embeddder to the given tree
+	 * *
+	 * * @param tree
+	 */
+	void apply(PhyloTree tree, ProgressListener progressListener) throws CanceledException;
 }
 

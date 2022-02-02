@@ -16,9 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package dendroscope.util.convexhull; /**
- * author: Tim Lambert, UNSW, 2000
- */
+package dendroscope.util.convexhull;
 
 import java.util.NoSuchElementException;
 import java.util.Random;
@@ -84,12 +82,12 @@ public class Point3d {
     public static Point3d fromString(String s) throws NumberFormatException {
         StringTokenizer st = new StringTokenizer(s, "[,]");
         try {
-            st.nextToken(); //get rid of leading v
-            double x = Double.valueOf(st.nextToken()).doubleValue();
-            double y = Double.valueOf(st.nextToken()).doubleValue();
-            double z = Double.valueOf(st.nextToken()).doubleValue();
-            return new Point3d(x, y, z);
-        } catch (NoSuchElementException e) {
+			st.nextToken(); //get rid of leading v
+			double x = Double.valueOf(st.nextToken());
+			double y = Double.valueOf(st.nextToken());
+			double z = Double.valueOf(st.nextToken());
+			return new Point3d(x, y, z);
+		} catch (NoSuchElementException e) {
             throw new NumberFormatException();
         }
     }

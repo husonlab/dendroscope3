@@ -36,12 +36,7 @@ public class PreProcess {
     /**
      * apply preprocessing to two trees
      *
-     * @param tree1
-     * @param tree2
-     * @param allTaxa
-     * @return
-     * @throws IOException
-     */
+	 */
     static public Pair<Root, Root> apply(PhyloTree tree1, PhyloTree tree2, Taxa allTaxa) throws IOException {
 
         if (tree1.getRoot() == null || tree2.getRoot() == null) {
@@ -62,12 +57,7 @@ public class PreProcess {
     /**
      * apply preprocessing to one tree
      *
-     * @param tree1
-     * @param allTaxa
-     * @param mustHaveSameTaxa
-     * @return
-     * @throws IOException
-     */
+	 */
     static public Root apply(PhyloTree tree1, Taxa allTaxa, boolean mustHaveSameTaxa) throws IOException {
 
         if (tree1.getRoot() == null) {

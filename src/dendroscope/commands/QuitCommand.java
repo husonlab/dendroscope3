@@ -73,20 +73,14 @@ public class QuitCommand extends CommandBase implements ICommand {
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
-        try {
-            np.matchIgnoreCase("quit;");
-            ProjectManager.doQuit(null, new Runnable() {
-                public void run() {
-                    NewCommand.makeNewDocument();
-                }
-            });
-        } catch (Exception ex) {
-        }
+		try {
+			np.matchIgnoreCase("quit;");
+			ProjectManager.doQuit(null, () -> NewCommand.makeNewDocument());
+		} catch (Exception ignored) {
+		}
     }
 
     /**
@@ -120,8 +114,7 @@ public class QuitCommand extends CommandBase implements ICommand {
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     @Override
     public void actionPerformed(ActionEvent ev) {
         executeImmediately("quit;");

@@ -47,7 +47,6 @@ public class PrimordialConsensus implements IConsensusTreeMethod {
     /**
      * compute the consensus
      *
-     * @param trees
      * @return consensus tree
      */
     public PhyloTree apply(Document doc, TreeData[] trees) throws CanceledException, IOException {
@@ -129,7 +128,7 @@ public class PrimordialConsensus implements IConsensusTreeMethod {
                 }
                 Iterator<String> it = labels.iterator();
                 if (it != null && it.hasNext())
-                    System.err.println(String.format("%s, %s, %s", it.next(), it.next(), it.next()));
+                    System.err.printf("%s, %s, %s%n", it.next(), it.next(), it.next());
             }
             int worst = 0;
             for (int i = 0; i < counts.length; i++) {
@@ -267,9 +266,8 @@ public class PrimordialConsensus implements IConsensusTreeMethod {
         // add all trivial clusters:
         for (int t = 1; t <= taxa.size(); t++) {
             Cluster cluster = new Cluster();
-            cluster.set(t);
-            if (!clusters.contains(cluster))
-                clusters.add(cluster);
+			cluster.set(t);
+			clusters.add(cluster);
         }
 
         List<Triplet<Cluster, Cluster, Boolean>> additionalEdges = new LinkedList<>();
@@ -279,7 +277,7 @@ public class PrimordialConsensus implements IConsensusTreeMethod {
         Node root = tree.newNode();
         tree.setRoot(root);
 
-        ClusterNetwork.constructHasse(taxa, tree, root, clusters.toArray(new Cluster[clusters.size()]), node2weight, node2confidence, additionalEdges, taxa.size());
+		ClusterNetwork.constructHasse(taxa, tree, root, clusters.toArray(new Cluster[0]), node2weight, node2confidence, additionalEdges, taxa.size());
 
         ClusterNetwork.convertHasseToClusterNetwork(tree, node2weight);
         for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
@@ -295,10 +293,6 @@ public class PrimordialConsensus implements IConsensusTreeMethod {
     /**
      * determines which triplet topology is the majority topology   and returns it as a quartet (including 0 as formal root)
      *
-     * @param a
-     * @param b
-     * @param c
-     * @param taxId2Address
      * @return majority topology
      */
     private QuartetTopology computeTopology(int a, int b, int c, TaxId2Address[] taxId2Address) {
@@ -340,9 +334,7 @@ public class PrimordialConsensus implements IConsensusTreeMethod {
     /**
      * computes the label2address mapping
      *
-     * @param v
-     * @param path
-     */
+	 */
     private void computeLabel2AddressRec(PhyloTree tree, Taxa taxa, Node v, String path, TaxId2Address taxId2Address) {
         if (v.getOutDegree() == 0) {
             Integer taxId = taxa.indexOf(tree.getLabel(v));
@@ -359,7 +351,6 @@ public class PrimordialConsensus implements IConsensusTreeMethod {
     /**
      * given a set of addresses, returns the common prefix
      *
-     * @param addresses
      * @return prefix
      */
     public String getCommonPrefix(String[] addresses) {
@@ -395,9 +386,6 @@ public class PrimordialConsensus implements IConsensusTreeMethod {
     /**
      * gets the sorted triplet
      *
-     * @param a
-     * @param b
-     * @param c
      * @return sorted triplet
      */
     private Triplet<Integer, Integer, Integer> getSortedTriplet(int a, int b, int c) {
@@ -411,18 +399,18 @@ public class PrimordialConsensus implements IConsensusTreeMethod {
         return new Triplet<>(min, mid, max);
     }
 
-    class TaxId2Address extends HashMap<Integer, String> {
-    }
+	static class TaxId2Address extends HashMap<Integer, String> {
+	}
 
-    class FourTaxa extends BitSet {
-        public FourTaxa(int a, int b, int c, int d) {
-            super();
-            set(a);
-            set(b);
-            set(c);
-            set(d);
-        }
-    }
+	static class FourTaxa extends BitSet {
+		public FourTaxa(int a, int b, int c, int d) {
+			super();
+			set(a);
+			set(b);
+			set(c);
+			set(d);
+		}
+	}
 
     static class QuartetTopology {
         final private Integer[] data;
@@ -476,9 +464,6 @@ public class PrimordialConsensus implements IConsensusTreeMethod {
         /**
          * does split separate a from b1 and b2?
          *
-         * @param a
-         * @param b1
-         * @param b2
          * @return true, if split separates a from b1, b2
          */
         public boolean separates(int a, int b1, int b2) {

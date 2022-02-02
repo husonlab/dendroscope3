@@ -19,6 +19,7 @@
 package dendroscope.dtl;
 
 import jloda.phylo.PhyloTree;
+import jloda.util.Basic;
 
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
@@ -27,32 +28,31 @@ import java.io.InputStreamReader;
 public class DTL {
 
     /**
-     * @param args
-     */
+	 */
     public static void main(String[] args) {
 
-        long time = System.currentTimeMillis();
+		long time = System.currentTimeMillis();
 
 
-        PhyloTree STree = new PhyloTree();
-        STree.setAllowMultiLabeledNodes(true);
+		PhyloTree STree = new PhyloTree();
+		STree.setAllowMultiLabeledNodes(true);
 
-        PhyloTree GTree = new PhyloTree();
-        GTree.setAllowMultiLabeledNodes(true);
+		PhyloTree GTree = new PhyloTree();
+		GTree.setAllowMultiLabeledNodes(true);
 
-        String dupCostS = new String();
-        String transCostS = new String();
-        String lossCostS = new String();
-        String sTreePath = "";
-        String gTreePath = "";
-        try {
-            sTreePath = args[0].trim();
-            gTreePath = args[1].trim();
-            // String sTreePath =
-            // "/home/wojtek/firstTests/size100_strees/STREE_" + i + ".sim";
-            // String sTreePath = "/home/wojtek/firstTests/STREE_" + i + ".txt";
-            // String gTreePath =
-            // "/home/wojtek/firstTests/size100_gtree_x_paramset_0_0/GTREE_"
+		String dupCostS = "";
+		String transCostS = "";
+		String lossCostS = "";
+		String sTreePath = "";
+		String gTreePath = "";
+		try {
+			sTreePath = args[0].trim();
+			gTreePath = args[1].trim();
+			// String sTreePath =
+			// "/home/wojtek/firstTests/size100_strees/STREE_" + i + ".sim";
+			// String sTreePath = "/home/wojtek/firstTests/STREE_" + i + ".txt";
+			// String gTreePath =
+			// "/home/wojtek/firstTests/size100_gtree_x_paramset_0_0/GTREE_"
             // + j + ":STREE_" + i + ":PARAMSET_0_0.sim";
             dupCostS = args[2].trim();
             transCostS = args[3].trim();
@@ -65,10 +65,8 @@ public class DTL {
             InputStreamReader inG = new InputStreamReader(fstreamG);
             GTree.read(inG, true);
         } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println(e);
-            System.out.println(e.toString());
-            System.out.print("Wrong path? File read error");
+			Basic.caught(e);
+			System.out.print("Wrong path? File read error");
         }
 
 

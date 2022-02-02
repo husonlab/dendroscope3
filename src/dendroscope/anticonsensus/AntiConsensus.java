@@ -107,7 +107,7 @@ public class AntiConsensus {
                                 boolean processNewCluster = false;
                                 while (!q.isEmpty()) {
                                     PhyloTree tree_3 = q.get(0);
-                                    int treeNumber = Integer.valueOf(tree_3.getName());
+									int treeNumber = Integer.parseInt(tree_3.getName());
                                     q.remove(0);
                                     HashSet<Node> witness_T3 = getNodesInOtherTree(tree_1, cluster.getWitness(), leaves, treeNumber);
                                     HashSet<Node> cluster_T3 = getNodesInOtherTree(tree_1, cluster.getNodes(), leaves, treeNumber);
@@ -174,7 +174,7 @@ public class AntiConsensus {
             System.err.println(e.getMessage());
         }
 
-        return antiClusters.toArray(new AntiCluster[antiClusters.size()]);
+		return antiClusters.toArray(new AntiCluster[0]);
     }
 
     private boolean checkTaxasets() {
@@ -245,8 +245,6 @@ public class AntiConsensus {
     /**
      * calculates v_T(C) for any set of nodes
      *
-     * @param lcaCalculation
-     * @param nodes
      * @return v_T(nodes)
      */
     private Node calculateV_T(LCA_LSACalculation lcaCalculation, HashSet<Node> nodes, boolean isCluster) {
@@ -299,12 +297,7 @@ public class AntiConsensus {
      * the given nodes have to be leaves in the given tree.
      * the function collects these nodes in the tree with index 'treeIndex'
      *
-     * @param tree
-     * @param nodes
-     * @param leaves
-     * @param treeIndex
-     * @return
-     */
+	 */
 
     private HashSet<Node> getNodesInOtherTree(PhyloTree tree, HashSet<Node> nodes, Vector<Hashtable<String, Node>> leaves,
                                               int treeIndex) {

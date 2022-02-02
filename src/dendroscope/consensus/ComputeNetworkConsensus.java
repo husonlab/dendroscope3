@@ -48,9 +48,7 @@ public class ComputeNetworkConsensus implements IConsensusTreeMethod {
     /**
      * constructor
      *
-     * @param optionMethod
-     * @param optionPercentThreshold
-     */
+	 */
     public ComputeNetworkConsensus(String optionMethod, double optionPercentThreshold) {
         this.optionMethod = optionMethod;
         this.optionPercentThreshold = optionPercentThreshold;

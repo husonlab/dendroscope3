@@ -45,7 +45,6 @@ public class Utilities {
     /**
      * compute the total set of splits
      *
-     * @param trees
      * @param allTaxa     total set of taxa will be returned here, if non-null
      * @param tree2taxa   tree-to-taxon mapping will be returned here, if non-null
      * @param tree2splits tree-to-splits mapping will be return here, if non-null
@@ -77,8 +76,8 @@ public class Utilities {
                     BitSet tree0MinusTreeI = Cluster.setminus(tree2taxa[0], tree2taxa[i]);
                     int diff = treeIMinusTree0.cardinality() + tree0MinusTreeI.cardinality();
                     if (equalSets) {
-                        new Message(owner, "Unequal taxon content: For example: tree[" + (i + 1) + "] differs from tree[1] by " + diff + " taxa\n" +
-                                "Will use Z-closure to extend trees to full taxon set");
+                        Message.show(owner, "Unequal taxon content: For example: tree[" + (i + 1) + "] differs from tree[1] by " + diff + " taxa\n" +
+											"Will use Z-closure to extend trees to full taxon set");
                         equalSets = false;
                     }
                     System.err.println("--- Taxa contained in tree[1], not contained in tree[" + (i + 1) + "]:");
@@ -144,9 +143,6 @@ public class Utilities {
     /**
      * extract all taxa from the given tree and add all new ones to the set of all taxa
      *
-     * @param i
-     * @param tree
-     * @param allTaxa
      * @return the bits of all taxa found in the tree
      */
     public static BitSet extractTaxa(int i, PhyloTree tree, Taxa allTaxa) throws IOException {
@@ -170,9 +166,7 @@ public class Utilities {
     /**
      * sets the node to taxa and taxon to node maps
      *
-     * @param tree
-     * @param taxa
-     */
+	 */
     public static void setNode2Taxa(Taxa taxa, PhyloTree tree) {
         for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
             String label = tree.getLabel(v);
@@ -188,8 +182,7 @@ public class Utilities {
     /**
      * clear node to taxa and taxa to node maps
      *
-     * @param tree
-     */
+	 */
     public static void clearNode2Taxa(PhyloTree tree) {
         tree.clearTaxa();
     }
@@ -199,8 +192,7 @@ public class Utilities {
      *
      * @param taxa     taxa, must have indices 1 .. ntax
      * @param ordering cells 1 .. ntax must contain each of the numbers 1 .. ntax
-     * @param tree
-     */
+	 */
     public static void applyOrderingToTree(Taxa taxa, int[] ordering, PhyloTree tree) {
         System.err.println("Applying circular ordering to tree");
         int[] orderingInv = new int[ordering.length];
@@ -225,9 +217,7 @@ public class Utilities {
     /**
      * recursively does the work. Assumes that all edges are directed away from the root
      *
-     * @param v
-     * @param numbering
-     */
+	 */
     private static void applyOrderingToTreeRec(Node v, NodeIntArray numbering) {
         int min;
 
@@ -250,17 +240,11 @@ public class Utilities {
     /**
      * order the edges
      *
-     * @param v
-     * @param numbering
      * @return edges ordered by numbering of nodes
      */
     private static List<Edge> orderEdges(Node v, NodeIntArray numbering) {
         {
-            SortedSet<Pair<Integer, Edge>> sorted = new TreeSet<>(new Comparator<Pair<Integer, Edge>>() {
-                public int compare(Pair<Integer, Edge> o1, Pair<Integer, Edge> o2) {
-                    return o1.compareTo(o2);
-                }
-            });
+			SortedSet<Pair<Integer, Edge>> sorted = new TreeSet<>((o1, o2) -> o1.compareTo(o2));
 
             for (Edge e = v.getFirstAdjacentEdge(); e != null; e = v.getNextAdjacentEdge(e)) {
                 Node w = e.getOpposite(v);
@@ -277,9 +261,6 @@ public class Utilities {
     /**
      * extract the most abundent root partition that is compatible with all given splits
      *
-     * @param taxa
-     * @param splits
-     * @param trees
      * @return root partition
      */
     public static Partition extractRootPartition(Taxa taxa, SplitSystem splits, TreeData[] trees) {
@@ -302,7 +283,7 @@ public class Utilities {
             }
         }
         if (list.size() > 0) {
-            Partition[] array = list.toArray(new Partition[list.size()]);
+			Partition[] array = list.toArray(new Partition[0]);
             Arrays.sort(array, Partition.getComparatorByDescendingWeight());
 
             System.err.println("root partition: " + array[0]);
@@ -325,8 +306,6 @@ public class Utilities {
     /**
      * computes the root partition of a tree (or network)
      *
-     * @param taxa
-     * @param tree
      * @return parition
      */
     private static Partition getRootPartition(Taxa taxa, PhyloTree tree) {

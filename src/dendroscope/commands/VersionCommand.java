@@ -73,9 +73,7 @@ public class VersionCommand extends CommandBase implements ICommand {
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase(getSyntax());
@@ -85,10 +83,9 @@ public class VersionCommand extends CommandBase implements ICommand {
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
-        new Message(getViewer().getFrame(), Version.SHORT_DESCRIPTION);
+		Message.show(getViewer().getFrame(), Version.SHORT_DESCRIPTION);
     }
 
 

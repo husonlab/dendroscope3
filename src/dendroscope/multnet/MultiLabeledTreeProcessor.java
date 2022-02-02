@@ -60,7 +60,6 @@ public class MultiLabeledTreeProcessor {
     /**
      * collapse multi-labeled to labeled
      *
-     * @param tree0
      * @return single labeled tree
      */
     private static PhyloTree collapseMultiLabeledTaxa(TreeData tree0) {

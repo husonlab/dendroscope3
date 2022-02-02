@@ -77,8 +77,7 @@ public class LadderizeRandomCommand extends LadderizeLeftCommand implements ICom
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         execute("ladderize=random;");
     }

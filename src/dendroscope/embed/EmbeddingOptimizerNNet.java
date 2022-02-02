@@ -51,9 +51,7 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
     /**
      * apply the embedding algorithm to a single tree
      *
-     * @param tree
-     * @param progressListener
-     */
+	 */
     public void apply(PhyloTree tree, ProgressListener progressListener) throws CanceledException {
         if (printILP) {
             int tempIndex = 1;
@@ -76,10 +74,7 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
     /**
      * apply the embedding algorithm to a whole set of trees
      *
-     * @param trees
-     * @param progressListener
-     * @param useFastAlignmentHeuristic
-     */
+	 */
     public int apply(PhyloTree[] trees, ProgressListener progressListener, boolean shortestPath, boolean useFastAlignmentHeuristic) throws CanceledException {
 		if (progressListener != null) {
 			progressListener.setSubtask("Neighbor-net heuristic");
@@ -380,7 +375,7 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
                             System.err.println("\n\nERROR newOrder Partial\n\n");
                             System.err.println(" bestEnd  " + newOrder[s].toString());
 
-                            System.err.println(currOrderingListNew.size() + " currOrderingListNew  " + currOrderingListNew.toString());
+							System.err.println(currOrderingListNew.size() + " currOrderingListNew  " + currOrderingListNew);
 							for (var str : currOrderingListNew) {
 								if (!newOrder[s].contains(str)) {
 									System.err.println(" missing  " + str);
@@ -468,11 +463,6 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
 	/**
 	 * fast heuristic that tries to rotate trees so that they match the given ordering
 	 *
-	 * @param trees
-	 * @param circularOrdering
-	 * @param idRho
-	 * @param taxon2Id
-	 * @param dummyLeaves
 	 */
 	private void useFastAlignmentHeuristic(PhyloTree[] trees, int[] circularOrdering, int idRho, Map<String, Integer> taxon2Id, Vector<Node> dummyLeaves) {
 
@@ -527,8 +517,6 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
     /**
      * gets the linear ordering starting at id idRho and excluding idRho
      *
-     * @param circularOrdering
-     * @param idRho
      * @return linear ordering
      */
     private int[] getLinearOrderingId(int[] circularOrdering, int idRho) {
@@ -553,9 +541,7 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
     /**
      * recursively extends the taxa below map from leaves to all nodes
      *
-     * @param v
-     * @param taxaBelow
-     */
+	 */
     public static void computeTaxaBelowRec(Node v, NodeArray<BitSet> taxaBelow) {
         if (v.getOutDegree() > 0 && taxaBelow.get(v) == null) {
 			var below = new BitSet();
@@ -572,9 +558,7 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
     /**
      * rotates all out edges so as to sort by the taxa-below sets
      *
-     * @param tree
-     * @param taxaBelow
-     */
+	 */
     public static void rotateTreeByTaxaBelow(PhyloTree tree, final NodeArray<BitSet> taxaBelow) {
 		for (var v0 : tree.nodes()) {
 			if (v0.getOutDegree() > 0) {
@@ -621,12 +605,7 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
 					else if (e.getSource() == sourceNode && f.getTarget() == sourceNode)
 						return 1;
 					// no else here!
-					if (e.getId() < f.getId())
-						return -1;
-					else if (e.getId() > f.getId())
-						return 1;
-					else
-						return 0;
+					return Integer.compare(e.getId(), f.getId());
 				});
 				v0.rearrangeAdjacentEdges(adjacentEdges);
             }
@@ -636,11 +615,7 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
     /**
      * compute a circular ordering using neighbor net
      *
-     * @param trees
-     * @param taxon2ID
-     * @param id2Taxon
-     * @return
-     */
+	 */
     //working
     public int[] computerCircularOrderingHardwiredMatrix(PhyloTree[] trees, Map<String, Integer> taxon2ID, Map<Integer, String> id2Taxon) {
         if (taxon2ID.size() > 2) {
@@ -774,11 +749,7 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
     /**
      * compute a circular ordering using neighbor net
      *
-     * @param trees
-     * @param taxon2ID
-     * @param id2Taxon
-     * @return
-     */
+	 */
     public int[] computerCircularOrderingShortestPathMatrix(PhyloTree[] trees, Map<String, Integer> taxon2ID, Map<Integer, String> id2Taxon) {
 
         if (taxon2ID.size() > 2) {

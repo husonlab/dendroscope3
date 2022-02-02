@@ -65,9 +65,7 @@ public class SourceCommand extends CommandBaseMultiViewer implements ICommand {
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
 
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("source file=");
@@ -106,8 +104,7 @@ public class SourceCommand extends CommandBaseMultiViewer implements ICommand {
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         String lastOpenFile = ProgramProperties.get("SourceFile", "commands.txt");
         File file = ChooseFileDialog.chooseFileToOpen(getViewer().getFrame(), new File(lastOpenFile), IOManager.getFileFilter(), IOManager.getFilenameFilter(), ev, "Open command source file");

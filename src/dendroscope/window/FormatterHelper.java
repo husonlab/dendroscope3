@@ -40,8 +40,7 @@ public class FormatterHelper implements INodeEdgeFormatable {
     /**
      * constructor
      *
-     * @param multiViewer
-     */
+	 */
     public FormatterHelper(MultiViewer multiViewer) {
         this.multiViewer = multiViewer;
         this.treeGrid = multiViewer.getTreeGrid();

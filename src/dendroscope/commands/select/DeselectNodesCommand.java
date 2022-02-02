@@ -72,8 +72,7 @@ public class DeselectNodesCommand extends DeselectAllCommand implements ICommand
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         executeImmediately("deselect nodes;");
     }
@@ -87,13 +86,7 @@ public class DeselectNodesCommand extends DeselectAllCommand implements ICommand
         return true;
     }
 
-    /**
-     * get command-line usage description
-     *
-     * @return usage
-     */
-
-    /**
+	/**
      * is the command currently applicable? Used to set enable state of command
      *
      * @return true, if command can be applied

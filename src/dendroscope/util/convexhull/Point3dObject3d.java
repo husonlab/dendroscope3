@@ -16,9 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package dendroscope.util.convexhull; /**
- * author: Tim Lambert, UNSW, 2000
- */
+package dendroscope.util.convexhull;
 
 /**
  * A Point3d that is also an Object 3d so that it can be rendered

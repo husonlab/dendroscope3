@@ -16,9 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package dendroscope.util.convexhull; /**
- * author: Tim Lambert, UNSW, 2000
- */
+package dendroscope.util.convexhull;
 
 import jloda.util.StringUtils;
 
@@ -33,7 +31,6 @@ public class GiftWrap extends HullAlgorithm {
     /**
      * compute the convex hull of a set of 2D points using the Quick hull algorithm
      *
-     * @param input
      * @return points on hull
      */
     public static Set<Point2D> apply2D(List<Point2D> input) {
@@ -62,7 +59,6 @@ public class GiftWrap extends HullAlgorithm {
     /**
      * convert java points
      *
-     * @param pts
      * @return converted points
      */
     private static Point3dObject3d[] convert(List<Point2D> pts) {
@@ -70,7 +66,7 @@ public class GiftWrap extends HullAlgorithm {
         for (Point2D src : pts) {
             list.add(new Point3dObject3d(new Point3d(src.getX(), src.getY(), 1)));
         }
-        return list.toArray(new Point3dObject3d[list.size()]);
+		return list.toArray(new Point3dObject3d[0]);
     }
 
 
@@ -178,7 +174,6 @@ public class GiftWrap extends HullAlgorithm {
     /**
      * test the two-dimensional algorithm
      *
-     * @param args
      */
     public static void main(String[] args) {
         Point2D[] input = new Point2D[]

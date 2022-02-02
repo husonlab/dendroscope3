@@ -38,9 +38,7 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
     /**
      * attempt an optimal topological embedding, based on the guide tree
      *
-     * @param tree
-     * @param progressListener
-     */
+	 */
     public void apply(PhyloTree tree, ProgressListener progressListener) {
         if (tree.getRoot() == null || tree.getNumberReticulateEdges() == 0) {
 			tree.getLSAChildrenMap().clear();
@@ -134,12 +132,7 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
     /**
      * optimize the topological embedding of the network
      *
-     * @param v
-     * @param before
-     * @param after
-     * @param node2GuideTreeChildren
-     * @param node2Special
-     */
+	 */
     private void optimizeTopologicalEmbedding(Node v, Node before, Node after, Map<Node, Integer> node2NumberOfLeavesBelow, NodeArray<List<Node>> node2GuideTreeChildren, NodeArray<Node> retNode2GuideParent, NodeArray<BitSet> node2Special) {
         if (node2GuideTreeChildren.get(v).size() > 1) {
 			var matrix = computeAttractionMatrix(v, before, after, node2GuideTreeChildren, retNode2GuideParent, node2Special);
@@ -180,9 +173,7 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
     /**
      * Finds the optimal ordering using branch-and-bound.
      *
-     * @param aMatrix
-     * @param ordering
-     */
+	 */
     private void improveOrdering(AttractionMatrix aMatrix, List<Node> ordering, Map<Node, Integer> node2NumberOfLeavesBelow) {
 		var nodes = ordering.toArray(new Node[0]);
 		var i = 0;
@@ -217,14 +208,6 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
     /**
      * uses branch and bound to find best layout
      *
-     * @param aMatrix
-     * @param nodes
-     * @param used
-     * @param currentOrdering
-     * @param length
-     * @param score
-     * @param bestOrdering
-     * @param bestScore
      * @return best score
      */
     private int improveRec(AttractionMatrix aMatrix, Node[] nodes, BitSet used, Map<Node, Integer> node2NumberOfLeavesBelow, int[] currentOrdering, int length, int score, int[] bestOrdering, int bestScore, int[] count) {
@@ -291,9 +274,6 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
     /**
      * counts the number of leaves in the guide tree below each node
      *
-     * @param v
-     * @param node2GuideTreeChildren
-     * @param node2NumberOfLeavesBelow
      * @return number of leaves
      */
     private int countLeaves(Node v, NodeArray<List<Node>> node2GuideTreeChildren, Map<Node, Integer> node2NumberOfLeavesBelow) {
@@ -314,9 +294,6 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
     /**
      * sets up the  attraction matrix
      *
-     * @param v
-     * @param node2GuideTreeChildren
-     * @param node2Special
      * @return attraction matrix
      */
     private AttractionMatrix computeAttractionMatrix(Node v, Node before, Node after, NodeArray<List<Node>> node2GuideTreeChildren, NodeArray<Node> retNode2GuideParent, NodeArray<BitSet> node2Special) {
@@ -373,11 +350,7 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
      * label every node v by the special edges that have a source or target node (but not both) in the
      * subtree rooted at v
      *
-     * @param v
-     * @param node2GuideTreeChildren
-     * @param node2SpecialSource
-     * @param node2SpecialTarget
-     */
+	 */
     private void computeExtendedMapRec(Node v, NodeArray<List<Node>> node2GuideTreeChildren, NodeArray<BitSet> node2SpecialSource, NodeArray<BitSet> node2SpecialTarget) {
 		var sources = new BitSet();
 		var targets = new BitSet();
@@ -408,7 +381,6 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
     /**
      * does network look like a transfer network?
      *
-     * @param tree
      * @return true, if is transfer network
      */
     public static boolean isTransferNetwork(PhyloTree tree) {
@@ -432,8 +404,6 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
 		/**
 		 * get the number of special edges from subtree of v to subtree of w
 		 *
-		 * @param v
-		 * @param w
 		 * @return count
 		 */
 		int get(Node v, Node w) {
@@ -444,9 +414,6 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
 		/**
 		 * set the number of edges from subtree of v to subtree of w
 		 *
-		 * @param v
-		 * @param w
-		 * @param value
 		 */
 		void set(Node v, Node w, int value) {
 			matrix.put(v.getId() < w.getId() ? new Pair<>(v, w) : new Pair<>(w, v), value);

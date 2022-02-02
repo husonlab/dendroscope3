@@ -35,11 +35,7 @@ public class PostProcess {
     /**
      * returns full trees or networks for the given rooted trees or networks
      *
-     * @param roots
-     * @param allTaxa
-     * @param showTaxonIds
-     * @return
-     */
+	 */
     public static List<TreeData> apply(Root[] roots, Taxa allTaxa, boolean showTaxonIds) {
         List<TreeData> list = new LinkedList<TreeData>();
 
@@ -70,13 +66,7 @@ public class PostProcess {
     /**
      * copies the rooted tree datastructure to the phylotree datastructure
      *
-     * @param vSrc
-     * @param vTar
-     * @param src2tar
-     * @param allTaxa
-     * @param showTaxonIds
-     * @param tree
-     */
+	 */
     private static void copyRec(Root vSrc, Node vTar, Map<Node, Node> src2tar, Taxa allTaxa, boolean showTaxonIds, PhyloTree tree) {
         if (vSrc.getOutDegree() == 0) { // is at a leaf, grab the taxon name
             int id = vSrc.getTaxa().nextSetBit(0);
@@ -103,14 +93,14 @@ public class PostProcess {
                     if (e1.getInfo() == null)
                         throw new RuntimeException("Unlabeled reticulate edge: " + e1);
                     else {
-                        ((PhyloTree) e2.getOwner()).setLabel(e2, e1.getInfo().toString());
+						e2.getOwner().setLabel(e2, e1.getInfo().toString());
                     }
                 }
             }
         }
         if (showTaxonIds) {
-            StringBuffer buf = new StringBuffer();
-            BitSet all = new BitSet();
+			StringBuilder buf = new StringBuilder();
+			BitSet all = new BitSet();
             all.or(vSrc.getTaxa());
             all.or(vSrc.getRemovedTaxa());
             for (int t = all.nextSetBit(0); t != -1; t = all.nextSetBit(t + 1)) {
@@ -120,9 +110,9 @@ public class PostProcess {
                     buf.append("-").append(t);
             }
             if (tree.getLabel(vTar) == null)
-                tree.setLabel(vTar, "{" + buf.toString() + "}");
+				tree.setLabel(vTar, "{" + buf + "}");
             else
-                tree.setLabel(vTar, tree.getLabel(vTar) + "{" + buf.toString() + "}");
+				tree.setLabel(vTar, tree.getLabel(vTar) + "{" + buf + "}");
         }
     }
 }

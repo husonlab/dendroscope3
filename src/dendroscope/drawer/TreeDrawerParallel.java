@@ -44,9 +44,7 @@ public class TreeDrawerParallel extends TreeDrawerBase implements IOptimizedGrap
     /**
      * constructor
      *
-     * @param viewer
-     * @param tree
-     */
+	 */
     public TreeDrawerParallel(TreeViewer viewer, PhyloTree tree) {
         super(viewer, tree);
         setupGraphView(viewer);
@@ -56,8 +54,7 @@ public class TreeDrawerParallel extends TreeDrawerBase implements IOptimizedGrap
     /**
      * set up the graphview
      *
-     * @param graphView
-     */
+	 */
     public void setupGraphView(GraphView graphView) {
         graphView.setAllowInternalEdgePoints(false);
 
@@ -189,8 +186,7 @@ public class TreeDrawerParallel extends TreeDrawerBase implements IOptimizedGrap
      * assign rectangular phylogram coordinates. First must use cladogram code to set y coordinates!
      * This code assumes that all edges are directed away from the root.
      *
-     * @param root
-     */
+	 */
     private void setCoordinatesPhylogram(Node root, NodeDoubleArray yCoord) {
         var percentOffset = 50; //getAuxilaryParameter();
 
@@ -268,8 +264,6 @@ public class TreeDrawerParallel extends TreeDrawerBase implements IOptimizedGrap
     /**
      * recursively compute optimization data
      *
-     * @param v
-     * @param visited
      * @return number of leaves below the node
      */
     private int recomputeOptimizationRec(Node v, NodeSet visited) {
@@ -329,8 +323,7 @@ public class TreeDrawerParallel extends TreeDrawerBase implements IOptimizedGrap
     /**
      * set the default label positions for nodes and edges
      *
-     * @param resetAll
-     */
+	 */
     public void resetLabelPositions(boolean resetAll) {
         byte leafOr;
         byte rootOr;
@@ -392,7 +385,6 @@ public class TreeDrawerParallel extends TreeDrawerBase implements IOptimizedGrap
     /**
      * must we visit the subtree rooted at this node when drawing or looking for a mouse click?
      *
-     * @param v
      * @return true, if we must look at subtree below v
      */
     protected boolean mustVisitSubTreeBelowNode(Node v) {
@@ -416,9 +408,7 @@ public class TreeDrawerParallel extends TreeDrawerBase implements IOptimizedGrap
     /**
      * compute the shape used to represent a collapsed subtree
      *
-     * @param v
-     * @return
-     */
+	 */
     public CollapsedShape computeCollapsedShape(Node v) {
         double[] xMinMax = new double[]{Integer.MAX_VALUE, Integer.MIN_VALUE};
         double[] yMinMax = new double[]{Integer.MAX_VALUE, Integer.MIN_VALUE};

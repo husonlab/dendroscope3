@@ -45,8 +45,7 @@ public class AuxiliaryThreadScheduler {
     /**
      * setup a scheduler
      *
-     * @param maxNumberOfThreads
-     */
+	 */
     public AuxiliaryThreadScheduler(int maxNumberOfThreads) {
         executor = new ScheduledThreadPoolExecutor(maxNumberOfThreads);
     }
@@ -54,7 +53,6 @@ public class AuxiliaryThreadScheduler {
     /**
      * schedule a task to be run on the next available thread
      *
-     * @param runnable
      * @return task id
      */
     public long schedule(Runnable runnable) {
@@ -88,7 +86,6 @@ public class AuxiliaryThreadScheduler {
     /**
      * de-schedule a task. Use this if we want to run the task ourselves.
      *
-     * @param taskId
      * @return status of task, de-scheduling only successful if DE_SCHEDULED returned
      */
     public byte deSchedule(long taskId) {
@@ -106,22 +103,20 @@ public class AuxiliaryThreadScheduler {
     /**
      * wait for the task to complete.
      *
-     * @param taskId
-     */
+	 */
     public void waitFor(long taskId) {
         Future future = id2future.get(taskId);
-        try {
-            future.wait();
-        } catch (InterruptedException e) {
-        }
+		try {
+			future.wait();
+		} catch (InterruptedException ignored) {
+		}
         id2future.remove(taskId);
     }
 
     /**
      * wait for a set of tasks to complete
      *
-     * @param taskIds
-     */
+	 */
     public void waitFor(HashSet<Long> taskIds) {
         for (Long taskId : taskIds) {
             waitFor(taskId);
@@ -131,30 +126,27 @@ public class AuxiliaryThreadScheduler {
     /**
      * attempt to launch a task in one of the worker threads
      *
-     * @param taskId
      * @return true, if launched, false if not
      */
     private boolean launch(final long taskId) {
         if (executor.getActiveCount() < executor.getMaximumPoolSize()) {
 
-            final Runnable task = scheduledTasks.get(taskId);
+			final Runnable task = scheduledTasks.get(taskId);
 
-            pending.remove(taskId);
-            running.add(taskId);
+			pending.remove(taskId);
+			running.add(taskId);
 
-            Future future = executor.submit(new Runnable() {
-                public void run() {
-                    if (verbose)
-                        System.err.println("Task " + taskId + " started");
-                    task.run();
-                    if (verbose)
-                        System.err.println("Task " + taskId + " finished");
-                    launchNext();
-                }
-            });
-            id2future.put(taskId, future);
-            return true;
-        } else
+			Future future = executor.submit(() -> {
+				if (verbose)
+					System.err.println("Task " + taskId + " started");
+				task.run();
+				if (verbose)
+					System.err.println("Task " + taskId + " finished");
+				launchNext();
+			});
+			id2future.put(taskId, future);
+			return true;
+		} else
             return false;
     }
 

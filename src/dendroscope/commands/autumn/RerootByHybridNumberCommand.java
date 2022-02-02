@@ -44,9 +44,7 @@ public class RerootByHybridNumberCommand extends CommandBaseMultiViewer implemen
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase(getSyntax());
@@ -66,7 +64,7 @@ public class RerootByHybridNumberCommand extends CommandBaseMultiViewer implemen
         getDir().getDocument().getProgressListener().close();
 
         if (h < Integer.MAX_VALUE) {
-            new Message(getViewer().getFrame(), "Best hybridization number is: " + h);
+			Message.show(getViewer().getFrame(), "Best hybridization number is: " + h);
 
             Director theDir;
             MultiViewer theMultiViewer;

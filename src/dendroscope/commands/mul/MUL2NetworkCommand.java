@@ -82,9 +82,7 @@ public class MUL2NetworkCommand extends CommandBaseMultiViewer implements IComma
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
 
@@ -109,8 +107,8 @@ public class MUL2NetworkCommand extends CommandBaseMultiViewer implements IComma
         MultiViewer newMultiViewer = (MultiViewer) newDir.getViewerByClass(MultiViewer.class);
         Document newDoc = newDir.getDocument();
 		newDoc.setTitle(FileUtils.getFileBaseName(getDir().getDocument().getTitle()) + "-networks");
-        BitSet which = new BitSet();
-        TreeData[] trees = list.toArray(new TreeData[list.size()]);
+		BitSet which = new BitSet();
+		TreeData[] trees = list.toArray(new TreeData[0]);
         for (int i = 0; i < trees.length; i++) {
             newDoc.appendTree(trees[i].getName(), trees[i], i);
             // System.err.println("tree[" + i + "] in doc: " + newDoc.getTree(i).toBracketString());
@@ -131,14 +129,13 @@ public class MUL2NetworkCommand extends CommandBaseMultiViewer implements IComma
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         String[] choices = new String[]{"HOLM [Build exact network using Huber, Oxelman, Lott and Moulton (2006)]", "Cluster [Build cluster network from all clusters]", "LevelK [Build level-k network from all clusters]"};
         Object reply = JOptionPane.showInputDialog(getViewer().getFrame(), "Choose method to convert multi-labeled tree to network:", "Choose Method", JOptionPane.QUESTION_MESSAGE,
                 ProgramProperties.getProgramIcon(), choices, choices[1]);
         if (reply != null)
-            execute("compute mult2net method=" + reply.toString() + ";");
+			execute("compute mult2net method=" + reply + ";");
 
 
     }

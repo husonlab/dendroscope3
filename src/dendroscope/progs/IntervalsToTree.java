@@ -41,9 +41,7 @@ public class IntervalsToTree {
     /**
      * read clusters consisting of 1-letter taxa and produces one tree per line
      *
-     * @param args
-     * @throws java.io.IOException
-     */
+	 */
     public static void main(String[] args) throws IOException {
         BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
 
@@ -113,9 +111,9 @@ public class IntervalsToTree {
         }
 
         PhyloTree tree = new PhyloTree();
-        tree.setRoot(tree.newNode());
-        ClusterNetwork.constructHasse(taxa, tree, tree.getRoot(), clusters.toArray(new Cluster[clusters.size()]), null, null, null, taxa.size());
-        ClusterNetwork.convertHasseToClusterNetwork(tree, null);
+		tree.setRoot(tree.newNode());
+		ClusterNetwork.constructHasse(taxa, tree, tree.getRoot(), clusters.toArray(new Cluster[0]), null, null, null, taxa.size());
+		ClusterNetwork.convertHasseToClusterNetwork(tree, null);
 
         System.out.println(tree.toBracketString(false) + ";");
     }

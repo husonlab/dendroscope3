@@ -72,8 +72,7 @@ public class MUL2ContractedCommand extends MUL2NetworkCommand implements IComman
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         execute("compute mult2net method=contracted;");
 

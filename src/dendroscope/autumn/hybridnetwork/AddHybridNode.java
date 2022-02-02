@@ -34,11 +34,9 @@ public class AddHybridNode {
     /**
      * add hybrid node to all given networks
      *
-     * @param networks
-     * @param taxon
-     */
+	 */
     public static void apply(Collection<Root> networks, int taxon) {
-        Root[] roots = networks.toArray(new Root[networks.size()]); // need to use array as networks will change
+		Root[] roots = networks.toArray(new Root[0]); // need to use array as networks will change
         networks.clear();
         for (Root root : roots) {
             // System.err.println("TRYING: " + root.toStringNetworkFull());
@@ -71,11 +69,7 @@ public class AddHybridNode {
     /**
      * recursively does the work
      *
-     * @param v
-     * @param hybrid
-     * @param taxon
-     * @param toDelete
-     */
+	 */
     private static void applyRec(Root v, Root hybrid, int taxon, NodeSet visited, Set<Root> toDelete) {
         if (v.getRemovedTaxa().get(taxon) && !visited.contains(v)) {
             visited.add(v);

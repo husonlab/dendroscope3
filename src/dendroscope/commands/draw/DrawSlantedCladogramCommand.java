@@ -95,8 +95,7 @@ public class DrawSlantedCladogramCommand extends DrawCommand implements ICheckBo
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
 
     public void actionPerformed(ActionEvent ev) {
         execute("set drawer=" + TreeViewer.SLANTED_CLADOGRAM + ";");

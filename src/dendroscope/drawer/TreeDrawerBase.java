@@ -84,8 +84,7 @@ public class TreeDrawerBase {
     /**
      * constructor. Call only after graph and trans have been set for GraphView
      *
-     * @param viewer
-     */
+	 */
     public TreeDrawerBase(TreeViewer viewer, PhyloTree tree) {
         this.viewer = viewer;
         this.tree = tree;
@@ -110,9 +109,7 @@ public class TreeDrawerBase {
     /**
      * paint the graph. If rect is non-null, only need to cover rect
      *
-     * @param gc0
-     * @param visibleRect
-     */
+	 */
     public void paint(Graphics gc0, Rectangle visibleRect) {
         final Graphics2D gc = (Graphics2D) gc0;
         this.visibleRect = visibleRect;
@@ -170,8 +167,7 @@ public class TreeDrawerBase {
     /**
      * paint all the collapsed nodes first
      *
-     * @param gc
-     */
+	 */
     private void paintCollapsedNodes(Graphics2D gc) {
         if (tree.getRoot() != null && tree.getRoot().getOwner() != null) {
             Stack<Node> stack = new Stack<>();
@@ -196,9 +192,7 @@ public class TreeDrawerBase {
     /**
      * recursively does the work
      *
-     * @param v
-     * @param gc
-     */
+	 */
     private void paintRec(Node v, Graphics2D gc) {
         try {
             final NodeView nv = viewer.getNV(v);
@@ -298,7 +292,6 @@ public class TreeDrawerBase {
      * Returns true for a leaf.
      * Different algorithms should implement their own version of this!
      *
-     * @param v
      * @return true, if we must look at subtree below v
      */
     protected boolean mustVisitSubTreeBelowNode(Node v) {
@@ -354,8 +347,6 @@ public class TreeDrawerBase {
     /**
      * get all nodes hit by mouse at (x,y) with tolerance of d pixels
      *
-     * @param x
-     * @param y
      * @return nodes hit
      */
     public NodeSet getHitNodes(int x, int y) {
@@ -369,8 +360,6 @@ public class TreeDrawerBase {
     /**
      * get all nodes hit by mouse at (x,y) with tolerance of d pixels
      *
-     * @param x
-     * @param y
      * @return nodes hit
      */
     public NodeSet getHitNodes(int x, int y, int d) {
@@ -380,11 +369,7 @@ public class TreeDrawerBase {
     /**
      * recursively do the work
      *
-     * @param v
-     * @param x
-     * @param y
-     * @param moreThanOne
-     */
+	 */
     private boolean getHitNodesRectangleRec(Node v, int x, int y, boolean moreThanOne) {
         try {
             if (viewer.getLocation(v) != null && viewer.getNV(v).contains(trans, x, y)) {
@@ -399,28 +384,25 @@ public class TreeDrawerBase {
             if (!isCollapsed(v) && mustVisitSubTreeBelowNode(v) && hitsBBox(v, 5, 5, x, y)) {
                 for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
                     if (tree.okToDescendDownThisEdgeInTraversal(f, v)) {
-                        Node w = f.getOpposite(v);
-                        Rectangle bbD = trans.w2d(node2bb.get(w)).getBounds();
-                        bbD.grow(10, 10);
-                        if ((viewer.getLocation(w) != null && viewer.getNV(w).contains(trans, x, y)) || bbD.contains(x, y)) {
-                            if (getHitNodesRectangleRec(w, x, y, moreThanOne) && moreThanOne)
-                                return true;
-                        }
-                    }
-                }
-            }
-        } catch (Exception ex) {
-        }
+						Node w = f.getOpposite(v);
+						Rectangle bbD = trans.w2d(node2bb.get(w)).getBounds();
+						bbD.grow(10, 10);
+						if ((viewer.getLocation(w) != null && viewer.getNV(w).contains(trans, x, y)) || bbD.contains(x, y)) {
+							if (getHitNodesRectangleRec(w, x, y, moreThanOne) && moreThanOne)
+								return true;
+						}
+					}
+				}
+			}
+		} catch (Exception ignored) {
+		}
         return false;
     }
 
     /**
      * recursively do the work
      *
-     * @param v
-     * @param rect
-     * @param moreThanOne
-     */
+	 */
     private boolean getHitNodesRectangleRec(Node v, Rectangle rect, boolean moreThanOne) {
         if (viewer.getLocation(v) != null && rect.intersects(viewer.getBox(v))) {
             hitNodes.add(v);
@@ -451,8 +433,6 @@ public class TreeDrawerBase {
     /**
      * get hit node labels
      *
-     * @param x
-     * @param y
      * @return hit node labels
      */
     public NodeSet getHitNodeLabels(int x, int y) {
@@ -480,10 +460,7 @@ public class TreeDrawerBase {
     /**
      * recursively do the work
      *
-     * @param v
-     * @param x
-     * @param y
-     */
+	 */
     private void getHitNodeLabelsRec(Node v, int x, int y) {
         NodeView nv = viewer.getNV(v);
         if (nv.getLabel() != null && nv.getLocation() != null
@@ -506,7 +483,6 @@ public class TreeDrawerBase {
     /**
      * get all nodes contained in rect
      *
-     * @param rect
      * @return nodes contained in rect
      */
     public NodeSet getHitNodes(Rectangle rect) {
@@ -523,7 +499,6 @@ public class TreeDrawerBase {
     /**
      * get all node labels contained in rect
      *
-     * @param rect
      * @return node labels contained in rect
      */
     public NodeSet getHitNodeLabels(Rectangle rect) {
@@ -547,9 +522,7 @@ public class TreeDrawerBase {
     /**
      * recursively do the work
      *
-     * @param v
-     * @param rect
-     */
+	 */
     private void getHitNodeLabelsRectangleRec(Node v, Rectangle rect) {
         NodeView nv = viewer.getNV(v);
         if (nv.getLabel() != null && nv.getLocation() != null && labelOverlapAvoider.isVisible(v)
@@ -569,8 +542,6 @@ public class TreeDrawerBase {
     /**
      * get all edges hit by mouse at (x,y)
      *
-     * @param x
-     * @param y
      * @return edges hits
      */
     public EdgeSet getHitEdges(int x, int y) {
@@ -601,10 +572,7 @@ public class TreeDrawerBase {
     /**
      * recursively do the work
      *
-     * @param v
-     * @param x
-     * @param y
-     */
+	 */
     private void getHitEdgesRec(Node v, int x, int y, MagnifierUtil magnifierUtil) {
         if (mustVisitSubTreeBelowNode(v) && hitsBBox(v, 10, 10, x, y)) {
             for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
@@ -629,8 +597,6 @@ public class TreeDrawerBase {
     /**
      * get all edge labels hit by mouse at (x,y)
      *
-     * @param x
-     * @param y
      * @return edge labels
      */
     public EdgeSet getHitEdgeLabels(int x, int y) {
@@ -653,10 +619,7 @@ public class TreeDrawerBase {
     /**
      * recursively do the work
      *
-     * @param v
-     * @param x
-     * @param y
-     */
+	 */
     private void getHitEdgeLabelsRec(Node v, int x, int y) {
         if (mustVisitSubTreeBelowNode(v) && hitsBBox(v, 100, 100, x, y)) {
             for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
@@ -674,7 +637,6 @@ public class TreeDrawerBase {
     /**
      * get all edges contained in rect
      *
-     * @param rect
      * @return edges contained in rect
      */
     public EdgeSet getHitEdges(Rectangle rect) {
@@ -696,9 +658,7 @@ public class TreeDrawerBase {
     /**
      * recursively do the work
      *
-     * @param v
-     * @param rect
-     */
+	 */
     private void getHitEdgesRectangleRec(Node v, Rectangle rect) {
         if (mustVisitSubTreeBelowNode(v) && hitsBBox(v, 100, 100, rect)) {
             for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
@@ -716,7 +676,6 @@ public class TreeDrawerBase {
     /**
      * get all edge labels contained in rect
      *
-     * @param rect
      * @return edges contained in rect
      */
     public EdgeSet getHitEdgeLabels(Rectangle rect) {
@@ -735,9 +694,7 @@ public class TreeDrawerBase {
     /**
      * recursively do the work
      *
-     * @param v
-     * @param rect
-     */
+	 */
     private void getHitEdgeLabelsRectangleRec(Node v, Rectangle rect) {
         if (mustVisitSubTreeBelowNode(v) && hitsBBox(v, 100, 100, rect)) {
             for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
@@ -755,8 +712,7 @@ public class TreeDrawerBase {
     /**
      * show bounding-boxes
      *
-     * @param showBoundingBoxes
-     */
+	 */
     public void setShowBoundingBoxes(boolean showBoundingBoxes) {
         this.showBoundingBoxes = showBoundingBoxes;
     }
@@ -831,8 +787,7 @@ public class TreeDrawerBase {
     /**
      * to support bounding-box oriented drawers, report any node whose label has been interavtively moved
      *
-     * @param v
-     */
+	 */
     public void setNodeHasMovedLabel(Node v) {
         nodesWithMovedLabels.add(v);
     }
@@ -841,8 +796,7 @@ public class TreeDrawerBase {
      * to support bounding-box oriented drawers, report any edge whose label has been interavtively moved
      * will misuse this also to keep track of any edge-middle point that has been interactively moved
      *
-     * @param e
-     */
+	 */
     public void setEdgesHasMovedLabel(Edge e) {
         edgesWithMovedLabels.add(e);
     }
@@ -851,8 +805,7 @@ public class TreeDrawerBase {
      * to support bounding-box oriented drawers, report any edge whose label has been interavtively moved
      * will misuse this also to keep track of any edge-middle point that has been interactively moved
      *
-     * @param e
-     */
+	 */
     public void setEdgesHasMovedInternalPoints(Edge e) {
         edgesWithMovedInternalPoints.add(e);
     }
@@ -890,9 +843,7 @@ public class TreeDrawerBase {
     /**
      * recursively does the work
      *
-     * @param v
-     * @param bounds
-     */
+	 */
     private void computeBBoxRec(Node v, double[] bounds) {
         double x = viewer.getLocation(v).getX();
         double y = viewer.getLocation(v).getY();
@@ -911,7 +862,6 @@ public class TreeDrawerBase {
     /**
      * has this node been collapsed?
      *
-     * @param v
      * @return true, if collapsed
      */
     public boolean isCollapsed(Node v) {
@@ -930,8 +880,7 @@ public class TreeDrawerBase {
     /**
      * rotate node labels to match edge directions?
      *
-     * @param radialLabels
-     */
+	 */
     public void setRadialLabels(boolean radialLabels) {
         this.radialLabels = radialLabels;
     }
@@ -940,7 +889,6 @@ public class TreeDrawerBase {
     /**
      * compute the y-coordinates for the parallel view
      *
-     * @param root
      * @return y-coordinates
      */
     public NodeDoubleArray computeYCoordinates(Node root) {
@@ -952,10 +900,7 @@ public class TreeDrawerBase {
     /**
      * compute the y-coordinates for the parallel view
      *
-     * @param root
-     * @param leafOrder
-     * @param yCoord
-     */
+	 */
     public void computeYCoordinates(Node root, List<Node> leafOrder, NodeDoubleArray yCoord) {
         computeYCoordinateOfLeavesRec(root, 0, yCoord, leafOrder);
         if (tree.getNumberReticulateEdges() > 0)
@@ -966,7 +911,6 @@ public class TreeDrawerBase {
     /**
      * recursively compute the y coordinate for a parallel or triangular diagram
      *
-     * @param v
      * @param leafNumber rank of leaf in vertical ordering
      * @return index of last leaf
      */
@@ -987,9 +931,7 @@ public class TreeDrawerBase {
     /**
      * recursively compute the y coordinate for the internal nodes of a parallel diagram
      *
-     * @param v
-     * @param yCoord
-     */
+	 */
     private void computeYCoordinateOfInternalRec(Node v, NodeDoubleArray yCoord) {
         if (v.getOutDegree() > 0) {
             double first = Double.NEGATIVE_INFINITY;
@@ -1012,8 +954,7 @@ public class TreeDrawerBase {
     /**
      * fix spacing so that space between any two true leaves is 1
      *
-     * @param leafOrder
-     */
+	 */
     private void fixSpacing(List<Node> leafOrder, NodeDoubleArray yCoord) {
         Node[] nodes = leafOrder.toArray(new Node[0]);
         double leafPos = 0;
@@ -1042,7 +983,6 @@ public class TreeDrawerBase {
     /**
      * compute the levels in the tree or network (max number of edges from node to a leaf)
      *
-     * @param add
      * @return levels
      */
     protected NodeIntArray computeLevels(int add) {
@@ -1057,9 +997,6 @@ public class TreeDrawerBase {
     /**
      * compute node levels
      *
-     * @param v
-     * @param levels
-     * @param add
      * @return max height
      */
     private int computeLevelsRec(Node v, NodeIntArray levels, int add, Set<Node> path) {
@@ -1132,8 +1069,7 @@ public class TreeDrawerBase {
     /**
      * set the minimal number of leaves that a subtree has to contain before it is represented by a proxy
      *
-     * @param min
-     */
+	 */
     public static void setMinLeavesForProxy(int min) {
         TreeDrawerBase.MIN_LEAVES_FOR_PROXY = min;
     }
@@ -1141,10 +1077,7 @@ public class TreeDrawerBase {
     /**
      * recursively compute the x and y min and max values for all nodes below v
      *
-     * @param v
-     * @param xMinMax
-     * @param yMinMax
-     */
+	 */
     protected void computeMinMaxRec(Node v, double[] xMinMax, double[] yMinMax) {
         if (v.getOutDegree() == 0) {
             double x = viewer.getLocation(v).getX();
@@ -1169,9 +1102,7 @@ public class TreeDrawerBase {
     /**
      * recursively collection the positions of all leaves below  v
      *
-     * @param v
-     * @param points
-     */
+	 */
     protected void computePointsRec(Node v, Collection<Point2D> points) {
         if (v.getOutDegree() == 0) {
             points.add(viewer.getLocation(v));
@@ -1196,8 +1127,7 @@ public class TreeDrawerBase {
     /**
      * set the order that leaves are supposed to appear, or null
      *
-     * @param taxonOrder
-     */
+	 */
     public void setTaxonOrder(List<String> taxonOrder) {
         this.taxonOrder = taxonOrder;
     }

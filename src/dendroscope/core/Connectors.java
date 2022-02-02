@@ -41,8 +41,7 @@ public class Connectors {
     /**
      * sync all connectors from tree grid
      *
-     * @param treeGrid
-     */
+	 */
     public void syncCurrentViewersToDocument(TreeGrid treeGrid) {
         for (int i = 0; i < treeGrid.getNumberOfPanels(); i++) {
             String treeName1 = treeGrid.getViewerByRank(i).getName();
@@ -59,19 +58,15 @@ public class Connectors {
         int count = 0;
         for (Connector connector : treeGrid.getConnectors()) {
             if (connector.isValid()) {
-                String treeName1 = connector.getTreeViewer1().getName();
-                String treeName2 = connector.getTreeViewer2().getName();
-                String nodeName1 = connector.getTreeViewer1().getLabel(connector.getV1());
-                String nodeName2 = connector.getTreeViewer2().getLabel(connector.getV2());
-                Pair<String, String> key = new Pair<String, String>(treeName1, treeName2);
-                List<Triplet<String, String, Color>> list = treePair2ListOfNodePairs.get(key);
-                if (list == null) {
-                    list = new LinkedList<Triplet<String, String, Color>>();
-                    treePair2ListOfNodePairs.put(key, list);
-                }
-                list.add(new Triplet<String, String, Color>(nodeName1, nodeName2, connector.getColor()));
-                count++;
-            }
+				String treeName1 = connector.getTreeViewer1().getName();
+				String treeName2 = connector.getTreeViewer2().getName();
+				String nodeName1 = connector.getTreeViewer1().getLabel(connector.getV1());
+				String nodeName2 = connector.getTreeViewer2().getLabel(connector.getV2());
+				Pair<String, String> key = new Pair<String, String>(treeName1, treeName2);
+				List<Triplet<String, String, Color>> list = treePair2ListOfNodePairs.computeIfAbsent(key, k -> new LinkedList<Triplet<String, String, Color>>());
+				list.add(new Triplet<String, String, Color>(nodeName1, nodeName2, connector.getColor()));
+				count++;
+			}
         }
 
     }
@@ -79,8 +74,7 @@ public class Connectors {
     /**
      * sync all connectors from document to tree grid
      *
-     * @param treeGrid
-     */
+	 */
     public void syncDocumentToCurrentViewers(TreeGrid treeGrid) {
         treeGrid.getConnectors().clear();
 
@@ -122,19 +116,10 @@ public class Connectors {
     /**
      * add a connector
      *
-     * @param treeName1
-     * @param treeName2
-     * @param nodeName1
-     * @param nodeName2
-     * @param color
-     */
+	 */
     public void add(String treeName1, String treeName2, String nodeName1, String nodeName2, Color color) {
-        Pair<String, String> key = new Pair<String, String>(treeName1, treeName2);
-        List<Triplet<String, String, Color>> list = treePair2ListOfNodePairs.get(key);
-        if (list == null) {
-            list = new LinkedList<Triplet<String, String, Color>>();
-            treePair2ListOfNodePairs.put(key, list);
-        }
-        list.add(new Triplet<String, String, Color>(nodeName1, nodeName2, color));
-    }
+		Pair<String, String> key = new Pair<String, String>(treeName1, treeName2);
+		List<Triplet<String, String, Color>> list = treePair2ListOfNodePairs.computeIfAbsent(key, k -> new LinkedList<Triplet<String, String, Color>>());
+		list.add(new Triplet<String, String, Color>(nodeName1, nodeName2, color));
+	}
 }

@@ -71,9 +71,7 @@ public class DisconnectAllCommand extends CommandBase implements ICommand {
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
         TreeGrid treeGrid = ((MultiViewer) getViewer()).getTreeGrid();
@@ -91,8 +89,7 @@ public class DisconnectAllCommand extends CommandBase implements ICommand {
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         execute("disconnect what=all;");
     }

@@ -16,22 +16,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package dendroscope.util.convexhull; /**
- * author: Tim Lambert, UNSW, 2000
- */
+package dendroscope.util.convexhull;
 
 /**
  * interface for 3d objects that can be rendered on screen
  */
 public interface Object3d {
-    public abstract Point3d centre();
+	Point3d centre();
 
-    public abstract void setCentre(Point3d c);
+	void setCentre(Point3d c);
 
-    public abstract void transform(Matrix3D T);
+	void transform(Matrix3D T);
 
-    public abstract String id();
+	String id();
 
-    public void select(int n);
+	void select(int n);
 
 }

@@ -18,7 +18,7 @@
  */
 package dendroscope.tripletMethods;
 
-import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.Vector;
 
 /**
@@ -215,28 +215,28 @@ class KSet {
 
         int numKids = children.size();
 
-        if (numKids == 0) {
-            isCTBR = YES;
-            ctbrs.addElement(this);
-            return;
-        }
+		if (numKids == 0) {
+			isCTBR = YES;
+			ctbrs.addElement(this);
+			return;
+		}
 
-        Enumeration e = children.elements();
+		Iterator iterator = children.iterator();
 
-        boolean kidsAreGood = true;
+		boolean kidsAreGood = true;
 
-        while (e.hasMoreElements()) {
-            KSet kid = (KSet) e.nextElement();
+		while (iterator.hasNext()) {
+			KSet kid = (KSet) iterator.next();
 
-            kid.computeCandidateTBRs(ctbrs);
+			kid.computeCandidateTBRs(ctbrs);
 
-            if (kid.isCTBR == NO) kidsAreGood = false;
-        }
+			if (kid.isCTBR == NO) kidsAreGood = false;
+		}
 
-        if (numKids != 2) {
-            isCTBR = NO;
-            return;
-        }
+		if (numKids != 2) {
+			isCTBR = NO;
+			return;
+		}
 
         isCTBR = kidsAreGood ? YES : NO;
 

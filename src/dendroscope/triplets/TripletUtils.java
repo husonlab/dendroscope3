@@ -125,12 +125,12 @@ public class TripletUtils {
                         Vector<Node> sonBis = tree.getCladeNode(sons.get(z));
                         for (Node aSon : son) {
                             for (Node sonBi : sonBis) {
-                                for (int i3 = 0; i3 < leavesRemaining.size(); i3++) {
-                                    (Triplets).addOne(tree.getNodeId(aSon), tree.getNodeId(sonBi), tree.getNodeId(leavesRemaining.get(i3)));
-                                    //System.out.println((Triplets).get(tree.getNodeId(son.get(i1)),tree.getNodeId(sonBis.get(i2)),tree.getNodeId(leavesRemaining.get(i3))));
+								for (Node value : leavesRemaining) {
+									(Triplets).addOne(tree.getNodeId(aSon), tree.getNodeId(sonBi), tree.getNodeId(value));
+									//System.out.println((Triplets).get(tree.getNodeId(son.get(i1)),tree.getNodeId(sonBis.get(i2)),tree.getNodeId(leavesRemaining.get(i3))));
 
-                                }
-                            }
+								}
+							}
                         }
                     }
                 }

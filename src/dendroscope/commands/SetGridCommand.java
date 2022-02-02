@@ -85,8 +85,7 @@ public class SetGridCommand extends CommandBaseMultiViewer implements ICommand {
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
 
         if ((ev.getModifiers() & ActionEvent.SHIFT_MASK) != 0)  // if shift is pressed, auto select
@@ -145,9 +144,7 @@ public class SetGridCommand extends CommandBaseMultiViewer implements ICommand {
     /**
      * parses the given command and executes it. Do not call this directly. This is called from the director in a separate thread
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("set grid=");
 

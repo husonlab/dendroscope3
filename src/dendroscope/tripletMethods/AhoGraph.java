@@ -105,16 +105,16 @@ class AhoGraph {
     }
 
 
-    private boolean visit(int vertex, int colourWith, int state[]) {
-        if (state[vertex] != NOT_VISITED) {
-            return state[vertex] == colourWith;
-        }
+    private boolean visit(int vertex, int colourWith, int[] state) {
+		if (state[vertex] != NOT_VISITED) {
+			return state[vertex] == colourWith;
+		}
 
-        state[vertex] = colourWith;
+		state[vertex] = colourWith;
 
-        int childCol;
-        if (colourWith == LEFT) childCol = RIGHT;
-        else childCol = LEFT;
+		int childCol;
+		if (colourWith == LEFT) childCol = RIGHT;
+		else childCol = LEFT;
 
         //! Now, try all COMPLEMENT children...
 

@@ -71,8 +71,7 @@ public class SetPropertyCommand extends CommandBaseMultiViewer implements IComma
     /**
      * parses the given command and executes it
      *
-     * @param np
-     */
+	 */
     @Override
     public void apply(NexusStreamParser np) throws IOException {
         np.matchIgnoreCase("set prop");
@@ -121,8 +120,7 @@ public class SetPropertyCommand extends CommandBaseMultiViewer implements IComma
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     @Override
     public void actionPerformed(ActionEvent ev) {
         String line = JOptionPane.showInputDialog("Enter property", "name=value");

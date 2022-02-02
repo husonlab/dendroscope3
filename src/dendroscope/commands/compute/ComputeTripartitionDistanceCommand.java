@@ -53,8 +53,8 @@ public class ComputeTripartitionDistanceCommand extends
 
         if (trees.size() == 2) {
             double distance = DistanceMethods.computeTripartitionDistance(trees);
-            new Message(getViewer().getFrame(), "Tripartition distance: "
-                    + distance);
+            Message.show(getViewer().getFrame(), "Tripartition distance: "
+												 + distance);
             System.out.println("Tripartition distance: " + distance);
         } else {
             new Alert(getViewer().getFrame(),

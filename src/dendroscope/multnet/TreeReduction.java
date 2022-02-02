@@ -23,7 +23,6 @@ import jloda.graph.Node;
 import jloda.phylo.PhyloTree;
 
 import java.util.HashMap;
-import java.util.Iterator;
 
 /*
  * tries to delete redundant informations in the given tree. given node v we collect all children n_1,n_2,...,n_l of v and
@@ -45,28 +44,27 @@ public class TreeReduction {
     }
 
     private void applyRec(MultilabeledTree reducedTree, Node n) {
-        HashMap<Integer, HeightList> childrenHeightlists = new HashMap<>();
-        Iterator<Edge> childrenIt = n.outEdges().iterator();
-        while (childrenIt.hasNext()) {
-            Node target = childrenIt.next().getTarget();
-            int targetHeight = reducedTree.getHeight(target);
-            HeightList targetList = childrenHeightlists.get(targetHeight);
-            if (targetList == null) {
-                targetList = new HeightList();
-                childrenHeightlists.put(targetHeight, targetList);
-            }
-            targetList.addSorted(target, reducedTree.getMultiset(target));
-        }
+		HashMap<Integer, HeightList> childrenHeightlists = new HashMap<>();
+		for (Edge edge : n.outEdges()) {
+			Node target = edge.getTarget();
+			int targetHeight = reducedTree.getHeight(target);
+			HeightList targetList = childrenHeightlists.get(targetHeight);
+			if (targetList == null) {
+				targetList = new HeightList();
+				childrenHeightlists.put(targetHeight, targetList);
+			}
+			targetList.addSorted(target, reducedTree.getMultiset(target));
+		}
 
-        for (HeightList h : childrenHeightlists.values()) {
-            while (!h.isEmpty()) {
-                Node v = (Node) h.get(0);
-                //now check if the current heightlist contains isomorphs to T(t_max).
-                for (int i = 1; i < h.size(); i++) {
-                    Node w = (Node) h.get(i);
-                    //found isomorph subtrees
-                    if (reducedTree.getMultiset(v).equals(reducedTree.getMultiset(w))) {
-                        Node w_father = w.getFirstInEdge().getSource();
+		for (HeightList h : childrenHeightlists.values()) {
+			while (!h.isEmpty()) {
+				Node v = (Node) h.get(0);
+				//now check if the current heightlist contains isomorphs to T(t_max).
+				for (int i = 1; i < h.size(); i++) {
+					Node w = (Node) h.get(i);
+					//found isomorph subtrees
+					if (reducedTree.getMultiset(v).equals(reducedTree.getMultiset(w))) {
+						Node w_father = w.getFirstInEdge().getSource();
                         reducedTree.deleteSubtree(w);
                         checkTreeStructure(reducedTree, w_father);
                         h.remove(w);

@@ -71,9 +71,7 @@ public class SetImageSizeCommand extends CommandBaseMultiViewer implements IComm
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("set imageheight=");
@@ -118,21 +116,20 @@ public class SetImageSizeCommand extends CommandBaseMultiViewer implements IComm
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     @Override
     public void actionPerformed(ActionEvent ev) {
         int imageHeight = ProgramProperties.get(DendroscopeProperties.IMAGE_HEIGHT, 50);
         String result = JOptionPane.showInputDialog(multiViewer.getFrame(), "Enter image height", "" + imageHeight);
         if (result != null) {
-            try {
-                imageHeight = Integer.parseInt(result);
-                if (imageHeight > 0) {
-                    ProgramProperties.put(DendroscopeProperties.IMAGE_HEIGHT, imageHeight);
-                    execute("set imageheight=" + imageHeight + ";");
-                }
-            } catch (NumberFormatException e) {
-            }
+			try {
+				imageHeight = Integer.parseInt(result);
+				if (imageHeight > 0) {
+					ProgramProperties.put(DendroscopeProperties.IMAGE_HEIGHT, imageHeight);
+					execute("set imageheight=" + imageHeight + ";");
+				}
+			} catch (NumberFormatException ignored) {
+			}
         }
 
     }

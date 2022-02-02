@@ -78,9 +78,7 @@ public class ExportCommand extends CommandBaseMultiViewer implements ICommand {
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
     }
@@ -88,8 +86,7 @@ public class ExportCommand extends CommandBaseMultiViewer implements ICommand {
     /**
      * action to be performed
      *
-     * @param event
-     */
+	 */
     public void actionPerformed(ActionEvent event) {
         String lastSaveFormat = ProgramProperties.get(ProgramProperties.SAVEFORMAT, Nexml.NAME);
 

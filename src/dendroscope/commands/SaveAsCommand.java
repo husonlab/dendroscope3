@@ -86,8 +86,7 @@ public class SaveAsCommand extends SaveCommand implements ICommand {
     /**
      * action to be performed
      *
-     * @param event
-     */
+	 */
     @Override
     public void actionPerformed(ActionEvent event) {
         final boolean inAskToSave = (event.getActionCommand() != null && event.getActionCommand().equals("askToSave"));

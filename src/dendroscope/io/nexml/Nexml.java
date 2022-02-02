@@ -56,10 +56,8 @@ public class Nexml extends IOBase implements IOFormat {
     /**
      * read trees
      *
-     * @param reader
      * @return trees
-     * @throws java.io.IOException
-     */
+	 */
     @Override
     public TreeData[] read(final Reader reader) throws IOException {
         InputStream stream = new InputStream() {
@@ -76,10 +74,7 @@ public class Nexml extends IOBase implements IOFormat {
     /**
      * write trees
      *
-     * @param writer
-     * @param trees
-     * @throws java.io.IOException
-     */
+	 */
     @Override
     public void write(Writer writer, boolean internalNodeLabelsAreEdgeLabels, TreeData[] trees) throws IOException {
         try {
@@ -113,7 +108,6 @@ public class Nexml extends IOBase implements IOFormat {
     /**
      * does this look like a file of the correct type?
      *
-     * @param file
      * @return true, if correct type of file
      */
     public boolean isCorrectFileType(File file) {
@@ -127,7 +121,6 @@ public class Nexml extends IOBase implements IOFormat {
     /**
      * does this look like the first line of the a file of the correct type?
      *
-     * @param aLine
      * @return true, if correct type of string
      */
     public boolean isCorrectType(String aLine) {

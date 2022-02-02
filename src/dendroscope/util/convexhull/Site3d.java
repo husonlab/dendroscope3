@@ -16,9 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package dendroscope.util.convexhull; /**
- * author: Tim Lambert, UNSW, 2000
- */
+package dendroscope.util.convexhull;
 
 import java.awt.*;
 
@@ -29,25 +27,25 @@ import java.awt.*;
 public class Site3d extends Object3dAdaptor {
 
 
-    public Site3d(Point3d pt) {
-        centre = pt;
-    }
+	public Site3d(Point3d pt) {
+		centre = pt;
+	}
 
-    public Site3d(Point3d pt, int frameNo) {
-        this(pt);
-        this.firstFrame = frameNo;
-    }
+	public Site3d(Point3d pt, int frameNo) {
+		this(pt);
+		this.firstFrame = frameNo;
+	}
 
-    private static int nfront;
-    private static int[][] ix = new int[Cube.nfront][Cube.npoints + 1]; // nfront visible cube faces in
-    private static int[][] iy = new int[Cube.nfront][Cube.npoints + 1]; // screen space
-    private static Color[] icols = new Color[Cube.nfront];
-    private static Color[] iselectcols = new Color[Cube.nfront];
-    private static Point[] ip = new Point[Cube.unitCube.length];
+	private static int nfront;
+	private static final int[][] ix = new int[Cube.nfront][Cube.npoints + 1]; // nfront visible cube faces in
+	private static final int[][] iy = new int[Cube.nfront][Cube.npoints + 1]; // screen space
+	private static final Color[] icols = new Color[Cube.nfront];
+	private static final Color[] iselectcols = new Color[Cube.nfront];
+	private static final Point[] ip = new Point[Cube.unitCube.length];
 
-    public String toString() {
-        return centre.toString();
-    }
+	public String toString() {
+		return centre.toString();
+	}
 
 
 }

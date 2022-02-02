@@ -74,9 +74,7 @@ public class SelectFromPreviousWindowCommand extends CommandBaseMultiViewer impl
     /**
      * parses the given command and executes it
      *
-     * @param np
-     * @throws java.io.IOException
-     */
+	 */
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase(getSyntax());
         for (Iterator<TreeViewer> it = ((MultiViewer) getViewer()).getTreeGrid().getSelectedOrAllIterator(); it.hasNext(); ) {
@@ -89,8 +87,7 @@ public class SelectFromPreviousWindowCommand extends CommandBaseMultiViewer impl
     /**
      * action to be performed
      *
-     * @param ev
-     */
+	 */
     public void actionPerformed(ActionEvent ev) {
         executeImmediately(getSyntax());
     }

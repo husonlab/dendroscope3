@@ -24,7 +24,6 @@ import jloda.graph.NodeSet;
 import jloda.phylo.PhyloTree;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
@@ -120,13 +119,12 @@ public class LCA_LSACalculation {
             }
         } else {
 			List<Node> LSAChildren = t.getLSAChildrenMap().get(n);
-            for (Iterator<Node> it = LSAChildren.iterator(); it.hasNext(); ) {
-                Node LSASon = it.next();
-                numNodes = doEulerTourRec(t, LSASon, currentLevel, eulerTour, levels, firstOccurences, computeLSA, numNodes);
-                eulerTour.add(n);
-                levels.add(currentLevel - 1);
-            }
-        }
+			for (Node LSASon : LSAChildren) {
+				numNodes = doEulerTourRec(t, LSASon, currentLevel, eulerTour, levels, firstOccurences, computeLSA, numNodes);
+				eulerTour.add(n);
+				levels.add(currentLevel - 1);
+			}
+		}
         return numNodes;
     }
 
@@ -155,8 +153,6 @@ public class LCA_LSACalculation {
     /**
      * calculates the RMQ of the subarray levels[i,j].
      *
-     * @param i
-     * @param j
      * @return RMQ_L(i, j)
      */
     public int getRMQ(int i, int j) {
@@ -189,8 +185,6 @@ public class LCA_LSACalculation {
     /**
      * calculates the LCA of two given nodes a and b.
      *
-     * @param a
-     * @param b
      * @return LCA(a, b)
      */
 
@@ -256,13 +250,13 @@ public class LCA_LSACalculation {
 
 
     public Node getLca(NodeSet nodes, boolean computeLSA) {
-        Node[] nodesToArray = new Node[nodes.size()];
-        int i = 0;
-        for (Iterator<Node> it = nodes.iterator(); it.hasNext(); ) {
-            nodesToArray[i] = it.next();
-            i++;
-        }
-        return getLca(nodesToArray, computeLSA);
-    }
+		Node[] nodesToArray = new Node[nodes.size()];
+		int i = 0;
+		for (Node node : nodes) {
+			nodesToArray[i] = node;
+			i++;
+		}
+		return getLca(nodesToArray, computeLSA);
+	}
 
 }

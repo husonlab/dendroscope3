@@ -83,17 +83,17 @@ class TripletSet {
 
 
     //! This is currently very slooow.
-    public boolean isDense(int errorTrip[]) {
-        for (int x = 1; x <= numLeaves; x++)
-            for (int y = 1; y <= numLeaves; y++)
-                for (int z = 1; z <= numLeaves; z++) {
-                    if ((x == y) || (x == z) || (z == y)) continue;
-                    if (!containsTriplet(x, y, z) && !containsTriplet(x, z, y) && !containsTriplet(z, y, x)) {
-                        errorTrip[0] = x;
-                        errorTrip[1] = y;
-                        errorTrip[2] = z;
-                        return false;
-                    }
+	public boolean isDense(int[] errorTrip) {
+		for (int x = 1; x <= numLeaves; x++)
+			for (int y = 1; y <= numLeaves; y++)
+				for (int z = 1; z <= numLeaves; z++) {
+					if ((x == y) || (x == z) || (z == y)) continue;
+					if (!containsTriplet(x, y, z) && !containsTriplet(x, z, y) && !containsTriplet(z, y, x)) {
+						errorTrip[0] = x;
+						errorTrip[1] = y;
+						errorTrip[2] = z;
+						return false;
+					}
                 }
         return true;
     }
@@ -371,17 +371,17 @@ class TripletSet {
     private final static int TBR_OBJECT = 0;
     private final static int EDGE_OBJECT = 1;
 
-    class StackObject {
-        //for both TBRs and edges
-        Vector<KSet> list;
-        int busyWith;
-        int type;
+	static class StackObject {
+		//for both TBRs and edges
+		Vector<KSet> list;
+		int busyWith;
+		int type;
 
-        //! int createdMustHits;
+		//! int createdMustHits;
 
-        // for only TBRs
-        TripletSet base;
-        KSet builtTBR;    //! The TBR that brought us here, labels are correct?
+		// for only TBRs
+		TripletSet base;
+		KSet builtTBR;    //! The TBR that brought us here, labels are correct?
         int[] bmap;
 
         //! for edges only...
@@ -960,17 +960,17 @@ class TripletSet {
 
     //! somehow I am unhappy about this routine, keep an eye on it for bugs...
 
-    public TripletSet subtractCTBR(KSet ctbr, int backmap[]) {
-        if (ctbr.getMaxSize() != numLeaves) {
-            System.out.println("The CTBR and TripletSet do not match.");
-            System.exit(0);
-        }
+	public TripletSet subtractCTBR(KSet ctbr, int[] backmap) {
+		if (ctbr.getMaxSize() != numLeaves) {
+			System.out.println("The CTBR and TripletSet do not match.");
+			System.exit(0);
+		}
 
-        int sub = ctbr.size();
+		int sub = ctbr.size();
 
-        int remains = numLeaves - sub;
+		int remains = numLeaves - sub;
 
-        if (backmap.length != remains + 1) {
+		if (backmap.length != remains + 1) {
             System.out.println("Backmap[] is broken.");
             System.exit(0);
         }
@@ -1581,17 +1581,17 @@ class TripletSet {
     //! Give it an array of which leaves you want to do the inducing
     //! backMap says what the original labellings of the new leaves were...
 
-    public TripletSet induceTripletSet(KSet k, int backMap[]) {
-        TripletSet ts = new TripletSet();
+	public TripletSet induceTripletSet(KSet k, int[] backMap) {
+		TripletSet ts = new TripletSet();
 
-        boolean[] in = new boolean[numLeaves + 1];
+		boolean[] in = new boolean[numLeaves + 1];
 
-        int[] leafMap = new int[numLeaves + 1];
-        int mapCount = 1;
-        //! This will map {1...numLeaves} -> {1...size(KSet)}
+		int[] leafMap = new int[numLeaves + 1];
+		int mapCount = 1;
+		//! This will map {1...numLeaves} -> {1...size(KSet)}
 
-        for (int x = 1; x <= numLeaves; x++) {
-            in[x] = k.containsLeaf(x);
+		for (int x = 1; x <= numLeaves; x++) {
+			in[x] = k.containsLeaf(x);
             if (in[x]) {
                 leafMap[x] = mapCount;
 
