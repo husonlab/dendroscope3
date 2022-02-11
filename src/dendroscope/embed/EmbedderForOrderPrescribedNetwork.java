@@ -472,27 +472,32 @@ public class EmbedderForOrderPrescribedNetwork {
      * @return ordering of labeled leaves
      */
     public static Map<Node, Float> setupOrderingFromNames(TreeViewer treeViewer, List<String> names) throws IOException {
-        Node[] nodes = new Node[names.size()];
-        Map<String, Integer> name2pos = new HashMap<String, Integer>();
-        int pos = 0;
-        for (String name : names) {
+        var nodes = new Node[names.size()];
+        var name2pos = new HashMap<String, Integer>();
+        var pos = 0;
+        for (var name : names) {
             name2pos.put(name, pos++);
         }
-        PhyloTree tree = treeViewer.getPhyloTree();
-        for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
-            if (v.getOutDegree() == 0) {
-                String name = tree.getLabel(v);
+        var seen = new HashSet<String>();
+        var tree = treeViewer.getPhyloTree();
+        for (var v : tree.nodes()) {
+            if (v.isLeaf()) {
+                var name = tree.getLabel(v);
                 if (name == null || name.trim().length() == 0)
                     throw new IOException("Unlabeled leaf encountered");
-                Integer thePos = name2pos.get(name);
+                if (seen.contains(name))
+                    throw new IOException("Multiple occurrence of leaf label: " + name);
+                else
+                    seen.add(name);
+                var thePos = name2pos.get(name);
                 if (thePos == null)
                     throw new IOException("Leaf-label without position encountered: " + name);
                 nodes[thePos] = v;
             }
         }
-        Map<Node, Float> node2pos = new HashMap<Node, Float>();
-        for (int i = 0; i < nodes.length; i++)
-            node2pos.put(nodes[i], (float) i + 1);
+        var node2pos = new HashMap<Node, Float>();
+        for (var i = 0; i < nodes.length; i++)
+            node2pos.put(nodes[i], i + 1f);
         return node2pos;
     }
 }

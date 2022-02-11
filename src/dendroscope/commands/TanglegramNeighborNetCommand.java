@@ -27,12 +27,9 @@ import dendroscope.embed.LayoutOptimizerManager;
 import dendroscope.tanglegram.TanglegramUtils;
 import dendroscope.window.MultiViewer;
 import dendroscope.window.TreeViewer;
-import jloda.graph.Node;
 import jloda.phylo.PhyloTree;
 import jloda.swing.commands.ICommand;
 import jloda.swing.director.IDirector;
-import jloda.swing.util.Alert;
-import jloda.util.Basic;
 import jloda.util.FileUtils;
 import jloda.util.ProgramProperties;
 import jloda.util.parse.NexusStreamParser;
@@ -42,8 +39,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.util.BitSet;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.*;
 
 /**
  * tanglegram using neighbor-net command
@@ -128,10 +128,9 @@ public class TanglegramNeighborNetCommand extends CommandBaseMultiViewer impleme
 
     /**
      * parses the given command and executes it
-     *
-	 */
+     */
 
-    public void apply(NexusStreamParser np) throws Exception {
+    public void apply(NexusStreamParser np) throws IOException {
         np.matchIgnoreCase(getSyntax());
 
         PhyloTree[] trees = new PhyloTree[multiViewer.getTreeGrid().getNumberSelectedOrAllViewers()];
@@ -227,13 +226,9 @@ public class TanglegramNeighborNetCommand extends CommandBaseMultiViewer impleme
 
             //  Map<Node, Float> node2pos = EmbedderForOrderPrescribedNetwork.setupAlphabeticalOrdering(treeViewer);
 
-            try {
-                Map<Node, Float> node2pos = EmbedderForOrderPrescribedNetwork.setupOrderingFromNames(treeViewer, orderFin[i]);
-                EmbedderForOrderPrescribedNetwork.apply(treeViewer, node2pos);
-            } catch (Exception ex) {
-                Basic.caught(ex);
-                new Alert(theMultiViewer.getFrame(), "Exception: " + ex.getMessage());
-            }
+            var node2pos = EmbedderForOrderPrescribedNetwork.setupOrderingFromNames(treeViewer, orderFin[i]);
+            EmbedderForOrderPrescribedNetwork.apply(treeViewer, node2pos);
+
             if (i > 0) {
                 treeViewer.trans.setFlipH(true);
                 treeViewer.flipNodeLabels(true, false);

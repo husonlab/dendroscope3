@@ -27,12 +27,15 @@ import dendroscope.consensus.Cluster;
 import dendroscope.consensus.Taxa;
 import dendroscope.core.TreeData;
 import jloda.graph.Edge;
+import jloda.graph.Node;
+import jloda.swing.window.NotificationsInSwing;
 import jloda.util.*;
 import jloda.util.progress.ProgressListener;
 import org.apache.commons.collections.map.LRUMap;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * computes minimal hybridization networks for two multifurcating trees
@@ -70,7 +73,7 @@ public class ComputeHybridizationNetwork {
      *
      * @return reduced trees
      */
-    private TreeData[] run(TreeData tree1, TreeData tree2, int upperBound, Single<Integer> hybridizationNumber) throws IOException, CanceledException {
+    private TreeData[] run(TreeData tree1, TreeData tree2, int upperBound, Single<Integer> hybridizationNumber) throws IOException {
         verbose = ProgramProperties.get("verbose-HL", false);
         Taxa allTaxa = new Taxa();
         Pair<Root, Root> roots = PreProcess.apply(tree1, tree2, allTaxa);
@@ -183,7 +186,14 @@ public class ComputeHybridizationNetwork {
 
         System.gc();
 
-        List<TreeData> list = PostProcess.apply(result.toArray(new Root[0]), allTaxa, false);
+        var list = PostProcess.apply(result.toArray(new Root[0]), allTaxa, false);
+        for (var tree : list) {
+            var leafLabels = tree.nodeStream().filter(Node::isLeaf).map(tree::getLabel).collect(Collectors.toList());
+            var nonUnique = CollectionUtils.difference(leafLabels, IteratorUtils.asSet(leafLabels));
+            if (nonUnique.size() > 0)
+                NotificationsInSwing.showWarning("Tree " + tree.getName() + ": Multiple occurrence of leaf label: " + nonUnique.get(0));
+        }
+
         return list.toArray(new TreeData[0]);
     }
 

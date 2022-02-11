@@ -41,19 +41,19 @@ public class PostProcess {
 
         // showTaxonIds=false;
 
-        for (Root original : roots) {
+        for (var original : roots) {
             PhyloTree tree = new PhyloTree();
-            Node treeRoot = tree.newNode();
+            var treeRoot = tree.newNode();
             tree.setRoot(treeRoot);
             copyRec(original, tree.getRoot(), new HashMap<Node, Node>(), allTaxa, showTaxonIds, tree);
-            for (Edge e = tree.getFirstEdge(); e != null; e = tree.getNextEdge(e)) {
+            for (var e : tree.edges()) {
                 if (e.getTarget().getInDegree() > 1) {
                     tree.setReticulated(e, true);
-					tree.setWeight(e, 0);
+                    tree.setWeight(e, 0);
                 }
             }
             if (treeRoot.getOutDegree() > 1) {
-                Node newRoot = tree.newNode();
+                var newRoot = tree.newNode();
                 tree.newEdge(newRoot, treeRoot);
                 tree.setRoot(newRoot);
             }
