@@ -17,11 +17,6 @@
 	~  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 	<project name="Dendroscope3" default="jar" basedir=".">
-
-		<property name="ant.build.javac.source" value="13"/>
-		<property name="ant.build.javac.target" value="13"/>
-
-
 		<property name="jfxDir" value="../../javafx/lib"/>
 		<property name="jlodaAntDir" value="../../jloda/antbuild"/>
 		<property name="buildSrcDir" value="../antbuild/src"/>
@@ -70,7 +65,8 @@
 		</target>
 
 		<target name="compile" depends="copy_resources">
-			<javac  includeantruntime="false"
+			<javac	source = "16" target = "16"
+				includeantruntime="false"
 				srcdir="../antbuild/src/dendroscope3"
 				destdir="${buildModulesDir}/dendroscope3"
 				debug="on"

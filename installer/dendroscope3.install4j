@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<install4j version="8.0.4" transformSequenceNumber="8">
+<install4j version="9.0.5" transformSequenceNumber="9">
   <directoryPresets config="../../javafx-jmods" />
-  <application name="Dendroscope" applicationId="3637-0812-9190-9529" mediaDir="../../../builds" shortName="Dendroscope" publisher="Center for Bioinformatics Tübingen" publisherWeb="www.zbit.informatik.uni-tuebingen.de" version="3.0" allPathsRelative="true" backupOnSave="true" macVolumeId="f94969a45be0d53a" javaMinVersion="11">
+  <application name="Dendroscope" applicationId="3637-0812-9190-9529" mediaDir="../../../builds" shortName="Dendroscope" publisher="Algorithms in Bioinformatics" publisherWeb="http://ab.inf.uni-tuebingen.de" version="3.0" allPathsRelative="true" backupOnSave="true" macVolumeId="f94969a45be0d53a" javaMinVersion="16">
     <codeSigning macEnabled="true" macPkcs12File="../../../../etc/application.p12" />
-    <jreBundles jdkProviderId="AdoptOpenJDK" release="openjdk14/jdk-14.0.1+7">
+    <jreBundles jdkProviderId="Zulu" release="17/17.0.2">
       <modules />
     </jreBundles>
   </application>
-  <files>
+  <files preserveSymlinks="false">
     <mountPoints>
       <mountPoint id="1691242151" location="jars" />
       <mountPoint id="1691242756" location="Examples" />
@@ -58,7 +58,7 @@
   <launchers>
     <launcher name="Dendroscope" id="1691242142" icnsFile="../src/dendroscope/resources/icons/Dendroscope.icns">
       <executable name="Dendroscope" iconSet="true" executableMode="gui" changeWorkingDirectory="false" dpiAware="false">
-        <versionInfo include="true" fileDescription="Dendroscope3 phylogenetic tree viewer" legalCopyright="Copyright 2019" internalName="Dendroscope3" />
+        <versionInfo include="true" fileDescription="Dendroscope3 phylogenetic tree viewer" legalCopyright="GPL" internalName="Dendroscope3" />
       </executable>
       <splashScreen width="450" height="300">
         <text>
@@ -69,7 +69,6 @@
       <java mainClass="dendroscope/dendroscope.main.Dendroscope" mainMode="module" vmParameters="-server -Dapple.laf.useScreenMenuBar=true -Duser.language=en -Duser.region=US --add-modules=dendroscope" arguments="-d">
         <modulePath>
           <directory location="jars" failOnError="false" />
-          <directory location="openjfx/${compiler:sys.platform}/lib" failOnError="false" />
         </modulePath>
       </java>
       <macStaticAssociationActions mode="selected" />
@@ -1006,11 +1005,19 @@ context.goForward(1, true, true);
           <group id="1691242610" beanClass="com.install4j.runtime.beans.groups.VerticalFormComponentGroup" useExternalParametrization="true" externalParametrizationName="Customize banner image" externalParametrizationMode="include">
             <serializedBean>
               <property name="backgroundColor">
-                <object class="java.awt.Color">
-                  <int>255</int>
-                  <int>255</int>
-                  <int>255</int>
-                  <int>255</int>
+                <object class="com.install4j.runtime.beans.LightOrDarkColor">
+                  <object class="java.awt.Color">
+                    <int>255</int>
+                    <int>255</int>
+                    <int>255</int>
+                    <int>255</int>
+                  </object>
+                  <object class="java.awt.Color">
+                    <int>49</int>
+                    <int>52</int>
+                    <int>53</int>
+                    <int>255</int>
+                  </object>
                 </object>
               </property>
               <property name="borderSides">
@@ -1019,11 +1026,19 @@ context.goForward(1, true, true);
                 </object>
               </property>
               <property name="imageEdgeBackgroundColor">
-                <object class="java.awt.Color">
-                  <int>25</int>
-                  <int>143</int>
-                  <int>220</int>
-                  <int>255</int>
+                <object class="com.install4j.runtime.beans.LightOrDarkColor">
+                  <object class="java.awt.Color">
+                    <int>25</int>
+                    <int>143</int>
+                    <int>220</int>
+                    <int>255</int>
+                  </object>
+                  <object class="java.awt.Color">
+                    <int>0</int>
+                    <int>74</int>
+                    <int>151</int>
+                    <int>255</int>
+                  </object>
                 </object>
               </property>
               <property name="imageEdgeBorder" type="boolean" value="true" />
@@ -1077,11 +1092,19 @@ context.goForward(1, true, true);
               <group id="1691242617" beanClass="com.install4j.runtime.beans.groups.VerticalFormComponentGroup" useExternalParametrization="true" externalParametrizationName="Customize title bar" externalParametrizationMode="include">
                 <serializedBean>
                   <property name="backgroundColor">
-                    <object class="java.awt.Color">
-                      <int>255</int>
-                      <int>255</int>
-                      <int>255</int>
-                      <int>255</int>
+                    <object class="com.install4j.runtime.beans.LightOrDarkColor">
+                      <object class="java.awt.Color">
+                        <int>255</int>
+                        <int>255</int>
+                        <int>255</int>
+                        <int>255</int>
+                      </object>
+                      <object class="java.awt.Color">
+                        <int>49</int>
+                        <int>52</int>
+                        <int>53</int>
+                        <int>255</int>
+                      </object>
                     </object>
                   </property>
                   <property name="borderSides">
@@ -1189,36 +1212,32 @@ context.goForward(1, true, true);
         <entry location="openjfx/macos" />
         <entry location="openjfx/windows-x64" />
       </exclude>
-      <jreBundle jreBundleSource="generated">
+      <jreBundle>
         <modules>
           <jmodDirectory location="../../javafx-jmods/unix" />
         </modules>
       </jreBundle>
     </unixInstaller>
-    <macosFolder name="Mac OS X Folder" id="1691242149" installDir="Dendroscope" overridePrincipalLanguage="true">
+    <macosFolder name="Mac OS X Folder" id="1691242149" installDir="Dendroscope" overridePrincipalLanguage="true" architecture="universal">
       <exclude>
         <entry location="openjfx/unix" />
         <entry location="openjfx/windows-x64" />
       </exclude>
-      <jreBundle jreBundleSource="generated" includedJre="macosx-amd64-12.0.1">
-        <modules>
-          <jmodDirectory location="../../javafx-jmods/macos" />
-        </modules>
-      </jreBundle>
+      <jreBundle includedJre="macosx-amd64-12.0.1" />
     </macosFolder>
     <windows name="Windows64bit" id="1691242421" installDir="Dendroscope" overridePrincipalLanguage="true">
       <exclude>
         <entry location="openjfx/macos" />
         <entry location="openjfx/unix" />
       </exclude>
-      <jreBundle jreBundleSource="generated" includedJre="windows-amd64-12.0.1">
+      <jreBundle includedJre="windows-amd64-12.0.1">
         <modules>
           <jmodDirectory location="../../javafx-jmods/windows" />
         </modules>
       </jreBundle>
     </windows>
   </mediaSets>
-  <buildIds>
+  <buildIds buildAll="false">
     <mediaSet refId="1691242149" />
   </buildIds>
   <buildOptions disableSigning="true" disableNotarization="true" />
