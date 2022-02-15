@@ -756,8 +756,8 @@ return console.askYesNo(message, true);
 }
 return true;</validation>
                 <postActivation>WizardContext wizardContext = context.getWizardContext();
-wizardContext.setNextButtonVisible(false);
-wizardContext.setCancelButtonVisible(false);</postActivation>
+wizardContext.setControlButtonEnabled(ControlButtonType.NEXT, false);
+wizardContext.setControlButtonEnabled(ControlButtonType.CANCEL, false);</postActivation>
                 <formComponents>
                   <formComponent id="1691242548" beanClass="com.install4j.runtime.beans.formcomponents.MultilineLabelComponent" useExternalParametrization="true" externalParametrizationName="Header" externalParametrizationMode="include">
                     <serializedBean>
@@ -1212,11 +1212,6 @@ context.goForward(1, true, true);
         <entry location="openjfx/macos" />
         <entry location="openjfx/windows-x64" />
       </exclude>
-      <jreBundle>
-        <modules>
-          <jmodDirectory location="../../javafx-jmods/unix" />
-        </modules>
-      </jreBundle>
     </unixInstaller>
     <macosFolder name="Mac OS X Folder" id="1691242149" installDir="Dendroscope" overridePrincipalLanguage="true" architecture="universal">
       <exclude>
@@ -1230,11 +1225,7 @@ context.goForward(1, true, true);
         <entry location="openjfx/macos" />
         <entry location="openjfx/unix" />
       </exclude>
-      <jreBundle includedJre="windows-amd64-12.0.1">
-        <modules>
-          <jmodDirectory location="../../javafx-jmods/windows" />
-        </modules>
-      </jreBundle>
+      <jreBundle includedJre="windows-amd64-12.0.1" />
     </windows>
   </mediaSets>
   <buildIds buildAll="false">
