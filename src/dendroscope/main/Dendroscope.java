@@ -75,11 +75,11 @@ public class Dendroscope {
         ProgramProperties.setProgramName(Version.NAME);
         ProgramProperties.setProgramVersion(Version.SHORT_DESCRIPTION);
 
-        final ArgsOptions options = new ArgsOptions(args, this, "Program for rooted phylogenetic trees and networks");
+        final var options = new ArgsOptions(args, this, "Program for rooted phylogenetic trees and networks");
         options.setAuthors("Daniel H. Huson, with some contributions from other authors");
         options.setVersion(ProgramProperties.getProgramVersion());
-        options.setLicense("Copyright (C) 2020 Daniel H. Huson. This program comes with ABSOLUTELY NO WARRANTY.\n" +
-                "This is free software, licensed under the terms of the GNU General Public License, Version 3.");
+        options.setLicense("Copyright (C) 2022 Daniel H. Huson. This program comes with ABSOLUTELY NO WARRANTY.\n" +
+                           "This is free software, licensed under the terms of the GNU General Public License, Version 3.");
         options.setVersion(ProgramProperties.getProgramVersion());
 
         options.comment("Mode:");
@@ -104,6 +104,8 @@ public class Dendroscope {
         final boolean silentMode = options.getOption("-S", "silentMode", "Silent mode", false);
         Basic.setDebugMode(options.getOption("-d", "debug", "Debug mode", false));
         final boolean showSplash = (!options.getOption("+s", "hideSplash", "Hide startup splash screen", false)) && ProgramProperties.isUseGUI();
+
+        MultiViewer.askToConfirmQuit = options.getOption("-q", "confirmQuit", "Confirm quit on exit", true);
         options.done();
 
         System.err.println("Java version: " + System.getProperty("java.version"));

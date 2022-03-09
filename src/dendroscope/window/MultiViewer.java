@@ -494,17 +494,22 @@ public class MultiViewer implements IDirectableViewer, IViewerWithFindToolBar, I
         }
     }
 
+    public static boolean askToConfirmQuit = true;
     /**
      * ask whether user wants to quit
      */
     private boolean confirmQuit() throws CanceledException {
-        JFrame parent = getLastActiveFrame();
-        if (parent == null)
-            parent = getFrame();
-        int result = JOptionPane.showConfirmDialog(parent, "Quit " + Version.NAME + "?", Version.NAME + " - Quit?", JOptionPane.YES_NO_CANCEL_OPTION);
-        if (result == JOptionPane.CANCEL_OPTION) {
-            throw new CanceledException();
-        } else return result != JOptionPane.NO_OPTION;
+        if (!askToConfirmQuit)
+            return true;
+        else {
+            var parent = getLastActiveFrame();
+            if (parent == null)
+                parent = getFrame();
+            var result = JOptionPane.showConfirmDialog(parent, "Quit " + Version.NAME + "?", Version.NAME + " - Quit?", JOptionPane.YES_NO_CANCEL_OPTION);
+            if (result == JOptionPane.CANCEL_OPTION) {
+                throw new CanceledException();
+            } else return result != JOptionPane.NO_OPTION;
+        }
     }
 
 

@@ -112,7 +112,8 @@ public class AddTreeOrNetworkCommand extends CommandBaseMultiViewer implements I
 
         String tree = newickInputDialog.getString();
         if (tree != null) {
-            ProgramProperties.put(DendroscopeProperties.LASTTREE, tree);
+            if (tree.length() < 100000) // only store reasonably small trees
+                ProgramProperties.put(DendroscopeProperties.LASTTREE, tree);
             execute("add tree='" + tree + "';");
         }
     }
