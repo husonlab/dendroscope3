@@ -105,7 +105,7 @@ public class Dendroscope {
         Basic.setDebugMode(options.getOption("-d", "debug", "Debug mode", false));
         final boolean showSplash = (!options.getOption("+s", "hideSplash", "Hide startup splash screen", false)) && ProgramProperties.isUseGUI();
 
-        MultiViewer.askToConfirmQuit = options.getOption("-q", "confirmQuit", "Confirm quit on exit", true);
+        ProgramProperties.setConfirmQuit(options.getOption("-q", "confirmQuit", "Confirm quit on exit", ProgramProperties.isConfirmQuit()));
         options.done();
 
         System.err.println("Java version: " + System.getProperty("java.version"));

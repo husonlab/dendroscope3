@@ -494,12 +494,11 @@ public class MultiViewer implements IDirectableViewer, IViewerWithFindToolBar, I
         }
     }
 
-    public static boolean askToConfirmQuit = true;
     /**
      * ask whether user wants to quit
      */
     private boolean confirmQuit() throws CanceledException {
-        if (!askToConfirmQuit)
+        if (!ProgramProperties.isConfirmQuit())
             return true;
         else {
             var parent = getLastActiveFrame();
