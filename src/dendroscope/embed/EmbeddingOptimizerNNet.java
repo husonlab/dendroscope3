@@ -723,8 +723,7 @@ public class EmbeddingOptimizerNNet implements ILayoutOptimizer {
 						int index = 0;
 						for (int i : ordering) {
 							if (i > 0 && !taxaNotInTrees[0].contains(id2Taxon.get(i)) && !taxaNotInTrees[1].contains(id2Taxon.get(i))) {
-								newOrdering[index] = i;
-								index++;
+								newOrdering[++index] = i;
 							}
 						}
 						return newOrdering;
