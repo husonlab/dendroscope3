@@ -26,6 +26,6 @@ package dendroscope.main;
  */
 public class Version {
     public static final String NAME = "Dendroscope";
-	public static final String SHORT_DESCRIPTION = "Dendroscope (version 3.8.2, built 9 Mar 2022)";
+	public static final String SHORT_DESCRIPTION = "Dendroscope (version 3.8.3, built 30 May 2022)";
 
 }

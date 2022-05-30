@@ -27,6 +27,7 @@ import jloda.util.StringUtils;
 import jloda.util.Triplet;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * constructs a cluster network from splits
@@ -68,25 +69,25 @@ public class ClusterNetwork {
         }
         */
 
-        Node root = tree.newNode();
+        var root = tree.newNode();
         tree.setRoot(root);
 
         //   determine the clusters
-        List<Cluster> list = new LinkedList<>();
-        int outGroupTaxonId = taxa.maxId();
-        for (int i = 1; i <= splits.size(); i++) {
-            Split split = splits.getSplit(i);
-            BitSet A = split.getPartNotContainingTaxon(outGroupTaxonId);
+        var list = new ArrayList<Cluster>();
+        var outGroupTaxonId = taxa.maxId();
+        for (var i = 1; i <= splits.size(); i++) {
+            var split = splits.getSplit(i);
+            var A = split.getPartNotContainingTaxon(outGroupTaxonId);
             //  System.err.println("A=" + A + " taxa=" + taxa);
             if (A.cardinality() < taxa.size() - 1)
                 list.add(new Cluster(A, split.getWeight()));
         }
-        Cluster[] clusters = list.toArray(new Cluster[0]);
+        var clusters = list.toArray(new Cluster[0]);
 
-        List<Triplet<Cluster, Cluster, Boolean>> additionalEdges = new LinkedList<>();
+        var additionalEdges = new ArrayList<Triplet<Cluster, Cluster, Boolean>>();
 
-        NodeDoubleArray node2weight = new NodeDoubleArray(tree);
-        NodeDoubleArray node2confidence = new NodeDoubleArray(tree);
+        var node2weight = new NodeDoubleArray(tree);
+        var node2confidence = new NodeDoubleArray(tree);
 
         constructHasse(taxa, tree, root, clusters, node2weight, node2confidence, additionalEdges, taxa.size());
 
@@ -94,7 +95,7 @@ public class ClusterNetwork {
 
         // computeConfidenceOnReticulate(tree);
 
-        for (Edge e = tree.getFirstEdge(); e != null; e = e.getNext()) {
+        for (var e : tree.edges()) {
             if (ProgramProperties.get("scaleconfidence", false) && tree.isReticulatedEdge(e)) {
                 tree.setWeight(e, tree.getConfidence(e));
             }
@@ -104,14 +105,15 @@ public class ClusterNetwork {
         //simplify(root);
 
         {
-            int numberOfSpecialNodes = 0;
-            for (Node v = tree.getFirstNode(); v != null; v = v.getNext())
+            var numberOfSpecialNodes = 0;
+            for (var v : tree.nodes()) {
                 if (v.getInDegree() > 1)
                     numberOfSpecialNodes++;
-            System.err.println("Special nodes: " + numberOfSpecialNodes);
+                System.err.println("Special nodes: " + numberOfSpecialNodes);
+            }
         }
 
-        for (Node v = tree.getFirstNode(); v != null; v = v.getNext()) {
+        for (var v : tree.nodes()) {
             if (v != root && v.getDegree() == 1 && tree.getLabel(v) == null)
                 throw new RuntimeException("unlabeled leaf");
         }
@@ -126,11 +128,11 @@ public class ClusterNetwork {
     public static void constructHasse(Taxa taxa, PhyloTree tree, Node root, Cluster[] clusters, NodeDoubleArray node2weight,
                                       NodeDoubleArray node2confidence, List<Triplet<Cluster, Cluster, Boolean>> additionalEdges, int maxTaxonId) {
         clusters = Cluster.getClustersSortedByDecreasingCardinality(clusters);
-        Node[] nodes = new Node[clusters.length];
-        NodeIntArray node2id = new NodeIntArray(tree);
-        NodeSet additionalEdgeSources = new NodeSet(tree);
+        var nodes = new Node[clusters.length];
+        var node2id = new NodeIntArray(tree);
+        var additionalEdgeSources = new NodeSet(tree);
 
-        for (int i = 0; i < clusters.length; i++) {
+        for (var i = 0; i < clusters.length; i++) {
             nodes[i] = tree.newNode();
             node2id.set(nodes[i], i);
             if (node2weight != null)
@@ -140,32 +142,31 @@ public class ClusterNetwork {
             //System.err.println("cluster: " + clusters[i] + " confidence: " + clusters[i].getConfidence());
         }
 
-        EdgeSet newEdges = new EdgeSet(tree);
+        var newEdges = new EdgeSet(tree);
 
-        Stack<Node> stack = new Stack<>();
-        NodeSet visited = new NodeSet(tree);
-        for (int i = 0; i < clusters.length; i++) {
-            Node node = nodes[i];
-            Cluster cluster = clusters[i];
+        var stack = new Stack<Node>();
+        var visited = new NodeSet(tree);
+        for (var i = 0; i < clusters.length; i++) {
+            var node = nodes[i];
+            var cluster = clusters[i];
             visited.clear();
             stack.push(root);
             visited.add(root);
             while (stack.size() > 0) {
-                Node v = stack.pop();
-                boolean isBelow = false;
-                for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e))
+                var v = stack.pop();
+                var isBelow = false;
+                for (var e : v.outEdges()) {
                     if (newEdges.contains(e)) {
-                        {
-                            Node w = e.getTarget();
-                            int j = node2id.getInt(w);
-                            if (Cluster.contains(clusters[j], cluster)) {
-                                isBelow = true;
-                                if (!visited.contains(w)) {
-                                    visited.add(w);
-                                    stack.push(w);
-                                }
+                        var w = e.getTarget();
+                        var j = node2id.getInt(w);
+                        if (Cluster.contains(clusters[j], cluster)) {
+                            isBelow = true;
+                            if (!visited.contains(w)) {
+                                visited.add(w);
+                                stack.push(w);
                             }
                         }
+                    }
                     }
                 if (!isBelow) {
                     Edge e = tree.newEdge(v, node);
@@ -179,12 +180,12 @@ public class ClusterNetwork {
         visited.clear();
         visited.add(root);
         while (stack.size() > 0) {
-            Node v = stack.pop();
-            BitSet cluster = (BitSet) clusters[node2id.getInt(v)].clone();
+            var v = stack.pop();
+            var cluster = (BitSet) clusters[node2id.getInt(v)].clone();
 
-            for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
+            for (var e : v.outEdges()) {
                 if (newEdges.contains(e)) {
-                    Node w = e.getTarget();
+                    var w = e.getTarget();
                     cluster = Cluster.setminus(cluster, clusters[node2id.getInt(w)]);
                     if (!visited.contains(w)) {
                         stack.push(w);
@@ -192,7 +193,7 @@ public class ClusterNetwork {
                     }
                 }
             }
-            for (int t = cluster.nextSetBit(0); t != -1 && t <= maxTaxonId; t = cluster.nextSetBit(t + 1)) {
+            for (var t = cluster.nextSetBit(0); t != -1 && t <= maxTaxonId; t = cluster.nextSetBit(t + 1)) {
                 tree.addTaxon(v, t);
                 if (tree.getLabel(v) == null)
                     tree.setLabel(v, taxa.getLabel(t));
@@ -203,19 +204,19 @@ public class ClusterNetwork {
         }
 
         if (additionalEdges != null && additionalEdges.size() > 0) {
-            Set<Cluster> seen = new HashSet<>();
+            var seen = new HashSet<Cluster>();
 
-            for (Triplet<Cluster, Cluster, Boolean> add : additionalEdges) {
-                Cluster first = add.getFirst();
-                Cluster second = add.getSecond();
-                boolean up = add.getThird();
-                Node v = findNode(first, clusters, nodes, maxTaxonId);
-                Node w = findNode(second, clusters, nodes, maxTaxonId);
+            for (var add : additionalEdges) {
+                var first = add.getFirst();
+                var second = add.getSecond();
+                var up = add.getThird();
+                var v = findNode(first, clusters, nodes, maxTaxonId);
+                var w = findNode(second, clusters, nodes, maxTaxonId);
 
                 if (w.getInDegree() == 1 && additionalEdgeSources.contains(w.getFirstInEdge().getSource()))
                     w = w.getFirstInEdge().getSource();
 
-				System.err.println("Creating additional edge: " + StringUtils.toString(first) + " -> " + StringUtils.toString(second) + "; up=" + up);
+                System.err.println("Creating additional edge: " + StringUtils.toString(first) + " -> " + StringUtils.toString(second) + "; up=" + up);
 
                 if (up) {
                     if (additionalEdgeSources.contains(v.getFirstInEdge().getSource())) {
@@ -223,16 +224,17 @@ public class ClusterNetwork {
                     } else {
                         System.err.println("Inserting new node, source node has indegree=" + v.getInDegree());
 
-                        Node u = tree.newNode();
+                        var u = tree.newNode();
                         additionalEdgeSources.add(u);
-                        List<Edge> toDelete = new LinkedList<>();
-                        for (Edge f = v.getFirstInEdge(); f != null; f = v.getNextInEdge(f)) {
+                        var toDelete = new ArrayList<Edge>();
+                        for (var f : v.inEdges()) {
                             tree.newEdge(f.getSource(), u);
                             toDelete.add(f);
                         }
                         tree.newEdge(u, v);
                         tree.newEdge(u, w);
-                        for (Edge aToDelete : toDelete) tree.deleteEdge(aToDelete);
+                        for (var g : toDelete)
+                            tree.deleteEdge(g);
 
                     }
                 } else
@@ -252,7 +254,7 @@ public class ClusterNetwork {
      * @return node or null
      */
     private static Node findNode(Cluster cluster, Cluster[] clusters, Node[] nodes, int maxTaxonId) {
-        for (int i = 0; i < clusters.length; i++) {
+        for (var i = 0; i < clusters.length; i++) {
             if (Cluster.equals(clusters[i], cluster, maxTaxonId))
                 return nodes[i];
         }
@@ -266,22 +268,20 @@ public class ClusterNetwork {
 	 */
     public static void convertHasseToClusterNetwork(PhyloTree tree, NodeDoubleArray node2weight) {
         // split every node that has indegree>1 and outdegree!=1
-        List<Node> nodes = new LinkedList<>();
-        for (Node v = tree.getFirstNode(); v != null; v = v.getNext())
-            nodes.add(v);
+        var nodes = tree.nodeStream().collect(Collectors.toCollection(ArrayList::new));
 
-        for (Node v : nodes) {
+        for (var v : nodes) {
             if (v.getInDegree() > 1) {
-                Node w = tree.newNode();
-                List<Edge> toDelete = new LinkedList<>();
+                var w = tree.newNode();
+                var toDelete = new ArrayList<Edge>();
                 for (var e : v.inEdges()) {
-                    Node u = e.getSource();
-                    Edge f = tree.newEdge(u, w);
+                    var u = e.getSource();
+                    var f = tree.newEdge(u, w);
                     tree.setWeight(f, 0); // special edges have zero weight
                     tree.setReticulated(f, true);
                     toDelete.add(e);
                 }
-                Edge f = tree.newEdge(w, v);
+                var f = tree.newEdge(w, v);
                 if (node2weight != null) {
                     if (node2weight.getDouble(v) == -1)  // todo: fix code so that is ok for node to have only special edges
                     {
@@ -291,30 +291,30 @@ public class ClusterNetwork {
                     }
                 }
 
-                for (Edge aToDelete : toDelete) {
+                for (var aToDelete : toDelete) {
                     tree.deleteEdge(aToDelete);
                 }
                 //treeView.setLocation(w, treeView.getLocation(v).getX(), treeView.getLocation(v).getY() + 0.1);
             } else if (v.getInDegree() == 1) {
-                Edge e = v.getFirstInEdge();
+                var e = v.getFirstInEdge();
                 if (node2weight != null)
                     tree.setWeight(e, node2weight.getDouble(v));
             }
         }
-        Node root = tree.getRoot();
+        var root = tree.getRoot();
         if (root.getDegree() == 2 && tree.getLabel(root) == null)  // is midway root, must divide both weights by two
         {
-            Edge e = root.getFirstAdjacentEdge();
-            Edge f = root.getLastAdjacentEdge();
-            double weight = 0.5 * (tree.getWeight(e) + tree.getWeight(f));
-            double a = RerootingUtils.computeAverageDistanceToALeaf(tree, e.getOpposite(root));
-            double b = RerootingUtils.computeAverageDistanceToALeaf(tree, f.getOpposite(root));
-            double na = 0.5 * (b - a + weight);
+            var e = root.getFirstAdjacentEdge();
+            var f = root.getLastAdjacentEdge();
+            var weight = 0.5 * (tree.getWeight(e) + tree.getWeight(f));
+            var a = RerootingUtils.computeAverageDistanceToALeaf(tree, e.getOpposite(root));
+            var b = RerootingUtils.computeAverageDistanceToALeaf(tree, f.getOpposite(root));
+            var na = 0.5 * (b - a + weight);
             if (na >= weight)
                 na = 0.95 * weight;
             else if (na <= 0)
                 na = 0.05 * weight;
-            double nb = weight - na;
+            var nb = weight - na;
             tree.setWeight(e, na);
             tree.setWeight(f, nb);
         }
@@ -334,7 +334,7 @@ public class ClusterNetwork {
      *
 	 */
     private static void computeConfidenceOnReticulate(PhyloTree tree) {
-        NodeArray<Node> reticulate2lsa = new NodeArray<>(tree);
+        var reticulate2lsa = new NodeArray<Node>(tree);
         (new LSATree()).computeReticulation2LSA(tree, reticulate2lsa);
 
         var averageConfidenceBelow = new NodeDoubleArray(tree);
@@ -345,22 +345,22 @@ public class ClusterNetwork {
                 averageConfidenceBelow.put(v, averageConfidenceBelow.getDouble(v) / countBelow.getInt(v));
         }
         for (var v : tree.nodes()) {
-            Node lsa = reticulate2lsa.get(v);
+            var lsa = reticulate2lsa.get(v);
             if (lsa != null) {
                 //System.err.println("node v=" + v);
                 //System.err.println("lsa=" + lsa);
-                Map<Edge, Double> e2AverageConfidence = new HashMap<>();
-                for (Edge e = v.getFirstInEdge(); e != null; e = v.getNextInEdge(e)) {
+                var e2AverageConfidence = new HashMap<Edge, Double>();
+                for (var e : v.inEdges()) {
                     // get all edges between e and lsa
-                    Stack<Edge> stack = new Stack<>();
+                    var stack = new Stack<Edge>();
                     stack.push(e);
-                    Set<Edge> seen = new HashSet<>();
+                    var seen = new HashSet<Edge>();
                     seen.add(e);
                     while (stack.size() > 0) {
-                        Edge f = stack.pop();
-                        Node w = f.getSource();
+                        var f = stack.pop();
+                        var w = f.getSource();
                         if (w != lsa) {
-                            for (Edge g = w.getFirstInEdge(); g != null; g = w.getNextInEdge(g)) {
+                            for (var g : w.inEdges()) {
                                 if (!seen.contains(g)) {
                                     seen.add(g);
                                     stack.push(g);
@@ -370,13 +370,13 @@ public class ClusterNetwork {
                     }
                     e2AverageConfidence.put(e, computeAverageConfidence(tree, seen));
                 }
-                double sum = 0;
-                for (Double x : e2AverageConfidence.values()) {
+                var sum = 0.0;
+                for (var x : e2AverageConfidence.values()) {
                     sum += (x);
                 }
-                for (Edge e : e2AverageConfidence.keySet()) {
-                    double value = e2AverageConfidence.get(e);
-                    double confidence = (sum == 0 ? 0 : (averageConfidenceBelow.getDouble(e.getTarget()) * value) / sum);
+                for (var e : e2AverageConfidence.keySet()) {
+                    var value = e2AverageConfidence.get(e);
+                    var confidence = (sum == 0 ? 0 : (averageConfidenceBelow.getDouble(e.getTarget()) * value) / sum);
                 }
             }
         }
@@ -387,14 +387,14 @@ public class ClusterNetwork {
      *
 	 */
     private static void computeConfidenceBelowRec(PhyloTree tree, Node v, NodeDoubleArray confidenceBelow, NodeIntArray countBelow) {
-        double confidence = 0;
-        int count = 0;
-        for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
+        var confidence = 0.0;
+        var count = 0;
+        for (var e : v.outEdges()) {
             if (!tree.isReticulatedEdge(e)) {
                 confidence += tree.getConfidence(e);
                 count++;
             }
-            Node w = e.getTarget();
+            var w = e.getTarget();
             if (countBelow.get(w) == null)
                 computeConfidenceBelowRec(tree, w, confidenceBelow, countBelow);
             confidence += confidenceBelow.getDouble(w);
@@ -410,9 +410,9 @@ public class ClusterNetwork {
      * @return average confidence
      */
     private static double computeAverageConfidence(PhyloTree tree, Collection<Edge> edges) {
-        double sum = 0;
-        int count = 0;
-        for (Edge e : edges) {
+        var sum = 0.0;
+        var count = 0;
+        for (var e : edges) {
             if (!tree.isReticulatedEdge(e)) {
                 sum += tree.getConfidence(e);
                 count++;
@@ -428,12 +428,12 @@ public class ClusterNetwork {
      * @return partitioning of taxa
      */
     public static Partition getPartitionDefinedByNode(PhyloTree tree, Taxa taxa, Node v) {
-        NodeIntArray node2component = new NodeIntArray(tree);
-        int componentNumber = 0;
+        var node2component = new NodeIntArray(tree);
+        var componentNumber = 0;
 
         node2component.set(v, -1); // always avoid this node
-        for (Edge e = v.getFirstAdjacentEdge(); e != null; e = v.getNextAdjacentEdge(e)) {
-            Node w = e.getOpposite(v);
+        for (var e : v.adjacentEdges()) {
+            var w = e.getOpposite(v);
             if (node2component.getInt(w) == 0) {
                 componentNumber++;
                 node2component.set(w, componentNumber);
@@ -441,11 +441,11 @@ public class ClusterNetwork {
             }
         }
 
-        final BitSet[] partition = new BitSet[componentNumber];
-        for (int p = 0; p < componentNumber; p++)
+        final var partition = new BitSet[componentNumber];
+        for (var p = 0; p < componentNumber; p++)
             partition[p] = new BitSet();
-        for (Node w = tree.getFirstNode(); w != null; w = w.getNext()) {
-            String label = tree.getLabel(w);
+        for (var w : tree.nodes()) {
+            var label = tree.getLabel(w);
             if (label != null) {
                 int t = taxa.indexOf(label);
                 if (t > 0) {
@@ -455,8 +455,8 @@ public class ClusterNetwork {
                 }
             }
         }
-        int count = 0;
-        for (int p = 0; p < componentNumber; p++) {
+        var count = 0;
+        for (var p = 0; p < componentNumber; p++) {
             count += partition[p].cardinality();
         }
         if (count == taxa.size())
@@ -471,18 +471,18 @@ public class ClusterNetwork {
      * @return partitioning defined by edge
      */
     public static Partition getPartitionDefinedByEdge(PhyloTree tree, Taxa taxa, Edge e0) {
-        NodeIntArray node2component = new NodeIntArray(tree);
-        int componentNumber = 0;
+        var node2component = new NodeIntArray(tree);
+        var componentNumber = 0;
 
-        Node source = e0.getSource();
-        Node target = e0.getTarget();
+        var source = e0.getSource();
+        var target = e0.getTarget();
 
         node2component.set(source, ++componentNumber);
 
-        boolean first = true;
-        for (Edge e = source.getFirstAdjacentEdge(); e != null; e = source.getNextAdjacentEdge(e)) {
+        var first = true;
+        for (var e : source.adjacentEdges()) {
             if (e != e0) {
-                Node w = e.getOpposite(source);
+                var w = e.getOpposite(source);
                 if (node2component.getInt(w) == 0) {
                     if (first)
                         first = false;
@@ -497,8 +497,8 @@ public class ClusterNetwork {
         if (node2component.getInt(target) == 0) {
             node2component.set(target, ++componentNumber);
             first = true;
-            for (Edge e = target.getFirstAdjacentEdge(); e != null; e = target.getNextAdjacentEdge(e)) {
-                Node w = e.getOpposite(target);
+            for (var e : target.adjacentEdges()) {
+                var w = e.getOpposite(target);
                 if (node2component.getInt(w) == 0) {
                     if (first)
                         first = false;
@@ -510,13 +510,13 @@ public class ClusterNetwork {
             }
         }
 
-        BitSet[] partition = new BitSet[componentNumber];
-        for (int p = 0; p < componentNumber; p++)
+        var partition = new BitSet[componentNumber];
+        for (var p = 0; p < componentNumber; p++)
             partition[p] = new BitSet();
-        for (Node w = tree.getFirstNode(); w != null; w = w.getNext()) {
-            String label = tree.getLabel(w);
+        for (var w : tree.nodes()) {
+            var label = tree.getLabel(w);
             if (label != null) {
-                int t = taxa.indexOf(label);
+                var t = taxa.indexOf(label);
                 if (t > 0) {
                     int n = node2component.getInt(w);
                     if (n > 0)
@@ -524,8 +524,8 @@ public class ClusterNetwork {
                 }
             }
         }
-        int count = 0;
-        for (int p = 0; p < componentNumber; p++) {
+        var count = 0;
+        for (var p = 0; p < componentNumber; p++) {
             count += partition[p].cardinality();
         }
         if (count == taxa.size())
@@ -539,8 +539,8 @@ public class ClusterNetwork {
      *
 	 */
     private static void getTwoConnectedComponentRec(Node v, int componentNumber, NodeIntArray node2component) {
-        for (Edge f = v.getFirstAdjacentEdge(); f != null; f = v.getNextAdjacentEdge(f)) {
-            Node w = f.getOpposite(v);
+        for (var f : v.adjacentEdges()) {
+            var w = f.getOpposite(v);
             if (node2component.getInt(w) == 0) {
                 node2component.set(w, componentNumber);
                 getTwoConnectedComponentRec(w, componentNumber, node2component);

@@ -65,7 +65,7 @@
 		</target>
 
 		<target name="compile" depends="copy_resources">
-			<javac	source = "16" target = "16"
+			<javac	source = "17" target = "17"
 				includeantruntime="false"
 				srcdir="../antbuild/src/dendroscope3"
 				destdir="${buildModulesDir}/dendroscope3"

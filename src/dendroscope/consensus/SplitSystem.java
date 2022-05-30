@@ -168,23 +168,24 @@ public class SplitSystem {
      *
      * @return taxa
      */
-    private static BitSet splitsFromTreeRec(Node v, PhyloTree tree,
-                                            Taxa allTaxa, BitSet activeTaxa, NodeArray<BitSet> reticulateNode2Taxa, SplitSystem splits) {
+    private static BitSet splitsFromTreeRec(Node v, PhyloTree tree, Taxa allTaxa, BitSet activeTaxa, NodeArray<BitSet> reticulateNode2Taxa, SplitSystem splits) {
         BitSet e_taxa = new BitSet();
 
-        int taxon = allTaxa.indexOf(tree.getLabel(v));
-        if (taxon > -1)
-            e_taxa.set(taxon);
+        if (tree.getLabel(v) != null) {
+            var taxon = allTaxa.indexOf(tree.getLabel(v));
+            if (taxon > -1)
+                e_taxa.set(taxon);
+        }
 
         for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
             Node w = f.getTarget();
             BitSet f_taxa;
             if (!tree.isReticulatedEdge(f) || reticulateNode2Taxa.get(w) == null)
-				f_taxa = splitsFromTreeRec(w, tree, allTaxa, activeTaxa, reticulateNode2Taxa, splits);
-			else
-				f_taxa = reticulateNode2Taxa.get(w);
+                f_taxa = splitsFromTreeRec(w, tree, allTaxa, activeTaxa, reticulateNode2Taxa, splits);
+            else
+                f_taxa = reticulateNode2Taxa.get(w);
 
-			if (!tree.isReticulatedEdge(f)) {
+            if (!tree.isReticulatedEdge(f)) {
 				BitSet complement = (BitSet) activeTaxa.clone();
 				complement.andNot(f_taxa);
 				Split split = new Split(f_taxa, complement, tree.getWeight(f));
