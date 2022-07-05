@@ -375,25 +375,25 @@ public class TreeDrawerRadial extends TreeDrawerBase implements IOptimizedGraphD
             final double vAngle = node2AngleOfInEdge.get(v);
             for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
                 Node w = f.getTarget();
-                if (!tree.isReticulatedEdge(f) || tree.getWeight(f) == 1) {
-                    viewer.getEV(f).setShape(EdgeView.ARC_LINE_EDGE);
-                    double wAngle = node2AngleOfInEdge.get(w);
-                    java.util.List<Point2D> list = new LinkedList<>();
-                    list.add(originPt);
-                    Point2D aPt = Geometry.rotate(vPt, wAngle - vAngle);
-                    list.add(aPt);
-                    viewer.setInternalPoints(f, list);
-                } else if (tree.isReticulatedEdge(f)) {
-                    viewer.getEV(f).setShape(EdgeView.QUAD_EDGE);
-                    double wAngle = node2AngleOfInEdge.get(w);
-                    java.util.List<Point2D> list = new LinkedList<>();
-                    Point2D aPt = Geometry.rotate(vPt, wAngle - vAngle);
-                    list.add(aPt);
-                    viewer.setInternalPoints(f, list);
-                }
-                if (tree.okToDescendDownThisEdgeInTraversal(f, v)) {
-                    stack.push(f.getTarget());
-                }
+                if (!tree.isReticulateEdge(f) || tree.getWeight(f) == 1) {
+					viewer.getEV(f).setShape(EdgeView.ARC_LINE_EDGE);
+					double wAngle = node2AngleOfInEdge.get(w);
+					java.util.List<Point2D> list = new LinkedList<>();
+					list.add(originPt);
+					Point2D aPt = Geometry.rotate(vPt, wAngle - vAngle);
+					list.add(aPt);
+					viewer.setInternalPoints(f, list);
+				} else if (tree.isReticulateEdge(f)) {
+					viewer.getEV(f).setShape(EdgeView.QUAD_EDGE);
+					double wAngle = node2AngleOfInEdge.get(w);
+					java.util.List<Point2D> list = new LinkedList<>();
+					Point2D aPt = Geometry.rotate(vPt, wAngle - vAngle);
+					list.add(aPt);
+					viewer.setInternalPoints(f, list);
+				}
+				if (tree.okToDescendDownThisEdgeInTraversal(f, v)) {
+					stack.push(f.getTarget());
+				}
             }
         }
     }

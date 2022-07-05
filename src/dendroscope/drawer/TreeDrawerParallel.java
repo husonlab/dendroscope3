@@ -170,14 +170,14 @@ public class TreeDrawerParallel extends TreeDrawerBase implements IOptimizedGrap
                 viewer.setInternalPoints(f, pts);
 
                 if (tree.isTransferEdge(f))
-                    viewer.setShape(f, EdgeView.STRAIGHT_EDGE);
-                else if (tree.isReticulatedEdge(f) && tree.getWeight(f) <= 0)
-                    viewer.setShape(f, EdgeView.QUAD_EDGE);
-                else // draw as curved edge
-                    viewer.setShape(f, EdgeView.POLY_EDGE);
-                if (tree.okToDescendDownThisEdgeInTraversal(f, v) && !isCollapsed(w)) {
-                    stack.push(w);
-                }
+					viewer.setShape(f, EdgeView.STRAIGHT_EDGE);
+				else if (tree.isReticulateEdge(f) && tree.getWeight(f) <= 0)
+					viewer.setShape(f, EdgeView.QUAD_EDGE);
+				else // draw as curved edge
+					viewer.setShape(f, EdgeView.POLY_EDGE);
+				if (tree.okToDescendDownThisEdgeInTraversal(f, v) && !isCollapsed(w)) {
+					stack.push(w);
+				}
             }
         }
     }

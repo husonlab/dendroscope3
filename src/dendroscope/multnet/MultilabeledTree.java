@@ -111,7 +111,7 @@ public class MultilabeledTree extends PhyloTree {
 
 		boolean hasNormalEdge = false;
         for (Edge e : v.inEdges()) {
-            if (!this.isReticulatedEdge(e)) {
+            if (!this.isReticulateEdge(e)) {
 				hasNormalEdge = true;
 				break;
 			}

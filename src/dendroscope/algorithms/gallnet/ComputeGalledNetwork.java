@@ -131,7 +131,7 @@ public class ComputeGalledNetwork {
         for(Edge e=tree.getFirstEdge();e!=null;e=tree.getNextEdge(e))
         {
             if(e.getTarget().getInDegree()>1)
-                tree.setReticulated(e,true);
+                tree.setReticulate(e,true);
          }
                 */
 

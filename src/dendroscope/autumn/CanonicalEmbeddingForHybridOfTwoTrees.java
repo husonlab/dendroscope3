@@ -169,12 +169,12 @@ public class CanonicalEmbeddingForHybridOfTwoTrees {
                 if (v.getOutDegree() > 1) {
                     boolean hasReticulate = false;
                     for (Edge e = v.getFirstOutEdge(); !found && e != null; e = v.getNextOutEdge(e)) {
-                        if (tree.isReticulatedEdge(e)) {
-                            if (!hasReticulate)
-                                hasReticulate = true;
-                            else
-                                found = true;
-                        }
+                        if (tree.isReticulateEdge(e)) {
+							if (!hasReticulate)
+								hasReticulate = true;
+							else
+								found = true;
+						}
                     }
                 }
             }

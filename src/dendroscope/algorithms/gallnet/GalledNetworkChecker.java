@@ -70,7 +70,7 @@ public class GalledNetworkChecker {
 
             // compute taxon sets for each non-reticulate edge
             for (Edge e = tree.getFirstEdge(); e != null; e = e.getNext()) {
-                if (!tree.isReticulatedEdge(e)) {
+                if (!tree.isReticulateEdge(e)) {
 					BitSet alwaysOn = new BitSet();
 					Set optional = new HashSet();
 					computeAlwaysOnAndOptional(e.getTarget(), node2taxaBelow, node2nodesBelow, node2leaves, node2reticulate, alwaysOn, optional);
@@ -83,7 +83,7 @@ public class GalledNetworkChecker {
 
             // verify that sets are for any given edge all sets have empty intersections
             for (Edge e = tree.getFirstEdge(); e != null; e = e.getNext()) {
-				if (!tree.isReticulatedEdge(e)) {
+				if (!tree.isReticulateEdge(e)) {
 					BitSet seen = new BitSet();
 					for (Object o : ((List) edge2TaxonSets.get(e))) {
 						BitSet set = (BitSet) o;
@@ -138,7 +138,7 @@ public class GalledNetworkChecker {
 
             nodesBelow.addAll((NodeSet) node2AllNodesBelow.get(w));
 
-			if (tree.isReticulatedEdge(e)) // w is reticulate node
+			if (tree.isReticulateEdge(e)) // w is reticulate node
 			{
 				reticulate.add(w);
 			} else // w is tree node
@@ -210,7 +210,7 @@ public class GalledNetworkChecker {
      *
 	 */
     private void labelNodesByTreeComponentsRec(Node v, Edge e, IntegerVariable maxComponentNumber, NodeIntArray node2component) {
-		if (e == null || tree.isReticulatedEdge(e))        // either root or reticulate node, start a new component
+		if (e == null || tree.isReticulateEdge(e))        // either root or reticulate node, start a new component
 			node2component.set(v, maxComponentNumber.increment());
 		else            // in same component, keep number
 			node2component.set(v, node2component.get(e.getSource()));
@@ -271,7 +271,7 @@ public class GalledNetworkChecker {
      */
     public boolean contains(BitSet cluster) {
         for (Edge e = tree.getFirstEdge(); e != null; e = e.getNext()) {
-			if (!tree.isReticulatedEdge(e) && contains(e, cluster))
+			if (!tree.isReticulateEdge(e) && contains(e, cluster))
 				return true;
         }
         return false;
@@ -286,7 +286,7 @@ public class GalledNetworkChecker {
         if (edge2TaxonSets == null)
             edge2TaxonSets = computeEdge2TaxonSets(tree);
 
-		if (tree.isReticulatedEdge(e)) {
+		if (tree.isReticulateEdge(e)) {
 			throw new RuntimeException("illegal to method on special edge");
 		}
         List taxonSets = (List) edge2TaxonSets.get(e);

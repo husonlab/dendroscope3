@@ -229,7 +229,7 @@ public class LevelKNetwork {
             for (Edge e = network.getFirstEdge(); e != null; e = e.getNext()) {
                 if (e.getTarget().getInDegree() > 1) {
                     network.setWeight(e, 0);
-					network.setReticulated(e, true);
+					network.setReticulate(e, true);
                 }
             }
             System.err.println("Network: " + network + ";");

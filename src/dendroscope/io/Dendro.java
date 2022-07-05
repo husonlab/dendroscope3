@@ -272,8 +272,8 @@ public class Dendro extends IOBase implements IOFormat {
         } else {
             w.write("{TREE '" + tree.getName() + "'\n");
 
-            tree.write(w, true, false, nodeId2Number, edgeId2Number);
-            w.write(";\n");
+            tree.write(w, PhyloTree.NewickOutputFormat.weighted(), nodeId2Number, edgeId2Number);
+			w.write(";\n");
             w.write("}\n");
         }
 
@@ -412,8 +412,8 @@ public class Dendro extends IOBase implements IOFormat {
             edgeId2Number.put(e.getId(), ++count);
             w.write("" + count + ":" + nodeId2Number.get(e.getSource().getId()) + " " +
                     nodeId2Number.get(e.getTarget().getId()) + " " + tree.getWeight(e));
-            if (tree.isReticulatedEdge(e))
-                w.write(" s");
+			if (tree.isReticulateEdge(e))
+				w.write(" s");
             w.write("\n");
         }
         w.write("edge.labels\n");
@@ -478,8 +478,8 @@ public class Dendro extends IOBase implements IOFormat {
             tree.setWeight(e, np.getDouble());
             num2edge.put(eid, e);
             if (np.peekMatchIgnoreCase("s")) {
-                np.matchIgnoreCase("s");
-                tree.setReticulated(e, true);
+				np.matchIgnoreCase("s");
+				tree.setReticulate(e, true);
             }
         }
 

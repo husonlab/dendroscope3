@@ -96,7 +96,7 @@ public class ClusterNetwork {
         // computeConfidenceOnReticulate(tree);
 
         for (var e : tree.edges()) {
-            if (ProgramProperties.get("scaleconfidence", false) && tree.isReticulatedEdge(e)) {
+            if (ProgramProperties.get("scaleconfidence", false) && tree.isReticulateEdge(e)) {
                 tree.setWeight(e, tree.getConfidence(e));
             }
         }
@@ -278,7 +278,7 @@ public class ClusterNetwork {
                     var u = e.getSource();
                     var f = tree.newEdge(u, w);
                     tree.setWeight(f, 0); // special edges have zero weight
-                    tree.setReticulated(f, true);
+                    tree.setReticulate(f, true);
                     toDelete.add(e);
                 }
                 var f = tree.newEdge(w, v);
@@ -325,8 +325,6 @@ public class ClusterNetwork {
             tree.deleteNode(tree.getRoot());
             tree.setRoot(root);
         }
-
-
     }
 
     /**
@@ -390,7 +388,7 @@ public class ClusterNetwork {
         var confidence = 0.0;
         var count = 0;
         for (var e : v.outEdges()) {
-            if (!tree.isReticulatedEdge(e)) {
+            if (!tree.isReticulateEdge(e)) {
                 confidence += tree.getConfidence(e);
                 count++;
             }
@@ -413,7 +411,7 @@ public class ClusterNetwork {
         var sum = 0.0;
         var count = 0;
         for (var e : edges) {
-            if (!tree.isReticulatedEdge(e)) {
+            if (!tree.isReticulateEdge(e)) {
                 sum += tree.getConfidence(e);
                 count++;
             }

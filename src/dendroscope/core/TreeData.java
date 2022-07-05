@@ -221,7 +221,7 @@ public class TreeData extends PhyloTree {
             }
             for (Edge e = srcTree.getFirstEdge(); e != null; e = e.getNext()) {
                 Edge f = oldEdge2NewEdge.get(e);
-                if (!srcTree.isReticulatedEdge(e))
+                if (!srcTree.isReticulateEdge(e))
                     viewer.setLabel(f, srcTree.getLabel(e));
                 else
                     viewer.setLabelColor(f, null);

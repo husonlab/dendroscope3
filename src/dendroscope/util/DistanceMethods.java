@@ -220,7 +220,7 @@ public class DistanceMethods {
         initPathTable(t.getRoot(), new HashSet<Edge>(), t);
 
         for (var e : t.edges()) {
-            if (!t.isReticulatedEdge(e) && e.getTarget().getOutDegree() != 0) {
+            if (!t.isReticulateEdge(e) && e.getTarget().getOutDegree() != 0) {
 				Vector<String> setA = new Vector<String>();
 				Vector<String> setB = new Vector<String>();
 				Vector<String> setC = (Vector<String>) taxa.clone();
@@ -280,7 +280,7 @@ public class DistanceMethods {
         if (v.getOutDegree() != 0) {
             for (Edge e : v.outEdges()) {
                 HashSet<Edge> pathCopy = (HashSet<Edge>) path.clone();
-				if (!t.isReticulatedEdge(e) && e.getTarget().getOutDegree() != 0)
+				if (!t.isReticulateEdge(e) && e.getTarget().getOutDegree() != 0)
 					pathCopy.add(e);
                 initPathTable(e.getTarget(), pathCopy, t);
             }
@@ -391,7 +391,7 @@ public class DistanceMethods {
                 }
 
                 if (treeEdge != null) {
-					tCopy.setReticulated(treeEdge, false);
+					tCopy.setReticulate(treeEdge, false);
 					tCopy.setWeight(treeEdge, 1.0);
                 }
                 int newID = id + 1;
@@ -549,7 +549,7 @@ public class DistanceMethods {
                 Node cCopy = nodeToCopy.get(c);
                 subnet.newEdge(vCopy, cCopy);
                 for (Edge e : cCopy.inEdges()) {
-					subnet.setReticulated(e, true);
+					subnet.setReticulate(e, true);
 					subnet.setWeight(e, 0.0);
                 }
             } else {

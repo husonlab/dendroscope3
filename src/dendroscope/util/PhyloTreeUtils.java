@@ -66,7 +66,7 @@ public class PhyloTreeUtils {
         }
         for (Edge e : newTree.edges()) {
             if (e.getTarget().getInDegree() > 1)
-                newTree.setReticulated(e, true);
+                newTree.setReticulate(e, true);
         }
         return newTree;
     }
@@ -111,7 +111,7 @@ public class PhyloTreeUtils {
         }
         for (var e : newTree.edges()) {
             if (e.getTarget().getInDegree() > 1)
-                newTree.setReticulated(e, true);
+				newTree.setReticulate(e, true);
         }
         return newTree;
 
@@ -323,40 +323,40 @@ public class PhyloTreeUtils {
             Node wNew = null;
             var isVisited = false;
 
-            if (oldTree.isReticulatedEdge(eOld)) {
-                isVisited = visited.contains(wOld);
-                if (isVisited) {
-                    for (var temp : visitedNew) {
-                        if (newTree.getInfo(temp).equals(wOld.getId()))
-                            wNew = temp;
-                    }
-                } else {
-                    wNew = newTree.newNode();
-                    visited.add(wOld);
-                    if (oldTree.getInfo(wOld) == null) {
+			if (oldTree.isReticulateEdge(eOld)) {
+				isVisited = visited.contains(wOld);
+				if (isVisited) {
+					for (var temp : visitedNew) {
+						if (newTree.getInfo(temp).equals(wOld.getId()))
+							wNew = temp;
+					}
+				} else {
+					wNew = newTree.newNode();
+					visited.add(wOld);
+					if (oldTree.getInfo(wOld) == null) {
                         newTree.setInfo(wNew, wOld.getId());
                         oldTree.setInfo(wOld, wOld.getId());
-                    } else {
-                        newTree.setInfo(wNew, oldTree.getInfo(wOld));
-                    }
-                    visitedNew.add(wNew);
-                }
-            } else {
-                wNew = newTree.newNode();
-            }
+					} else {
+						newTree.setInfo(wNew, oldTree.getInfo(wOld));
+					}
+					visitedNew.add(wNew);
+				}
+			} else {
+				wNew = newTree.newNode();
+			}
 
-            var eNew = newTree.newEdge(vNew, wNew);
-            if (oldTree.isReticulatedEdge(eOld)) {
-                newTree.setReticulated(eNew, true);
-                newTree.setWeight(eNew, 0);
-            }
+			var eNew = newTree.newEdge(vNew, wNew);
+			if (oldTree.isReticulateEdge(eOld)) {
+				newTree.setReticulate(eNew, true);
+				newTree.setWeight(eNew, 0);
+			}
 
-            newTree.setLabel(eNew, oldTree.getLabel(eOld));
-            newTree.setInfo(eNew, oldTree.getInfo(eOld));
+			newTree.setLabel(eNew, oldTree.getLabel(eOld));
+			newTree.setInfo(eNew, oldTree.getInfo(eOld));
 
-            if (!isVisited)
-                getSubnetworkRec(oldTree, newTree, wOld, wNew, visited, visitedNew);
-        }
+			if (!isVisited)
+				getSubnetworkRec(oldTree, newTree, wOld, wNew, visited, visitedNew);
+		}
     }
 
     /**

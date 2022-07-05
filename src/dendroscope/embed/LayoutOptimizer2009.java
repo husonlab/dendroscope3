@@ -55,7 +55,7 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
             for (Node v = tree.getFirstNode(); v != null; v = tree.getNextNode(v)) {
                 List<Node> children = new LinkedList<Node>();
                 for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
-					if (!tree.isReticulatedEdge(e) || tree.getWeight(e) > 0) {
+					if (!tree.isReticulateEdge(e) || tree.getWeight(e) > 0) {
 						children.add(e.getTarget());
 						retNode2GuideParent.put(e.getTarget(), e.getSource());
 					}
@@ -74,7 +74,7 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
 		var node2SpecialTarget = new NodeArray<BitSet>(tree);
 		int num = 0;
 		for (var e : tree.edges()) {
-			if (tree.isReticulatedEdge(e) && tree.getWeight(e) <= 0) {
+			if (tree.isReticulateEdge(e) && tree.getWeight(e) <= 0) {
 				num++;
 				var sources = node2SpecialSource.get(e.getSource());
 				if (sources == null) {
@@ -385,7 +385,7 @@ public class LayoutOptimizer2009 implements ILayoutOptimizer {
      */
     public static boolean isTransferNetwork(PhyloTree tree) {
 		var isTransferNetwork = false;
-		for (Edge e : tree.reticulatedEdges()) {
+		for (Edge e : tree.reticulateEdges()) {
 			if (tree.getWeight(e) != 0) {
 				isTransferNetwork = true;
 				break;

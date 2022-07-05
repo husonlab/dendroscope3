@@ -88,7 +88,7 @@ public class ExactNetFromMultree {
                     Node u = t.newNode();
                     t.deleteEdge(toDel);
                     Edge reticulation1 = t.newEdge(source, u);
-                    t.setReticulated(reticulation1, true);
+                    t.setReticulate(reticulation1, true);
 					t.setWeight(reticulation1, 0);
 
                     t.newEdge(u, t_max);
@@ -98,7 +98,7 @@ public class ExactNetFromMultree {
                         t.deleteSubtree(w);
                         Edge reticulation2;
 						reticulation2 = t.newEdge(w_father, u);
-						t.setReticulated(reticulation2, true);
+						t.setReticulate(reticulation2, true);
 						t.setWeight(reticulation2, 0);
                     }
                     //finally remove T(t_max) and the associated iosomorphs from the heightlist.

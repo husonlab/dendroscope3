@@ -1047,7 +1047,7 @@ public class TreeDrawerBase {
         while (stack.size() > 0) {
             Node v = stack.pop();
             for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
-                if (!tree.isReticulatedEdge(f))
+                if (!tree.isReticulateEdge(f))
                     length = Math.max(length, tree.getWeight(f));
                 if (tree.okToDescendDownThisEdgeInTraversal(f, v)) {
                     stack.push(f.getTarget());

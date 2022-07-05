@@ -143,7 +143,7 @@ public class CassAlgorithm {
         }
 
         for (Edge e = tree.getFirstEdge(); e != null; e = tree.getNextEdge(e)) {
-            tree.setReticulated(e, e.getTarget().getInDegree() > 1);
+            tree.setReticulate(e, e.getTarget().getInDegree() > 1);
         }
         return tree;
     }

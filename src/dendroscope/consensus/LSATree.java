@@ -133,9 +133,9 @@ public class LSATree implements IConsensusTreeMethod {
         // make sure special attribute is set correctly:
         for (Edge e = tree.getFirstEdge(); e != null; e = e.getNext()) {
             boolean shouldBe = e.getTarget().getInDegree() > 1;
-            if (shouldBe != tree.isReticulatedEdge(e)) {
+            if (shouldBe != tree.isReticulateEdge(e)) {
 				System.err.println("WARNING: bad special state, fixing (to: " + shouldBe + ") for e=" + e);
-				tree.setReticulated(e, shouldBe);
+				tree.setReticulate(e, shouldBe);
 			}
         }
         // making sure leaves have labels:
@@ -220,9 +220,9 @@ public class LSATree implements IConsensusTreeMethod {
         // make sure special attribute is set correctly:
         for (Edge e = tree.getFirstEdge(); e != null; e = e.getNext()) {
             boolean shouldBe = e.getTarget().getInDegree() > 1;
-			if (shouldBe != tree.isReticulatedEdge(e)) {
+			if (shouldBe != tree.isReticulateEdge(e)) {
 				System.err.println("WARNING: bad special state, fixing (to: " + shouldBe + ") for e=" + e);
-				tree.setReticulated(e, shouldBe);
+				tree.setReticulate(e, shouldBe);
 			}
         }
         // making sure leaves have labels:
@@ -264,7 +264,7 @@ public class LSATree implements IConsensusTreeMethod {
 			lsaTree.computeReticulation2LSA(tree, reticulation2LSA);
 
 			for (Node v : tree.nodes()) {
-				var children = v.outEdgesStream(false).filter(e -> !tree.isReticulatedEdge(e))
+				var children = v.outEdgesStream(false).filter(e -> !tree.isReticulateEdge(e))
 						.map(Edge::getTarget).collect(Collectors.toList());
 				tree.getLSAChildrenMap().put(v, children);
 			}
@@ -470,7 +470,7 @@ public class LSATree implements IConsensusTreeMethod {
                 for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
                     Node w = f.getTarget();
                     length += node2Dist.getDouble(w);
-					if (!tree.isReticulatedEdge(f))
+					if (!tree.isReticulateEdge(f))
 						length += tree.getWeight(f);
                 }
                 if (v.getOutDegree() > 0)

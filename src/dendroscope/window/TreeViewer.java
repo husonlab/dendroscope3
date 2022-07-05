@@ -128,8 +128,8 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
                 if (v.getInDegree() >= 2) // if node now has two in-edges, make both special
                 {
                     for (Edge f = v.getFirstInEdge(); f != null; f = v.getNextInEdge(f)) {
-                        getPhyloTree().setReticulated(f, true);
-                        setColor(f, Color.BLUE);
+                        getPhyloTree().setReticulate(f, true);
+						setColor(f, Color.BLUE);
                         getPhyloTree().setWeight(f, 0);
                     }
                 }
@@ -144,8 +144,8 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
                 if (v.getInDegree() <= 2) // if node has two or less in-edges before deleting one, make not-special
                 {
                     for (Edge f = v.getFirstInEdge(); f != null; f = v.getNextInEdge(f)) {
-                        getPhyloTree().setReticulated(f, false);
-                        getPhyloTree().setWeight(f, 1);
+						getPhyloTree().setReticulate(f, false);
+						getPhyloTree().setWeight(f, 1);
                         setColor(f, Color.BLACK);
                     }
                 }
@@ -322,15 +322,15 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
 
 		if (!collapsedNodes.contains(v)) {
 			for (Edge f : v.outEdges()) {
-                if (useSpecialEdges || !select || !getPhyloTree().isReticulatedEdge(f) || getPhyloTree().getWeight(f) > 0) {
-                    if (select && !getSelected(f))
-                        selectedEdges.add(f);
-                    var w = f.getTarget();
-                    if (!select && !getSelected(w) && (getSelected(f) || selectedEdges.contains(f))) {
-                        selectedNodes.add(w);
-                    }
-                    selectSubTreeRec(w, seeds, select, useSpecialEdges, selectedNodes, selectedEdges);
-                }
+				if (useSpecialEdges || !select || !getPhyloTree().isReticulateEdge(f) || getPhyloTree().getWeight(f) > 0) {
+					if (select && !getSelected(f))
+						selectedEdges.add(f);
+					var w = f.getTarget();
+					if (!select && !getSelected(w) && (getSelected(f) || selectedEdges.contains(f))) {
+						selectedNodes.add(w);
+					}
+					selectSubTreeRec(w, seeds, select, useSpecialEdges, selectedNodes, selectedEdges);
+				}
 			}
         }
 	}
@@ -347,15 +347,15 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
 
         if (!collapsedNodes.contains(v)) {
 			for (Edge f : v.outEdges()) {
-                if (useSpecialEdges || !select || !getPhyloTree().isReticulatedEdge(f) || getPhyloTree().getWeight(f) > 0) {
-                    if (select)
-                        selectedEdges.add(f);
-                    Node w = f.getTarget();
-                    if (!select && getSelected(f)) {
-                        selectedNodes.add(w);
-                    }
-                    selectSubTreeRec(w, select, useSpecialEdges);
-                }
+				if (useSpecialEdges || !select || !getPhyloTree().isReticulateEdge(f) || getPhyloTree().getWeight(f) > 0) {
+					if (select)
+						selectedEdges.add(f);
+					Node w = f.getTarget();
+					if (!select && getSelected(f)) {
+						selectedNodes.add(w);
+					}
+					selectSubTreeRec(w, select, useSpecialEdges);
+				}
 			}
         }
         fireDoSelect(selectedNodes);
@@ -396,11 +396,11 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
                 Node v = stack.pop();
                 if (!getCollapsedNodes().contains(v)) {
                     for (Edge f = v.getFirstOutEdge(); f != null; f = v.getNextOutEdge(f)) {
-                        if (getPhyloTree().isReticulatedEdge(f) && getPhyloTree().getWeight(f) <= 0)
-                            setSelected(f, select);
-                        if (getPhyloTree().okToDescendDownThisEdgeInTraversal(f, v)) {
-                            stack.push(f.getTarget());
-                        }
+						if (getPhyloTree().isReticulateEdge(f) && getPhyloTree().getWeight(f) <= 0)
+							setSelected(f, select);
+						if (getPhyloTree().okToDescendDownThisEdgeInTraversal(f, v)) {
+							stack.push(f.getTarget());
+						}
                     }
                 }
             }
@@ -898,20 +898,20 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
     public void resetViewSpecialEdges() {
         PhyloTree tree = getPhyloTree();
         for (Edge e = tree.getFirstEdge(); e != null; e = e.getNext()) {
-            if (tree.isReticulatedEdge(e) && tree.getWeight(e) <= 0 && getColor(e) == GraphView.defaultEdgeView.getColor()) {
-                setColor(e, Color.BLUE);
-            }
-            if (tree.isReticulatedEdge(e) && tree.getWeight(e) == -1) {
-                setDirection(e, EdgeView.DIRECTED);
-            }
-            if (tree.getNumberReticulateEdges() > 0 && ProgramProperties.get("scaleconfidence", false)) {
-                //System.err.println("scaleconfidence e="+e+" weight: "+tree.getWeight(e));
-                int width = tree.isReticulatedEdge(e) ? ((int) (10 * tree.getWeight(e))) : 10;
-                setLineWidth(e, width);
-                int value = (int) (255 - 25.5 * width);
-                Color color = new Color(value, value, value);
-                setColor(e, color);
-            }
+			if (tree.isReticulateEdge(e) && tree.getWeight(e) <= 0 && getColor(e) == GraphView.defaultEdgeView.getColor()) {
+				setColor(e, Color.BLUE);
+			}
+			if (tree.isReticulateEdge(e) && tree.getWeight(e) == -1) {
+				setDirection(e, EdgeView.DIRECTED);
+			}
+			if (tree.getNumberReticulateEdges() > 0 && ProgramProperties.get("scaleconfidence", false)) {
+				//System.err.println("scaleconfidence e="+e+" weight: "+tree.getWeight(e));
+				int width = tree.isReticulateEdge(e) ? ((int) (10 * tree.getWeight(e))) : 10;
+				setLineWidth(e, width);
+				int value = (int) (255 - 25.5 * width);
+				Color color = new Color(value, value, value);
+				setColor(e, color);
+			}
             // treeView.setDirection(e,EdgeView.DIRECTED);
         }
 
@@ -1232,7 +1232,7 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
 
 			for (Node v : getSelectedNodes()) {
 				for (Edge e = v.getFirstAdjacentEdge(); e != null; e = v.getNextAdjacentEdge(e)) {
-					if (!tree.isReticulatedEdge(e) && (!getSelected(e) || !getSelected(e.getOpposite(v))))
+					if (!tree.isReticulateEdge(e) && (!getSelected(e) || !getSelected(e.getOpposite(v))))
 						return false;
 				}
 			}
@@ -1258,7 +1258,7 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
         if (isUnlockEdgeLengths())
             return true;
         else return getSelectedEdges().size() == 1 &&
-                    (super.isAllowMoveInternalEdgePoints() || getPhyloTree().isReticulatedEdge(getSelectedEdges().getFirstElement()));
+					(super.isAllowMoveInternalEdgePoints() || getPhyloTree().isReticulateEdge(getSelectedEdges().getFirstElement()));
     }
 
     public boolean isAllowInternalEdgePoints() {

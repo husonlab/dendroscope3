@@ -49,8 +49,8 @@ public class RerootingUtils {
             return false; // no need to reroot
 
         if (tree.getNumberReticulateEdges() > 0) {
-            if (tree.isReticulatedEdge(e))
-                return false; // can't root in special edge
+            if (tree.isReticulateEdge(e))
+				return false; // can't root in special edge
             // todo: bugs need fixing
             if (JOptionPane.showConfirmDialog(MultiViewer.getLastActiveFrame(), "Rerooting networks has major bugs, try anyway?", "Warning", JOptionPane.YES_NO_CANCEL_OPTION)
                 != JOptionPane.YES_OPTION)
@@ -116,8 +116,8 @@ public class RerootingUtils {
         if (tree.getNumberReticulateEdges() > 0) {
             // v is source of a special edge, can't use it as root
             for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e))
-                if (tree.isReticulatedEdge(e))
-                    return false;
+				if (tree.isReticulateEdge(e))
+					return false;
 
             // todo: bugs need fixing
             if (JOptionPane.showConfirmDialog(MultiViewer.getLastActiveFrame(), "Rerooting networks has major bugs, try anyway?", "Warning", JOptionPane.YES_NO_CANCEL_OPTION)

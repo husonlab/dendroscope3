@@ -336,8 +336,8 @@ public class EmbedderForOrderPrescribedNetwork {
 
         if (targetNodes == null) {
             for (Edge e = v.getFirstOutEdge(); e != null; e = v.getNextOutEdge(e)) {
-                if (!tree.isReticulatedEdge(e))
-                    list.add(e.getTarget());
+                if (!tree.isReticulateEdge(e))
+					list.add(e.getTarget());
             }
         } else {
             list.addAll(targetNodes);
