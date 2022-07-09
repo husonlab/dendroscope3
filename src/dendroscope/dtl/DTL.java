@@ -60,10 +60,10 @@ public class DTL {
 
             FileInputStream fstreamS = new FileInputStream(sTreePath);
             InputStreamReader inS = new InputStreamReader(fstreamS);
-            STree.read(inS, true);
+            STree.read(inS);
             FileInputStream fstreamG = new FileInputStream(gTreePath);
             InputStreamReader inG = new InputStreamReader(fstreamG);
-            GTree.read(inG, true);
+			GTree.read(inG);
         } catch (Exception e) {
 			Basic.caught(e);
 			System.out.print("Wrong path? File read error");

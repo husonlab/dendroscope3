@@ -170,8 +170,7 @@ public class NexusTrees {
             np.matchIgnoreCase("=");
             np.pushPunctuationCharacters(NexusStreamTokenizer.SEMICOLON_PUNCTUATION);
             try {
-                String tmp = np.getWordRespectCase();
-                TreeData tree = new TreeData(PhyloTree.valueOf(tmp, true));
+                TreeData tree = new TreeData(PhyloTree.valueOf(np.getWordRespectCase()));
                 addTree(name, tree);
             } catch (Exception ex) {
                 Basic.caught(ex);

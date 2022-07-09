@@ -27,8 +27,8 @@ import jloda.util.parse.NexusStreamParser;
 import jloda.util.parse.NexusStreamTokenizer;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -76,7 +76,7 @@ public class Nexus extends IOBase implements IOFormat {
      * @return trees
 	 */
     public TreeData[] read(Reader r0) throws IOException {
-        final List treesList = new LinkedList(); // list of phylotrees
+        final var treesList = new ArrayList<TreeData>(); // list of phylotrees
         TreeData[] trees;
 
         try (BufferedReader r = new BufferedReader(r0)) {
@@ -94,11 +94,11 @@ public class Nexus extends IOBase implements IOFormat {
 
                 System.err.print("Skipping  NEXUS block '" + name + "': ");
                 while (true) {
-                    while (np.peekMatchAnyTokenIgnoreCase("end endblock") == false) {
+                    while (!np.peekMatchAnyTokenIgnoreCase("end endblock")) {
                         np.nextToken();
                         if (np.ttype == NexusStreamTokenizer.TT_EOF)
                             throw new IOException("line " + np.lineno() +
-                                    ": Unexpected EOF while skipping block");
+                                                  ": Unexpected EOF while skipping block");
                     }
                     np.matchAnyTokenIgnoreCase("end endblock");
                     if (np.peekMatchRespectCase(";")) {
@@ -158,7 +158,7 @@ public class Nexus extends IOBase implements IOFormat {
                 name = name.replaceAll("[ \t\b]+", "_");
                 name = name.replaceAll("[:;,]+", ".");
                 name = name.replaceAll("\\[", "(");
-                name = name.replaceAll("\\]", ")");
+                name = name.replaceAll("]", ")");
                 if (name.length() == 0 || name.equals("tree"))
                     name = createNewTreeName();
 
@@ -167,7 +167,7 @@ public class Nexus extends IOBase implements IOFormat {
                 while (!np.peekMatchIgnoreCase(";"))
                     buf.append(np.getWordRespectCase());
                 np.matchIgnoreCase(";");
-                TreeData tree = new TreeData(PhyloTree.valueOf(buf.toString(), true));
+                TreeData tree = new TreeData(PhyloTree.valueOf(buf.toString()));
                 addTree(name, tree, treesList);
 
                 /*
@@ -187,7 +187,7 @@ public class Nexus extends IOBase implements IOFormat {
                 */
             }
             np.matchEndBlock();
-            trees = (TreeData[]) treesList.toArray(new TreeData[0]);
+            trees = treesList.toArray(new TreeData[0]);
         }
         return trees;
     }

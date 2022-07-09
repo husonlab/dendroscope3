@@ -41,7 +41,7 @@ public class SConverter {
             try {
                 FileInputStream fstreamS = new FileInputStream(path[i]);
                 InputStreamReader inS = new InputStreamReader(fstreamS);
-                STree.read(inS, true);
+                STree.read(inS);
 
             } catch (Exception ignored) {
 

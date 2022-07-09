@@ -47,7 +47,7 @@ public class Dendroscope {
     public static void main(String[] args) throws Exception {
         ResourceManager.getClassLoadersAndRoots().add(new Pair<>(Dendroscope.class, "dendroscope.resources"));
 
-        PhyloTree.setWarnMultiLabeled(false);
+        PhyloTree.WARN_HAS_MULTILABELS = false;
         About.setVersionStringOffset(20, 20);
         About.setAbout("Dendroscope3-splash.png", Version.SHORT_DESCRIPTION, JDialog.DISPOSE_ON_CLOSE);
 

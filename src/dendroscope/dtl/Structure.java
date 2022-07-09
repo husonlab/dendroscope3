@@ -86,7 +86,7 @@ public class Structure {
         StringReader sT = new StringReader(this.speciesTree.toBracketString());
         try {
             this.subdivision = new PhyloTree();
-            this.subdivision.read(sT, true);
+            this.subdivision.read(sT);
         } catch (Exception e) {
             System.out.println("read problem");
             e.printStackTrace();
