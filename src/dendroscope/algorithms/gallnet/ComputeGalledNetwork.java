@@ -107,17 +107,9 @@ public class ComputeGalledNetwork {
 
         IntegerVariable additionalTaxonId = new IntegerVariable(taxa.size() + 1);
 
-        if (progressListener instanceof ProgressDialog) {
-            ((ProgressDialog) progressListener).setCancelButtonText("Skip");
-        }
-
         Cluster[] result = applyToPartition(progressListener, clusters, additionalEdges, taxa.maxId(), additionalTaxonId);
 
-        if (progressListener instanceof ProgressDialog) {
-            ((ProgressDialog) progressListener).resetCancelButtonText();
-        }
-
-        NodeDoubleArray node2weight = new NodeDoubleArray(tree);
+         NodeDoubleArray node2weight = new NodeDoubleArray(tree);
         NodeDoubleArray node2confidence = new NodeDoubleArray(tree);
 
         if (DEBUG)

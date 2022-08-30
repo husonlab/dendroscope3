@@ -264,18 +264,18 @@ public class Dendro extends IOBase implements IOFormat {
      *
 	 */
     private void write(BufferedWriter w, TreeData tree) throws IOException {
-        Map<Integer, Integer> nodeId2Number = new HashMap<Integer, Integer>();
-        Map<Integer, Integer> edgeId2Number = new HashMap<Integer, Integer>();
+		var nodeId2Number = new HashMap<Integer, Integer>();
+		var edgeId2Number = new HashMap<Integer, Integer>();
 
-        if (tree.getNumberReticulateEdges() > 0) {
-            write(tree, w, nodeId2Number, edgeId2Number); // write as nework
-        } else {
-            w.write("{TREE '" + tree.getName() + "'\n");
+		if (tree.getNumberReticulateEdges() > 0) {
+			write(tree, w, nodeId2Number, edgeId2Number); // write as network
+		} else {
+			w.write("{TREE '" + tree.getName() + "'\n");
 
-            tree.write(w, PhyloTree.NewickOutputFormat.weighted(), nodeId2Number, edgeId2Number);
+			tree.write(w, new PhyloTree.NewickOutputFormat(true, true, false, false, false), nodeId2Number, edgeId2Number);
 			w.write(";\n");
-            w.write("}\n");
-        }
+			w.write("}\n");
+		}
 
         if (tree.getNumberReticulateEdges() > 0 && !tree.getLSAChildrenMap().isEmpty()) {
             w.write("{LSA\n");
