@@ -82,8 +82,7 @@ public class IncreaseFontCommand extends CommandBase implements ICommand {
 
     /**
      * parses the given command and executes it
-     *
-	 */
+     */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("set fontsize=");
@@ -93,9 +92,9 @@ public class IncreaseFontCommand extends CommandBase implements ICommand {
         int newSize = 0;
         boolean increase = false;
         boolean decrease = false;
-		if (NumberUtils.isInteger(input) && Integer.parseInt(input) >= 0)
-			newSize = Integer.parseInt(input);
-		else if (input.equalsIgnoreCase("increase"))
+        if (NumberUtils.isInteger(input) && Integer.parseInt(input) >= 0)
+            newSize = Integer.parseInt(input);
+        else if (input.equalsIgnoreCase("increase"))
 			increase = true;
 		else if (input.equalsIgnoreCase("decrease"))
 			decrease = true;
@@ -146,7 +145,7 @@ public class IncreaseFontCommand extends CommandBase implements ICommand {
                     if (size != font.getSize()) {
                         font = new Font(font.getFamily(), font.getStyle(), size);
                         viewer.setFont(v, font);
-                        ProgramProperties.put(ProgramProperties.DEFAULT_FONT, font.getFamily(), font.getStyle(), size > 0 ? size : 6);
+                        jloda.swing.util.ProgramProperties.put(ProgramProperties.DEFAULT_FONT, font.getFamily(), font.getStyle(), size > 0 ? size : 6);
                         changed = true;
                     }
                 }
@@ -167,7 +166,7 @@ public class IncreaseFontCommand extends CommandBase implements ICommand {
                         if (size != font.getSize()) {
                             font = new Font(font.getFamily(), font.getStyle(), size);
                             viewer.setFont(e, font);
-                            ProgramProperties.put(ProgramProperties.DEFAULT_FONT, font.getFamily(), font.getStyle(), size > 0 ? size : 6);
+                            jloda.swing.util.ProgramProperties.put(ProgramProperties.DEFAULT_FONT, font.getFamily(), font.getStyle(), size > 0 ? size : 6);
                             changed = true;
                         }
                     }

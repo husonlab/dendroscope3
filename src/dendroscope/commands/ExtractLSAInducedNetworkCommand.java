@@ -80,8 +80,7 @@ public class ExtractLSAInducedNetworkCommand extends CommandBaseMultiViewer impl
 
     /**
      * parses the given command and executes it
-     *
-	 */
+     */
 
 
     public void apply(NexusStreamParser np) throws Exception {

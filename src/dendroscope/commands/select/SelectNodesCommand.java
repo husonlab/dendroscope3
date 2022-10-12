@@ -76,8 +76,7 @@ public class SelectNodesCommand extends CommandBase implements ICommand {
 
     /**
      * parses the given command and executes it
-     *
-	 */
+     */
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("select nodes=");
         boolean all = np.peekMatchIgnoreCase("all");

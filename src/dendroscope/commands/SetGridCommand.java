@@ -143,8 +143,7 @@ public class SetGridCommand extends CommandBaseMultiViewer implements ICommand {
 
     /**
      * parses the given command and executes it. Do not call this directly. This is called from the director in a separate thread
-     *
-	 */
+     */
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("set grid=");
 

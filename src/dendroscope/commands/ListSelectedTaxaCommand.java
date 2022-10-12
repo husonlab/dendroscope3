@@ -75,8 +75,7 @@ public class ListSelectedTaxaCommand extends CommandBase implements ICommand {
 
     /**
      * parses the given command and executes it
-     *
-	 */
+     */
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("list taxa=selected;");
         executeImmediately("show messageWindow;");

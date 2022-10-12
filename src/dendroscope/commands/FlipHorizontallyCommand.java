@@ -85,8 +85,7 @@ public class FlipHorizontallyCommand extends CommandBase implements ICheckBoxCom
 
     /**
      * parses the given command and executes it
-     *
-	 */
+     */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("set hflip=");

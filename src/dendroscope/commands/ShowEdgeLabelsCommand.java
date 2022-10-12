@@ -95,8 +95,7 @@ public class ShowEdgeLabelsCommand extends CommandBaseMultiViewer implements ICh
 
     /**
      * parses the given command and executes it
-     *
-	 */
+     */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("show edgelabels=");

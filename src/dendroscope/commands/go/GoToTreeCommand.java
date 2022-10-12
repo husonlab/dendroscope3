@@ -74,8 +74,7 @@ public class GoToTreeCommand extends CommandBaseMultiViewer implements ICommand 
 
     /**
      * parses the given command and executes it
-     *
-	 */
+     */
 
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("go tree=");

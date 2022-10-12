@@ -91,8 +91,7 @@ public class LadderizeLeftCommand extends CommandBaseMultiViewer implements ICom
 
     /**
      * parses the given command and executes it
-     *
-	 */
+     */
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("ladderize=");
         String ladderize = np.getWordMatchesIgnoringCase("left right random none");

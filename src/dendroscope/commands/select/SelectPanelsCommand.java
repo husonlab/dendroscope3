@@ -20,7 +20,7 @@ package dendroscope.commands.select;
 
 import dendroscope.commands.CommandBaseMultiViewer;
 import jloda.swing.commands.ICommand;
-import jloda.util.ProgramProperties;
+import jloda.swing.util.ProgramProperties;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;
@@ -70,8 +70,7 @@ public class SelectPanelsCommand extends CommandBaseMultiViewer implements IComm
 
     /**
      * parses the given command and executes it
-     *
-	 */
+     */
 
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("select panels");

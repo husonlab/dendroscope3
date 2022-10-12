@@ -80,8 +80,7 @@ public class ContractEdgeBySupportValueCommand extends CommandBase implements IC
 
     /**
      * parses the given command and executes it
-     *
-	 */
+     */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("contractEdges minSupport=");

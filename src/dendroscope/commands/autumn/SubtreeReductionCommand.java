@@ -41,20 +41,19 @@ import java.util.Set;
  */
 public class SubtreeReductionCommand extends CommandBaseMultiViewer implements ICommand {
     /**
-     * parses the given command and executes it
-     *
+	 * parses the given command and executes it
 	 */
-    @Override
-    public void apply(NexusStreamParser np) throws Exception {
-        np.matchIgnoreCase(getSyntax());
+	@Override
+	public void apply(NexusStreamParser np) throws Exception {
+		np.matchIgnoreCase(getSyntax());
 
 		Iterator<TreeViewer> it = multiViewer.getTreeGrid().getSelectedOrAllIterator();
 		TreeViewer viewer1 = it.next();
 		Set<String> selectedLabels = new HashSet<>(viewer1.getSelectedNodeLabels());
 		TreeData tree1 = getDir().getDocument().getTree(multiViewer.getTreeGrid().getNumberOfViewerInDocument(viewer1));
-        TreeViewer viewer2 = it.next();
-        selectedLabels.addAll(viewer2.getSelectedNodeLabels());
-        TreeData tree2 = getDir().getDocument().getTree(multiViewer.getTreeGrid().getNumberOfViewerInDocument(viewer2));
+		TreeViewer viewer2 = it.next();
+		selectedLabels.addAll(viewer2.getSelectedNodeLabels());
+		TreeData tree2 = getDir().getDocument().getTree(multiViewer.getTreeGrid().getNumberOfViewerInDocument(viewer2));
 
         TreeData[] newTrees = SubtreeReduction.apply(tree1, tree2, selectedLabels, true);
 

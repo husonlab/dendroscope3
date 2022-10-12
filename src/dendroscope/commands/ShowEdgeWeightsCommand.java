@@ -74,8 +74,7 @@ public class ShowEdgeWeightsCommand extends CommandBaseMultiViewer implements IC
 
     /**
      * parses the given command and executes it
-     *
-	 */
+     */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("show edgeweights=");

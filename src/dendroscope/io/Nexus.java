@@ -80,7 +80,7 @@ public class Nexus extends IOBase implements IOFormat {
         TreeData[] trees;
 
         try (BufferedReader r = new BufferedReader(r0)) {
-            NexusStreamParser np = new NexusStreamParser(r);
+             NexusStreamParser np = new NexusStreamParser(r);
 
             np.matchIgnoreCase("#nexus");
 

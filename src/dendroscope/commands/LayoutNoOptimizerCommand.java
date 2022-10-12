@@ -39,8 +39,7 @@ public class LayoutNoOptimizerCommand extends CommandBaseMultiViewer implements 
 
     /**
      * parses the given command and executes it
-     *
-	 */
+     */
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("set layouter=");
         String embedder = np.getWordMatchesIgnoringCase(LayoutOptimizerManager.getEmbedderNames());
@@ -49,8 +48,8 @@ public class LayoutNoOptimizerCommand extends CommandBaseMultiViewer implements 
         for (Iterator<TreeViewer> it = multiViewer.getTreeGrid().getSelectedOrAllIterator(); it.hasNext(); ) {
             TreeViewer treeViewer = it.next();
             treeViewer.setDirty(true);
-			treeViewer.getPhyloTree().getLSAChildrenMap().clear(); // this will force recomputation of embedding
-			LayoutOptimizerManager.apply(embedder, treeViewer.getPhyloTree());
+            treeViewer.getPhyloTree().getLSAChildrenMap().clear(); // this will force recomputation of embedding
+            LayoutOptimizerManager.apply(embedder, treeViewer.getPhyloTree());
         }
         multiViewer.getCommandManager().updateEnableState();
         multiViewer.setMustRecomputeEmbedding(true);

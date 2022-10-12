@@ -78,8 +78,7 @@ public class ContractEdgeCommand extends CommandBaseMultiViewer implements IComm
 
     /**
      * parses the given command and executes it
-     *
-	 */
+     */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase(getSyntax());
@@ -88,7 +87,7 @@ public class ContractEdgeCommand extends CommandBaseMultiViewer implements IComm
         for (Iterator<TreeViewer> it = ((MultiViewer) getViewer()).getTreeGrid().getSelectedEdgesIterator(); it.hasNext(); ) {
             final TreeViewer treeViewer = it.next();
 
-			final Set<Edge> edges = new HashSet<>(treeViewer.getSelectedEdges());
+            final Set<Edge> edges = new HashSet<>(treeViewer.getSelectedEdges());
 
             if (edges.size() > 0 && edges.size() < treeViewer.getGraph().getNumberOfEdges()) {
                 //   doc.getTree(multiViewer.getTreeGrid().getNumberOfViewerInDocument(treeViewer)).syncViewer2Data(treeViewer, treeViewer.isDirty());

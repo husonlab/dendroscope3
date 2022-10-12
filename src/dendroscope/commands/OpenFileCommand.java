@@ -127,8 +127,7 @@ public class OpenFileCommand extends CommandBaseMultiViewer implements ICommand 
 
     /**
      * parses the given command and executes it
-     *
-	 */
+     */
 
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("open file=");
@@ -158,7 +157,7 @@ public class OpenFileCommand extends CommandBaseMultiViewer implements ICommand 
                 if (internalLabel != null) {
                     final String[] choices = new String[]{"Interpret as node labels", "Interpret as edge labels (such as bootstrap values)", "Delete"};
                     final String choice = (String) JOptionPane.showInputDialog(getViewer().getFrame(), "Internal nodes have labels (example: '" + internalLabel + "'),\nhow should they be interpreted?",
-                            "How to interpret internal node numbers", JOptionPane.QUESTION_MESSAGE, ProgramProperties.getProgramIcon(), choices, choices[0]);
+                            "How to interpret internal node numbers", JOptionPane.QUESTION_MESSAGE, jloda.swing.util.ProgramProperties.getProgramIcon(), choices, choices[0]);
                     if (choice == null) {
 						System.err.println("USER CANCELED");
 						if (ProjectManager.getNumberOfProjects() > 1) {

@@ -70,8 +70,7 @@ public class RepositionLabelsCommand extends CommandBaseMultiViewer implements I
 
     /**
      * parses the given command and executes it
-     *
-	 */
+     */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("reset labelpositions;");

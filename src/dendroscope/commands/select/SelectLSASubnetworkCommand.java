@@ -75,8 +75,7 @@ public class SelectLSASubnetworkCommand extends CommandBaseMultiViewer implement
 
     /**
      * parses the given command and executes it
-     *
-	 */
+     */
 
 
     public void apply(NexusStreamParser np) throws Exception {

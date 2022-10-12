@@ -81,8 +81,7 @@ public class ExtractSubnetworkCommand extends CommandBaseMultiViewer implements 
 
     /**
      * parses the given command and executes it
-     *
-	 */
+     */
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase(getSyntax());
 

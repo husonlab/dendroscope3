@@ -127,8 +127,7 @@ public class AddFromFileCommand extends CommandBaseMultiViewer implements IComma
 
     /**
      * parses the given command and executes it
-     *
-	 */
+     */
 
     public void apply(NexusStreamParser np) throws Exception {
         List<File> files = new LinkedList<>();

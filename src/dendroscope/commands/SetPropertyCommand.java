@@ -70,8 +70,7 @@ public class SetPropertyCommand extends CommandBaseMultiViewer implements IComma
 
     /**
      * parses the given command and executes it
-     *
-	 */
+     */
     @Override
     public void apply(NexusStreamParser np) throws IOException {
         np.matchIgnoreCase("set prop");

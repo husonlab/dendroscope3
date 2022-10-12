@@ -142,7 +142,7 @@ public class MultiViewer implements IDirectableViewer, IViewerWithFindToolBar, I
         frame.getContentPane().add(statusBar, BorderLayout.SOUTH);
 
         // frame.getContentPane().add(new JScrollPane(treeGrid), BorderLayout.CENTER);
-        frame.setIconImages(ProgramProperties.getProgramIconImages());
+        frame.setIconImages(jloda.swing.util.ProgramProperties.getProgramIconImages());
 
         int[] geometry;
         JFrame lastActiveFrame = getLastActiveFrame();
@@ -228,9 +228,9 @@ public class MultiViewer implements IDirectableViewer, IViewerWithFindToolBar, I
      */
     private void setupMessageWindow() {
         if (MessageWindow.getInstance() == null) {
-            MessageWindow.setInstance(
-                    new MessageWindow(ProgramProperties.getProgramIcon(), "Messages - Dendroscope", getFrame(), false));
-            MessageWindow.getInstance().getTextArea().setFont(new Font("Monospaced", Font.PLAIN, 12));
+			MessageWindow.setInstance(
+					new MessageWindow(jloda.swing.util.ProgramProperties.getProgramIcon(), "Messages - Dendroscope", getFrame(), false));
+			MessageWindow.getInstance().getTextArea().setFont(new Font("Monospaced", Font.PLAIN, 12));
             MessageWindow.getInstance().getFrame().addWindowListener(new WindowAdapter() {
                 public void windowActivated(WindowEvent event) {
                     SearchManager searchManager = SearchManager.getInstance();

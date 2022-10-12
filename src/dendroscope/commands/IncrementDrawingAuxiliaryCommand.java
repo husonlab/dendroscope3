@@ -95,8 +95,7 @@ public class IncrementDrawingAuxiliaryCommand extends CommandBase implements ICo
 
     /**
      * parses the given command and executes it
-     *
-	 */
+     */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("auxiliaryparameter change=");

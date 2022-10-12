@@ -55,8 +55,8 @@ public class DendroscopeProperties {
      *
 	 */
     public static void initializeProperties(String propertiesFile) {
-        ProgramProperties.setProgramIcons(ResourceManager.getIcons("Dendroscope16.png", "Dendroscope32.png", "Dendroscope48.png", "Dendroscope128.png"));
-        ProgramProperties.setProgramVersion(Version.SHORT_DESCRIPTION);
+        jloda.swing.util.ProgramProperties.setProgramIcons(ResourceManager.getIcons("Dendroscope16.png", "Dendroscope32.png", "Dendroscope48.png", "Dendroscope128.png"));
+		ProgramProperties.setProgramVersion(Version.SHORT_DESCRIPTION);
         ProgramProperties.setProgramName(Version.NAME);
         ProgramProperties.setPropertiesFileName(propertiesFile);
 

@@ -73,8 +73,7 @@ public class ReplaceCommand extends CommandBaseMultiViewer implements ICommand {
 
     /**
      * parses the given command and executes it
-     *
-	 */
+     */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
         if (np.peekMatchIgnoreCase("replace searchtext")) {

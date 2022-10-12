@@ -69,13 +69,12 @@ public class AboutCommand extends CommandBase implements ICommand {
 
     /**
      * parses the given command and executes it
-     *
-	 */
+     */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("about;");
         System.out.println("Dendroscope 3 - by Daniel Huson\n" +
-                "with contributions from: Celine Scornavacca, Thomas Bonfert, Philippe Gambette and Regula Rupp");
+                           "with contributions from: Celine Scornavacca, Thomas Bonfert, Philippe Gambette and Regula Rupp");
     }
 
     /**

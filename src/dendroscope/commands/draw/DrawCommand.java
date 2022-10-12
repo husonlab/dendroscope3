@@ -20,7 +20,7 @@ package dendroscope.commands.draw;
 
 import dendroscope.commands.CommandBaseMultiViewer;
 import dendroscope.window.TreeViewer;
-import jloda.util.ProgramProperties;
+import jloda.swing.util.ProgramProperties;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;
@@ -81,19 +81,18 @@ public abstract class DrawCommand extends CommandBaseMultiViewer {
 
     /**
      * parses the given command and executes it
-     *
-	 */
+     */
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("set drawer=");
         String drawerKind = np.getWordMatchesIgnoringCase
                 (TreeViewer.RECTANGULAR_PHYLOGRAM + " "
-                        + TreeViewer.RECTANGULAR_CLADOGRAM + " "
-                        + TreeViewer.SLANTED_CLADOGRAM + " "
-                        + TreeViewer.RADIAL_PHYLOGRAM + " "
-                        + TreeViewer.RADIAL_CLADOGRAM + " "
-                        + TreeViewer.CIRCULAR_CLADOGRAM + " "
-                        + TreeViewer.CIRCULAR_PHYLOGRAM + " "
-                        + TreeViewer.INNERCIRCULAR_CLADOGRAM);
+                 + TreeViewer.RECTANGULAR_CLADOGRAM + " "
+                 + TreeViewer.SLANTED_CLADOGRAM + " "
+                 + TreeViewer.RADIAL_PHYLOGRAM + " "
+                 + TreeViewer.RADIAL_CLADOGRAM + " "
+                 + TreeViewer.CIRCULAR_CLADOGRAM + " "
+                 + TreeViewer.CIRCULAR_PHYLOGRAM + " "
+                 + TreeViewer.INNERCIRCULAR_CLADOGRAM);
         np.matchIgnoreCase(";");
 
         boolean showScaleBar = (drawerKind.equals(TreeViewer.RECTANGULAR_PHYLOGRAM)

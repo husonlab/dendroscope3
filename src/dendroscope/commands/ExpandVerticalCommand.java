@@ -71,8 +71,7 @@ public class ExpandVerticalCommand extends CommandBaseMultiViewer implements ICo
 
     /**
      * parses the given command and executes it
-     *
-	 */
+     */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("expand direction=");

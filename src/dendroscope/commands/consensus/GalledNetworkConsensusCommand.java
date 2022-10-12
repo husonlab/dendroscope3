@@ -79,8 +79,7 @@ public class GalledNetworkConsensusCommand extends CommandBase implements IComma
 
     /**
      * parses the given command and executes it
-     *
-	 */
+     */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
     }

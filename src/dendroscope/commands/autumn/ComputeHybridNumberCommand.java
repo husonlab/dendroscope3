@@ -38,8 +38,7 @@ import java.util.Iterator;
 public class ComputeHybridNumberCommand extends CommandBaseMultiViewer implements ICommand {
     /**
      * parses the given command and executes it
-     *
-	 */
+     */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase(getSyntax());
@@ -51,7 +50,7 @@ public class ComputeHybridNumberCommand extends CommandBaseMultiViewer implement
         int number = ComputeHybridNumber.apply(tree1, tree2, getDir().getDocument().getProgressListener());
         getDir().getDocument().getProgressListener().close();
 
-		Message.show(getViewer().getFrame(), "Hybridization number is: " + number);
+        Message.show(getViewer().getFrame(), "Hybridization number is: " + number);
 
     }
 

@@ -74,8 +74,7 @@ public class MidpointRerootCommand extends CommandBaseMultiViewer implements ICo
 
     /**
      * parses the given command and executes it
-     *
-	 */
+     */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase(getSyntax());
@@ -87,7 +86,7 @@ public class MidpointRerootCommand extends CommandBaseMultiViewer implements ICo
             boolean changed = false;
             PhyloTree tree = treeViewer.getPhyloTree();
             if (tree.getNumberReticulateEdges() > 0) {
-				if (!warned) {
+                if (!warned) {
 					warned = true;
 					new Alert(getViewer().getFrame(), "Reroot by midpoint: not implemented for network");
 				}

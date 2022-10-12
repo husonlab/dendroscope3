@@ -99,7 +99,7 @@ public class GraphIO {
     public static void read(Reader r, Graph graph, Num2NodeArray num2node, Num2EdgeArray num2edge) throws IOException {
         graph.clear();
 
-        NexusStreamParser np = new NexusStreamParser(r);
+         NexusStreamParser np = new NexusStreamParser(r);
         np.matchRespectCase("{GRAPH\n");
         np.matchRespectCase("nnodes=");
         int nNodes = np.getInt(0, 10000000);

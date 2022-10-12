@@ -86,7 +86,7 @@ public class NexusTrees {
     }
 
     public void read(Reader r) throws IOException {
-        NexusStreamParser np = new NexusStreamParser(r);
+         NexusStreamParser np = new NexusStreamParser(r);
 
         np.matchIgnoreCase("#nexus");
 

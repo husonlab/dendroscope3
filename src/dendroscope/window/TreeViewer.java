@@ -102,7 +102,7 @@ public class TreeViewer extends PhyloGraphView implements Comparable<TreeViewer>
         setDefaultNodeHeight(2);
         setDefaultNodeWidth(2);
 
-        Font font = ProgramProperties.get(ProgramProperties.DEFAULT_FONT, (Font) null);
+        Font font = jloda.swing.util.ProgramProperties.get(ProgramProperties.DEFAULT_FONT, (Font) null);
         if (font != null) {
             setDefaultNodeFont(font);
             setDefaultEdgeFont(font);

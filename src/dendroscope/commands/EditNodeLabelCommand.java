@@ -72,8 +72,7 @@ public class EditNodeLabelCommand extends CommandBaseMultiViewer implements ICom
 
     /**
      * parses the given command and executes it
-     *
-	 */
+     */
     @Override
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase("edit nodelabels;");

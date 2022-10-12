@@ -76,8 +76,7 @@ public class AlignTaxaCommand extends CommandBaseMultiViewer implements ICommand
 
     /**
      * parses the given command and executes it
-     *
-	 */
+     */
     public void apply(NexusStreamParser np) throws Exception {
         np.matchIgnoreCase(getSyntax());
         List<PhyloTree> trees = new LinkedList<>();
@@ -86,7 +85,7 @@ public class AlignTaxaCommand extends CommandBaseMultiViewer implements ICommand
             TreeViewer viewer = it.next();
             if (viewer.getPhyloTree().getNumberOfNodes() > 0) {
                 trees.add(viewer.getPhyloTree());
-				viewer.getPhyloTree().getLSAChildrenMap().clear();
+                viewer.getPhyloTree().getLSAChildrenMap().clear();
             }
         }
 
