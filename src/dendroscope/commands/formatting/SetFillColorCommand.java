@@ -24,7 +24,7 @@ import jloda.graph.Node;
 import jloda.swing.commands.CommandBase;
 import jloda.swing.commands.ICommand;
 import jloda.swing.util.ChooseColorDialog;
-import jloda.swing.util.Colors;
+import jloda.swing.util.ColorUtilsSwing;
 import jloda.util.parse.NexusStreamParser;
 
 import javax.swing.*;
@@ -84,7 +84,7 @@ public class SetFillColorCommand extends CommandBase implements ICommand {
         if (np.peekMatchIgnoreCase("null"))
             np.matchIgnoreCase("null");
         else
-            color = Colors.convert(np.getColor());
+			color = ColorUtilsSwing.convert(np.getColor());
         np.matchIgnoreCase(";");
 
         for (Iterator<TreeViewer> it = ((MultiViewer) getViewer()).getTreeGrid().getSelectedOrAllIterator(); it.hasNext(); ) {
