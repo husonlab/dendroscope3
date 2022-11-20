@@ -17,7 +17,7 @@
 	~  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 	<project name="Dendroscope3" default="jar" basedir=".">
-		<property name="jfxDir" value="../../javafx/lib"/>
+		<property name="jfxDir" value="/Users/huson/lib/javafx/lib"/>
 		<property name="jlodaAntDir" value="../../jloda/antbuild"/>
 		<property name="buildSrcDir" value="../antbuild/src"/>
 		<property name="buildModulesDir" value="../antbuild/modules"/>
