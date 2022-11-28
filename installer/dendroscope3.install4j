@@ -78,7 +78,7 @@
       </iconImageFiles>
     </launcher>
   </launchers>
-  <installerGui autoUpdateDescriptorUrl="http://software-ab.informatik.uni-tuebingen.de/download/dendroscope3/updates.xml">
+  <installerGui autoUpdateDescriptorUrl="https://software-ab.cs.uni-tuebingen.de/download/dendroscope3/updates.xml">
     <autoUpdate useMinUpdatableVersion="true" minUpdatableVersion="3" />
     <applications>
       <application id="installer" beanClass="com.install4j.runtime.beans.applications.InstallerApplication" styleId="1691242603" launchInNewProcess="false">

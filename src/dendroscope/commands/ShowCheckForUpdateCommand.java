@@ -96,7 +96,7 @@ public class ShowCheckForUpdateCommand extends CommandBase implements ICommand {
         ApplicationDisplayMode applicationDisplayMode = ProgramProperties.isUseGUI() ? ApplicationDisplayMode.GUI : ApplicationDisplayMode.CONSOLE;
         UpdateDescriptor updateDescriptor;
         try {
-            updateDescriptor = UpdateChecker.getUpdateDescriptor("http://software-ab.informatik.uni-tuebingen.de/download/dendroscope/updates.xml", applicationDisplayMode);
+            updateDescriptor = UpdateChecker.getUpdateDescriptor("https://software-ab.cs.uni-tuebingen.de/download/dendroscope/updates.xml", applicationDisplayMode);
         } catch (Exception e) {
             Basic.caught(e);
             new InfoMessage(MultiViewer.getLastActiveFrame(), "Installed version is up-to-date");
@@ -105,8 +105,8 @@ public class ShowCheckForUpdateCommand extends CommandBase implements ICommand {
         if (updateDescriptor.getEntries().length > 0) {
             if (!ProgramProperties.isUseGUI()) {
                 UpdateDescriptorEntry entry = updateDescriptor.getEntries()[0];
-                new InfoMessage(MultiViewer.getLastActiveFrame(), "New version available: " + entry.getNewVersion()
-                        + "\nPlease download from: http://software-ab.informatik.uni-tuebingen.de/download/dendroscope", true);
+				new InfoMessage(MultiViewer.getLastActiveFrame(), "New version available: " + entry.getNewVersion()
+																  + "\nPlease download from: https://software-ab.cs.uni-tuebingen.de/download/dendroscope", true);
                 return;
             }
         } else {
