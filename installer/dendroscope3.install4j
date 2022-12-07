@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<install4j version="9.0.5" transformSequenceNumber="9">
+<install4j version="10.0.3" transformSequenceNumber="10">
   <directoryPresets config="../../javafx-jmods" />
   <application name="Dendroscope" applicationId="3637-0812-9190-9529" mediaDir="../../../builds" shortName="Dendroscope" publisher="Algorithms in Bioinformatics" publisherWeb="http://ab.inf.uni-tuebingen.de" version="3.0" allPathsRelative="true" backupOnSave="true" macVolumeId="f94969a45be0d53a" javaMinVersion="16">
     <codeSigning macEnabled="true" macPkcs12File="../../../../etc/application.p12" />
-    <jreBundles jdkProviderId="Liberica" release="18/18.0.1+12">
+    <jreBundles jdkProviderId="Liberica" release="18/18.0.2.1+1">
       <modules />
     </jreBundles>
   </application>
-  <files preserveSymlinks="false">
+  <files>
     <mountPoints>
       <mountPoint id="1691242151" location="jars" />
       <mountPoint id="1691242756" location="Examples" />
@@ -71,7 +71,6 @@
           <directory location="jars" failOnError="false" />
         </modulePath>
       </java>
-      <macStaticAssociationActions mode="selected" />
       <iconImageFiles>
         <file path="../src/dendroscope/resources/icons/Dendroscope16.png" />
         <file path="../src/dendroscope/resources/icons/Dendroscope32.png" />
@@ -1220,7 +1219,7 @@ context.goForward(1, true, true);
       </exclude>
       <jreBundle includedJre="macosx-amd64-12.0.1" />
     </macosFolder>
-    <windows name="Windows64bit" id="1691242421" installDir="Dendroscope" overridePrincipalLanguage="true">
+    <windows name="Windows64bit" id="1691242421" installDir="Dendroscope" overridePrincipalLanguage="true" architecture="64">
       <exclude>
         <entry location="openjfx/macos" />
         <entry location="openjfx/unix" />
