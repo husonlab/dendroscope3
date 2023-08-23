@@ -88,7 +88,7 @@ public class Newick extends IOBase implements IOFormat {
                     list.add(tmpTreeData);
                 }
             }
-            if (buf.length() > 0) {
+            if (!buf.isEmpty()) {
                 TreeData tree = new TreeData();
                 tree.parseBracketNotation(buf.toString(), true);
                 tree.setName(createNewTreeName());
