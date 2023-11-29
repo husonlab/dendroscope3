@@ -108,7 +108,6 @@ public class Dendroscope {
         ProgramProperties.setConfirmQuit(options.getOption("-q", "confirmQuit", "Confirm quit on exit", ProgramProperties.isConfirmQuit()));
         options.done();
 
-        System.err.println("Java version: " + System.getProperty("java.version"));
         if (silentMode) {
             Basic.stopCollectingStdErr();
             Basic.hideSystemErr();
