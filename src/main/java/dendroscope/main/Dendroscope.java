@@ -46,6 +46,10 @@ public class Dendroscope {
      *
 	 */
     public static void main(String[] args) throws Exception {
+        // jloda3 keeps its icons (sun/Open16.gif and the others) in jloda-core, but ResourceManager, which is in
+        // jloda-swing, looks for them with a class of its own module, which on the module path cannot see them.
+        // A class of jloda-core does. Inserted first, so that, as before, jloda's icon wins where both have one
+        ResourceManager.insertResourceRoot(jloda.resources.Resources.class);
         ResourceManager.getClassLoadersAndRoots().add(new Pair<>(Dendroscope.class, "dendroscope.resources"));
 
         ExtendedNewick.WARN_HAS_MULTILABELS = false;
