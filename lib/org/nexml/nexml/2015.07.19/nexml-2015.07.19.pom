@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.nexml</groupId>
+    <artifactId>nexml</artifactId>
+    <version>2015.07.19</version>
+    <packaging>jar</packaging>
+    <name>NeXML Java API (as used by Dendroscope)</name>
+    <description>The org.nexml.model library, built 19 July 2015 and previously kept as jars/nexml.jar. It is not
+        published in any public Maven repository, so it is kept in the in-project repository lib/.</description>
+</project>

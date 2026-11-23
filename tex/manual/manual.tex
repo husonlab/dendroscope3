@@ -100,13 +100,13 @@ require that you acknowledge this by \pwindow{citing the program} as follows:
 \item Daniel H. Huson and Celine Scornavacca. Dendroscope 3: An interactive tool for rooted phylogenetic trees and networks,
 Systematic Biology (2012), \url{http://sysbio.oxfordjournals.org/cgi/content/abstract/sys062? ijkey=ZCxPRbYt74aQJhR&keytype=ref},
 software freely available from
-\href{http://www.dendroscope.org}{www.dendroscope.org}.
+\url{https://github.com/husonlab/dendroscope3}.
 \end{itemize}
 
 This manual is based on the user manual for Dendroscope~1, which was written by
 Daniel H.~Huson, Daniel C.~Richter, Christian Rausch and Regula Rupp.
 
-The source files for \Dendroscope can be found here: \url{http://danielhuson.github.io/dendroscope3}
+The source files for \Dendroscope can be found here: \url{https://github.com/husonlab/dendroscope3}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \mysection{Program Overview} 
@@ -137,25 +137,25 @@ coloring or resizing edges, nodes and labels.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \mysection{Obtaining and Installing the Program}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Dendroscope is written in Java and requires a Java runtime environment
-version 1.7 or later, freely available from
-\href{http://www.java.org}{www.java.org}. %\marginpar{CS: v 1.6?}
+\Dendroscope is written in Java. The installers include the Java runtime that the program needs, so Java does
+not have to be installed separately.
 
-\Dendroscope is installed using an installer program that is freely available
-from\\
-\href{http://www.dendroscope.org}
-{www.dendroscope.org}.
-There are three different installers, targeting different operating systems:
+The installers of the latest release are freely available from\\
+\url{https://github.com/husonlab/dendroscope3/releases/latest}.\\
+There are installers for the following operating systems, where $\langle$version$\rangle$ is the
+version of the release:
 \begin{itemize}
-\item \itt{Dendroscope\_windows\_\VERSION.exe} provides an installer for \irm{Windows}.
-\item \itt{Dendroscope\_macos\_\VERSION.dmg} provides an installer for \irm{MacOS}.
-\item \itt{Dendroscope\_unix\_\VERSION.sh} provides a shell installer for
-\irm{Linux} and \irm{Unix}.
+\item \itt{Dendroscope-$\langle$version$\rangle$-macos-aarch64.dmg} for \irm{MacOS} on computers with Apple silicon,
+and \itt{Dendroscope-$\langle$version$\rangle$-macos-x86\_64.dmg} for MacOS on computers with an Intel processor.
+\item \itt{Dendroscope-$\langle$version$\rangle$.msi} for \irm{Windows}.
+\item \itt{dendroscope\_$\langle$version$\rangle$\_amd64.deb} and \itt{dendroscope\_$\langle$version$\rangle$\_arm64.deb}
+for \irm{Linux} distributions that install Debian packages, and
+\itt{Dendroscope-$\langle$version$\rangle$-linux-x86\_64.tar.gz} and
+\itt{Dendroscope-$\langle$version$\rangle$-linux-aarch64.tar.gz}, archives that can be unpacked and run
+without administrator privileges.
 \end{itemize}
 
-Alternatively \Dendroscope will be available as Java \pwindow{Webstart application} from \\
-\href{http://ab.inf.uni-tuebingen.de/data/software/dendroscope/webstart/}{http://ab.inf.uni-tuebingen.de/data/software/dendroscope/webstart/}.
-If you need information concerning Java Webstart, go to \href{http://java.sun.com/products/javawebstart/}{http://java.sun.com/products/javawebstart/}.
+Use \menuitem{Help}{Check For Updates...} to find out whether a newer release is available.
 
 
 %\pagebreak
@@ -165,9 +165,8 @@ If you need information concerning Java Webstart, go to \href{http://java.sun.co
 This section describes how to get started and to do the first steps of analyses 
 using \Dendroscope.
 
-First, download an installer for the program from 
-\href{http://www.dendroscope.org}
-{www.dendroscope.org},
+First, download an installer for the program from
+\url{https://github.com/husonlab/dendroscope3/releases/latest},
 see Section~\ref{sec:Obtaining and Installing the Program}
 for details.
 
@@ -774,31 +773,15 @@ The following \pwindow{graphics formats} are supported (how to open the \texttt{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \mysection{Using More Memory }
 
-The Dendroscope installer allows you to specify the amount of Dendroscope that the
-program can use. \\
-
-To run Dendroscope with more than 400 MB under MacOS X on an intel
-Mac, edit the file $\langle$installation-dir$\rangle$/Dendroscope/Dendroscope.app/Contents/Info.plist as follows: Find the lines
-
+By default, the Java runtime lets \Dendroscope use up to a quarter of the memory of the computer.
+The options that the program is started with are listed in the file \itt{Dendroscope.cfg}, which is located in
+\itt{Dendroscope.app/Contents/app} under MacOS, in \itt{/opt/dendroscope/lib/app} under Linux (in \itt{lib/app}
+of the unpacked archive, if that was used) and in the subfolder \itt{app} of the installation folder under Windows.
+To let the program use more memory, for example 8 gigabytes, add the line
 \begin{verbatim}
-<key>VMOptions</key>
-<string>-server -Xmx400M</string><!-- I4J_INSERT_VMOPTIONS -->
+java-options=-Xmx8G
 \end{verbatim}
-
-and replace them by:
-
-\begin{verbatim}
-<key>VMOptions</key> 
-<string>-server -Xmx1000M </string><!--I4J_INSERT_VMOPTIONS --> 
-\end{verbatim}
-
-
-to run using 1 gigabyte, for example. 
-
-To run Dendroscope with more more than 400 Mb on a
-64-bit unix/linux system, open the file $\langle$installation-dir$\rangle$/Dendroscope in a text editor. Find the current
-memory specification (e.g. -Xmx400M) and replace it by -d64 -Xmx100M to run with 1 gigabyte of
-memory, say. Note that the flag -d64 is necessary to specify 64-bit Java.
+to the section \verb"[JavaOptions]" of that file.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \mysection{Commands}
@@ -816,7 +799,9 @@ to all trees and networks in the current file, each one separately. Use this but
 
 To start Dendroscope in command-line mode use the option \verb"-g". For example under MacOS X type 
 
-$\langle$\verb"installation-dir"$\rangle$\verb"/Dendroscope/Dendroscope.app/Contents/MacOS/JavaApplicationStub -g"
+$\langle$\verb"installation-dir"$\rangle$\verb"/Dendroscope.app/Contents/MacOS/Dendroscope -g"
+
+and under Linux type \verb"/opt/dendroscope/bin/Dendroscope -g".
 
 in a terminal shell. To make things easier, in the command line version only one file is opened at the time. When new trees or networks are computed, the file is emptied and filled with the newly computed trees and networks.
 To apply a set of commands to all trees and networks in the current file in the command line version, use the syntax:
