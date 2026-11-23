@@ -9,12 +9,12 @@ Open source repository: https://github.com/husonlab/dendroscope3
 ## Documentation
 
 - [User Manual (PDF)](manual.pdf)
-- [Release Notes](https://github.com/husonlab/dendroscope3/tree/master/release-notes)
+- [Release Notes](https://github.com/husonlab/dendroscope3/tree/main/release-notes)
 
 If you use this software, please cite:
 
 - Daniel H. Huson and Celine Scornavacca. Dendroscope 3: An interactive tool for rooted phylogenetic trees and
-  networks. Systematic Biology (2012), [doi:10.1093/sysbio/sys062](https://doi.org/10.1093/sysbio/sys062)
+  networks. Systematic Biology 61(6):1061–1067 (2012), [doi:10.1093/sysbio/sys062](https://doi.org/10.1093/sysbio/sys062)
 
 ## Downloads
 
@@ -34,6 +34,7 @@ Source code is hosted at:
 
 - [https://github.com/husonlab/dendroscope3](https://github.com/husonlab/dendroscope3)
 
-## Main author
+## Authors and contributors
 
-- Daniel H. Huson, University of Tübingen
+Most of the code was written by Daniel H. Huson, University of Tübingen. Some code was contributed by Celine
+Scornavacca, Benjamin Albrecht, Leo van Iersel, Philippe Gambette and students; see the source files for details.

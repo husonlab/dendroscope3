@@ -70,7 +70,7 @@ built from these by a separate release workflow.
 If you use Dendroscope in your research, please cite:
 
 Daniel H. Huson and Celine Scornavacca. Dendroscope 3: An interactive tool for rooted phylogenetic trees and networks.
-Systematic Biology (2012), [doi:10.1093/sysbio/sys062](https://doi.org/10.1093/sysbio/sys062).
+Systematic Biology 61(6):1061–1067 (2012), [doi:10.1093/sysbio/sys062](https://doi.org/10.1093/sysbio/sys062).
 
 ## License
 
